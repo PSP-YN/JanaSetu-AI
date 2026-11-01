@@ -38,6 +38,12 @@ Evidence can be reused across scheme assessments with the citizen's consent. Unk
 
 A chatbot can explain a scheme. JanaSetu must maintain a workflow across several operational steps: retrieve a source, select relevant rules, evaluate structured conditions, connect evidence, identify unknowns, generate a checklist, create a draft and schedule a follow-up. Each step changes the state of the work. The agent has tools and an audit trail; the citizen remains the approval authority.
 
+## Competitive positioning
+
+JanaSetu is not differentiated by scheme discovery, multilingual chat or AI alone. myScheme already provides national discovery, profile-based eligibility, a multilingual AI chatbot and more than 5,000 live-listed schemes. UMANG aggregates thousands of public services. Kisan e-Mitra provides AI-enabled farmer support for PM-KISAN. Doot publicly describes a broader personal-agent vision for Indian citizens.
+
+JanaSetu's proposed wedge is a narrow, auditable benefit-readiness case file: each versioned condition is connected to a citizen fact or document, an explicit matched / not-matched / unknown state, the missing proof, the next action and a follow-up. The current prototype demonstrates a small slice of this workflow; evidence reuse, secure continuity and assisted-worker operations remain planned capabilities. The competitor analysis and source caveats are in [docs/competitor-analysis.md](competitor-analysis.md).
+
 ## Six-slide deck content
 
 ### Slide 1 — JanaSetu: From discovery to readiness
@@ -66,8 +72,9 @@ Tools: scheme search, source/rule retrieval, eligibility evaluation, evidence ex
 Human approval is required before any external or irreversible action.
 
 ### Slide 5 — Differentiation, feasibility and trust
-- Existing platforms already provide scheme discovery, language support and broad government-service access.
-- JanaSetu focuses on the execution gap: evidence traceability, cross-scheme reuse, unknown-state handling and persistent readiness.
+- Existing platforms already provide national scheme discovery, multilingual AI assistance, broad government-service transactions and scheme-specific farmer support.
+- JanaSetu does not claim to replace myScheme, UMANG, Kisan e-Mitra or DigiLocker. It focuses on an auditable cross-scheme readiness case file.
+- Reusable evidence, authenticated case continuity and assisted-worker workflows are the proposed moat, not yet complete in the prototype.
 - Initial prototype: four curated Central Government scheme references, all 36 State/UT profile choices, six interface languages and a local application workflow.
 - Success is measured through rule-test accuracy, evidence traceability, missing-document detection and successful completion of end-to-end test journeys.
 
