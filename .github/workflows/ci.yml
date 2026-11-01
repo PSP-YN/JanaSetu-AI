@@ -9,22 +9,67 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: janasetu-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   verify:
+    name: Tests, types, security and production smoke
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Check out source
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@1e60f620b9541d7f4c9c2f8d5a6f1e0f5b2b5a5e
         with:
           node-version: "22"
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --no-audit --no-fund
+
       - name: Run unit tests
         run: npm test
+
       - name: Type-check
         run: npm run typecheck
+
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=high
+
       - name: Build production application
         run: npm run build
+
+      - name: Smoke-test production server
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run start > /tmp/janasetu-next.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:3000/api/health > /tmp/janasetu-health.json; then
+              break
+            fi
+            sleep 2
+          done
+
+          node -e '
+            const fs = require("node:fs");
+            const health = JSON.parse(fs.readFileSync("/tmp/janasetu-health.json", "utf8"));
+            if (health.ok !== true) throw new Error("Health endpoint did not return ok=true");
+          '
+
+          curl --fail --silent http://127.0.0.1:3000/api/schemes > /tmp/janasetu-schemes.json
+          node -e '
+            const fs = require("node:fs");
+            const data = JSON.parse(fs.readFileSync("/tmp/janasetu-schemes.json", "utf8"));
+            if (!Array.isArray(data.schemes) || data.schemes.length < 1) {
+              throw new Error("Scheme catalogue smoke test failed");
+            }
+          '
