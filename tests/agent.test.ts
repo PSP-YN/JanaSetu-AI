@@ -52,3 +52,26 @@ test("agent returns an inspectable multi-step tool trace", () => {
   assert.ok(result.trace.some((item) => item.tool === "evaluate_scheme_rules"));
   assert.ok(result.assessments.length > 0);
 });
+
+
+import { parseCitizenMessage } from "../lib/intake";
+
+test("Hindi intake extracts supported profile facts for review", () => {
+  const result = parseCitizenMessage("मैं 34 साल की महिला किसान हूं, कर्नाटक में रहती हूं, वार्षिक आय 1.5 लाख है");
+  assert.equal(result.updates.age, 34);
+  assert.equal(result.updates.gender, "woman");
+  assert.equal(result.updates.occupation, "Farmer");
+  assert.equal(result.updates.state, "Karnataka");
+  assert.equal(result.updates.annualIncome, 150000);
+  assert.ok(result.recognizedFields.includes("Annual household income"));
+});
+
+test("Tamil intake extracts supported facts without making an eligibility decision", () => {
+  const result = parseCitizenMessage("நான் 32 வயது பெண் விவசாயி, தமிழ்நாடு, ஆண்டு வருமானம் 2 லட்சம்");
+  assert.equal(result.updates.age, 32);
+  assert.equal(result.updates.gender, "woman");
+  assert.equal(result.updates.occupation, "Farmer");
+  assert.equal(result.updates.state, "Tamil Nadu");
+  assert.equal(result.updates.annualIncome, 200000);
+  assert.ok(result.note.includes("Review every value"));
+});
