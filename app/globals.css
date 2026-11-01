@@ -21,7 +21,7 @@
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { margin: 0; background: var(--canvas); color: var(--ink); font-family: "DM Sans", ui-sans-serif, system-ui, -apple-system, sans-serif; font-size: 14px; }
+body { margin: 0; background: var(--canvas); color: var(--ink); font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 14px; }
 button, input, select { font: inherit; }
 button { cursor: pointer; }
 button:disabled { cursor: not-allowed; opacity: .55; }
@@ -29,9 +29,9 @@ a { color: inherit; text-decoration: none; }
 .app-shell { min-height: 100vh; }
 .sidebar { position: fixed; z-index: 20; inset: 0 auto 0 0; width: 248px; background: #fbfaf6; border-right: 1px solid var(--line); padding: 27px 18px 18px; display: flex; flex-direction: column; }
 .brand { display: flex; align-items: center; gap: 11px; padding: 0 9px 34px; }
-.brand-mark { width: 39px; height: 39px; border-radius: 13px; background: var(--forest-dark); display: grid; place-items: center; color: #f8f4e9; font-family: "Manrope", sans-serif; font-size: 23px; font-weight: 800; }
+.brand-mark { width: 39px; height: 39px; border-radius: 13px; background: var(--forest-dark); display: grid; place-items: center; color: #f8f4e9; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 23px; font-weight: 800; }
 .brand > div:last-of-type { display: grid; gap: 1px; }
-.brand strong { font: 800 20px "Manrope", sans-serif; letter-spacing: -.8px; }
+.brand strong { font: 800 20px ui-sans-serif, system-ui, sans-serif; letter-spacing: -.8px; }
 .brand small { font-size: 8px; font-weight: 700; color: var(--muted); letter-spacing: 1.65px; }
 .sidebar-kicker { padding: 0 12px 10px; font-size: 9px; font-weight: 700; letter-spacing: 1.55px; color: #a09f95; }
 .side-nav { display: grid; gap: 5px; }
@@ -63,7 +63,7 @@ a { color: inherit; text-decoration: none; }
 .eyebrow { color: #8a8c82; font-size: 9px; font-weight: 700; letter-spacing: 1.55px; margin-bottom: 9px; }
 .eyebrow-line { display: inline-block; width: 20px; height: 2px; background: var(--clay); vertical-align: middle; margin-right: 7px; }
 h1, h2, h3, p { margin-top: 0; }
-h1, h2, h3 { font-family: "Manrope", "DM Sans", sans-serif; }
+h1, h2, h3 { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
 .welcome-row h1, .page-title-row h1 { margin: 0; font-size: clamp(26px, 3vw, 36px); line-height: 1.16; letter-spacing: -1.5px; font-weight: 800; }
 .welcome-row p, .page-title-row p { margin: 9px 0 0; color: var(--muted); font-size: 13px; line-height: 1.6; max-width: 650px; }
 .date-chip, .private-chip { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--line); border-radius: 30px; padding: 8px 12px; color: #6f756a; background: #fbfaf6; font-size: 10px; font-weight: 600; white-space: nowrap; }
@@ -108,7 +108,7 @@ h1, h2, h3 { font-family: "Manrope", "DM Sans", sans-serif; }
 .metric-icon.clay { background: #f5e9e1; color: var(--clay); }
 .metric-icon.ink { background: #e9ece7; color: #35483a; }
 .metric-card > div:nth-child(2) { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
-.metric-card strong { font: 800 22px "Manrope", sans-serif; letter-spacing: -.9px; }
+.metric-card strong { font: 800 22px ui-sans-serif, system-ui, sans-serif; letter-spacing: -.9px; }
 .metric-card span { font-size: 10px; color: #6b7269; font-weight: 600; }
 .metric-card small { margin-top: 2px; color: #a0a097; font-size: 9px; }
 .dashboard-grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: 14px; }
@@ -120,7 +120,7 @@ h1, h2, h3 { font-family: "Manrope", "DM Sans", sans-serif; }
 .section-index { color: #a4a499; font-size: 9px; letter-spacing: 1px; font-weight: 700; }
 .step-list { display: grid; }
 .step-row { display: grid; grid-template-columns: 29px 1fr 29px; gap: 12px; align-items: center; padding: 12px 0; border-top: 1px solid #f0eee7; }
-.step-number { width: 27px; height: 27px; border-radius: 50%; display: grid; place-items: center; background: #f1efe7; color: #71776e; font: 700 10px "Manrope", sans-serif; }
+.step-number { width: 27px; height: 27px; border-radius: 50%; display: grid; place-items: center; background: #f1efe7; color: #71776e; font: 700 10px ui-sans-serif, system-ui, sans-serif; }
 .step-copy strong { font-size: 11px; }
 .step-copy p { margin: 4px 0 0; font-size: 10px; color: var(--muted); line-height: 1.45; }
 .step-row > button { width: 29px; height: 29px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 7px; background: transparent; color: var(--forest); }
@@ -208,7 +208,7 @@ h1, h2, h3 { font-family: "Manrope", "DM Sans", sans-serif; }
 .aside-card { padding: 19px; text-align: center; }
 .progress-ring { width: 105px; height: 105px; margin: 4px auto 15px; border-radius: 50%; display: grid; place-items: center; }
 .progress-ring > div { width: 86px; height: 86px; border-radius: 50%; background: var(--paper); display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.progress-ring strong { font: 800 23px "Manrope", sans-serif; color: var(--forest); }
+.progress-ring strong { font: 800 23px ui-sans-serif, system-ui, sans-serif; color: var(--forest); }
 .progress-ring small { font-size: 8px; color: #92958b; }
 .aside-card h3 { font-size: 13px; margin: 0 0 7px; }
 .aside-card p { color: #83877d; font-size: 9px; line-height: 1.6; margin: 0; }
