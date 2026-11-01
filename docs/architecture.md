@@ -91,12 +91,12 @@ Official department portals / authorised APIs (where available)
 - Accessibility, assisted workflows and robust low-bandwidth/mobile experience.
 - Security testing, privacy impact assessment, legal review and incident response.
 
-## Current limitations
+## Request and data boundary\n\nThe browser stores the profile, document metadata, assessments, drafts and reminders in localStorage. When a citizen runs an assessment or prepares a draft, the relevant profile fields are sent over HTTPS to the JanaSetu Next.js route handlers for processing. These handlers do not intentionally write citizen profiles or drafts to a database. The project has no authentication, cross-device storage or production retention/deletion workflow. The browser SpeechRecognition API, when used, may process audio through the browser vendor's speech service; its data handling is controlled by that provider. Use synthetic demo details and do not enter Aadhaar, bank-account numbers or other sensitive identifiers.\n\n## Current limitations
 
 - No user accounts or cross-device sync.
 - No production database; user state lives in browser localStorage.
 - File binaries are not uploaded or parsed.
-- No LLM inference, speech recognition or text-to-speech.
+- No external LLM inference or server-side speech-to-text/text-to-speech. Optional browser SpeechRecognition is used where the browser supports it.
 - No live myScheme, UMANG, DigiLocker or department API integration.
 - No application submission or authoritative status lookup.
 - Only four curated Central scheme records are encoded.
