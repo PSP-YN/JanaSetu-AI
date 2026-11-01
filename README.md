@@ -41,7 +41,7 @@ npm run build
 - Explicit planner, scheme retrieval, deterministic rule evaluation, evidence-link construction and next-action generation.
 - Application draft endpoint and a local application tracker.
 - Document checklist and local metadata-only document register.
-- Multilingual deterministic text intake for English, Hindi, Kannada, Tamil, Telugu and Malayalam; optional browser speech recognition where supported. Extracted facts require review.\n- Field-by-field application preparation sheet with missing-value markers and a citizen-review record.\n- Browser persistence for the demo profile, assessments, document metadata and draft records.
+- Multilingual deterministic text intake for English, Hindi, Kannada, Tamil, Telugu and Malayalam; optional browser speech recognition where supported. Extracted facts require review.\n- Field-by-field application preparation sheet with missing-value markers and a citizen-review record.\n- Browser persistence for the demo profile, assessments, document metadata and draft records. Relevant profile fields are sent to the app server when an assessment or draft is requested; they are not intentionally persisted server-side.
 
 ## Architecture and governance
 
