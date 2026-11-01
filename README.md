@@ -1,6 +1,6 @@
 # JanaSetu AI
 
-**Understand what you may qualify for. Prepare what comes next.**
+**Understand what you may qualify for. Prepare what comes next.**\n\nLive prototype: https://janasetu-ai-pspyn.vercel.app
 
 JanaSetu is an independent, India-wide benefits navigation prototype. It combines a citizen profile, source-linked scheme screening, explainable rule checks, document checklists, application-draft preparation and persistent follow-up tasks.
 
