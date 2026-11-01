@@ -33,7 +33,7 @@ Curated source-linked rule catalogue
 
 The prototype's "agents" are explicit software roles and tool functions coordinated by a deterministic planner. It does **not** currently call an external LLM. This keeps the demo reproducible and prevents generated text from deciding legal eligibility. A future LLM can be used for multilingual intake, plain-language explanations and task planning, but the final rule evaluation must remain constrained by versioned deterministic rules and authoritative data.
 
-## Core execution
+## Multilingual citizen intake\n\nThe current prototype includes a conservative deterministic pattern extractor for selected profile facts in English, Hindi, Kannada, Tamil, Telugu and Malayalam. It can suggest selected facts such as age, income expressed in lakh, State/UT aliases, gender, farmer/student occupation, rural/urban residence and selected household indicators. This is not open-ended language understanding and does not infer facts outside its patterns. The UI requires the citizen to review the extracted values before running an assessment. Optional voice capture uses the browser SpeechRecognition API where available; browser voice providers and language availability vary.\n\n## Core execution
 
 1. Validate and normalize the submitted profile.
 2. Planner chooses domains based on declared attributes.
