@@ -63,7 +63,7 @@ No impact percentages or accuracy claims are asserted before evaluation.
 
 ## Links
 - Repository: https://github.com/PSP-YN/JanaSetu-AI
-- Website: https://janasetu-ai-pspyn.vercel.app (replace with the final production URL after deployment is verified)
+- Website: https://janasetu-ai-pspyn.vercel.app (production deployment verified)
 - Six-slide idea deck: attach the supplied PowerPoint file or host an accessible share link.
 
 ## Submission note
