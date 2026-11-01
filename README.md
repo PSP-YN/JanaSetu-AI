@@ -2,7 +2,7 @@
 
 **Understand what you may qualify for. Prepare what comes next.**\n\nLive prototype: https://janasetu-ai-pspyn.vercel.app
 
-JanaSetu is an independent, India-wide benefits navigation prototype. It combines a citizen profile, source-linked scheme screening, explainable rule checks, document checklists, application-draft preparation and persistent follow-up tasks.
+JanaSetu is an independent benefits-readiness prototype. It is designed to complement official discovery and service platforms by connecting a citizen's stated facts to source-linked screening conditions, evidence gaps, draft preparation and next actions.
 
 > **Important:** JanaSetu is not a government website or an official eligibility authority. The current prototype contains a small, curated set of Central Government scheme references. Screening results are preliminary and must be verified with the relevant department. It does not submit applications to government systems.
 
@@ -41,7 +41,8 @@ npm run build
 - Explicit planner, scheme retrieval, deterministic rule evaluation, evidence-link construction and next-action generation.
 - Application draft endpoint and a local application tracker.
 - Document checklist and local metadata-only document register.
-- Multilingual deterministic text intake for English, Hindi, Kannada, Tamil, Telugu and Malayalam; optional browser speech recognition where supported. Extracted facts require review.\n- Field-by-field application preparation sheet with missing-value markers and a citizen-review record.\n- Browser persistence for the demo profile, assessments, document metadata and draft records. Relevant profile fields are sent to the app server when an assessment or draft is requested; they are not intentionally persisted server-side.
+- Multilingual deterministic text intake for English, Hindi, Kannada, Tamil, Telugu and Malayalam; optional browser speech recognition where supported. Extracted facts require review.\n- Field-by-field application preparation sheet with missing-value markers and a citizen-review record.
+- Official ecosystem links to myScheme, UMANG, DigiLocker and Common Service Centres; JanaSetu does not claim to replace or be integrated with them.\n- Browser persistence for the demo profile, assessments, document metadata and draft records. Relevant profile fields are sent to the app server when an assessment or draft is requested; they are not intentionally persisted server-side.
 
 ## Architecture and governance
 
