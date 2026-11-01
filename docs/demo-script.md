@@ -25,19 +25,19 @@ This profile is a test fixture, not a representation of a real beneficiary.
 ### 0:00–0:25 — Explain the gap
 “Scheme discovery is important, but a citizen still has to translate rules into evidence, collect documents and manage follow-ups. JanaSetu focuses on that bridge.”
 
-### 0:25–0:55 — Create a profile
+### 0:25–0:55 — Describe the situation\nUse the intake box in Hindi or another supported language. Show suggested facts and explicitly review them on the profile screen. If browser speech recognition is available, demonstrate the microphone; otherwise use typed text.\n\n### 0:55–1:15 — Confirm the citizen profile
 Open the profile. Use the sample household. Show that the profile can select any State/UT, not only one region. Switch briefly to Hindi, then back to English.
 
-### 0:55–1:25 — Run the agent
+### 1:15–1:40 — Run the agent
 Run the benefits assessment. Open the execution trace. Explain the planner, catalogue retrieval, deterministic rule evaluation, evidence links and next-action generation.
 
-### 1:25–2:05 — Inspect evidence
+### 1:40–2:10 — Inspect evidence
 Open PMUY and PMAY-U 2.0 details. Show matched, not-matched and unknown conditions. Emphasize that a preliminary screen is not an official decision. Open the official source link.
 
-### 2:05–2:35 — Prepare a draft
+### 2:10–2:40 — Prepare a draft
 Prepare a draft for a potential pathway. Show its source, open checks and “Not submitted” boundary.
 
-### 2:35–3:00 — Persistence and trust
+### 2:40–3:00 — Persistence and trust
 Add a follow-up reminder. Refresh the page or navigate away and back to show browser-local persistence. Close with: “JanaSetu doesn't replace government portals. It prepares citizens to use them with clearer evidence and next steps.”
 
 ## Claims to avoid
