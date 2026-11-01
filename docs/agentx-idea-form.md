@@ -31,7 +31,7 @@ A simple chatbot can explain a scheme but cannot reliably manage a multi-step wo
 - Application-preparation tool: maps known information to a draft and highlights unresolved fields.
 - Follow-up tool: persists a next-action reminder and retrieves the workflow on return.
 
-The current working prototype implements a deterministic server-side planner and executable tools with an inspectable tool trace. It does not claim external LLM inference or live government API integration.
+The current working prototype implements a deterministic server-side planner and executable tools with an inspectable tool trace. The conversational intake uses multilingual phrase/pattern extraction; it is not an external LLM. It does not claim external LLM inference or live government API integration.
 
 ## Target users
 Citizens across all Indian States and Union Territories, including farmers, women and households exploring clean-cooking support, urban households exploring housing pathways, and students exploring scholarship pathways. Assisted-service workers can use the checklist as a preparation aid.
@@ -40,13 +40,13 @@ Citizens across all Indian States and Union Territories, including farmers, wome
 Designed for all 28 States and 8 Union Territories. Interface languages in the prototype: English, Hindi, Kannada, Tamil, Telugu and Malayalam. The catalogue currently contains four curated Central Government scheme references only; state-specific schemes will be added after their official rules and current implementation details are verified.
 
 ## Safety and trust
-- The prototype asks for no Aadhaar number or bank-account number.
+- The prototype asks for no Aadhaar number or bank-account number. Profiles and drafts persist in browser localStorage; relevant profile fields are sent to JanaSetu server routes when screening or preparing a draft and are not intentionally persisted server-side.
 - User-entered screening answers are not treated as authenticated government records.
 - Each record links to an official source and identifies the rule period or verification caveat.
 - Unknown or unverified evidence prevents a positive eligibility conclusion.
 - The system does not submit applications or fabricate government application IDs/status.
 - Human review is required before any consequential external action.
-- Prototype profile, document references, drafts and reminders are browser-local; files themselves are not uploaded.
+- Prototype profile, document references, drafts and reminders are browser-local; relevant profile fields are sent to the app server for assessment/draft processing. File binaries are not uploaded or parsed.
 
 ## Technical feasibility
 Next.js and TypeScript provide the responsive interface; Python-style deterministic rule logic is implemented in TypeScript server modules; Next.js route handlers expose the tools; browser storage persists the demo journey; and Vercel deploys the prototype. The initial catalogue is purposefully small so every encoded rule can be inspected against an official source.
