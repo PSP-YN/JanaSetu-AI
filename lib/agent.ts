@@ -32,7 +32,7 @@ export function evaluateScheme(scheme: Scheme, profile: CitizenProfile): Assessm
 
   if (scheme.id === "pm-kisan") {
     checks = [
-      check("farmer", "Farmer profile", profile.occupation.toLowerCase().includes("farmer") || profile.occupation.toLowerCase().includes("agri"), profile.occupation || "Not provided", "The scheme is for landholding farmer families.", "Confirm the applicant belongs to a landholding farmer family."),
+      check("farmer", "Farmer profile", profile.occupation.toLowerCase().includes("farmer") || profile.occupation.toLowerCase().includes("agri"), profile.occupation || "Not provided", "The scheme is for landholding farmer families; confirm the family qualifies under the current operational guidelines."),
       check("land", "Cultivable land in State/UT records", profile.hasCultivableLand, profile.hasCultivableLand === null ? "Not provided" : profile.hasCultivableLand ? "Declared: yes" : "Declared: no", "Cultivable land must be recorded by the concerned State/UT."),
       check("exclusions", "Higher-economic-status exclusion check", profile.pmKisanExcluded === "yes" ? false : profile.pmKisanExcluded === "no" ? true : null, profile.pmKisanExcluded === "unknown" ? "Not verified" : profile.pmKisanExcluded, "Complete all exclusion checks in the current operational guidelines.")
     ];
