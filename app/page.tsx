@@ -511,7 +511,7 @@ export default function Home() {
               <div className="hero-content">
                 <div className="hero-label"><span/> A CLEARER WAY FORWARD</div>
                 <h2>One profile.<br/><em>Clearer next steps.</em></h2>
-                <p>Understand the rules, see what evidence is missing, and prepare your next action with confidence.</p>
+                <p>Go beyond discovery: see which rule needs which evidence, what is still unknown, and what to prepare next.</p>
                 <div className="hero-buttons">
                   <button className="button button-light" onClick={() => setTab("profile")}>{t("start")} <ArrowRight size={16}/></button>
                   <button className="button button-ghost" onClick={fillSample}>{t("sample")}</button>
@@ -524,6 +524,20 @@ export default function Home() {
                 <div className="float-tag tag-two"><FileCheck2 size={15}/> Next action ready</div>
               </div>
               <div className="hero-bottom-note"><LockKeyhole size={13}/> No Aadhaar or bank-account number required in this prototype.</div>
+            </section>
+
+            <section className="ecosystem-panel">
+              <div>
+                <div className="eyebrow">BUILT FOR THE REAL PUBLIC-SERVICE ECOSYSTEM</div>
+                <h2>A preparation layer — not another government portal.</h2>
+                <p>Use JanaSetu to organise your evidence and next steps. Official platforms and departments remain authoritative for scheme information, document services and application submission.</p>
+              </div>
+              <div className="ecosystem-links">
+                <a href="https://www.myscheme.gov.in/" target="_blank" rel="noreferrer">myScheme <ExternalLink size={12}/><small>Scheme discovery</small></a>
+                <a href="https://web.umang.gov.in/" target="_blank" rel="noreferrer">UMANG <ExternalLink size={12}/><small>Government services</small></a>
+                <a href="https://www.digilocker.gov.in/" target="_blank" rel="noreferrer">DigiLocker <ExternalLink size={12}/><small>Digital documents</small></a>
+                <a href="https://locator.csccloud.in/" target="_blank" rel="noreferrer">Common Service Centres <ExternalLink size={12}/><small>Assisted access</small></a>
+              </div>
             </section>
 
             <section className="panel intake-panel">
