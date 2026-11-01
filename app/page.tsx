@@ -6,7 +6,7 @@ import {
   Building2, CalendarClock, Check, CheckCircle2, ChevronDown, ChevronRight,
   CircleAlert, ClipboardCheck, Clock3, FileCheck2, FileText, Globe2, HandHeart,
   House, IndianRupee, Landmark, LayoutDashboard, ListChecks, LockKeyhole,
-  MessageCircle, Search, ShieldCheck, Sparkles, Sprout, Upload, UserRound,
+  MessageCircle, Search, ShieldCheck, Sparkles, Sprout, Upload, UserRound, Mic,
   Users, Wallet, X, Menu, GraduationCap, Leaf
 } from "lucide-react";
 import {
@@ -15,10 +15,12 @@ import {
 } from "@/lib/catalog";
 
 type Tab = "overview" | "discover" | "profile" | "documents" | "applications" | "about";
+type DraftField = { key: string; label: string; value: string; source: string; status: "provided" | "missing" };
 type LocalApplication = {
   id: string; schemeId: string; schemeName: string; citizenName: string;
   state: string; district: string; status: string; createdAt: string;
   reviewRequired: boolean; missingChecks: string[]; sourceUrl: string; disclaimer: string;
+  fields?: DraftField[]; reviewedAt?: string | null;
 };
 type LocalDocument = { id: string; name: string; type: string; size: number; addedAt: string; status: string };
 type LocalTask = { id: string; title: string; dueAt: string; status: string; note: string };
@@ -198,6 +200,10 @@ export default function Home() {
   const [category, setCategory] = useState("All categories");
   const [busy, setBusy] = useState(false);
   const [draftBusy, setDraftBusy] = useState("");
+  const [intakeText, setIntakeText] = useState("");
+  const [intakeBusy, setIntakeBusy] = useState(false);
+  const [intakeRecognized, setIntakeRecognized] = useState<string[]>([]);
+  const [expandedApplication, setExpandedApplication] = useState("");
   const [notice, setNotice] = useState("");
   const [hydrated, setHydrated] = useState(false);
   const [showMobileNav, setShowMobileNav] = useState(false);
@@ -257,6 +263,63 @@ export default function Home() {
     setToolTrace([]);
     setTab("profile");
     setNotice("Sample household loaded. Review the profile and run the assessment.");
+  };
+
+  const submitIntake = async () => {
+    if (!intakeText.trim()) {
+      setNotice("Describe your situation in a sentence before continuing.");
+      return;
+    }
+    setIntakeBusy(true);
+    try {
+      const response = await fetch("/api/intake/parse", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: intakeText, language })
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || "Unable to extract profile facts.");
+      const extracted = payload.updates || {};
+      setProfile((current) => ({ ...current, ...extracted }));
+      setIntakeRecognized(payload.recognizedFields || []);
+      setTab("profile");
+      setNotice(payload.recognizedFields?.length
+        ? `Extracted ${payload.recognizedFields.length} profile detail(s). Review every value before assessment.`
+        : "No profile facts were confidently recognized. Complete the form manually.");
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : "Unable to process the description.");
+    } finally {
+      setIntakeBusy(false);
+    }
+  };
+
+  const startVoiceInput = () => {
+    const browser = window as unknown as {
+      SpeechRecognition?: new () => any;
+      webkitSpeechRecognition?: new () => any;
+    };
+    const Recognition = browser.SpeechRecognition || browser.webkitSpeechRecognition;
+    if (!Recognition) {
+      setNotice("Voice input is not available in this browser. Use the text description instead.");
+      return;
+    }
+    const recognition = new Recognition();
+    const locales: Record<LanguageCode, string> = {
+      en: "en-IN", hi: "hi-IN", kn: "kn-IN", ta: "ta-IN", te: "te-IN", ml: "ml-IN"
+    };
+    recognition.lang = locales[language];
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+    recognition.onresult = (event: any) => {
+      const transcript = event?.results?.[0]?.[0]?.transcript;
+      if (typeof transcript === "string") {
+        setIntakeText((current) => current ? current + " " + transcript : transcript);
+        setNotice("Voice transcript added. Review the text before extracting profile facts.");
+      }
+    };
+    recognition.onerror = () => setNotice("Voice recognition did not complete. You can type the description instead.");
+    recognition.start();
+    setNotice("Listening… speak in the language selected above.");
   };
 
   const runAssessment = async () => {
@@ -463,6 +526,39 @@ export default function Home() {
               <div className="hero-bottom-note"><LockKeyhole size={13}/> No Aadhaar or bank-account number required in this prototype.</div>
             </section>
 
+            <section className="panel intake-panel">
+              <div className="intake-heading">
+                <div className="eyebrow">START WITH YOUR SITUATION</div>
+                <h2>Tell JanaSetu what you need help with.</h2>
+                <p>Describe your household in your chosen language. We will suggest profile facts for you to review before any screening.</p>
+              </div>
+              <textarea
+                className="intake-text"
+                value={intakeText}
+                onChange={(event) => setIntakeText(event.target.value)}
+                maxLength={4000}
+                placeholder={language === "hi"
+                  ? "उदाहरण: मैं 34 साल की महिला किसान हूं, कर्नाटक में रहती हूं, वार्षिक घरेलू आय 1.5 लाख रुपये है।"
+                  : language === "kn"
+                    ? "ಉದಾಹರಣೆ: ನಾನು 34 ವರ್ಷದ ಮಹಿಳಾ ರೈತ, ಕರ್ನಾಟಕದಲ್ಲಿ ವಾಸಿಸುತ್ತೇನೆ, ವಾರ್ಷಿಕ ಕುಟುಂಬ ಆದಾಯ ₹1.5 ಲಕ್ಷ."
+                    : language === "ta"
+                      ? "உதாரணம்: நான் 34 வயது பெண் விவசாயி, தமிழ்நாட்டில் வசிக்கிறேன், ஆண்டு குடும்ப வருமானம் ₹1.5 லட்சம்."
+                      : language === "te"
+                        ? "ఉదాహరణ: నేను 34 ఏళ్ల మహిళా రైతును, తెలంగాణలో ఉంటాను, వార్షిక కుటుంబ ఆదాయం ₹1.5 లక్షలు."
+                        : language === "ml"
+                          ? "ഉദാഹരണം: ഞാൻ 34 വയസ്സുള്ള വനിതാ കർഷകയാണ്, കേരളത്തിൽ താമസിക്കുന്നു, വാർഷിക കുടുംബ വരുമാനം ₹1.5 ലക്ഷം."
+                          : "Example: I am a 34-year-old woman farmer in Karnataka. My annual household income is ₹1.5 lakh."}
+              />
+              <div className="intake-actions">
+                <span><ShieldCheck size={14}/> Text extraction is a suggestion. Check every field on your profile.</span>
+                <div>
+                  <button className="button button-outline" onClick={startVoiceInput}><Mic size={15}/> Speak</button>
+                  <button className="button button-primary" onClick={submitIntake} disabled={intakeBusy}>{intakeBusy ? "Reading…" : "Extract profile facts"} <ArrowRight size={15}/></button>
+                </div>
+              </div>
+              {intakeRecognized.length > 0 && <div className="intake-recognized"><CheckCircle2 size={15}/> Suggested fields: {intakeRecognized.join(" · ")}. Review and correct them in My profile.</div>}
+            </section>
+
             <div className="metric-grid">
               <div className="metric-card"><div className="metric-icon green"><BookOpen size={18}/></div><div><strong>04</strong><span>{t("reviewed")}</span></div><small>Central schemes</small></div>
               <div className="metric-card"><div className="metric-icon sand"><Globe2 size={18}/></div><div><strong>36</strong><span>{t("coverage")}</span></div><small>28 States + 8 UTs</small></div>
@@ -580,7 +676,23 @@ export default function Home() {
           {tab === "applications" && <section className="page-section">
             <div className="page-title-row"><div><div className="eyebrow">APPLICATION LIFECYCLE</div><h1>{t("applicationsTitle")}</h1><p>{t("applicationsText")}</p></div><div className="private-chip"><ClipboardCheck size={14}/> {applications.length} saved</div></div>
             {applications.length === 0 ? <div className="panel empty-large"><div className="empty-state"><ClipboardCheck size={32}/><h3>No application drafts yet</h3><p>Run an assessment, open a scheme and choose “Prepare draft” to create a reviewable application record.</p><button className="button button-primary" onClick={() => setTab("discover")}>Find benefits <ArrowRight size={15}/></button></div></div> :
-              <div className="application-list">{applications.map((application) => <article className="panel application-card" key={application.id}><div className="application-top"><div className="application-icon"><FileCheck2 size={20}/></div><div><span className="draft-label">PREPARATION DRAFT</span><h3>{application.schemeName}</h3><p>{application.id} · Created {shortDate(application.createdAt)}</p></div><span className="status-pill neutral">Not submitted</span></div><div className="application-meta"><div><small>Applicant</small><strong>{application.citizenName}</strong></div><div><small>Location</small><strong>{application.district}, {application.state}</strong></div><div><small>Open checks</small><strong>{application.missingChecks.length} require review</strong></div></div><p className="application-disclaimer"><CircleAlert size={15}/>{application.disclaimer}</p><div className="application-actions"><a className="text-button" href={application.sourceUrl} target="_blank" rel="noreferrer">Open official source <ArrowUpRight size={14}/></a><button className="button button-small button-outline" onClick={() => addFollowup(application)}><CalendarClock size={14}/> Add follow-up</button><button className="text-button danger-text" onClick={() => setApplications((current) => current.filter((item) => item.id !== application.id))}>Remove</button></div></article>)}</div>}
+              <div className="application-list">{applications.map((application) => <article className="panel application-card" key={application.id}><div className="application-top"><div className="application-icon"><FileCheck2 size={20}/></div><div><span className="draft-label">PREPARATION DRAFT</span><h3>{application.schemeName}</h3><p>{application.id} · Created {shortDate(application.createdAt)}</p></div><span className="status-pill neutral">Not submitted</span></div><div className="application-meta"><div><small>Applicant</small><strong>{application.citizenName}</strong></div><div><small>Location</small><strong>{application.district}, {application.state}</strong></div><div><small>Open checks</small><strong>{application.missingChecks.length} require review</strong></div></div>
+                <div className="draft-field-toolbar">
+                  <button className="text-button" onClick={() => setExpandedApplication(expandedApplication === application.id ? "" : application.id)}>
+                    {expandedApplication === application.id ? "Hide prepared fields" : "Review prepared fields"} <ChevronDown size={14}/>
+                  </button>
+                  {application.reviewedAt
+                    ? <span className="reviewed-label"><CheckCircle2 size={13}/> Citizen review recorded · {shortDate(application.reviewedAt)}</span>
+                    : <button className="button button-small button-outline" onClick={() => setApplications((current) => current.map((item) => item.id === application.id ? { ...item, reviewedAt: new Date().toISOString(), status: "Reviewed by citizen — not submitted" } : item))}>Mark as reviewed</button>}
+                </div>
+                {expandedApplication === application.id && <div className="draft-field-grid">
+                  {(application.fields || []).map((field) => <div className="draft-field" key={field.key}>
+                    <span>{field.label}</span><strong>{field.value || "Not provided"}</strong>
+                    <small>{field.source} · {field.status === "provided" ? "Provided" : "Needs information"}</small>
+                  </div>)}
+                  <p className="draft-field-note">These are profile preparation fields, not a verified mapping to an official department form. Confirm the form's current fields and values on the linked official source.</p>
+                </div>}
+                <p className="application-disclaimer"><CircleAlert size={15}/>{application.disclaimer}</p><div className="application-actions"><a className="text-button" href={application.sourceUrl} target="_blank" rel="noreferrer">Open official source <ArrowUpRight size={14}/></a><button className="button button-small button-outline" onClick={() => addFollowup(application)}><CalendarClock size={14}/> Add follow-up</button><button className="text-button danger-text" onClick={() => setApplications((current) => current.filter((item) => item.id !== application.id))}>Remove</button></div></article>)}</div>}
             {tasks.length > 0 && <div className="panel followup-panel"><div className="section-heading"><div><div className="eyebrow">FOLLOW-UP MEMORY</div><h2>Upcoming actions</h2></div><span className="trace-count">{tasks.length} reminders</span></div>{tasks.map((task) => <div className="task-row" key={task.id}><div className="task-date"><CalendarClock size={17}/></div><div><strong>{task.title}</strong><small>Suggested date: {shortDate(task.dueAt)} · {task.note}</small></div><button className="text-button" onClick={() => setTasks((current) => current.filter((item) => item.id !== task.id))}>Done</button></div>)}</div>}
           </section>}
 
