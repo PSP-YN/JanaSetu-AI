@@ -105,14 +105,15 @@ Implication:
 ## Positioning matrix
 
 | Capability | myScheme | UMANG | Kisan e-Mitra | Doot (public positioning) | JanaSetu prototype |
-|---|---|---|---|---|
-| Central + State/UT discovery | Yes | Service/scheme gateway | No | Limited curated Central catalogue |
-| Multilingual access | 15 languages reported | Multiple access modes and languages | Multiple language/issuer contexts | English, Hindi, Kannada, Tamil, Telugu, Malayalam UI |
-| Eligibility questions | Yes | Varies by service | Not its core function | Deterministic prototype rules |
-| Rule-to-profile evidence trail | Not claimed as a core user-facing graph in public FAQ | Not claimed as a core feature | Document provenance, not scheme rule mapping | Yes, condition-level checks |
-| Draft preparation and readiness state | FAQ says redirects to department application page | Service-specific transaction workflows | Document access/sharing | Local draft and checklist |
-| Persistent cross-scheme task memory | Not stated in public FAQ | User/account service features vary | Not its core function | Browser-local prototype only |
-| Government submission | Redirects to responsible portal per FAQ | Many services are available directly; varies by service | Not its core function | No submission |
+|---|---|---|---|---|---|
+| Primary role | National scheme discovery | Government service gateway | PM-KISAN farmer query/status assistant | Broad personal citizen-agent vision | Benefits preparation and follow-through prototype |
+| Catalogue / scope | 5,140+ live site snapshot; Central + State/UT | 2,575 services reported across 240 departments (31 Jul 2026) | PM-KISAN only | Broad civic-service vision; live integration scope not independently verified | Four curated Central scheme records |
+| Languages | 15 languages reported in FAQ | Multilingual service access; varies by service | 11 languages reported in programme documentation | 22+ languages claimed on product site | Six UI languages; deterministic intake patterns |
+| Eligibility / screening | Profile-based discovery and scheme questionnaires | Varies by service | Beneficiary-specific PM-KISAN information | Agentic civic-service vision | Deterministic rules for four scheme records |
+| Rule-to-evidence trace | Eligibility criteria and document lists; not presented as JanaSetu's exact case graph | Service-dependent | Beneficiary record context for PM-KISAN | Explainable actions claimed; implementation requires validation | Condition-level checks and profile evidence |
+| Application workflow | FAQ says it redirects to department portals | Many services are directly accessible; varies | Scheme-specific query/status assistance | Broad action-taking vision | Local preparation draft; no submission |
+| Cross-scheme case continuity | Saved profile/bookmarks and recommendations; workflow scope differs | Account/service history varies | Not a cross-scheme workflow | Personal-agent vision | Browser-local records only; no authenticated account |
+| Best JanaSetu response | Complement discovery and consume official source links | Link to official service destinations | Refer farmers to official PM-KISAN support | Compete on measurable case-readiness workflow, not generic agent claims | Narrow, auditable readiness case file |
 
 ## Additional adjacent ecosystem
 
@@ -133,6 +134,10 @@ JanaSetu should not compete head-on with myScheme's catalogue scale, UMANG's tra
 - PIB, “Government Expands Citizen-Centric Digital Public Service Delivery through UMANG and DigiLocker”, 12 August 2026: https://www.pib.gov.in/PressReleasePage.aspx?PRID=2298116&lang=1&reg=1
 - DigiLocker: https://www.digilocker.gov.in/
 - CSC locator: https://locator.csccloud.in/
+- Kisan e-Mitra programme description: https://socialprotectionai.org/use-case/IND-001
+- Doot public product site: https://digidoot.in/
+- Prabodhini research paper (ACL Anthology, 2025): https://aclanthology.org/2025.hcinlp-1.6/
+- Bhashini: https://bhashini.gov.in/
 
 
 ## Research caveats
