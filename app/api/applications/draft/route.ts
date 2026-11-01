@@ -19,6 +19,20 @@ export async function POST(request: NextRequest) {
 
     const assessment = evaluateScheme(scheme, profile);
     const missing = assessment.checks.filter((item) => item.state === "unknown" || item.state === "not_matched");
+    const preparationFields = [
+      { key: "applicant_name", label: "Applicant name", value: profile.fullName || "", source: "Citizen profile" },
+      { key: "age", label: "Age", value: profile.age === "" ? "" : String(profile.age), source: "Citizen profile" },
+      { key: "gender", label: "Gender", value: profile.gender || "", source: "Citizen profile" },
+      { key: "state", label: "State / Union Territory", value: profile.state || "", source: "Citizen profile" },
+      { key: "district", label: "District", value: profile.district || "", source: "Citizen profile" },
+      { key: "residence", label: "Area of residence", value: profile.residenceType || "", source: "Citizen profile" },
+      { key: "annual_income", label: "Annual household income", value: profile.annualIncome === "" ? "" : "₹" + Number(profile.annualIncome).toLocaleString("en-IN"), source: "Citizen profile" },
+      { key: "occupation", label: "Occupation", value: profile.occupation || "", source: "Citizen profile" }
+    ].map((field) => ({
+      ...field,
+      status: field.value ? "provided" as const : "missing" as const
+    }));
+
     const draft = {
       id: "JS-" + new Date().toISOString().slice(0, 10).replaceAll("-", "") + "-" + Math.random().toString(36).slice(2, 7).toUpperCase(),
       schemeId: scheme.id,
@@ -30,6 +44,8 @@ export async function POST(request: NextRequest) {
       createdAt: new Date().toISOString(),
       reviewRequired: true,
       missingChecks: missing.map((item) => item.label),
+      fields: preparationFields,
+      reviewedAt: null,
       sourceUrl: scheme.sourceUrl,
       disclaimer: "This is a preparation draft created by the JanaSetu prototype. It has not been submitted to a government portal."
     };
