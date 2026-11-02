@@ -38,6 +38,14 @@ jobs:
       - name: Type-check
         run: npm run typecheck
 
+      - name: Install browser test dependencies
+        run: |
+          npm install --no-save --no-package-lock @playwright/test @axe-core/playwright
+          npx playwright install --with-deps chromium
+
+      - name: Run browser accessibility and interaction tests
+        run: npx playwright test
+
       - name: Validate Chrome extension syntax and manifest
         run: |
           node --check extension/popup.js
