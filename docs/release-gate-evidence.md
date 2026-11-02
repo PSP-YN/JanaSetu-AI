@@ -24,7 +24,7 @@ Current evidence: the hero and a subset of shared copy have translations. Severa
 - [ ] Mobile zoom/reflow, touch target size, orientation and virtual keyboard tested on representative Android devices.
 - [ ] Accessibility findings have severity, owner, reproduction steps and retest evidence.
 
-Current evidence: skip link and visible focus styling exist. Automated axe and manual assistive-technology evidence is not present. **Not passed.**
+Current evidence: Playwright includes axe scans for the overview, privacy and terms routes, plus a mobile overview scan and keyboard skip-link test. A new main-workflow network-boundary regression test is present; execution on the latest commit is pending. Other primary tabs and interactive states are not covered by axe, and no manual screen-reader/assistive-technology sign-off is recorded. **Not passed.**
 
 ## Gate 3 — browser extension portal compatibility
 
@@ -35,7 +35,7 @@ Current evidence: skip link and visible focus styling exist. Automated axe and m
 - [ ] Confirm OTP, CAPTCHA, password, Aadhaar, bank and document upload fields are never populated.
 - [ ] Re-run the matrix after portal markup or extension changes.
 
-Current evidence: hostname restriction and click-to-fill are implemented. Heuristic matching has not been proven portal by portal. **Not passed.**
+Current evidence: hostname restriction and click-to-fill are implemented. Synthetic Playwright fixtures cover basic text fill, sensitive-field skipping and select mapping; new tests cover Male/Female partial-match collisions, unmatched options and duplicate exact options. CI execution for the latest fixtures is pending. Heuristic matching has not been proven portal by portal. **Not passed.**
 
 ## Gate 4 — scheme verification and approval
 
