@@ -28,7 +28,7 @@ function aggregate(checks: RuleCheck[], mustVerify = false): "potential_match" |
 export function evaluateScheme(scheme: Scheme, profile: CitizenProfile): Assessment {
   // Fail closed: deterministic screening is disabled until two-person human
   // source/rule approval is recorded in the catalogue. Missing means pending.
-  if (scheme.catalogueStatus === "rule-screened" && scheme.reviewStatus !== "approved") {
+  if (scheme.reviewStatus !== "approved") {
     return {
       schemeId: scheme.id,
       state: "needs_verification",
