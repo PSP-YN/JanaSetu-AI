@@ -43,3 +43,37 @@ test("skip navigation is keyboard reachable and moves to main content", async ({
   await expect(page).toHaveURL(/#main-content$/);
   await expect(page.locator("#main-content")).toBeVisible();
 });
+
+
+test("extension synthetic form fills unique safe fields and skips sensitive or ambiguous controls", async ({ page }) => {
+  await page.setContent(`
+    <form>
+      <label for="applicant">Applicant name</label><input id="applicant" name="applicantName">
+      <label for="age">Age</label><input id="age" name="age">
+      <label for="state">State</label><select id="state" name="state"><option value="">Choose</option><option value="Karnataka">Karnataka</option></select>
+      <label for="aadhaar">Aadhaar number</label><input id="aadhaar" name="aadhaar">
+      <label for="password">Password</label><input id="password" type="password">
+      <label for="consent">I agree to the declaration</label><input id="consent" type="checkbox">
+      <label for="duplicate1">Applicant name</label><input id="duplicate1">
+      <label for="duplicate2">Applicant name</label><input id="duplicate2">
+      <input id="hidden" type="hidden" name="age">
+    </form>`);
+  await page.addScriptTag({ path: "extension/fill.js" });
+  const result = await page.evaluate(() => (window as any).fillProfileInPage({
+    fullName: "Synthetic Citizen", age: 34, state: "Karnataka", gender: "woman",
+    annualIncome: 150000, occupation: "Farmer", residenceType: "urban",
+    hasCultivableLand: true, pmKisanExcluded: "no", ownsPuccaHouse: false,
+    previousHousingBenefit: "no", householdHasLpg: false, poorHouseholdDeclaration: true,
+    isStudent: false, top20Percentile: null, regularUndergraduate: null,
+    otherScholarship: null, diplomaOrDistance: null
+  }));
+  expect(result.filled).toBe(2);
+  await expect(page.locator("#applicant")).toHaveValue("Synthetic Citizen");
+  await expect(page.locator("#age")).toHaveValue("34");
+  await expect(page.locator("#state")).toHaveValue("Karnataka");
+  await expect(page.locator("#aadhaar")).toHaveValue("");
+  await expect(page.locator("#password")).toHaveValue("");
+  await expect(page.locator("#consent")).not.toBeChecked();
+  await expect(page.locator("#duplicate1")).toHaveValue("");
+  await expect(page.locator("#duplicate2")).toHaveValue("");
+});
