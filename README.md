@@ -49,6 +49,9 @@ npm run build
 See:
 - [Architecture](docs/architecture.md)
 - [Data provenance and rule notes](docs/data-provenance.md)
+- [Source verification and freshness register](docs/source-verification-and-freshness.md)
+- [Production readiness and release gates](docs/production-readiness.md)
+- [Privacy notice](app/privacy/page.tsx) · [Terms and limitations](app/terms/page.tsx)
 - [Competitor landscape](docs/competitor-analysis.md)
 - [Idea submission and six-slide narrative](docs/idea-submission.md)
 - [Three-minute demo script](docs/demo-script.md)
