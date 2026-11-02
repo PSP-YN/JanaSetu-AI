@@ -54,6 +54,22 @@ function invalidateUnapprovedAssessments(value: unknown): Assessment[] {
     });
 }
 
+function invalidateUnapprovedApplications(value: unknown): LocalApplication[] {
+  if (!Array.isArray(value)) return [];
+  return value.filter((item) => item && typeof item === "object" && typeof item.schemeId === "string")
+    .map((item) => {
+      const scheme = SCHEMES.find((entry) => entry.id === item.schemeId);
+      if (!scheme || scheme.reviewStatus === "approved") return item as LocalApplication;
+      return {
+        ...(item as LocalApplication),
+        reviewRequired: true,
+        assessmentState: "needs_verification" as const,
+        status: "Scheme review pending — not an eligibility result",
+        reviewedAt: null
+      };
+    });
+}
+
 const EMPTY_PROFILE: CitizenProfile = {
   fullName: "", age: "", gender: "", state: "", district: "", residenceType: "",
   annualIncome: "", occupation: "", hasCultivableLand: null, pmKisanExcluded: "unknown",
@@ -931,7 +947,7 @@ export default function Home() {
       };
       setProfile(read(STORAGE.profile, EMPTY_PROFILE));
       setLanguage(read(STORAGE.language, "en"));
-      setApplications(read(STORAGE.applications, []));
+      setApplications(invalidateUnapprovedApplications(read(STORAGE.applications, [])));
       setDocuments(read(STORAGE.documents, []));
       setTasks(read(STORAGE.tasks, []));
       setAssessments(invalidateUnapprovedAssessments(read(STORAGE.assessments, [])));
@@ -970,7 +986,7 @@ export default function Home() {
     try {
       const data = JSON.parse(await file.text());
       if (data?.app !== "JanaSetu" || data?.schemaVersion !== 1 || !data?.profile) throw new Error("This is not a supported JanaSetu backup file.");
-      setProfile(data.profile); setLanguage(data.language || "en"); setApplications(Array.isArray(data.applications) ? data.applications : []); setDocuments(Array.isArray(data.documents) ? data.documents : []); setTasks(Array.isArray(data.tasks) ? data.tasks : []); setAssessments(invalidateUnapprovedAssessments(data.assessments));
+      setProfile(data.profile); setLanguage(data.language || "en"); setApplications(invalidateUnapprovedApplications(data.applications)); setDocuments(Array.isArray(data.documents) ? data.documents : []); setTasks(Array.isArray(data.tasks) ? data.tasks : []); setAssessments(invalidateUnapprovedAssessments(data.assessments));
       setTab("profile"); setNotice("Backup restored in this browser. Review imported details before use.");
     } catch (error) { setNotice(error instanceof Error ? error.message : "Unable to restore this backup."); } finally { setBackupBusy(false); }
   };
