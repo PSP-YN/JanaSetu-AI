@@ -164,7 +164,7 @@ export const SCHEMES: Scheme[] = [
 ];
 
 // Source-indexed records are deliberately not eligibility-scored until current rules are reviewed.
-SCHEMES.push(...[
+SCHEMES.push(...([
   {
     "id": "pmss-police-martyred",
     "name": "Prime Minister’s Scholarship Scheme for Wards of States/UTs Police Personnel Martyred During Terror/Naxal Attacks",
@@ -1352,7 +1352,7 @@ SCHEMES.push(...[
     "catalogueStatus": "catalogue-only",
     "jurisdiction": "state"
   }
-]);
+] as Scheme[]));
 
 export const LANGUAGE_OPTIONS = [
   { code: "en", label: "English" },
