@@ -199,11 +199,11 @@ function Field({ label, hint, children }: { label: string; hint?: string; childr
 function Select({ value, onChange, children }: { value: string; onChange: (value: string) => void; children: React.ReactNode }) {
   return <select value={value} onChange={(event) => onChange(event.target.value)}>{children}</select>;
 }
-function YesNo({ value, onChange, unknown = false }: { value: boolean | null; onChange: (value: boolean | null) => void; unknown?: boolean }) {
+function YesNo({ value, onChange, unknown = false, t }: { value: boolean | null; onChange: (value: boolean | null) => void; unknown?: boolean; t: (key: string) => string }) {
   return <div className="segmented">
-    <button type="button" className={value === true ? "selected" : ""} onClick={() => onChange(true)}>Yes</button>
-    <button type="button" className={value === false ? "selected" : ""} onClick={() => onChange(false)}>No</button>
-    {unknown && <button type="button" className={value === null ? "selected" : ""} onClick={() => onChange(null)}>Not sure</button>}
+    <button type="button" className={value === true ? "selected" : ""} onClick={() => onChange(true)}>{t("yes")}</button>
+    <button type="button" className={value === false ? "selected" : ""} onClick={() => onChange(false)}>{t("no")}</button>
+    {unknown && <button type="button" className={value === null ? "selected" : ""} onClick={() => onChange(null)}>{t("notSure")}</button>}
   </div>;
 }
 function statusLabel(state: Assessment["state"], t: (key: string) => string) {
@@ -669,7 +669,7 @@ export default function Home() {
 
                 <div className="form-section-title subsection"><span>02</span><div><h2>Housing and household</h2><p>These questions only screen the housing and LPG records shown in this catalogue.</p></div></div>
                 <div className="form-grid">
-                  <Field label="Does your family own a pucca house anywhere in India?"><YesNo value={profile.ownsPuccaHouse} onChange={(v) => updateProfile("ownsPuccaHouse", v)} unknown/></Field>
+                  <Field label="Does your family own a pucca house anywhere in India?"><YesNo t={t} value={profile.ownsPuccaHouse} onChange={(v) => updateProfile("ownsPuccaHouse", v)} unknown/></Field>
                   <Field label="Was your family allotted a government house in the last 20 years?"><Select value={profile.previousHousingBenefit} onChange={(v) => updateProfile("previousHousingBenefit", v as CitizenProfile["previousHousingBenefit"])}><option value="unknown">Not sure</option><option value="yes">Yes</option><option value="no">No</option></Select></Field>
                   <Field label="Does anyone in your household have an LPG connection?"><YesNo value={profile.householdHasLpg} onChange={(v) => updateProfile("householdHasLpg", v)} unknown/></Field>
                   <Field label="Can the applicant provide the prescribed poor-household declaration for PMUY?"><YesNo value={profile.poorHouseholdDeclaration} onChange={(v) => updateProfile("poorHouseholdDeclaration", v)} unknown/></Field>
