@@ -73,7 +73,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     documentsTitle: "Document checklist", documentsText: "Add file references to organize what you have. Prototype files are not uploaded to a server.",
     applicationsTitle: "Application workspace", applicationsText: "Drafts are preparation records. Nothing here has been submitted to a government portal.",
     language: "Language", allIndia: "Designed for every State and Union Territory", catalogue: "Source-linked Central + Karnataka starter catalogue · partial coverage",
-    official: "Official decision remains with the department", noUpload: "Files are not uploaded"
+    official: "Official decision remains with the department", noUpload: "Files are not uploaded",
     skip: "Skip to main content",
     benefitsAccess: "BENEFITS ACCESS",
     workspace: "GOVERNMENT BENEFITS WORKSPACE",
@@ -136,7 +136,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     documentsTitle: "दस्तावेज़ सूची", documentsText: "अपने दस्तावेज़ व्यवस्थित करने के लिए फ़ाइल संदर्भ जोड़ें। फ़ाइलें सर्वर पर अपलोड नहीं होतीं।",
     applicationsTitle: "आवेदन कार्यक्षेत्र", applicationsText: "ये तैयारी के ड्राफ़्ट हैं; कोई आवेदन सरकारी पोर्टल पर जमा नहीं हुआ है।",
     language: "भाषा", allIndia: "हर राज्य और केंद्र शासित प्रदेश के लिए", catalogue: "चयनित केंद्रीय योजनाओं का पायलट",
-    official: "अंतिम निर्णय संबंधित विभाग का होगा", noUpload: "फ़ाइलें अपलोड नहीं होतीं"
+    official: "अंतिम निर्णय संबंधित विभाग का होगा", noUpload: "फ़ाइलें अपलोड नहीं होतीं",
     skip: "मुख्य सामग्री पर जाएँ",
     benefitsAccess: "लाभ तक पहुँच",
     workspace: "सरकारी लाभ कार्यक्षेत्र",
@@ -199,7 +199,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     documentsTitle: "ದಾಖಲೆಗಳ ಪಟ್ಟಿ", documentsText: "ದಾಖಲೆಗಳನ್ನು ವ್ಯವಸ್ಥಿತಗೊಳಿಸಲು ಫೈಲ್ ವಿವರ ಸೇರಿಸಿ. ಫೈಲ್‌ಗಳು ಸರ್ವರ್‌ಗೆ ಅಪ್‌ಲೋಡ್ ಆಗುವುದಿಲ್ಲ.",
     applicationsTitle: "ಅರ್ಜಿ ಕಾರ್ಯಕ್ಷೇತ್ರ", applicationsText: "ಇವು ಕರಡು ದಾಖಲೆಗಳು ಮಾತ್ರ; ಸರ್ಕಾರಿ ಪೋರ್ಟಲ್‌ಗೆ ಸಲ್ಲಿಸಲಾಗಿಲ್ಲ.",
     language: "ಭಾಷೆ", allIndia: "ಪ್ರತಿ ರಾಜ್ಯ ಮತ್ತು ಕೇಂದ್ರಾಡಳಿತ ಪ್ರದೇಶಕ್ಕಾಗಿ", catalogue: "ಆಯ್ದ ಕೇಂದ್ರ ಯೋಜನೆಗಳ ಪೈಲಟ್",
-    official: "ಅಂತಿಮ ನಿರ್ಧಾರ ಸಂಬಂಧಿತ ಇಲಾಖೆಯದು", noUpload: "ಫೈಲ್ ಅಪ್‌ಲೋಡ್ ಆಗುವುದಿಲ್ಲ"
+    official: "ಅಂತಿಮ ನಿರ್ಧಾರ ಸಂಬಂಧಿತ ಇಲಾಖೆಯದು", noUpload: "ಫೈಲ್ ಅಪ್‌ಲೋಡ್ ಆಗುವುದಿಲ್ಲ",
     skip: "ಮುಖ್ಯ ವಿಷಯಕ್ಕೆ ತೆರಳಿ",
     benefitsAccess: "ಸೌಲಭ್ಯಗಳ ಪ್ರವೇಶ",
     workspace: "ಸರ್ಕಾರಿ ಸೌಲಭ್ಯ ಕಾರ್ಯಕ್ಷೇತ್ರ",
@@ -262,7 +262,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     documentsTitle: "ஆவணப் பட்டியல்", documentsText: "கோப்பு குறிப்புகளைச் சேர்த்து ஒழுங்குபடுத்துங்கள். கோப்புகள் சேவையகத்தில் பதிவேற்றப்படாது.",
     applicationsTitle: "விண்ணப்பப் பணியிடம்", applicationsText: "இவை தயாரிப்பு வரைவுகள் மட்டுமே; அரசு தளத்தில் சமர்ப்பிக்கப்படவில்லை.",
     language: "மொழி", allIndia: "அனைத்து மாநிலங்கள் மற்றும் யூனியன் பிரதேசங்களுக்காக", catalogue: "தேர்ந்தெடுக்கப்பட்ட மத்திய திட்டங்களின் முன்னோடி",
-    official: "இறுதி முடிவு சம்பந்தப்பட்ட துறையின்து", noUpload: "கோப்புகள் பதிவேற்றப்படாது"
+    official: "இறுதி முடிவு சம்பந்தப்பட்ட துறையின்து", noUpload: "கோப்புகள் பதிவேற்றப்படாது",
     skip: "முக்கிய உள்ளடக்கத்திற்குச் செல்",
     benefitsAccess: "நலன்களை அணுகுதல்",
     workspace: "அரசு நலன் பணியிடம்",
@@ -325,7 +325,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     documentsTitle: "పత్రాల జాబితా", documentsText: "పత్రాలను క్రమబద్ధీకరించడానికి ఫైల్ వివరాలను జోడించండి. ఫైళ్లు సర్వర్‌కు అప్‌లోడ్ కావు.",
     applicationsTitle: "దరఖాస్తుల కార్యస్థలం", applicationsText: "ఇవి తయారీ డ్రాఫ్ట్‌లు మాత్రమే; ప్రభుత్వ పోర్టల్‌కు సమర్పించబడలేదు.",
     language: "భాష", allIndia: "అన్ని రాష్ట్రాలు మరియు కేంద్రపాలిత ప్రాంతాల కోసం", catalogue: "ఎంచుకున్న కేంద్ర పథకాల పైలట్",
-    official: "చివరి నిర్ణయం సంబంధిత శాఖదే", noUpload: "ఫైళ్లు అప్‌లోడ్ కావు"
+    official: "చివరి నిర్ణయం సంబంధిత శాఖదే", noUpload: "ఫైళ్లు అప్‌లోడ్ కావు",
     skip: "ప్రధాన విషయానికి వెళ్లండి",
     benefitsAccess: "ప్రయోజనాల ప్రాప్యత",
     workspace: "ప్రభుత్వ ప్రయోజనాల కార్యస్థలం",
