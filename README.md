@@ -77,3 +77,18 @@ All rights reserved. This repository is published for evaluation and demonstrati
 JanaSetu's Discover view now includes paginated, keyword-searchable records from the public Hugging Face Dataset Viewer for [SmartDuke Technologies — Indian Government Schemes Dataset 2026](https://huggingface.co/datasets/smartduketech/indian-government-schemes-2025), published under **CC BY 4.0**. Dataset snapshot: 5 July 2026. Attribution: SmartDuke Technologies, SchemeFit dataset, CC BY 4.0. The dataset card says its source is myScheme and that the publisher's parser produced the structured eligibility fields. These are **third-party machine-parsed data**, not official JanaSetu rules. JanaSetu does not use imported eligibility fields to decide whether a person qualifies. Users must verify current rules, benefits, application dates and destination URLs against the linked government department/myScheme page. Dataset viewer availability is an external dependency; JanaSetu shows an error and preserves the official myScheme link if it is unavailable.
 
 This open-data integration does not claim all 4,693 rows are current active schemes or officially verified. The row count reflects the dataset snapshot and can change.
+
+
+## Release assurance and review packs
+
+The current application is a prototype. Read the evidence and approval requirements before using it with any real citizen data:
+
+- [Six-gate release evidence register](docs/release-gate-evidence.md)
+- [Localization policy](docs/localization-policy.md)
+- [Scheme source and rule approval workflow](docs/scheme-review-workflow.md)
+- [Portal compatibility test matrix](docs/portal-test-matrix.md)
+- [Privacy impact assessment draft](docs/privacy-impact-assessment.md)
+- [Security threat model](docs/security-threat-model.md)
+- [Security assessment and independent test scope](docs/security-assessment.md)
+
+**Important:** the four deterministic scheme records are now fail-closed and remain blocked until human approval is explicitly recorded. Synthetic CI tests do not constitute portal compatibility certification, legal review, DPIA approval, manual accessibility sign-off or an independent penetration test.
