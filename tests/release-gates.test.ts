@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { SCHEMES, type CitizenProfile } from "../lib/catalog";
 import { evaluateScheme } from "../lib/agent";
 import { readJsonBody } from "../lib/request";
+import { invalidateUnapprovedAssessments, invalidateUnapprovedApplications } from "../lib/assessment-safety";
 import { parseCitizenProfile } from "../lib/profile-validation";
 
 const syntheticProfile: CitizenProfile = {
@@ -91,4 +92,21 @@ test("bounded JSON parser rejects non-object payloads at the profile boundary", 
   const result = await readJsonBody(request, 128);
   assert.equal(result.ok, true);
   if (result.ok) assert.equal(result.value, null);
+});
+
+
+test("saved positive assessment for an unapproved scheme is invalidated", () => {
+  const old = [{ schemeId: "pm-kisan", state: "potential_match", headline: "Potential match", explanation: "Old", checks: [], nextActions: [] }];
+  const safe = invalidateUnapprovedAssessments(old);
+  assert.equal(safe[0].state, "needs_verification");
+  assert.match(safe[0].headline, /Human review pending/);
+});
+
+test("imported application drafts cannot retain a reviewed state for a pending scheme", () => {
+  const old = [{ schemeId: "pm-kisan", reviewRequired: false, assessmentState: "potential_match" as const, status: "Reviewed", reviewedAt: "2026-01-01" }];
+  const safe = invalidateUnapprovedApplications(old);
+  assert.equal(safe[0].reviewRequired, true);
+  assert.equal(safe[0].assessmentState, "needs_verification");
+  assert.equal(safe[0].reviewedAt, null);
+  assert.match(safe[0].status, /Scheme review pending/);
 });
