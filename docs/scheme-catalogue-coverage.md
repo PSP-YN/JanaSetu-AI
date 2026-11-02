@@ -71,3 +71,18 @@ rule-screened means deterministic eligibility checks exist in the app and are li
 4. Add machine translation with original text, engine/version, human-review status and translation date; do not treat translated summaries as rule sources.
 5. Add deterministic rule packs only after current scheme guidelines are reviewed and versioned.
 6. Introduce scheduled source checks and human review before presenting changed benefits, rules or deadlines.
+
+
+## Open-data expansion — Karnataka FY 2026–27 budget leads
+
+On 2 November 2026, JanaSetu added 96 Karnataka budget-derived discovery leads from the published CC BY 4.0 derived dataset in [urbanmorph/schemes](https://github.com/urbanmorph/schemes). The underlying budget documents are linked directly from the Government of Karnataka Finance Department:
+
+- Child Budget: https://finance.karnataka.gov.in/uploads/CB2026-27_1772789054.pdf
+- Gender Budget: https://finance.karnataka.gov.in/uploads/GB2026-27_1772789013.pdf
+- SCSP/TSP allocations: https://finance.karnataka.gov.in/uploads/SCSPTSP2026-27_1772789239.pdf
+
+The source register reports a 2026–27 budget snapshot and a model-generated classifier. Its README and methodology disclose that the classification labels were not human-reviewed. The 96 records are therefore displayed as **budget-derived discovery leads**, not confirmed citizen schemes. A budget head can fund an institution, programme or transfer; the allocation is not an individual benefit amount. JanaSetu does not infer eligibility, application windows or application URLs from these records.
+
+Dataset attribution: Urban Morph, [schemes](https://github.com/urbanmorph/schemes), derived data CC BY 4.0. Code in that repository is MIT. Original Karnataka budget documents remain attributable to the Government of Karnataka. Dataset snapshot: FY 2026–27; classification build: 1 November 2026.
+
+Current catalogue breakdown after this import: **142 records = 4 rule-screened + 138 catalogue-only**, including 96 Karnataka budget-derived leads. This is not a complete national catalogue. The budget import does not use or reproduce the myScheme-derived files in that repository.
