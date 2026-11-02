@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { readJsonBody } from "@/lib/request";
 import { runBenefitsAgent } from "@/lib/agent";
 import type { CitizenProfile } from "@/lib/catalog";
 
@@ -17,7 +18,9 @@ const allowedFields = Object.keys(defaults) as (keyof CitizenProfile)[];
 
 export async function POST(request: NextRequest) {
   try {
-    const incoming = await request.json();
+    const parsed = await readJsonBody(request, 16 * 1024);
+    if (!parsed.ok) return parsed.response;
+    const incoming = parsed.value;
     const profile = Object.fromEntries(
       allowedFields.map((field) => [field, incoming?.[field] ?? defaults[field]])
     ) as unknown as CitizenProfile;
