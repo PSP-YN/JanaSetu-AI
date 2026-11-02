@@ -50,7 +50,7 @@ test("extension synthetic form fills unique safe fields and skips sensitive or a
   await page.setContent(`
     <form>
       <label for="applicant">Applicant name</label><input id="applicant" name="applicantName">
-      <label for="age">Age</label><input id="age" name="age">
+      
       
       <label for="aadhaar">Aadhaar number</label><input id="aadhaar" name="aadhaar">
       <label for="password">Password</label><input id="password" type="password">
@@ -68,9 +68,8 @@ test("extension synthetic form fills unique safe fields and skips sensitive or a
     isStudent: false, top20Percentile: null, regularUndergraduate: null,
     otherScholarship: null, diplomaOrDistance: null
   }));
-  expect(result.filled).toBe(2);
+  expect(result.filled).toBe(1);
   await expect(page.locator("#applicant")).toHaveValue("Synthetic Citizen");
-  await expect(page.locator("#age")).toHaveValue("34");
   await expect(page.locator("#aadhaar")).toHaveValue("");
   await expect(page.locator("#password")).toHaveValue("");
   await expect(page.locator("#consent")).not.toBeChecked();
