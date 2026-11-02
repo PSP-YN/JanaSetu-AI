@@ -39,7 +39,7 @@ test("six locales define the primary workspace shell translations", () => {
 test("locale dictionaries do not define duplicate keys", () => {
   const localeBlocks = Array.from(page.matchAll(/^  (en|hi|kn|ta|te|ml): \{([\s\S]*?)^  \},?$/gm));
   for (const [, locale, block] of localeBlocks) {
-    const keys = Array.from(block.matchAll(/^\s+([A-Za-z0-9_]+):/gm), match => match[1]);
+    const keys = Array.from(block.matchAll(/(?:^|,)\s*([A-Za-z][A-Za-z0-9_]*)\s*:/gm), match => match[1]);
     assert.equal(new Set(keys).size, keys.length, locale + " contains duplicate translation keys");
   }
 });
