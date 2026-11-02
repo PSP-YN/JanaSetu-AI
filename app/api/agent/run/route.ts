@@ -6,16 +6,6 @@ import { parseCitizenProfile } from "@/lib/profile-validation";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const defaults: CitizenProfile = {
-  fullName: "", age: "", gender: "", state: "", district: "", residenceType: "",
-  annualIncome: "", occupation: "", hasCultivableLand: null, pmKisanExcluded: "unknown",
-  ownsPuccaHouse: null, previousHousingBenefit: "unknown", householdHasLpg: null,
-  poorHouseholdDeclaration: null, isStudent: false, top20Percentile: null,
-  regularUndergraduate: null, otherScholarship: null, diplomaOrDistance: null
-};
-
-const allowedFields = Object.keys(defaults) as (keyof CitizenProfile)[];
-
 export async function POST(request: NextRequest) {
   try {
     const parsed = await readJsonBody(request, 16 * 1024);
