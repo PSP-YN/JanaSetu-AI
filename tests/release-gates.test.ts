@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { SCHEMES, type CitizenProfile } from "../lib/catalog";
 import { evaluateScheme } from "../lib/agent";
 import { readJsonBody } from "../lib/request";
+import { parseCitizenProfile } from "../lib/profile-validation";
 
 const syntheticProfile: CitizenProfile = {
   fullName: "Synthetic Test", age: 30, gender: "woman", state: "Karnataka", district: "Mysuru",
@@ -61,4 +62,21 @@ test("streaming JSON parser stops reading when chunked body exceeds the limit", 
   assert.equal(result.ok, false);
   if (!result.ok) assert.equal(result.response.status, 413);
   assert.equal(cancelled, true);
+});
+
+
+test("profile validation rejects wrong types, out-of-range values and extra fields", () => {
+  assert.equal(parseCitizenProfile({ state: "Karnataka", age: { value: 25 } }), null);
+  assert.equal(parseCitizenProfile({ state: "Karnataka", age: 250 }), null);
+  assert.equal(parseCitizenProfile({ state: "Karnataka", annualIncome: -1 }), null);
+  assert.equal(parseCitizenProfile({ state: "Karnataka", aadhaar: "1234" }), null);
+  assert.equal(parseCitizenProfile({ state: "Karnataka", isStudent: "yes" }), null);
+});
+
+test("profile validation fills omitted optional fields with safe defaults", () => {
+  const profile = parseCitizenProfile({ state: "Karnataka" });
+  assert.ok(profile);
+  assert.equal(profile?.pmKisanExcluded, "unknown");
+  assert.equal(profile?.hasCultivableLand, null);
+  assert.equal(profile?.fullName, "");
 });
