@@ -46,3 +46,19 @@ test("bounded JSON parser rejects malformed JSON", async () => {
   assert.equal(result.ok, false);
   if (!result.ok) assert.equal(result.response.status, 400);
 });
+
+
+test("streaming JSON parser stops reading when chunked body exceeds the limit", async () => {
+  let cancelled = false;
+  const body = new ReadableStream<Uint8Array>({
+    pull(controller) {
+      controller.enqueue(new TextEncoder().encode("x".repeat(20)));
+    },
+    cancel() { cancelled = true; }
+  });
+  const request = new Request("https://example.test/api", { method: "POST", body, duplex: "half" } as RequestInit);
+  const result = await readJsonBody(request, 32);
+  assert.equal(result.ok, false);
+  if (!result.ok) assert.equal(result.response.status, 413);
+  assert.equal(cancelled, true);
+});
