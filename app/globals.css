@@ -566,3 +566,17 @@ h1, h2, h3 { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
 .backup-button { white-space: nowrap; min-height: 32px; padding: 7px 9px; font-size: 10px; }
 .backup-button input { display: none; }
 @media (max-width: 780px) { .backup-button { padding: 7px; font-size: 0; gap: 3px; } .backup-button svg { width: 15px; height: 15px; } }
+
+/* Accessibility: improve readability and touch targets for older and low-vision users */
+body { font-size: 16px; line-height: 1.55; }
+button, .button, select, input, textarea { font-size: 16px; }
+.button { min-height: 44px; padding: 12px 16px; }
+.button-small { min-height: 40px; padding: 9px 12px; font-size: 14px; }
+.nav-item { min-height: 48px; font-size: 15px; }
+.field label, .form-grid label, .form-section-title p { font-size: 14px; }
+input, select, textarea { min-height: 44px; }
+.intake-text { font-size: 16px; line-height: 1.6; }
+.scheme-summary, .hero-content p, .welcome-row p, .page-title-row p, .trust-panel > p, .step-copy p { font-size: 14px; line-height: 1.65; }
+.scheme-category, .source-dot, .scheme-title-wrap p, .scheme-benefit span, .eyebrow, .section-index { font-size: 11px; }
+:focus-visible { outline: 3px solid #f59e0b; outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
