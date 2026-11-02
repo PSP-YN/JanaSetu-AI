@@ -1,0 +1,35 @@
+import { test, expect } from "@playwright/test";
+import AxeBuilder from "@axe-core/playwright";
+
+for (const route of ["/", "/privacy", "/terms"]) {
+  test(`axe WCAG 2.1 AA critical/serious scan: ${route}`, async ({ page }) => {
+    await page.goto(route);
+    await expect(page.locator("body")).toBeVisible();
+    const result = await new AxeBuilder({ page })
+      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "best-practice"])
+      .analyze();
+    const blocking = result.violations.filter((v) => v.impact === "critical" || v.impact === "serious");
+    expect(blocking.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.map(n => ({ target: n.target, summary: n.failureSummary })) }))).toEqual([]);
+  });
+}
+
+test("all six language options update document language and selected locale", async ({ page }) => {
+  await page.goto("/");
+  const selector = page.locator(".language-control select");
+  await expect(selector).toBeVisible();
+  for (const [code, tag] of [["en","en-IN"],["hi","hi-IN"],["kn","kn-IN"],["ta","ta-IN"],["te","te-IN"],["ml","ml-IN"]]) {
+    await selector.selectOption(code);
+    await expect(page.locator("html")).toHaveAttribute("lang", tag);
+    await expect(page.locator(".main-area")).toHaveAttribute("data-language", code);
+  }
+});
+
+test("skip navigation is keyboard reachable and moves to main content", async ({ page }) => {
+  await page.goto("/");
+  await page.keyboard.press("Tab");
+  const skip = page.locator("a.skip-link");
+  await expect(skip).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/#main-content$/);
+  await expect(page.locator("#main-content")).toBeVisible();
+});
