@@ -1,0 +1,33 @@
+# JanaSetu Form Assistant (experimental)
+
+This extension is a local, user-triggered form-filling prototype. It is not a government integration and does not automate application submission.
+
+## Install locally (Chrome / Chromium / Edge)
+
+1. Open JanaSetu and create/review a profile.
+2. Click **Backup** and save the JSON file to your device.
+3. Download/clone this repository and open `extension/`.
+4. In Chrome, visit `chrome://extensions`; enable **Developer mode**.
+5. Choose **Load unpacked** and select the repository's `extension` folder.
+6. Open the official scheme portal in a tab.
+7. Click the extension icon, choose the exported JanaSetu JSON file, and click **Import reviewed profile**.
+8. Click **Fill fields on active tab**. Review every populated field. Submit only when you decide to.
+
+## Safety and limitations
+
+- The extension requests `activeTab`, `storage`, and `scripting`; it does not request blanket access to all websites.
+- Form matching is heuristic (visible labels, placeholders, names and IDs). Portal changes can cause fields to be missed or ambiguously matched.
+- It does not click Submit/Apply, upload files, solve CAPTCHA, bypass authentication, or claim to have applied.
+- Profile data is imported into extension storage on the current browser profile. Treat the backup as private; delete it when no longer needed.
+- Do not import Aadhaar, bank account, OTP, or other highly sensitive identifiers into this prototype.
+- Test only with dummy data before use on official portals.
+
+## Cross-device continuity
+
+Browser localStorage is device/browser-specific. For no-account, privacy-first use:
+- Keep the working draft locally in JanaSetu.
+- Export a versioned JSON backup for machine-readable restore on another device.
+- Use PDF for printing/sharing a human-readable checklist, not as the restore format.
+- Keep a human confirmation step before extension fill and before final submission.
+
+A future production extension should add explicit portal-specific field mapping, test fixtures, conflict warnings, per-field consent, and a clear data wipe control.
