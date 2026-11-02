@@ -74,3 +74,19 @@ Prototype status: **academic-year verification required**. This code is not a cl
 - No scheme-window or budget availability synchronisation.
 - No official identity, land-record, LPG-household, Board percentile or scholarship verification.
 - No automated document OCR in this prototype.
+
+
+## Catalogue expansion — 2 November 2026
+
+The catalogue was expanded using the public National Scholarship Portal AY 2026–27 listing, Ministry/department pages, Government district portals and public government-hosted programme documents.
+
+The expanded catalogue contains 46 records: four Central records with deterministic prototype screening and 42 additional source-indexed records. The 42 new records are catalogue-only: they do not run eligibility logic. NSP deadlines were recorded as they appeared on 2 November 2026 and must be rechecked before application.
+
+Specific caveats:
+- PM-JAY eligibility is not checked against a beneficiary database.
+- PMMVY category, pregnancy registration, antenatal care and claim conditions must be checked against current Ministry instructions.
+- PMSBY and PMJJBY policy terms and premiums are subject to official revision.
+- PMFBY depends on notified crop, location and season.
+- Yuva Nidhi's linked Legislative Council source is a 2024 draft, not a current final notification.
+- Gruha Jyothi's linked Government-hosted study is not a current ESCOM billing circular.
+- Karnataka district pages do not establish complete State-wide coverage.
