@@ -38,9 +38,16 @@ jobs:
       - name: Type-check
         run: npm run typecheck
 
+      - name: Install Chromium for browser tests
+        run: npx playwright install --with-deps chromium
+
+      - name: Run browser accessibility tests
+        run: npm run test:e2e
+
       - name: Validate Chrome extension syntax and manifest
         run: |
           node --check extension/popup.js
+          node --check extension/fill.js
           node -e 'JSON.parse(require("node:fs").readFileSync("extension/manifest.json", "utf8"))'
 
       - name: Audit production dependencies

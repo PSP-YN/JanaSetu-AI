@@ -25,20 +25,33 @@ const base: CitizenProfile = {
   diplomaOrDistance: null
 };
 
-test("PMUY screen never promotes a missing answer to a match", () => {
-  const profile = { ...base, householdHasLpg: null };
-  const result = evaluateScheme(SCHEMES.find((s) => s.id === "pm-ujjwala")!, profile);
+test("all four rule screens stay blocked until human source approval", () => {
+  const screened = SCHEMES.filter((scheme) => scheme.catalogueStatus === "rule-screened");
+  assert.equal(screened.length, 4);
+  for (const scheme of screened) {
+    assert.equal(scheme.reviewStatus, "pending");
+    const result = evaluateScheme(scheme, base);
+    assert.equal(result.state, "needs_verification");
+    assert.equal(result.checks.length, 0);
+    assert.match(result.headline, /Human review pending/);
+  }
+});
+
+test("PMUY approved-rule regression keeps missing answers unknown", () => {
+  const scheme = { ...SCHEMES.find((s) => s.id === "pm-ujjwala")!, reviewStatus: "approved" as const };
+  const result = evaluateScheme(scheme, { ...base, householdHasLpg: null });
   assert.equal(result.state, "needs_verification");
   assert.ok(result.checks.some((item) => item.state === "unknown"));
 });
 
-test("PMAY-U 2.0 rejects a rural profile for this urban route", () => {
-  const result = evaluateScheme(SCHEMES.find((s) => s.id === "pmay-u-2")!, { ...base, residenceType: "rural" });
+test("PMAY-U approved-rule regression rejects a rural profile", () => {
+  const scheme = { ...SCHEMES.find((s) => s.id === "pmay-u-2")!, reviewStatus: "approved" as const };
+  const result = evaluateScheme(scheme, { ...base, residenceType: "rural" });
   assert.equal(result.state, "not_matched");
 });
 
-test("PM-USP cited income threshold is checked deterministically", () => {
-  const scheme = SCHEMES.find((s) => s.id === "pm-usp-csss")!;
+test("PM-USP approved-rule regression checks the cited income threshold", () => {
+  const scheme = { ...SCHEMES.find((s) => s.id === "pm-usp-csss")!, reviewStatus: "approved" as const };
   const result = evaluateScheme(scheme, {
     ...base, isStudent: true, top20Percentile: true, regularUndergraduate: true,
     diplomaOrDistance: false, annualIncome: 500000, otherScholarship: false
@@ -46,6 +59,13 @@ test("PM-USP cited income threshold is checked deterministically", () => {
   assert.equal(result.checks.find((item) => item.key === "income")?.state, "not_matched");
 });
 
+test("missing catalogue metadata cannot bypass human approval", () => {
+  const scheme = { ...SCHEMES.find((s) => s.id === "pm-ujjwala")!, catalogueStatus: undefined, reviewStatus: undefined };
+  const result = evaluateScheme(scheme, base);
+  assert.equal(result.state, "needs_verification");
+  assert.equal(result.checks.length, 0);
+  assert.match(result.headline, /Human review pending/);
+});
 test("agent returns an inspectable multi-step tool trace", () => {
   const result = runBenefitsAgent(base);
   assert.ok(result.trace.length >= 4);

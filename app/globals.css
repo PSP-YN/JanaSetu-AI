@@ -5,12 +5,12 @@
   --paper: #fffdf9;
   --paper-2: #fff1e4;
   --ink: #2f2118;
-  --muted: #78675b;
-  --muted-2: #a89586;
+  --muted: #594331;
+  --muted-2: #594331;
   --line: #f0dfd0;
   --line-strong: #e3c6ad;
-  --forest: #c45a12;
-  --forest-dark: #7c2d12;
+  --forest: #a9440b;
+  --forest-dark: #71300f;
   --forest-soft: #ffead7;
   --moss: #e9a56a;
   --clay: #e07825;
@@ -645,3 +645,48 @@ input, select, textarea { min-height: 44px; }
 .footer-policy-links { display: inline-flex; gap: 10px; margin-left: auto; }
 .footer-policy-links a { color: inherit; font-size: 12px; text-decoration: underline; text-underline-offset: 3px; }
 .footer-policy-links a:focus-visible { outline: 2px solid #b45309; outline-offset: 3px; }
+
+
+/* Text contrast: all non-decorative copy in the application shell must meet AA. */
+.main-area :where(p, small, span, li, label, dt, dd),
+.sidebar :where(p, small, span, li, label, dt, dd) {
+  color: #594331;
+}
+.main-area :where(a, button):focus-visible,
+.sidebar :where(a, button):focus-visible {
+  outline: 3px solid #71300f;
+  outline-offset: 3px;
+}
+
+
+/* Specific high-density dashboard copy found by automated axe scans. */
+.main-area .metric-card small,
+.main-area .eyebrow,
+.main-area .step-number,
+.main-area .profile-progress small,
+.main-area .scheme-title-wrap p,
+.main-area .scheme-benefit span,
+.main-area .section-index,
+.main-area .progress-top > span,
+.main-area .intake-actions > span {
+  color: #594331 !important;
+}
+
+
+/* Additional contrast corrections from the home-page axe report. */
+.sidebar-kicker,
+.system-status,
+.ecosystem-panel > div:first-child > p,
+.ecosystem-links a > small {
+  color: #594331 !important;
+}
+
+
+/* Intake helper copy is small text and must meet WCAG AA contrast. */
+.intake-heading > p {
+  color: #594331 !important;
+}
+
+
+/* Axe: intake helper copy is 10px; use a dark neutral that clears 4.5:1. */
+.intake-heading > p { color: #594331 !important; }

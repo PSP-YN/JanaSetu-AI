@@ -26,6 +26,22 @@ function aggregate(checks: RuleCheck[], mustVerify = false): "potential_match" |
 }
 
 export function evaluateScheme(scheme: Scheme, profile: CitizenProfile): Assessment {
+  // Fail closed: deterministic screening is disabled until two-person human
+  // source/rule approval is recorded in the catalogue. Missing means pending.
+  if (scheme.reviewStatus !== "approved") {
+    return {
+      schemeId: scheme.id,
+      state: "needs_verification",
+      headline: "Human review pending",
+      explanation: "This scheme's source and deterministic rules have not received recorded human approval. JanaSetu will not calculate or imply eligibility until that review is completed.",
+      checks: [],
+      nextActions: [
+        "Review the current official notification and amendments.",
+        "Obtain independent reviewer approval for the source and every rule.",
+        "Use the official department portal for authoritative eligibility confirmation."
+      ]
+    };
+  }
   let checks: RuleCheck[] = [];
   let nextActions: string[] = [];
   let mustVerify = false;
@@ -109,9 +125,9 @@ export function runBenefitsAgent(profile: CitizenProfile) {
   const selected = relevantSchemes(profile);
   addTrace("Scheme agent", "search_scheme_catalog", "Retrieved " + selected.length + " relevant record(s) for deterministic screening; the wider catalogue contains source-indexed entries not automatically eligibility-scored.");
   const assessments = selected.map((scheme) => evaluateScheme(scheme, profile));
-  addTrace("Eligibility agent", "evaluate_scheme_rules", "Evaluated structured conditions with deterministic rules; unknown inputs were preserved.");
+  addTrace("Eligibility agent", "evaluate_scheme_rules", "Checked scheme approval status first; pending rules were blocked and no eligibility conditions were evaluated.");
   const linkedEvidence = assessments.reduce((total, assessment) => total + assessment.checks.length, 0);
-  addTrace("Evidence agent", "link_rules_to_evidence", "Created " + linkedEvidence + " rule-to-profile evidence links with source provenance.");
+  addTrace("Evidence agent", "link_rules_to_evidence", "Created " + linkedEvidence + " rule-to-profile evidence links; pending schemes expose no rule checks.");
   const actionCount = assessments.reduce((total, assessment) => total + assessment.nextActions.length, 0);
   addTrace("Workflow agent", "generate_next_actions", "Generated " + actionCount + " review and document actions; no external application was submitted.");
 

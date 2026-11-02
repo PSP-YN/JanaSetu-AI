@@ -1,20 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
+import { readJsonBody } from "@/lib/request";
 import { SCHEMES } from "@/lib/catalog";
 import { evaluateScheme } from "@/lib/agent";
-import type { CitizenProfile } from "@/lib/catalog";
+import { parseCitizenProfile } from "@/lib/profile-validation";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const parsed = await readJsonBody(request, 16 * 1024);
+    if (!parsed.ok) return parsed.response;
+    const body = parsed.value as Record<string, unknown>;
     const scheme = SCHEMES.find((item) => item.id === body?.schemeId);
     if (!scheme) return NextResponse.json({ error: "Scheme not found in the prototype catalogue." }, { status: 404 });
 
-    const profile = body?.profile as CitizenProfile;
-    if (!profile || typeof profile !== "object" || typeof profile.state !== "string") {
-      return NextResponse.json({ error: "A citizen profile with a State/UT is required." }, { status: 400 });
+    const profile = parseCitizenProfile(body?.profile);
+    if (!profile || !profile.state) {
+      return NextResponse.json({ error: "A valid citizen profile with a State/UT is required." }, { status: 400 });
     }
 
     const assessment = evaluateScheme(scheme, profile);
@@ -40,9 +43,10 @@ export async function POST(request: NextRequest) {
       citizenName: profile.fullName || "Citizen",
       state: profile.state,
       district: profile.district || "Not provided",
-      status: "Draft prepared",
+      status: assessment.state === "needs_verification" ? "Scheme review pending — not an eligibility result" : "Draft prepared",
       createdAt: new Date().toISOString(),
       reviewRequired: true,
+      assessmentState: assessment.state,
       missingChecks: missing.map((item) => item.label),
       fields: preparationFields,
       reviewedAt: null,

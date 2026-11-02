@@ -40,6 +40,8 @@ export interface Scheme {
   ruleNotes: string[];
   tags: string[];
   catalogueStatus?: "rule-screened" | "catalogue-only";
+  /** Human approval gate. Missing status is treated as pending, never approved. */
+  reviewStatus?: "pending" | "approved";
   jurisdiction?: "central" | "state" | "ut";
   applicationUrl?: string;
 }
@@ -75,6 +77,7 @@ export const SCHEMES: Scheme[] = [
   {
     id: "pm-kisan",
     catalogueStatus: "rule-screened",
+    reviewStatus: "pending",
     jurisdiction: "central",
     name: "PM-KISAN Samman Nidhi",
     category: "Agriculture",
@@ -97,6 +100,7 @@ export const SCHEMES: Scheme[] = [
   {
     id: "pmay-u-2",
     catalogueStatus: "rule-screened",
+    reviewStatus: "pending",
     jurisdiction: "central",
     name: "Pradhan Mantri Awas Yojana — Urban 2.0",
     category: "Housing",
@@ -120,6 +124,7 @@ export const SCHEMES: Scheme[] = [
   {
     id: "pm-ujjwala",
     catalogueStatus: "rule-screened",
+    reviewStatus: "pending",
     jurisdiction: "central",
     name: "Pradhan Mantri Ujjwala Yojana 2.0",
     category: "Energy & household",
@@ -143,6 +148,7 @@ export const SCHEMES: Scheme[] = [
   {
     id: "pm-usp-csss",
     catalogueStatus: "rule-screened",
+    reviewStatus: "pending",
     jurisdiction: "central",
     name: "PM-USP Central Sector Scholarship (CSSS)",
     category: "Education",

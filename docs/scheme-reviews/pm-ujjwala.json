@@ -1,0 +1,31 @@
+{
+  "schemeId": "pm-ujjwala",
+  "canonicalName": "Pradhan Mantri Ujjwala Yojana 2.0",
+  "primaryOfficialSource": "https://www.pmuy.gov.in/",
+  "reviewStatus": "pending",
+  "ruleVersion": null,
+  "sourceVersion": null,
+  "sourceCheckedAt": null,
+  "reviewers": [
+    {
+      "role": "independent_source_reviewer",
+      "name": null,
+      "organization": null,
+      "decision": "pending",
+      "reviewedAt": null,
+      "evidence": []
+    },
+    {
+      "role": "independent_rule_reviewer",
+      "name": null,
+      "organization": null,
+      "decision": "pending",
+      "reviewedAt": null,
+      "evidence": []
+    }
+  ],
+  "eligibilityMatrix": [],
+  "boundaryTests": [],
+  "amendmentsReviewed": [],
+  "approvalNote": "Do not set reviewStatus to approved until both independent reviewers sign off and the evidence is merged in a reviewed pull request."
+}

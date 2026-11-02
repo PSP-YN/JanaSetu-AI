@@ -22,8 +22,8 @@ export function createDraftRecord(schemeId: string, profile: CitizenProfile) {
   const draft = {
     id: "JS-" + new Date().toISOString().slice(0, 10).replaceAll("-", "") + "-" + Math.random().toString(36).slice(2, 7).toUpperCase(),
     schemeId: scheme.id, schemeName: scheme.name, citizenName: profile.fullName || "Citizen",
-    state: profile.state, district: profile.district || "Not provided", status: "Draft prepared",
-    createdAt: new Date().toISOString(), reviewRequired: true,
+    state: profile.state, district: profile.district || "Not provided", status: assessment.state === "needs_verification" ? "Scheme review pending — not an eligibility result" : "Draft prepared",
+    createdAt: new Date().toISOString(), reviewRequired: true, assessmentState: assessment.state,
     missingChecks: missing.map((item) => item.label), fields, reviewedAt: null,
     sourceUrl: scheme.sourceUrl,
     disclaimer: "This is a preparation draft created by JanaSetu. It has not been submitted to a government portal."
