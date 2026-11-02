@@ -16,7 +16,9 @@ This extension is a local, user-triggered form-filling prototype. It is not a go
 ## Safety and limitations
 
 - The extension requests `activeTab`, `storage`, and `scripting`; it does not request blanket access to all websites.
-- Form matching is heuristic (visible labels, placeholders, names and IDs). Portal changes can cause fields to be missed or ambiguously matched.
+- Form matching is heuristic (visible labels, placeholders, names and IDs) and uses whole-word/phrase alias matching to avoid substring collisions such as `username` being treated as `name`.
+- Select controls are filled only when exactly one enabled option has an exact normalized label or value match. Partial matches, missing options and duplicate matching options are skipped and are not counted as filled.
+- Boolean declaration checkboxes are deliberately not auto-checked. Unknown or ambiguous values stay unchanged.
 - It does not click Submit/Apply, upload files, solve CAPTCHA, bypass authentication, or claim to have applied.
 - Profile data is imported into extension storage on the current browser profile. Treat the backup as private; delete it when no longer needed.
 - Do not import Aadhaar, bank account, OTP, or other highly sensitive identifiers into this prototype.
