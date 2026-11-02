@@ -178,6 +178,8 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     scholarship: "Do you receive another scholarship or fee reimbursement?",
     distanceCourse: "Is your course a diploma or distance/correspondence course?",
     noAfterReview: "No, after checking the list",
+
+
   },
   hi: {
     overview: "अवलोकन", discover: "लाभ खोजें", profile: "मेरी प्रोफ़ाइल", documents: "दस्तावेज़",
@@ -296,6 +298,13 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     scholarship: "क्या आपको कोई अन्य छात्रवृत्ति या शुल्क प्रतिपूर्ति मिलती है?",
     distanceCourse: "क्या आपका पाठ्यक्रम डिप्लोमा या दूरस्थ/पत्राचार पाठ्यक्रम है?",
     noAfterReview: "सूची जाँचने के बाद नहीं",
+
+    noResult: "अभी जाँच के परिणाम नहीं हैं",
+    reviewed: "समीक्षित योजना रिकॉर्ड",
+    saved: "प्रोफ़ाइल इस ब्राउज़र में सहेजी गई",
+    screening: "जाँच कार्यक्षेत्र",
+    start: "पात्रता जाँच शुरू करें",
+    verified: "स्रोत-संदर्भित सूची",
   },
   kn: {
     overview: "ಅವಲೋಕನ", discover: "ಸೌಲಭ್ಯಗಳನ್ನು ಹುಡುಕಿ", profile: "ನನ್ನ ಪ್ರೊಫೈಲ್", documents: "ದಾಖಲೆಗಳು",
@@ -414,6 +423,13 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     scholarship: "ಬೇರೆ ವಿದ್ಯಾರ್ಥಿವೇತನ ಅಥವಾ ಶುಲ್ಕ ಮರುಪಾವತಿ ಪಡೆಯುತ್ತಿದ್ದೀರಾ?",
     distanceCourse: "ನಿಮ್ಮ ಕೋರ್ಸ್ ಡಿಪ್ಲೊಮಾ ಅಥವಾ ದೂರ/ಪತ್ರವ್ಯವಹಾರ ಕೋರ್ಸ್ ಆಗಿದೆಯೇ?",
     noAfterReview: "ಪಟ್ಟಿಯನ್ನು ಪರಿಶೀಲಿಸಿದ ನಂತರ ಇಲ್ಲ",
+
+    noResult: "ಇನ್ನೂ ಪರಿಶೀಲನಾ ಫಲಿತಾಂಶಗಳಿಲ್ಲ",
+    reviewed: "ಪರಿಶೀಲಿಸಿದ ಯೋಜನೆ ದಾಖಲೆಗಳು",
+    saved: "ಪ್ರೊಫೈಲ್ ಈ ಬ್ರೌಸರ್‌ನಲ್ಲಿ ಉಳಿಸಲಾಗಿದೆ",
+    screening: "ಪರಿಶೀಲನಾ ಕಾರ್ಯಕ್ಷೇತ್ರ",
+    start: "ಅರ್ಹತೆ ಪರಿಶೀಲನೆ ಪ್ರಾರಂಭಿಸಿ",
+    verified: "ಮೂಲ-ಸೂಚನೆಯ ಪಟ್ಟಿ",
   },
   ta: {
     overview: "கண்ணோட்டம்", discover: "நலத்திட்டங்களைத் தேடு", profile: "எனது சுயவிவரம்", documents: "ஆவணங்கள்",
@@ -532,6 +548,13 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     scholarship: "வேறு உதவித்தொகை அல்லது கட்டணத் திருப்பிச் செலுத்துதல் கிடைக்கிறதா?",
     distanceCourse: "உங்கள் படிப்பு டிப்ளமோ அல்லது தொலை/தொடர்புக் கல்வியா?",
     noAfterReview: "பட்டியலைச் சரிபார்த்த பிறகு இல்லை",
+
+    noResult: "இன்னும் மதிப்பீட்டு முடிவுகள் இல்லை",
+    reviewed: "மதிப்பாய்வு செய்யப்பட்ட திட்டப் பதிவுகள்",
+    saved: "சுயவிவரம் இந்த உலாவியில் சேமிக்கப்பட்டது",
+    screening: "மதிப்பீட்டுப் பணியிடம்",
+    start: "தகுதி சரிபார்ப்பைத் தொடங்கவும்",
+    verified: "ஆதார இணைப்புள்ள பட்டியல்",
   },
   te: {
     overview: "అవలోకనం", discover: "ప్రయోజనాలను కనుగొనండి", profile: "నా ప్రొఫైల్", documents: "పత్రాలు",
@@ -650,6 +673,13 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     scholarship: "మరొక స్కాలర్‌షిప్ లేదా ఫీజు రీయింబర్స్‌మెంట్ పొందుతున్నారా?",
     distanceCourse: "మీ కోర్సు డిప్లొమా లేదా దూర/కరస్పాండెన్స్ కోర్సా?",
     noAfterReview: "జాబితాను పరిశీలించిన తర్వాత కాదు",
+
+    noResult: "ఇంకా అంచనా ఫలితాలు లేవు",
+    reviewed: "సమీక్షించిన పథకాల వివరాలు",
+    saved: "ప్రొఫైల్ ఈ బ్రౌజర్‌లో సేవ్ చేయబడింది",
+    screening: "పరిశీలన కార్యస్థలం",
+    start: "అర్హత తనిఖీ ప్రారంభించండి",
+    verified: "మూలాల లింక్ ఉన్న జాబితా",
   },
   ml: {
     overview: "അവലോകനം", discover: "ആനുകൂല്യങ്ങൾ കണ്ടെത്തുക", profile: "എന്റെ പ്രൊഫൈൽ", documents: "രേഖകൾ",
@@ -767,6 +797,13 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     intelligence: "പദ്ധതി വിവരങ്ങൾ",
     execution: "പ്രവർത്തന ട്രേസ്",
     agentActions: "സിസ്റ്റം ചെയ്ത പ്രവർത്തനം",
+
+    noResult: "ഇതുവരെ പരിശോധനാ ഫലങ്ങളില്ല",
+    reviewed: "പരിശോധിച്ച പദ്ധതി രേഖകൾ",
+    saved: "പ്രൊഫൈൽ ഈ ബ്രൗസറിൽ സംരക്ഷിച്ചു",
+    screening: "പരിശോധനാ പ്രവർത്തനമേഖല",
+    start: "യോഗ്യതാ പരിശോധന ആരംഭിക്കുക",
+    verified: "ഉറവിട ലിങ്കുകളുള്ള പട്ടിക",
   },
 };
 
