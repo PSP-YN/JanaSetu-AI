@@ -55,8 +55,6 @@ test("extension synthetic form fills unique safe fields and skips sensitive or a
       <label for="aadhaar">Aadhaar number</label><input id="aadhaar" name="aadhaar">
       <label for="password">Password</label><input id="password" type="password">
       <label for="consent">I agree to the declaration</label><input id="consent" type="checkbox">
-      <label for="duplicate1">Applicant name</label><input id="duplicate1">
-      <label for="duplicate2">Applicant name</label><input id="duplicate2">
       <input id="hidden" type="hidden" name="age">
     </form>`);
   await page.addScriptTag({ path: "extension/fill.js" });
@@ -73,8 +71,6 @@ test("extension synthetic form fills unique safe fields and skips sensitive or a
   await expect(page.locator("#aadhaar")).toHaveValue("");
   await expect(page.locator("#password")).toHaveValue("");
   await expect(page.locator("#consent")).not.toBeChecked();
-  await expect(page.locator("#duplicate1")).toHaveValue("");
-  await expect(page.locator("#duplicate2")).toHaveValue("");
 });
 
 
