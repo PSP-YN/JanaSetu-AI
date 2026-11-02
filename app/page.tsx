@@ -554,6 +554,7 @@ export default function Home() {
 
   return (
     <div className="app-shell">
+      <a className="skip-link" href="#main-content">Skip to main content</a>
       <aside className={"sidebar " + (showMobileNav ? "sidebar-open" : "")}>
         <div className="brand">
           <div className="brand-mark"><span>ज</span></div>
