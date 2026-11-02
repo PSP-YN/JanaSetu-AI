@@ -42,7 +42,7 @@ npm run build
 - Application draft endpoint and a local application tracker.
 - Document checklist and local metadata-only document register.
 - Multilingual deterministic text intake for English, Hindi, Kannada, Tamil, Telugu and Malayalam; optional browser speech recognition where supported. Extracted facts require review.\n- Field-by-field application preparation sheet with missing-value markers and a citizen-review record.
-- Official ecosystem links to myScheme, UMANG, DigiLocker and Common Service Centres; JanaSetu does not claim to replace or be integrated with them.\n- Browser persistence for the demo profile, assessments, document metadata and draft records. Relevant profile fields are sent to the app server when an assessment or draft is requested; they are not intentionally persisted server-side.
+- Official ecosystem links to myScheme, UMANG, DigiLocker and Common Service Centres; JanaSetu does not claim to replace or be integrated with them.\n- Browser persistence for the demo profile, assessments, document metadata and draft records, plus versioned JSON backup/restore for cross-device transfer. Screening, text extraction and draft creation run in the browser in the current local-first version. Browser speech recognition may use the browser vendor's service; data entered into an external government portal is governed by that portal.
 
 ## Architecture and governance
 
