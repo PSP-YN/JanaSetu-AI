@@ -13,7 +13,8 @@
 ## Remaining engineering verification
 - Verify the deployed response headers and HSTS behaviour over HTTPS.
 - Validate every API route's schema, nested field types, boundary values and malformed JSON.
-- Add abuse/rate controls using a durable shared store; do not rely on process-memory counters in serverless functions.
+- Add abuse/rate controls using a durable shared store; do not rely on process-memory counters in serverless functions. No shared rate limiter is currently configured, so public endpoint abuse resistance remains incomplete.
+- Review CSP report-only violations and then move to an enforced policy with nonce/hash-based scripts; the current report-only policy permits inline/eval for compatibility and is not a security boundary.
 - Review CORS/origin behaviour, CSRF assumptions, caching, logs and error messages.
 - Add CSP in report-only mode, collect violations, then enforce only after Next.js runtime compatibility tests.
 - Inspect npm audit output, lockfile and GitHub Actions pinning; run secret scanning and SAST.
