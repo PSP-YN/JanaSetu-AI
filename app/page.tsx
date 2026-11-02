@@ -57,6 +57,8 @@ const SAMPLE_PROFILE: CitizenProfile = {
 const COPY: Record<LanguageCode, Record<string, string>> = {
   en: {
     overview: "Overview", discover: "Find benefits", profile: "My profile", documents: "Documents",
+    heroTitle1: "One profile.", heroTitle2: "Clear next steps.",
+    heroDescription: "Go beyond finding schemes. See which rules need evidence, what remains uncertain and what to prepare next.",
     applications: "My applications", about: "How it works", hello: "Government benefits, made easier to access.",
     intro: "A clearer path from your circumstances to the support you may be able to access.",
     start: "Start eligibility check", sample: "Try sample household", search: "Search schemes or support",
@@ -75,6 +77,8 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
   },
   hi: {
     overview: "अवलोकन", discover: "लाभ खोजें", profile: "मेरी प्रोफ़ाइल", documents: "दस्तावेज़",
+    heroTitle1: "एक प्रोफ़ाइल।", heroTitle2: "अगले कदम स्पष्ट।",
+    heroDescription: "केवल योजनाएँ न खोजें। समझें कि किन नियमों के लिए प्रमाण चाहिए, क्या अनिश्चित है और आगे क्या तैयार करना है।",
     applications: "मेरे आवेदन", about: "यह कैसे काम करता है", hello: "सरकारी योजनाओं और लाभों तक आसान पहुँच।",
     intro: "आपकी परिस्थितियों से संभावित सहायता तक एक स्पष्ट रास्ता।", start: "पात्रता जाँच शुरू करें",
     sample: "डेमो परिवार आज़माएँ", search: "योजनाएँ या सहायता खोजें", verified: "स्रोत-संदर्भित सूची",
@@ -93,6 +97,8 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
   },
   kn: {
     overview: "ಅವಲೋಕನ", discover: "ಸೌಲಭ್ಯಗಳನ್ನು ಹುಡುಕಿ", profile: "ನನ್ನ ಪ್ರೊಫೈಲ್", documents: "ದಾಖಲೆಗಳು",
+    heroTitle1: "ಒಂದು ಪ್ರೊಫೈಲ್.", heroTitle2: "ಮುಂದಿನ ಹಂತಗಳು ಸ್ಪಷ್ಟ.",
+    heroDescription: "ಯೋಜನೆಗಳನ್ನು ಹುಡುಕುವುದಷ್ಟೇ ಅಲ್ಲ. ಯಾವ ನಿಯಮಕ್ಕೆ ಯಾವ ದಾಖಲೆ ಬೇಕು, ಯಾವುದು ಇನ್ನೂ ಸ್ಪಷ್ಟವಿಲ್ಲ ಮತ್ತು ಮುಂದೆ ಏನು ಸಿದ್ಧಪಡಿಸಬೇಕು ಎಂಬುದನ್ನು ತಿಳಿಯಿರಿ.",
     applications: "ನನ್ನ ಅರ್ಜಿಗಳು", about: "ಇದು ಹೇಗೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ", hello: "ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು ಮತ್ತು ಸೌಲಭ್ಯಗಳನ್ನು ಸುಲಭವಾಗಿ ಪಡೆಯಿರಿ.",
     intro: "ನಿಮ್ಮ ಪರಿಸ್ಥಿತಿಯಿಂದ ಸಾಧ್ಯವಿರುವ ನೆರವಿನವರೆಗೆ ಸ್ಪಷ್ಟ ದಾರಿ.", start: "ಅರ್ಹತೆ ಪರಿಶೀಲನೆ ಪ್ರಾರಂಭಿಸಿ",
     sample: "ಮಾದರಿ ಕುಟುಂಬ ಪ್ರಯತ್ನಿಸಿ", search: "ಯೋಜನೆಗಳು ಅಥವಾ ನೆರವು ಹುಡುಕಿ", verified: "ಮೂಲ-ಸೂಚನೆಯ ಪಟ್ಟಿ",
@@ -111,6 +117,8 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
   },
   ta: {
     overview: "கண்ணோட்டம்", discover: "நலத்திட்டங்களைத் தேடு", profile: "எனது சுயவிவரம்", documents: "ஆவணங்கள்",
+    heroTitle1: "ஒரு சுயவிவரம்.", heroTitle2: "அடுத்த படிகள் தெளிவாக.",
+    heroDescription: "திட்டங்களைக் கண்டுபிடிப்பதைக் கடந்து செல்லுங்கள். எந்த விதிக்கு ஆதாரம் தேவை, எது இன்னும் உறுதியில்லை, அடுத்து என்ன தயார் செய்ய வேண்டும் என்பதை அறியுங்கள்.",
     applications: "எனது விண்ணப்பங்கள்", about: "இது எவ்வாறு செயல்படுகிறது", hello: "அரசுத் திட்டங்கள் மற்றும் நலன்களை எளிதாக அணுகலாம்.",
     intro: "உங்கள் சூழ்நிலையிலிருந்து சாத்தியமான உதவிவரை தெளிவான பாதை.", start: "தகுதி மதிப்பீட்டைத் தொடங்கு",
     sample: "மாதிரி குடும்பத்தை முயற்சி செய்", search: "திட்டங்கள் அல்லது உதவியைத் தேடு", verified: "ஆதார இணைப்புள்ள பட்டியல்",
@@ -129,6 +137,8 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
   },
   te: {
     overview: "అవలోకనం", discover: "ప్రయోజనాలను కనుగొనండి", profile: "నా ప్రొఫైల్", documents: "పత్రాలు",
+    heroTitle1: "ఒక ప్రొఫైల్.", heroTitle2: "తదుపరి దశలు స్పష్టం.",
+    heroDescription: "పథకాలను కనుగొనడమే కాకుండా, ఏ నియమానికి ఏ ఆధారం అవసరం, ఏది ఇంకా అనిశ్చితం, తర్వాత ఏమి సిద్ధం చేయాలో తెలుసుకోండి.",
     applications: "నా దరఖాస్తులు", about: "ఇది ఎలా పనిచేస్తుంది", hello: "ప్రభుత్వ పథకాలు, ప్రయోజనాలను సులభంగా తెలుసుకోండి.",
     intro: "మీ పరిస్థితి నుంచి అందుబాటులో ఉండే సహాయం వరకు స్పష్టమైన మార్గం.", start: "అర్హత తనిఖీ ప్రారంభించండి",
     sample: "నమూనా కుటుంబాన్ని ప్రయత్నించండి", search: "పథకాలు లేదా సహాయాన్ని వెతకండి", verified: "మూలాలతో కూడిన జాబితా",
@@ -147,6 +157,8 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
   },
   ml: {
     overview: "അവലോകനം", discover: "ആനുകൂല്യങ്ങൾ കണ്ടെത്തുക", profile: "എന്റെ പ്രൊഫൈൽ", documents: "രേഖകൾ",
+    heroTitle1: "ഒരു പ്രൊഫൈൽ.", heroTitle2: "അടുത്ത ഘട്ടങ്ങൾ വ്യക്തം.",
+    heroDescription: "പദ്ധതികൾ കണ്ടെത്തുന്നതിൽ മാത്രം ഒതുങ്ങരുത്. ഏത് നിയമത്തിന് തെളിവ് വേണം, എന്താണ് അനിശ്ചിതം, ഇനി എന്ത് തയ്യാറാക്കണം എന്നിവ മനസ്സിലാക്കുക.",
     applications: "എന്റെ അപേക്ഷകൾ", about: "ഇത് എങ്ങനെ പ്രവർത്തിക്കുന്നു", hello: "സർക്കാർ പദ്ധതികളും ആനുകൂല്യങ്ങളും എളുപ്പത്തിൽ കണ്ടെത്താം.",
     intro: "നിങ്ങളുടെ സാഹചര്യത്തിൽ നിന്ന് ലഭ്യമായേക്കാവുന്ന സഹായത്തിലേക്കുള്ള വ്യക്തമായ വഴി.", start: "യോഗ്യതാ പരിശോധന ആരംഭിക്കുക",
     sample: "മാതൃകാ കുടുംബം പരീക്ഷിക്കുക", search: "പദ്ധതികളോ സഹായമോ തിരയുക", verified: "ഉറവിടം ചേർത്ത പട്ടിക",
