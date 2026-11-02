@@ -1130,7 +1130,7 @@ export default function Home() {
             <button className="button button-small button-outline backup-button" onClick={exportBackup} title="Export local data to a private JSON file"><Download size={13}/> Backup</button>
             <label className="button button-small button-outline backup-button" title="Restore a JanaSetu JSON backup"><Upload size={13}/> Restore<input type="file" accept=".json,application/json" hidden disabled={backupBusy} onChange={(e) => { importBackup(e.target.files?.[0]); e.currentTarget.value = ""; }}/></label>
             <label className="language-control"><Globe2 size={16}/><span>{t("language")}</span>
-              <select value={language} onChange={(event) => setLanguage(event.target.value as LanguageCode)}>
+              <select aria-label={t("language")} value={language} onChange={(event) => setLanguage(event.target.value as LanguageCode)}>
                 {LANGUAGE_OPTIONS.map((item) => <option key={item.code} value={item.code}>{item.label}</option>)}
               </select><ChevronDown size={13}/>
             </label>
