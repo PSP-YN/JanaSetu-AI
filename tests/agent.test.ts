@@ -80,13 +80,23 @@ test("Tamil intake extracts supported facts without making an eligibility decisi
 test("expanded catalogue has unique source-indexed records and explicit rule coverage", () => {
   const ids = SCHEMES.map((scheme) => scheme.id);
   assert.equal(new Set(ids).size, ids.length);
-  assert.equal(SCHEMES.length, 46);
+  assert.equal(SCHEMES.length, 142);
   assert.equal(SCHEMES.filter((scheme) => scheme.catalogueStatus === "rule-screened").length, 4);
-  assert.equal(SCHEMES.filter((scheme) => scheme.catalogueStatus === "catalogue-only").length, 42);
+  assert.equal(SCHEMES.filter((scheme) => scheme.catalogueStatus === "catalogue-only").length, 138);
 });
 
 test("benefits agent does not silently eligibility-score catalogue-only records", () => {
   const result = runBenefitsAgent(base);
   assert.ok(result.schemes.every((scheme) => scheme.catalogueStatus === "rule-screened"));
   assert.ok(!result.schemes.some((scheme) => scheme.catalogueStatus === "catalogue-only"));
+});
+
+
+test("Karnataka budget leads remain catalogue-only and carry official budget provenance", () => {
+  const leads = SCHEMES.filter((scheme) => scheme.id.startsWith("ka-budget-"));
+  assert.equal(leads.length, 96);
+  assert.ok(leads.every((scheme) => scheme.catalogueStatus === "catalogue-only"));
+  assert.ok(leads.every((scheme) => scheme.jurisdiction === "state"));
+  assert.ok(leads.every((scheme) => scheme.sourceUrl.startsWith("https://finance.karnataka.gov.in/")));
+  assert.ok(leads.every((scheme) => scheme.ruleNotes.some((note) => note.includes("not human-reviewed"))));
 });
