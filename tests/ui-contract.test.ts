@@ -9,7 +9,7 @@ test("hero title and description are translated in every supported locale", () =
   assert.equal(localeBlocks.length, 6, "expected six explicit locale dictionaries");
   for (const [, locale, block] of localeBlocks) {
     for (const key of ["heroTitle1", "heroTitle2", "heroDescription"]) {
-      assert.match(block, new RegExp("\b" + key + "\s*:"), `${locale} is missing ${key}`);
+      assert.match(block, new RegExp("\\b" + key + "\\s*:"), `${locale} is missing ${key}`);
     }
   }
 });
