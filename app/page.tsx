@@ -70,7 +70,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     profileTitle: "Build your citizen profile", profileText: "Share only the details needed to screen the pathways in this catalogue.",
     documentsTitle: "Document checklist", documentsText: "Add file references to organize what you have. Prototype files are not uploaded to a server.",
     applicationsTitle: "Application workspace", applicationsText: "Drafts are preparation records. Nothing here has been submitted to a government portal.",
-    language: "Language", allIndia: "Designed for every State and Union Territory", catalogue: "Curated central-government scheme pilot catalogue",
+    language: "Language", allIndia: "Designed for every State and Union Territory", catalogue: "Source-linked Central + Karnataka starter catalogue · partial coverage",
     official: "Official decision remains with the department", noUpload: "Files are not uploaded"
   },
   hi: {
@@ -272,14 +272,11 @@ export default function Home() {
   const [backupBusy, setBackupBusy] = useState(false);
 
   const t = (key: string) => COPY[language][key] || COPY.en[key] || key;
-  const activeResults = useMemo(() => {
-    const byId = new Map(assessments.map((item) => [item.schemeId, item]));
-    return SCHEMES.filter((scheme) => {
-      const matchesText = [scheme.name, scheme.category, scheme.summary, scheme.ministry].join(" ").toLowerCase().includes(query.toLowerCase());
-      const matchesCategory = category === "All categories" || scheme.category === category;
-      return matchesText && matchesCategory && (assessments.length === 0 || byId.has(scheme.id));
-    });
-  }, [assessments, category, query]);
+  const activeResults = useMemo(() => SCHEMES.filter((scheme) => {
+    const matchesText = [scheme.name, scheme.category, scheme.summary, scheme.ministry, scheme.geography].join(" ").toLowerCase().includes(query.toLowerCase());
+    const matchesCategory = category === "All categories" || scheme.category === category;
+    return matchesText && matchesCategory;
+  }), [category, query]);
 
   useEffect(() => {
     try {
@@ -468,7 +465,7 @@ export default function Home() {
     return <article className="scheme-card" key={scheme.id}>
       <div className="scheme-topline">
         <span className="scheme-category">{scheme.category}</span>
-        <span className="source-dot"><ShieldCheck size={14}/> Source linked</span>
+        <span className="source-dot"><ShieldCheck size={14}/> {scheme.catalogueStatus === "rule-screened" ? "Rule-screened · source linked" : "Source indexed · verify rules"}</span>
       </div>
       <div className="scheme-main">
         <div className="scheme-symbol">{scheme.category === "Agriculture" ? <Sprout/> : scheme.category === "Housing" ? <House/> : scheme.category === "Education" ? <GraduationCap/> : <HandHeart/>}</div>
@@ -492,6 +489,8 @@ export default function Home() {
         {assessment && <div className="rule-list"><strong>Assessment evidence</strong>{assessment.checks.map((item) => <div className="rule-row" key={item.key}><span className={"rule-state " + item.state}>{item.state === "matched" ? <Check size={12}/> : item.state === "not_matched" ? <X size={12}/> : <CircleAlert size={12}/>}</span><div><b>{item.label}</b><small>{item.evidence}</small><em>{item.rule}</em></div></div>)}</div>}
         {assessment && <div><strong>Next recommended actions</strong><ul>{assessment.nextActions.map((action) => <li key={action}>{action}</li>)}</ul></div>}
         <a className="source-link" href={scheme.sourceUrl} target="_blank" rel="noreferrer">{t("source")}: {scheme.sourceName} <ArrowUpRight size={14}/></a>
+        {scheme.applicationUrl && <a className="source-link" href={scheme.applicationUrl} target="_blank" rel="noreferrer">Official application / service channel <ArrowUpRight size={14}/></a>}
+        {scheme.catalogueStatus === "catalogue-only" && <p className="source-period">Catalogue entry only — JanaSetu has not automated an eligibility decision for this scheme. Confirm requirements with the department.</p>}
         <p className="source-period">Source period: {scheme.sourcePeriod}. Accessed: {scheme.sourceChecked}.</p>
       </div>}
     </article>;
@@ -619,7 +618,7 @@ export default function Home() {
             </section>
 
             <div className="metric-grid">
-              <div className="metric-card"><div className="metric-icon green"><BookOpen size={18}/></div><div><strong>{SCHEMES.length.toString().padStart(2, "0")}</strong><span>{t("reviewed")}</span></div><small>Central Government pilot · not complete</small></div>
+              <div className="metric-card"><div className="metric-icon green"><BookOpen size={18}/></div><div><strong>{SCHEMES.length.toString().padStart(2, "0")}</strong><span>Catalogue entries</span></div><small>{SCHEMES.filter((item) => item.catalogueStatus === "rule-screened").length} rule-screened · remainder require verification</small></div>
               <div className="metric-card"><div className="metric-icon sand"><Globe2 size={18}/></div><div><strong>36</strong><span>{t("coverage")}</span></div><small>State/UT selection supported</small></div>
               <div className="metric-card"><div className="metric-icon clay"><MessageCircle size={18}/></div><div><strong>06</strong><span>{t("languages")}</span></div><small>English + 5 Indian languages</small></div>
               <div className="metric-card"><div className="metric-icon ink"><ShieldCheck size={18}/></div><div><strong>{applications.length.toString().padStart(2, "0")}</strong><span>Draft applications</span></div><small>Browser-only · backup to move devices</small></div>
@@ -707,12 +706,12 @@ export default function Home() {
               <div className="trace-list">{toolTrace.map((item) => <div className="trace-row" key={item.id}><span className="trace-check"><Check size={13}/></span><div><strong>{item.agent}</strong><small>{item.tool} · {item.detail}</small></div><span className="trace-duration">{item.durationMs} ms</span></div>)}</div>
               <p className="trace-note">This prototype uses deterministic server-side tools and a rule-based planner; it does not call an external LLM or government API.</p>
             </div>}
-            <div className="full-catalogue-cta"><div><strong>Need the full live Central + State/UT Government scheme list?</strong><p>The internal catalogue is a small pilot. Search the official myScheme portal for currently listed schemes across India.</p></div><a className="button button-primary" href="https://search.myscheme.gov.in/" target="_blank" rel="noreferrer">Search official myScheme <ExternalLink size={15}/></a></div>
+            <div className="full-catalogue-cta"><div><strong>Need the full live Central + State/UT Government scheme list?</strong><p>The catalogue now includes Central scheme references, National Scholarship Portal AY 2026–27 listings and a Karnataka State starter set. Many entries are source-indexed only; other State/UT catalogues still need verified ingestion. Use myScheme for the full live national directory.</p></div><a className="button button-primary" href="https://search.myscheme.gov.in/" target="_blank" rel="noreferrer">Search official myScheme <ExternalLink size={15}/></a></div>
             <div className="catalogue-controls">
               <div className="search-box"><Search size={17}/><input placeholder={t("search")} value={query} onChange={(e) => setQuery(e.target.value)}/>{query && <button onClick={() => setQuery("")}><X size={14}/></button>}</div>
               <label className="filter-select"><span>Category</span><select value={category} onChange={(e) => setCategory(e.target.value)}><option>All categories</option>{Array.from(new Set(SCHEMES.map((item) => item.category))).map((item) => <option key={item}>{item}</option>)}</select><ChevronDown size={14}/></label>
             </div>
-            <div className="catalogue-head"><span>{activeResults.length} {assessments.length ? "assessed records" : "catalogue records"}</span><span>Official links · indicative screening only</span></div>
+            <div className="catalogue-head"><span>{activeResults.length} catalogue records · {SCHEMES.filter((item) => item.catalogueStatus === "rule-screened").length} rule-screened</span><span>Source-linked · verify current rules and deadlines</span></div>
             {activeResults.length ? <div className="scheme-grid">{activeResults.map(renderSchemeCard)}</div> : <div className="empty-state"><Search size={28}/><h3>No scheme records found</h3><p>Try another keyword or category.</p><button className="text-button" onClick={() => { setQuery(""); setCategory("All categories"); }}>Clear filters</button></div>}
             {assessments.length === 0 && <div className="empty-guidance"><CircleAlert size={17}/><span>Results are not personalized until you run the assessment. The curated catalogue is not a complete list of Indian schemes.</span></div>}
           </section>}
