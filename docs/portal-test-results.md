@@ -1,15 +1,23 @@
 # Synthetic extension compatibility test results
 
-The Playwright suite uses local synthetic HTML and synthetic citizen data only. It does not contact government portals, use real accounts or submit forms.
+## Execution result
 
-Cases added:
-- Applicant name, age and district fields.
+<badge>CI run 188 — success</badge>
+
+GitHub Actions run: https://github.com/PSP-YN/JanaSetu-AI/actions/runs/41477782192
+
+The following local Playwright fixtures executed successfully using synthetic citizen data and local HTML. No real portal, account or citizen record was used.
+
+- Basic labelled applicant name, age and district fields.
 - State select and gender radio controls.
-- Ambiguous duplicate labels skipped.
-- Aadhaar, OTP, password, hidden, disabled and consent fields untouched.
+- Duplicate applicant labels skipped as ambiguous.
+- Aadhaar, OTP, password, hidden, disabled and consent fields left untouched.
 - React-style controlled input receives input/change events.
-- Unknown labels remain unchanged.
+- Unknown portal labels remain unchanged.
+- Additional extension safety and select mapping checks in the browser regression suite.
 
-The suite is included in `npm run test:e2e`. It is marked **awaiting CI execution** until a CI run after the fixture commit passes.
+## Limitations
 
-Passing synthetic fixtures validates only those DOM structures. It does not validate named live portals, authentication, dynamic workflows, custom widgets, iframes, shadow DOM or portal-specific legal requirements. Obtain written portal-owner authorization and a dedicated test environment before testing any live portal.
+This is evidence for the tested synthetic DOM structures only. It does not validate any named live government portal, authentication, dynamic multi-step workflows, custom widgets, iframes, shadow DOM, browser-specific portal scripts or portal-specific legal requirements. Obtain written authorization and a dedicated test environment from each portal owner before attempting live portal tests.
+
+The extension remains experimental and must not be represented as certified for any government portal.
