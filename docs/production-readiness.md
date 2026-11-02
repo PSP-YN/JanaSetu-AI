@@ -4,6 +4,28 @@
 
 This assessment is intentionally strict. A successful Next.js build and public deployment do not establish operational, security, privacy or legal readiness.
 
+## Changes delivered in the 2 November 2026 hardening pass
+
+- Fixed hero copy for all six configured interface locales and synchronized the document `lang` attribute.
+- Improved hero typography for Indic scripts and added keyboard skip navigation/focus treatment.
+- Added source-age/availability reporting for the third-party dataset. The current 5 July 2026 snapshot exceeds the 90-day freshness policy as of 2 November 2026, so the monitor should report attention required.
+- Added source-governance register and official-source spot-check notes. PM-USP AY 2026–27 window dates were inconsistent across official NSP search pages; treat the current application window as uncertain.
+- Restricted the extension to HTTPS `.gov.in` and `.nic.in` hosts, with explicit click-to-fill and no submission behaviour.
+- Published prototype privacy and terms notices. These are disclosures, not legal approval or a DPDP compliance certification.
+- Added white-box locale/extension safety tests and black-box HTTP checks for API validation, policy pages and source-monitor contract.
+
+## Verification evidence and remaining gaps
+
+The latest completed CI run before the final documentation-only update passed: unit tests, TypeScript, extension syntax/manifest validation, production dependency audit, Next.js production build and the then-current production HTTP smoke tests. A subsequent CI run adds black-box checks for policy pages and malformed API requests; it must pass before release promotion.
+
+Not yet demonstrated:
+- Browser-driven end-to-end tests across all pages, devices and six locales.
+- Automated WCAG/axe audit plus manual keyboard and screen-reader review.
+- Portal-by-portal extension mapping accuracy on representative official application forms.
+- Full review of every imported scheme record or independent approval of all four deterministic rules.
+- Penetration test, privacy impact assessment, qualified legal review, incident response and operational monitoring.
+- Real-world load, resilience, backup/restore and disaster-recovery exercises.
+
 ## Working today
 
 - Public Next.js application deployed on Vercel.
