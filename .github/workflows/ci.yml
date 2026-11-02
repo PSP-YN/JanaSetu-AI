@@ -47,6 +47,7 @@ jobs:
       - name: Validate Chrome extension syntax and manifest
         run: |
           node --check extension/popup.js
+          node --check extension/fill.js
           node -e 'JSON.parse(require("node:fs").readFileSync("extension/manifest.json", "utf8"))'
 
       - name: Audit production dependencies
