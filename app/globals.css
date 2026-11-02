@@ -586,3 +586,58 @@ input, select, textarea { min-height: 44px; }
 
 /* Open-data catalogue pagination */
 .catalogue-load-more{display:flex;flex-direction:column;align-items:center;gap:8px;margin:22px 0 8px}.catalogue-load-more small{font-size:12px;color:#77695d;text-align:center}.catalogue-load-more button{min-width:240px}.catalogue-load-more button:disabled{opacity:.65;cursor:wait}
+
+
+/* Readability pass: keep Indic-script typography from inheriting tight Latin tracking. */
+.hero-content h2 {
+  max-width: 13ch;
+  font-size: clamp(2rem, 4.2vw, 3.25rem);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+.hero-content h2 em { letter-spacing: inherit; }
+.hero-content p {
+  max-width: 52ch;
+  font-size: 1rem;
+  line-height: 1.75;
+}
+.main-area[data-language="hi"] .hero-content h2,
+.main-area[data-language="kn"] .hero-content h2,
+.main-area[data-language="ta"] .hero-content h2,
+.main-area[data-language="te"] .hero-content h2,
+.main-area[data-language="ml"] .hero-content h2 {
+  max-width: 15ch;
+  font-family: system-ui, "Noto Sans Devanagari", "Noto Sans Kannada", "Noto Sans Tamil", "Noto Sans Telugu", "Noto Sans Malayalam", sans-serif;
+  letter-spacing: 0;
+  line-height: 1.35;
+  font-size: clamp(1.8rem, 3.7vw, 2.75rem);
+}
+.main-area[data-language="hi"] .hero-content p,
+.main-area[data-language="kn"] .hero-content p,
+.main-area[data-language="ta"] .hero-content p,
+.main-area[data-language="te"] .hero-content p,
+.main-area[data-language="ml"] .hero-content p {
+  letter-spacing: 0;
+  line-height: 1.9;
+}
+.skip-link {
+  position: fixed;
+  z-index: 1000;
+  top: 8px;
+  left: 8px;
+  transform: translateY(-160%);
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: #fff;
+  color: #1d3328;
+  font-weight: 700;
+  box-shadow: 0 3px 16px rgba(0,0,0,.2);
+}
+.skip-link:focus { transform: translateY(0); }
+:focus-visible { outline: 3px solid #b45309; outline-offset: 3px; }
+@media (max-width: 760px) {
+  .hero-content { width: 100%; }
+  .hero-content h2 { max-width: 100%; }
+}
