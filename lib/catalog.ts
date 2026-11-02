@@ -1352,7 +1352,7 @@ SCHEMES.push(...([
     ],
     "catalogueStatus": "catalogue-only",
     "jurisdiction": "state"
-  }
+  },
   ...KARNATAKA_BUDGET_LEADS
 ] as Scheme[]));
 
