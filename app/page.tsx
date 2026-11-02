@@ -207,7 +207,8 @@ export default function Home() {
   const [notice, setNotice] = useState("");
   const [hydrated, setHydrated] = useState(false);
   const [showMobileNav, setShowMobileNav] = useState(false);
-  const [expandedScheme, setExpandedScheme] = useState("");\n  const [backupBusy, setBackupBusy] = useState(false);
+  const [expandedScheme, setExpandedScheme] = useState("");
+  const [backupBusy, setBackupBusy] = useState(false);
 
   const t = (key: string) => COPY[language][key] || COPY.en[key] || key;
   const activeResults = useMemo(() => {
@@ -253,7 +254,25 @@ export default function Home() {
     return () => window.clearTimeout(timer);
   }, [notice]);
 
-\n  const exportBackup = () => {\n    const backup = { app: "JanaSetu", schemaVersion: 1, exportedAt: new Date().toISOString(), profile, language, applications, documents, tasks, assessments };\n    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });\n    const url = URL.createObjectURL(blob);\n    const link = document.createElement("a"); link.href = url; link.download = "janSetu-local-backup.json"; link.click(); URL.revokeObjectURL(url);\n    setNotice("Backup exported to this device. Treat it as private personal data.");\n  };\n  const importBackup = async (file?: File) => {\n    if (!file) return; setBackupBusy(true);\n    try {\n      const data = JSON.parse(await file.text());\n      if (data?.app !== "JanaSetu" || data?.schemaVersion !== 1 || !data?.profile) throw new Error("This is not a supported JanaSetu backup file.");\n      setProfile(data.profile); setLanguage(data.language || "en"); setApplications(Array.isArray(data.applications) ? data.applications : []); setDocuments(Array.isArray(data.documents) ? data.documents : []); setTasks(Array.isArray(data.tasks) ? data.tasks : []); setAssessments(Array.isArray(data.assessments) ? data.assessments : []);\n      setTab("profile"); setNotice("Backup restored in this browser. Review imported details before use.");\n    } catch (error) { setNotice(error instanceof Error ? error.message : "Unable to restore this backup."); } finally { setBackupBusy(false); }\n  };\n\n  const updateProfile = <K extends keyof CitizenProfile>(key: K, value: CitizenProfile[K]) => {
+
+  const exportBackup = () => {
+    const backup = { app: "JanaSetu", schemaVersion: 1, exportedAt: new Date().toISOString(), profile, language, applications, documents, tasks, assessments };
+    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a"); link.href = url; link.download = "janSetu-local-backup.json"; link.click(); URL.revokeObjectURL(url);
+    setNotice("Backup exported to this device. Treat it as private personal data.");
+  };
+  const importBackup = async (file?: File) => {
+    if (!file) return; setBackupBusy(true);
+    try {
+      const data = JSON.parse(await file.text());
+      if (data?.app !== "JanaSetu" || data?.schemaVersion !== 1 || !data?.profile) throw new Error("This is not a supported JanaSetu backup file.");
+      setProfile(data.profile); setLanguage(data.language || "en"); setApplications(Array.isArray(data.applications) ? data.applications : []); setDocuments(Array.isArray(data.documents) ? data.documents : []); setTasks(Array.isArray(data.tasks) ? data.tasks : []); setAssessments(Array.isArray(data.assessments) ? data.assessments : []);
+      setTab("profile"); setNotice("Backup restored in this browser. Review imported details before use.");
+    } catch (error) { setNotice(error instanceof Error ? error.message : "Unable to restore this backup."); } finally { setBackupBusy(false); }
+  };
+
+  const updateProfile = <K extends keyof CitizenProfile>(key: K, value: CitizenProfile[K]) => {
     setProfile((current) => ({ ...current, [key]: value }));
   };
 
@@ -490,7 +509,9 @@ export default function Home() {
             <div className="breadcrumb"><span>JanaSetu</span><ChevronRight size={14}/><strong>{navItems.find((item) => item.id === tab)?.label}</strong></div>
           </div>
           <div className="topbar-actions">
-            <div className="system-status"><span className="status-pulse"/> Local-first prototype</div>\n            <button className="button button-small button-outline backup-button" onClick={exportBackup} title="Export local data to a private JSON file"><Download size={13}/> Backup</button>\n            <label className="button button-small button-outline backup-button" title="Restore a JanaSetu JSON backup"><Upload size={13}/> Restore<input type="file" accept=".json,application/json" hidden disabled={backupBusy} onChange={(e) => { importBackup(e.target.files?.[0]); e.currentTarget.value = ""; }}/></label>
+            <div className="system-status"><span className="status-pulse"/> Local-first prototype</div>
+            <button className="button button-small button-outline backup-button" onClick={exportBackup} title="Export local data to a private JSON file"><Download size={13}/> Backup</button>
+            <label className="button button-small button-outline backup-button" title="Restore a JanaSetu JSON backup"><Upload size={13}/> Restore<input type="file" accept=".json,application/json" hidden disabled={backupBusy} onChange={(e) => { importBackup(e.target.files?.[0]); e.currentTarget.value = ""; }}/></label>
             <label className="language-control"><Globe2 size={16}/><span>{t("language")}</span>
               <select value={language} onChange={(event) => setLanguage(event.target.value as LanguageCode)}>
                 {LANGUAGE_OPTIONS.map((item) => <option key={item.code} value={item.code}>{item.label}</option>)}
