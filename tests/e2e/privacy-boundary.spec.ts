@@ -28,10 +28,11 @@ test("main citizen workflow keeps profile, screening, intake and draft payloads 
   // Return to the overview and run deterministic text intake.
   await page.getByRole("button", { name: "Overview" }).click();
   await page.locator(".intake-text").fill(
-    "I am a 34 years old woman farmer in Karnataka. My annual household income is 1.5 lakh."
+    "I am a 42 years old woman farmer in Karnataka. My annual household income is 2.75 lakh."
   );
   await page.locator(".intake-actions .button-primary").click();
-  await expect(page.locator(".intake-recognized")).toBeVisible();
+  await expect(page.getByRole("spinbutton", { name: "Age" })).toHaveValue("42");
+  await expect(page.getByRole("spinbutton", { name: /Annual household income/ })).toHaveValue("275000");
 
   expect(unexpectedPosts).toEqual([]);
 });
