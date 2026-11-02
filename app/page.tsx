@@ -578,7 +578,7 @@ export default function Home() {
           <a href="https://locator.csccloud.in/" target="_blank" rel="noreferrer">Find a CSC <ArrowUpRight size={13}/></a>
         </div>
         <div className="sidebar-footer">
-          <ShieldCheck size={15}/><span>Independent public-service navigator</span>
+          <ShieldCheck size={15}/><span>Independent public-service navigator</span><span className="footer-policy-links"><a href="/privacy">Privacy</a><a href="/terms">Terms</a></span>
         </div>
       </aside>
 
