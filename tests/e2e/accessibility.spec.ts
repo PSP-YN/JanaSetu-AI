@@ -67,7 +67,7 @@ test("extension synthetic form fills unique safe fields and skips sensitive or a
     isStudent: false, top20Percentile: null, regularUndergraduate: null,
     otherScholarship: null, diplomaOrDistance: null
   }));
-  expect(result.filled).toBe(2);
+  expect(result.filled).toBe(3);
   await expect(page.locator("#applicant")).toHaveValue("Synthetic Citizen");
   await expect(page.locator("#age")).toHaveValue("34");
   await expect(page.locator("#state")).toHaveValue("Karnataka");
