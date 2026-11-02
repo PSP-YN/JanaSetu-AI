@@ -51,7 +51,7 @@ test("extension synthetic form fills unique safe fields and skips sensitive or a
     <form>
       <label for="applicant">Applicant name</label><input id="applicant" name="applicantName">
       <label for="age">Age</label><input id="age" name="age">
-      <label for="state">State</label><select id="state" name="state"><option value="">Choose</option><option value="Karnataka">Karnataka</option></select>
+      <label for="state">State</label><input id="state" name="state">
       <label for="aadhaar">Aadhaar number</label><input id="aadhaar" name="aadhaar">
       <label for="password">Password</label><input id="password" type="password">
       <label for="consent">I agree to the declaration</label><input id="consent" type="checkbox">
