@@ -90,3 +90,11 @@ Specific caveats:
 - Yuva Nidhi's linked Legislative Council source is a 2024 draft, not a current final notification.
 - Gruha Jyothi's linked Government-hosted study is not a current ESCOM billing circular.
 - Karnataka district pages do not establish complete State-wide coverage.
+
+
+## Third-party open dataset attribution
+
+- SmartDuke Technologies, *Indian Government Schemes Dataset 2026*, CC BY 4.0, Hugging Face. Snapshot: 5 July 2026. Dataset publisher says source: myScheme; structured parsing by SmartDuke Technologies. https://huggingface.co/datasets/smartduketech/indian-government-schemes-2025
+- Access path: Hugging Face Dataset Viewer API (public, paginated): https://datasets-server.huggingface.co
+- Data fields are not official JanaSetu eligibility rules; no automatic screening is run on them.
+- Dataset card warns users to verify scheme information at the official portal. Currentness, source URL accuracy and completeness are not guaranteed by JanaSetu.
