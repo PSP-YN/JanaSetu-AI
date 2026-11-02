@@ -107,7 +107,7 @@ export function runBenefitsAgent(profile: CitizenProfile) {
   // Planner selects domain tools from the citizen's profile; no LLM is used to invent legal rules.
   addTrace("Planner agent", "plan_benefit_search", "Selected scheme domains using the citizen's stated profile and location.");
   const selected = relevantSchemes(profile);
-  addTrace("Scheme agent", "search_scheme_catalog", "Retrieved " + selected.length + " relevant record(s) from the curated national catalogue.");
+  addTrace("Scheme agent", "search_scheme_catalog", "Retrieved " + selected.length + " relevant record(s) for deterministic screening; the wider catalogue contains source-indexed entries not automatically eligibility-scored.");
   const assessments = selected.map((scheme) => evaluateScheme(scheme, profile));
   addTrace("Eligibility agent", "evaluate_scheme_rules", "Evaluated structured conditions with deterministic rules; unknown inputs were preserved.");
   const linkedEvidence = assessments.reduce((total, assessment) => total + assessment.checks.length, 0);
@@ -122,6 +122,6 @@ export function runBenefitsAgent(profile: CitizenProfile) {
     assessments,
     schemes: selected,
     trace,
-    note: "Prototype screening only. The catalogue is intentionally small; official authorities make final eligibility decisions."
+    note: "Prototype screening only. Deterministic eligibility rules currently cover four Central scheme records. Other records are source pointers and are not automatically eligibility-assessed. Official authorities make final eligibility decisions."
   };
 }
