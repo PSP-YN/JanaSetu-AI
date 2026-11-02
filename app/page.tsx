@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
-  Activity, ArrowDownRight, ArrowRight, ArrowUpRight, BadgeCheck, Bell, BookOpen, ExternalLink,
+  Activity, ArrowDownRight, ArrowRight, ArrowUpRight, BadgeCheck, Bell, BookOpen, Download, ExternalLink,
   Building2, CalendarClock, Check, CheckCircle2, ChevronDown, ChevronRight,
   CircleAlert, ClipboardCheck, Clock3, FileCheck2, FileText, Globe2, HandHeart,
   House, IndianRupee, Landmark, LayoutDashboard, ListChecks, LockKeyhole,
@@ -54,7 +54,7 @@ const SAMPLE_PROFILE: CitizenProfile = {
 const COPY: Record<LanguageCode, Record<string, string>> = {
   en: {
     overview: "Overview", discover: "Find benefits", profile: "My profile", documents: "Documents",
-    applications: "My applications", about: "How it works", hello: "Benefits, made easier to access.",
+    applications: "My applications", about: "How it works", hello: "Government benefits, made easier to access.",
     intro: "A clearer path from your circumstances to the support you may be able to access.",
     start: "Start eligibility check", sample: "Try sample household", search: "Search schemes or support",
     verified: "Source-linked catalogue", next: "Your next steps", featured: "Potential benefit pathways",
@@ -67,12 +67,12 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     profileTitle: "Build your citizen profile", profileText: "Share only the details needed to screen the pathways in this catalogue.",
     documentsTitle: "Document checklist", documentsText: "Add file references to organize what you have. Prototype files are not uploaded to a server.",
     applicationsTitle: "Application workspace", applicationsText: "Drafts are preparation records. Nothing here has been submitted to a government portal.",
-    language: "Language", allIndia: "Designed for every State and Union Territory", catalogue: "Curated central-scheme pilot catalogue",
+    language: "Language", allIndia: "Designed for every State and Union Territory", catalogue: "Curated central-government scheme pilot catalogue",
     official: "Official decision remains with the department", noUpload: "Files are not uploaded"
   },
   hi: {
     overview: "अवलोकन", discover: "लाभ खोजें", profile: "मेरी प्रोफ़ाइल", documents: "दस्तावेज़",
-    applications: "मेरे आवेदन", about: "यह कैसे काम करता है", hello: "सरकारी लाभों तक पहुँच, अब आसान।",
+    applications: "मेरे आवेदन", about: "यह कैसे काम करता है", hello: "सरकारी योजनाओं और लाभों तक आसान पहुँच।",
     intro: "आपकी परिस्थितियों से संभावित सहायता तक एक स्पष्ट रास्ता।", start: "पात्रता जाँच शुरू करें",
     sample: "डेमो परिवार आज़माएँ", search: "योजनाएँ या सहायता खोजें", verified: "स्रोत-संदर्भित सूची",
     next: "आपके अगले कदम", featured: "संभावित लाभ के रास्ते", reviewed: "समीक्षित योजना रिकॉर्ड",
@@ -90,7 +90,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
   },
   kn: {
     overview: "ಅವಲೋಕನ", discover: "ಸೌಲಭ್ಯಗಳನ್ನು ಹುಡುಕಿ", profile: "ನನ್ನ ಪ್ರೊಫೈಲ್", documents: "ದಾಖಲೆಗಳು",
-    applications: "ನನ್ನ ಅರ್ಜಿಗಳು", about: "ಇದು ಹೇಗೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ", hello: "ಸರ್ಕಾರಿ ಸೌಲಭ್ಯಗಳನ್ನು ಸುಲಭವಾಗಿ ತಲುಪಿರಿ.",
+    applications: "ನನ್ನ ಅರ್ಜಿಗಳು", about: "ಇದು ಹೇಗೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ", hello: "ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು ಮತ್ತು ಸೌಲಭ್ಯಗಳನ್ನು ಸುಲಭವಾಗಿ ಪಡೆಯಿರಿ.",
     intro: "ನಿಮ್ಮ ಪರಿಸ್ಥಿತಿಯಿಂದ ಸಾಧ್ಯವಿರುವ ನೆರವಿನವರೆಗೆ ಸ್ಪಷ್ಟ ದಾರಿ.", start: "ಅರ್ಹತೆ ಪರಿಶೀಲನೆ ಪ್ರಾರಂಭಿಸಿ",
     sample: "ಮಾದರಿ ಕುಟುಂಬ ಪ್ರಯತ್ನಿಸಿ", search: "ಯೋಜನೆಗಳು ಅಥವಾ ನೆರವು ಹುಡುಕಿ", verified: "ಮೂಲ-ಸೂಚನೆಯ ಪಟ್ಟಿ",
     next: "ನಿಮ್ಮ ಮುಂದಿನ ಹಂತಗಳು", featured: "ಸಂಭಾವ್ಯ ಸೌಲಭ್ಯ ಮಾರ್ಗಗಳು", reviewed: "ಪರಿಶೀಲಿಸಿದ ಯೋಜನೆ ದಾಖಲೆಗಳು",
@@ -108,7 +108,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
   },
   ta: {
     overview: "கண்ணோட்டம்", discover: "நலத்திட்டங்களைத் தேடு", profile: "எனது சுயவிவரம்", documents: "ஆவணங்கள்",
-    applications: "எனது விண்ணப்பங்கள்", about: "இது எவ்வாறு செயல்படுகிறது", hello: "அரசு நலன்களை எளிதாக அணுகலாம்.",
+    applications: "எனது விண்ணப்பங்கள்", about: "இது எவ்வாறு செயல்படுகிறது", hello: "அரசுத் திட்டங்கள் மற்றும் நலன்களை எளிதாக அணுகலாம்.",
     intro: "உங்கள் சூழ்நிலையிலிருந்து சாத்தியமான உதவிவரை தெளிவான பாதை.", start: "தகுதி மதிப்பீட்டைத் தொடங்கு",
     sample: "மாதிரி குடும்பத்தை முயற்சி செய்", search: "திட்டங்கள் அல்லது உதவியைத் தேடு", verified: "ஆதார இணைப்புள்ள பட்டியல்",
     next: "அடுத்த படிகள்", featured: "சாத்தியமான நலன் வழிகள்", reviewed: "மதிப்பாய்வு செய்யப்பட்ட திட்டங்கள்",
@@ -126,7 +126,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
   },
   te: {
     overview: "అవలోకనం", discover: "ప్రయోజనాలను కనుగొనండి", profile: "నా ప్రొఫైల్", documents: "పత్రాలు",
-    applications: "నా దరఖాస్తులు", about: "ఇది ఎలా పనిచేస్తుంది", hello: "ప్రభుత్వ ప్రయోజనాలను సులభంగా పొందండి.",
+    applications: "నా దరఖాస్తులు", about: "ఇది ఎలా పనిచేస్తుంది", hello: "ప్రభుత్వ పథకాలు, ప్రయోజనాలను సులభంగా తెలుసుకోండి.",
     intro: "మీ పరిస్థితి నుంచి అందుబాటులో ఉండే సహాయం వరకు స్పష్టమైన మార్గం.", start: "అర్హత తనిఖీ ప్రారంభించండి",
     sample: "నమూనా కుటుంబాన్ని ప్రయత్నించండి", search: "పథకాలు లేదా సహాయాన్ని వెతకండి", verified: "మూలాలతో కూడిన జాబితా",
     next: "మీ తదుపరి చర్యలు", featured: "సంభావ్య ప్రయోజన మార్గాలు", reviewed: "సమీక్షించిన పథక రికార్డులు",
@@ -144,7 +144,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
   },
   ml: {
     overview: "അവലോകനം", discover: "ആനുകൂല്യങ്ങൾ കണ്ടെത്തുക", profile: "എന്റെ പ്രൊഫൈൽ", documents: "രേഖകൾ",
-    applications: "എന്റെ അപേക്ഷകൾ", about: "ഇത് എങ്ങനെ പ്രവർത്തിക്കുന്നു", hello: "സർക്കാർ ആനുകൂല്യങ്ങളിലേക്കുള്ള പ്രവേശനം എളുപ്പമാക്കാം.",
+    applications: "എന്റെ അപേക്ഷകൾ", about: "ഇത് എങ്ങനെ പ്രവർത്തിക്കുന്നു", hello: "സർക്കാർ പദ്ധതികളും ആനുകൂല്യങ്ങളും എളുപ്പത്തിൽ കണ്ടെത്താം.",
     intro: "നിങ്ങളുടെ സാഹചര്യത്തിൽ നിന്ന് ലഭ്യമായേക്കാവുന്ന സഹായത്തിലേക്കുള്ള വ്യക്തമായ വഴി.", start: "യോഗ്യതാ പരിശോധന ആരംഭിക്കുക",
     sample: "മാതൃകാ കുടുംബം പരീക്ഷിക്കുക", search: "പദ്ധതികളോ സഹായമോ തിരയുക", verified: "ഉറവിടം ചേർത്ത പട്ടിക",
     next: "അടുത്ത ഘട്ടങ്ങൾ", featured: "സാധ്യതയുള്ള ആനുകൂല്യ മാർഗങ്ങൾ", reviewed: "പരിശോധിച്ച പദ്ധതി രേഖകൾ",
@@ -207,7 +207,7 @@ export default function Home() {
   const [notice, setNotice] = useState("");
   const [hydrated, setHydrated] = useState(false);
   const [showMobileNav, setShowMobileNav] = useState(false);
-  const [expandedScheme, setExpandedScheme] = useState("");
+  const [expandedScheme, setExpandedScheme] = useState("");\n  const [backupBusy, setBackupBusy] = useState(false);
 
   const t = (key: string) => COPY[language][key] || COPY.en[key] || key;
   const activeResults = useMemo(() => {
@@ -253,7 +253,7 @@ export default function Home() {
     return () => window.clearTimeout(timer);
   }, [notice]);
 
-  const updateProfile = <K extends keyof CitizenProfile>(key: K, value: CitizenProfile[K]) => {
+\n  const exportBackup = () => {\n    const backup = { app: "JanaSetu", schemaVersion: 1, exportedAt: new Date().toISOString(), profile, language, applications, documents, tasks, assessments };\n    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });\n    const url = URL.createObjectURL(blob);\n    const link = document.createElement("a"); link.href = url; link.download = "janSetu-local-backup.json"; link.click(); URL.revokeObjectURL(url);\n    setNotice("Backup exported to this device. Treat it as private personal data.");\n  };\n  const importBackup = async (file?: File) => {\n    if (!file) return; setBackupBusy(true);\n    try {\n      const data = JSON.parse(await file.text());\n      if (data?.app !== "JanaSetu" || data?.schemaVersion !== 1 || !data?.profile) throw new Error("This is not a supported JanaSetu backup file.");\n      setProfile(data.profile); setLanguage(data.language || "en"); setApplications(Array.isArray(data.applications) ? data.applications : []); setDocuments(Array.isArray(data.documents) ? data.documents : []); setTasks(Array.isArray(data.tasks) ? data.tasks : []); setAssessments(Array.isArray(data.assessments) ? data.assessments : []);\n      setTab("profile"); setNotice("Backup restored in this browser. Review imported details before use.");\n    } catch (error) { setNotice(error instanceof Error ? error.message : "Unable to restore this backup."); } finally { setBackupBusy(false); }\n  };\n\n  const updateProfile = <K extends keyof CitizenProfile>(key: K, value: CitizenProfile[K]) => {
     setProfile((current) => ({ ...current, [key]: value }));
   };
 
@@ -462,7 +462,7 @@ export default function Home() {
           <div><strong>JanaSetu</strong><small>BENEFITS ACCESS</small></div>
           <button className="mobile-close" onClick={() => setShowMobileNav(false)} aria-label="Close navigation"><X size={18}/></button>
         </div>
-        <div className="sidebar-kicker">WORKSPACE</div>
+        <div className="sidebar-kicker">GOVERNMENT BENEFITS WORKSPACE</div>
         <nav className="side-nav">
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -474,7 +474,7 @@ export default function Home() {
         <div className="sidebar-spacer"/>
         <div className="sidebar-assist">
           <div className="assist-icon"><HandHeart size={18}/></div>
-          <strong>Need human assistance?</strong>
+          <strong>Need help with government benefits?</strong>
           <p>Take your checklist to an authorized Common Service Centre or the responsible department.</p>
           <a href="https://locator.csccloud.in/" target="_blank" rel="noreferrer">Find a CSC <ArrowUpRight size={13}/></a>
         </div>
@@ -490,7 +490,7 @@ export default function Home() {
             <div className="breadcrumb"><span>JanaSetu</span><ChevronRight size={14}/><strong>{navItems.find((item) => item.id === tab)?.label}</strong></div>
           </div>
           <div className="topbar-actions">
-            <div className="system-status"><span className="status-pulse"/> Prototype workspace</div>
+            <div className="system-status"><span className="status-pulse"/> Local-first prototype</div>\n            <button className="button button-small button-outline backup-button" onClick={exportBackup} title="Export local data to a private JSON file"><Download size={13}/> Backup</button>\n            <label className="button button-small button-outline backup-button" title="Restore a JanaSetu JSON backup"><Upload size={13}/> Restore<input type="file" accept=".json,application/json" hidden disabled={backupBusy} onChange={(e) => { importBackup(e.target.files?.[0]); e.currentTarget.value = ""; }}/></label>
             <label className="language-control"><Globe2 size={16}/><span>{t("language")}</span>
               <select value={language} onChange={(event) => setLanguage(event.target.value as LanguageCode)}>
                 {LANGUAGE_OPTIONS.map((item) => <option key={item.code} value={item.code}>{item.label}</option>)}
@@ -503,7 +503,7 @@ export default function Home() {
         <div className="content-area">
           {tab === "overview" && <>
             <div className="welcome-row">
-              <div><div className="eyebrow"><span className="eyebrow-line"/> YOUR BENEFITS WORKSPACE</div><h1>{t("hello")}</h1><p>{t("intro")}</p></div>
+              <div><div className="eyebrow"><span className="eyebrow-line"/> GOVERNMENT BENEFITS WORKSPACE</div><h1>{t("hello")}</h1><p>{t("intro")}</p></div>
               <div className="date-chip"><CalendarClock size={15}/> {new Date().toLocaleDateString("en-IN", { weekday: "short", day: "numeric", month: "short" })}</div>
             </div>
 
@@ -574,10 +574,10 @@ export default function Home() {
             </section>
 
             <div className="metric-grid">
-              <div className="metric-card"><div className="metric-icon green"><BookOpen size={18}/></div><div><strong>04</strong><span>{t("reviewed")}</span></div><small>Central schemes</small></div>
-              <div className="metric-card"><div className="metric-icon sand"><Globe2 size={18}/></div><div><strong>36</strong><span>{t("coverage")}</span></div><small>28 States + 8 UTs</small></div>
+              <div className="metric-card"><div className="metric-icon green"><BookOpen size={18}/></div><div><strong>{SCHEMES.length.toString().padStart(2, "0")}</strong><span>{t("reviewed")}</span></div><small>Central Government pilot · not complete</small></div>
+              <div className="metric-card"><div className="metric-icon sand"><Globe2 size={18}/></div><div><strong>36</strong><span>{t("coverage")}</span></div><small>State/UT selection supported</small></div>
               <div className="metric-card"><div className="metric-icon clay"><MessageCircle size={18}/></div><div><strong>06</strong><span>{t("languages")}</span></div><small>English + 5 Indian languages</small></div>
-              <div className="metric-card"><div className="metric-icon ink"><ShieldCheck size={18}/></div><div><strong>{applications.length.toString().padStart(2, "0")}</strong><span>Draft applications</span></div><small>Saved in this browser</small></div>
+              <div className="metric-card"><div className="metric-icon ink"><ShieldCheck size={18}/></div><div><strong>{applications.length.toString().padStart(2, "0")}</strong><span>Draft applications</span></div><small>Browser-only · backup to move devices</small></div>
             </div>
 
             <div className="dashboard-grid">
@@ -720,7 +720,7 @@ export default function Home() {
             </div>
             <div className="panel source-panel"><div className="section-heading"><div><div className="eyebrow">DATA TRANSPARENCY</div><h2>What is in the current catalogue?</h2></div><span className="trace-count">4 curated records</span></div>
               {SCHEMES.map((scheme) => <div className="source-row" key={scheme.id}><div><strong>{scheme.name}</strong><small>{scheme.sourcePeriod}</small></div><a href={scheme.sourceUrl} target="_blank" rel="noreferrer">Official source <ArrowUpRight size={14}/></a></div>)}
-              <div className="source-disclaimer"><CircleAlert size={16}/><p>The current catalogue is a limited Central Government pilot, not a complete national or state scheme database. The profile accepts every State and Union Territory, but state-specific schemes must be added only after their official rules and sources are verified. Scheme rules and application windows can change.</p></div>
+              <div className="source-disclaimer"><CircleAlert size={16}/><p><strong>Coverage honesty:</strong> The prototype currently has {SCHEMES.length} curated Central Government scheme records. It does not yet include every Central or State/UT scheme. Selecting a State/UT personalizes profile context only; it does not mean that State’s catalogue is complete. Scheme records need an official source, eligibility conditions, application link, and last-verified date. Check myScheme and the relevant State portal for the full live catalogue.</p></div>
             </div>
             <div className="panel responsible-panel"><h2>Responsible-use boundary</h2><p>JanaSetu provides preliminary information and workflow support. It does not provide legal or official determinations, authenticate identity, make benefit decisions, guarantee receipt of benefits or act on behalf of a government department. Citizens should verify all details with the official source and responsible authority.</p><div className="responsible-links"><a href="https://www.myscheme.gov.in/" target="_blank" rel="noreferrer">myScheme <ArrowUpRight size={13}/></a><a href="https://web.umang.gov.in/" target="_blank" rel="noreferrer">UMANG <ArrowUpRight size={13}/></a><a href="https://locator.csccloud.in/" target="_blank" rel="noreferrer">CSC locator <ArrowUpRight size={13}/></a></div></div>
           </section>}
