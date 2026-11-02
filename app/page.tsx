@@ -9,6 +9,9 @@ import {
   MessageCircle, Search, ShieldCheck, Sparkles, Sprout, Upload, UserRound, Mic,
   Users, Wallet, X, Menu, GraduationCap, Leaf
 } from "lucide-react";
+import { runBenefitsAgent } from "@/lib/agent";
+import { parseCitizenMessage } from "@/lib/intake";
+import { createDraftRecord } from "@/lib/draft";
 import {
   LANGUAGE_OPTIONS, SCHEMES, STATES_AND_UTS,
   type Assessment, type CitizenProfile, type LanguageCode
@@ -330,31 +333,19 @@ export default function Home() {
   };
 
   const submitIntake = async () => {
-    if (!intakeText.trim()) {
-      setNotice("Describe your situation in a sentence before continuing.");
-      return;
-    }
+    if (!intakeText.trim()) { setNotice("Describe your situation in a sentence before continuing."); return; }
     setIntakeBusy(true);
     try {
-      const response = await fetch("/api/intake/parse", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: intakeText, language })
-      });
-      const payload = await response.json();
-      if (!response.ok) throw new Error(payload.error || "Unable to extract profile facts.");
-      const extracted = payload.updates || {};
-      setProfile((current) => ({ ...current, ...extracted }));
+      const payload = parseCitizenMessage(intakeText);
+      setProfile((current) => ({ ...current, ...(payload.updates || {}) }));
       setIntakeRecognized(payload.recognizedFields || []);
       setTab("profile");
       setNotice(payload.recognizedFields?.length
-        ? `Extracted ${payload.recognizedFields.length} profile detail(s). Review every value before assessment.`
+        ? "Extracted " + payload.recognizedFields.length + " profile detail(s). Review every value before assessment."
         : "No profile facts were confidently recognized. Complete the form manually.");
     } catch (error) {
       setNotice(error instanceof Error ? error.message : "Unable to process the description.");
-    } finally {
-      setIntakeBusy(false);
-    }
+    } finally { setIntakeBusy(false); }
   };
 
   const startVoiceInput = () => {
@@ -387,66 +378,41 @@ export default function Home() {
   };
 
   const runAssessment = async () => {
-    if (!profile.state) {
-      setTab("profile");
-      setNotice("Select a State or Union Territory before screening.");
-      return;
-    }
-    setBusy(true);
-    setNotice("");
+    if (!profile.state) { setTab("profile"); setNotice("Select a State or Union Territory before screening."); return; }
+    setBusy(true); setNotice("");
     try {
-      const response = await fetch("/api/agent/run", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(profile)
-      });
-      const payload = await response.json();
-      if (!response.ok) throw new Error(payload.error || "Assessment failed.");
+      const payload = runBenefitsAgent(profile);
       setAssessments(payload.assessments || []);
       setToolTrace(payload.trace || []);
       setTab("discover");
-      setNotice("Assessment complete. Review the evidence and official sources.");
+      setNotice("Assessment completed locally. Review the evidence and official sources.");
     } catch (error) {
       setNotice(error instanceof Error ? error.message : "Unable to complete the assessment.");
-    } finally {
-      setBusy(false);
-    }
+    } finally { setBusy(false); }
   };
 
-  const prepareDraft = async (schemeId: string) => {
+  const prepareDraft = (schemeId: string) => {
     setDraftBusy(schemeId);
     try {
-      const response = await fetch("/api/applications/draft", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ schemeId, profile })
-      });
-      const payload = await response.json();
-      if (!response.ok) throw new Error(payload.error || "Draft creation failed.");
-      setApplications((current) => [payload.draft, ...current.filter((item) => item.id !== payload.draft.id)]);
+      const { draft } = createDraftRecord(schemeId, profile);
+      setApplications((current) => [draft, ...current.filter((item) => item.id !== draft.id)]);
       setTab("applications");
-      setNotice("Draft prepared and saved in this browser. It has not been submitted.");
+      setNotice("Draft prepared and saved only in this browser. It has not been submitted.");
     } catch (error) {
       setNotice(error instanceof Error ? error.message : "Unable to prepare the draft.");
-    } finally {
-      setDraftBusy("");
-    }
+    } finally { setDraftBusy(""); }
   };
 
-  const addFollowup = async (application: LocalApplication) => {
-    try {
-      const response = await fetch("/api/tools/follow-up", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ schemeName: application.schemeName })
-      });
-      const payload = await response.json();
-      if (!response.ok) throw new Error(payload.error || "Follow-up creation failed.");
-      setTasks((current) => [payload.task, ...current]);
-      setNotice("A reminder has been added to your local follow-up list.");
-    } catch (error) {
-      setNotice(error instanceof Error ? error.message : "Unable to add reminder.");
-    }
+  const addFollowup = (application: LocalApplication) => {
+    const due = new Date(); due.setDate(due.getDate() + 7);
+    const task: LocalTask = {
+      id: "TASK-" + Math.random().toString(36).slice(2, 8).toUpperCase(),
+      title: "Review next step for " + application.schemeName,
+      dueAt: due.toISOString(), status: "Pending",
+      note: "Prototype reminder only. Confirm the current application window with the official department."
+    };
+    setTasks((current) => [task, ...current]);
+    setNotice("Reminder saved only in this browser.");
   };
 
   const addDocument = (file?: File) => {
