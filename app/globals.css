@@ -580,3 +580,5 @@ input, select, textarea { min-height: 44px; }
 .scheme-category, .source-dot, .scheme-title-wrap p, .scheme-benefit span, .eyebrow, .section-index { font-size: 11px; }
 :focus-visible { outline: 3px solid #f59e0b; outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
+
+.full-catalogue-cta{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:18px 20px;margin:18px 0;background:#fff0e2;border:1px solid #e8b48b;border-radius:12px}.full-catalogue-cta strong{font-size:16px;color:#7c2d12}.full-catalogue-cta p{margin:5px 0 0;font-size:14px;color:#765744;line-height:1.55}.full-catalogue-cta .button{flex-shrink:0}@media(max-width:700px){.full-catalogue-cta{align-items:stretch;flex-direction:column}.full-catalogue-cta .button{width:100%}}
