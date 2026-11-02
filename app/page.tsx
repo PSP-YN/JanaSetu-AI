@@ -47,7 +47,7 @@ const EMPTY_PROFILE: CitizenProfile = {
 };
 
 const SAMPLE_PROFILE: CitizenProfile = {
-  fullName: "Ananya Rao", age: 34, gender: "woman", state: "Karnataka", district: "Mysuru",
+  fullName: "Demo Citizen", age: 34, gender: "woman", state: "Karnataka", district: "Mysuru",
   residenceType: "urban", annualIncome: 150000, occupation: "Farmer",
   hasCultivableLand: true, pmKisanExcluded: "no", ownsPuccaHouse: false,
   previousHousingBenefit: "no", householdHasLpg: false, poorHouseholdDeclaration: true,
