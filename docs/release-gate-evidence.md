@@ -4,6 +4,20 @@
 
 Last updated: 2 November 2026.
 
+## Local verification record
+
+Validated locally on commit `50fbe47821123929e9691828b4e410461eadcf8c` (`main`) using Fedora Linux, Node.js 24.15.0 and npm 11.12.1:
+
+- `npm test`: 29/29 passed.
+- `npx playwright test`: 21/21 passed, including desktop/mobile axe scans, six-language selector behaviour, keyboard navigation, extension safety fixtures and the main-workflow privacy network-boundary test.
+- `npm run typecheck`: passed.
+- `node --check extension/fill.js` and `node --check extension/popup.js`: passed; extension manifest JSON parsed successfully.
+- `npm audit --omit=dev --audit-level=high`: 0 vulnerabilities.
+- `npm run build`: passed.
+- Production smoke checks: health, scheme catalogue, source monitor, privacy/terms routes and invalid API payload handling passed.
+
+These are local verification results, not a claim that GitHub Actions or a hosted deployment passed. They do not replace manual, independent, legal or official-source review.
+
 ## Gate 1 — complete interface localization
 
 - [ ] Every user-visible interface string is keyed (navigation, headings, buttons, labels, hints, empty states, errors, dialogs, notifications, accessibility names and metadata).
@@ -24,7 +38,7 @@ Current evidence: the hero and a subset of shared copy have translations. Severa
 - [ ] Mobile zoom/reflow, touch target size, orientation and virtual keyboard tested on representative Android devices.
 - [ ] Accessibility findings have severity, owner, reproduction steps and retest evidence.
 
-Current evidence: Playwright includes axe scans for the overview, privacy and terms routes, plus a mobile overview scan and keyboard skip-link test. A new main-workflow network-boundary regression test is present; execution on the latest commit is pending. Other primary tabs and interactive states are not covered by axe, and no manual screen-reader/assistive-technology sign-off is recorded. **Not passed.**
+Current evidence: local Playwright run passed 21/21 tests, including axe scans for the overview, privacy and terms routes, a mobile overview scan, keyboard skip-link test and six-locale selector behaviour. Other primary tabs and interactive states are not covered by axe, and no manual screen-reader/assistive-technology sign-off is recorded. **Not passed.**
 
 ## Gate 3 — browser extension portal compatibility
 
@@ -35,7 +49,7 @@ Current evidence: Playwright includes axe scans for the overview, privacy and te
 - [ ] Confirm OTP, CAPTCHA, password, Aadhaar, bank and document upload fields are never populated.
 - [ ] Re-run the matrix after portal markup or extension changes.
 
-Current evidence: hostname restriction and click-to-fill are implemented. Synthetic Playwright fixtures cover basic text fill, sensitive-field skipping and select mapping; new tests cover Male/Female partial-match collisions, unmatched options and duplicate exact options. CI execution for the latest fixtures is pending. Heuristic matching has not been proven portal by portal. **Not passed.**
+Current evidence: hostname restriction and click-to-fill are implemented. Local Playwright synthetic fixtures passed for basic text/number fill, React-controlled input events, sensitive-field skipping, username/account-holder protection, file-input exclusion, exact select matching, Male/Female collision prevention, unmatched options and duplicate exact options. Heuristic matching has not been proven portal by portal. **Not passed.**
 
 ## Gate 4 — scheme verification and approval
 
@@ -56,7 +70,7 @@ Current evidence: four prototype rule-screened records exist; none has final two
 - [ ] Publish only after legal reviewer, version, date and approval scope are recorded.
 - [ ] Verify actual runtime behaviour against the published notices; do not rely on documentation alone.
 
-Current evidence: prototype privacy/terms pages exist. No qualified legal review or DPIA has been completed. **Not passed.**
+Current evidence: the privacy notice and DPIA draft now describe the observed browser/API boundary. The main-workflow Playwright network test passed and confirmed no POST to screening, intake or draft API routes during the tested journey. Hosting logs, provider retention and all possible external flows remain unverified. No qualified legal review or DPIA approval has been completed. **Not passed.**
 
 ## Gate 6 — security assurance
 
@@ -67,7 +81,7 @@ Current evidence: prototype privacy/terms pages exist. No qualified legal review
 - [ ] Independent penetration test against a defined staging scope; record tester, dates, methodology, findings and retest.
 - [ ] Incident response, rollback, backup/restore and vulnerability disclosure procedures are exercised.
 
-Current evidence: CI unit/type/build/dependency checks and selected API smoke tests exist. No independent penetration test or complete threat assessment exists. **Not passed.**
+Current evidence: local unit tests, TypeScript check, production build, selected API smoke checks and `npm audit --omit=dev --audit-level=high` passed; the audit reported zero vulnerabilities. Security headers are covered by a browser test. No independent penetration test or complete threat assessment exists. **Not passed.**
 
 ## Release decision
 
