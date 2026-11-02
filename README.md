@@ -57,6 +57,13 @@ See:
 
 The prototype uses a small, explicitly curated catalogue based on public official sources. It does not scrape government portals, claim API access it does not have, or infer official application status. Scheme rules can change; verify the linked official source and current application window before acting.
 
+
+## Local continuity and portal form assistance
+
+- **Backup / Restore:** export profile, language, assessments, drafts, document metadata and follow-up records as a versioned local JSON file. Keep it private; it contains personal profile data.
+- **Experimental Chrome extension:** [installation and safety guide](docs/extension.md). It fills matching fields only after the citizen clicks and reviews the portal. It does not submit applications.
+- **Scheme catalogue coverage:** [coverage, source policy and expansion plan](docs/scheme-catalogue-coverage.md). The current built-in catalogue has four curated Central scheme records; use [official myScheme search](https://search.myscheme.gov.in/) for the current full Central + State/UT catalogue.
+
 ## License
 
 All rights reserved. This repository is published for evaluation and demonstration. No government affiliation or endorsement is implied.
