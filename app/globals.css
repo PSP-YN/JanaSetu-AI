@@ -561,3 +561,8 @@ h1, h2, h3 { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
 @media(max-width:760px) {
   .ecosystem-panel { grid-template-columns: 1fr; gap: 14px; padding: 15px; }
 }
+
+/* Local backup controls */
+.backup-button { white-space: nowrap; min-height: 32px; padding: 7px 9px; font-size: 10px; }
+.backup-button input { display: none; }
+@media (max-width: 780px) { .backup-button { padding: 7px; font-size: 0; gap: 3px; } .backup-button svg { width: 15px; height: 15px; } }
