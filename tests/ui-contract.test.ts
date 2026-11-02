@@ -49,7 +49,7 @@ test("all six locale dictionaries have exact translation-key parity", () => {
   const localeBlocks = Array.from(page.matchAll(/^  (en|hi|kn|ta|te|ml): \{([\s\S]*?)^  \},?$/gm));
   const keysByLocale = localeBlocks.map(([, locale, block]) => {
     const keys = Array.from(block.matchAll(/^\s+([A-Za-z0-9_]+):/gm), match => match[1]);
-    return { locale, keys: [...new Set(keys)].sort() };
+    return { locale, keys: Array.from(new Set(keys)).sort() };
   });
   assert.equal(keysByLocale.length, 6);
   const baseline = JSON.stringify(keysByLocale.find(x => x.locale === "en")?.keys);
