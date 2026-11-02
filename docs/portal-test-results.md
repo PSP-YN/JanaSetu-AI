@@ -2,7 +2,7 @@
 
 ## Execution result
 
-<badge>CI run 188 — success</badge>
+**CI run 188: passed**
 
 GitHub Actions run: https://github.com/PSP-YN/JanaSetu-AI/actions/runs/41477782192
 
