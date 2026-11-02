@@ -19,7 +19,7 @@
 | React controlled fields | Input value setter + input/change events | Framework state updates; visible value persists | Not run |
 | Vue controlled fields | v-model fields | Visible value and app state agree | Not run |
 | Dynamic form | Fields added after initial page load | Fill uses current visible DOM only | Not run |
-| Duplicate labels | Multiple applicant/household name fields | Ambiguous matches skipped | Automated synthetic fixture added; CI execution pending |
+| Duplicate labels / substring collisions | Multiple applicant/household name fields and login username | Ambiguous matches skipped; username must not be treated as applicant name | Synthetic Playwright fixtures added; CI execution pending |
 | Localized labels | Hindi/Kannada/Tamil/Telugu/Malayalam labels | Exact aliases map; unknown labels skipped | Not run |
 | Select options | Exact label/value match, partial collision (Male/Female), missing option and duplicate exact labels | Only one unique exact enabled option fills; unmatched or ambiguous options stay unchanged and are not counted as filled | Synthetic Playwright fixtures added; CI execution pending |
 | Iframe / shadow DOM | Cross-origin iframe and shadow root | Unsupported contexts skipped, no broad traversal | Not run |
