@@ -175,6 +175,34 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     noAfterReview: "No, after checking the list",
 
 
+
+    publishedBenefit: "Published benefit",
+    metadataOnly: "Metadata only",
+    addDocumentReference: "Add a document reference",
+    chooseFile: "Choose a file",
+    maxFileSize: "Maximum 12 MB",
+    yourRecords: "Your records",
+    noDocumentReferences: "No document references yet",
+    documentChecklistEmpty: "Your checklist will appear here when you add a file.",
+    noApplicationDrafts: "No application drafts yet",
+    findBenefits: "Find benefits",
+    applicant: "Applicant",
+    location: "Location",
+    openChecks: "Open checks",
+    markReviewed: "Mark as reviewed",
+    openOfficialSource: "Open official source",
+    addFollowup: "Add follow-up",
+    remove: "Remove",
+    followupMemory: "Follow-up memory",
+    upcomingActions: "Upcoming actions",
+    done: "Done",
+    ourApproach: "Our approach",
+    clarityEvidenceControl: "Clarity, evidence and citizen control.",
+    dataTransparency: "Data transparency",
+    currentCatalogue: "What is in the current catalogue?",
+    officialSource: "Official source",
+    coverageHonesty: "Coverage honesty",
+    responsibleUseBoundary: "Responsible-use boundary",
   },
   hi: {
     overview: "अवलोकन", discover: "लाभ खोजें", profile: "मेरी प्रोफ़ाइल", documents: "दस्तावेज़",
@@ -294,6 +322,34 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     distanceCourse: "क्या आपका पाठ्यक्रम डिप्लोमा या दूरस्थ/पत्राचार पाठ्यक्रम है?",
     noAfterReview: "सूची जाँचने के बाद नहीं",
 
+
+    publishedBenefit: "प्रकाशित लाभ",
+    metadataOnly: "केवल मेटाडेटा",
+    addDocumentReference: "दस्तावेज़ संदर्भ जोड़ें",
+    chooseFile: "फ़ाइल चुनें",
+    maxFileSize: "अधिकतम 12 MB",
+    yourRecords: "आपके रिकॉर्ड",
+    noDocumentReferences: "अभी कोई दस्तावेज़ संदर्भ नहीं",
+    documentChecklistEmpty: "फ़ाइल जोड़ने पर आपकी सूची यहाँ दिखाई देगी।",
+    noApplicationDrafts: "अभी कोई आवेदन ड्राफ़्ट नहीं",
+    findBenefits: "लाभ खोजें",
+    applicant: "आवेदक",
+    location: "स्थान",
+    openChecks: "खुली जाँच",
+    markReviewed: "समीक्षित चिह्नित करें",
+    openOfficialSource: "आधिकारिक स्रोत खोलें",
+    addFollowup: "अनुस्मारक जोड़ें",
+    remove: "हटाएँ",
+    followupMemory: "अनुस्मारक",
+    upcomingActions: "आगामी कार्य",
+    done: "पूर्ण",
+    ourApproach: "हमारा दृष्टिकोण",
+    clarityEvidenceControl: "स्पष्टता, प्रमाण और नागरिक का नियंत्रण।",
+    dataTransparency: "डेटा पारदर्शिता",
+    currentCatalogue: "वर्तमान सूची में क्या है?",
+    officialSource: "आधिकारिक स्रोत",
+    coverageHonesty: "कवरेज की स्पष्टता",
+    responsibleUseBoundary: "ज़िम्मेदार उपयोग की सीमा",
   },
   kn: {
     overview: "ಅವಲೋಕನ", discover: "ಸೌಲಭ್ಯಗಳನ್ನು ಹುಡುಕಿ", profile: "ನನ್ನ ಪ್ರೊಫೈಲ್", documents: "ದಾಖಲೆಗಳು",
@@ -413,6 +469,34 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     distanceCourse: "ನಿಮ್ಮ ಕೋರ್ಸ್ ಡಿಪ್ಲೊಮಾ ಅಥವಾ ದೂರ/ಪತ್ರವ್ಯವಹಾರ ಕೋರ್ಸ್ ಆಗಿದೆಯೇ?",
     noAfterReview: "ಪಟ್ಟಿಯನ್ನು ಪರಿಶೀಲಿಸಿದ ನಂತರ ಇಲ್ಲ",
 
+
+    publishedBenefit: "ಪ್ರಕಟಿತ ಸೌಲಭ್ಯ",
+    metadataOnly: "ಮೆಟಾಡೇಟಾ ಮಾತ್ರ",
+    addDocumentReference: "ದಾಖಲೆ ಉಲ್ಲೇಖ ಸೇರಿಸಿ",
+    chooseFile: "ಫೈಲ್ ಆಯ್ಕೆಮಾಡಿ",
+    maxFileSize: "ಗರಿಷ್ಠ 12 MB",
+    yourRecords: "ನಿಮ್ಮ ದಾಖಲೆಗಳು",
+    noDocumentReferences: "ಇನ್ನೂ ಯಾವುದೇ ದಾಖಲೆ ಉಲ್ಲೇಖಗಳಿಲ್ಲ",
+    documentChecklistEmpty: "ಫೈಲ್ ಸೇರಿಸಿದಾಗ ನಿಮ್ಮ ಪಟ್ಟಿ ಇಲ್ಲಿ ಕಾಣಿಸುತ್ತದೆ.",
+    noApplicationDrafts: "ಇನ್ನೂ ಅರ್ಜಿ ಕರಡುಗಳಿಲ್ಲ",
+    findBenefits: "ಸೌಲಭ್ಯಗಳನ್ನು ಹುಡುಕಿ",
+    applicant: "ಅರ್ಜಿದಾರ",
+    location: "ಸ್ಥಳ",
+    openChecks: "ಬಾಕಿ ಪರಿಶೀಲನೆಗಳು",
+    markReviewed: "ಪರಿಶೀಲಿಸಲಾಗಿದೆ ಎಂದು ಗುರುತಿಸಿ",
+    openOfficialSource: "ಅಧಿಕೃತ ಮೂಲ ತೆರೆಯಿರಿ",
+    addFollowup: "ಜ್ಞಾಪನೆ ಸೇರಿಸಿ",
+    remove: "ತೆಗೆದುಹಾಕಿ",
+    followupMemory: "ಜ್ಞಾಪನೆಗಳು",
+    upcomingActions: "ಮುಂಬರುವ ಕ್ರಮಗಳು",
+    done: "ಮುಗಿದಿದೆ",
+    ourApproach: "ನಮ್ಮ ವಿಧಾನ",
+    clarityEvidenceControl: "ಸ್ಪಷ್ಟತೆ, ಸಾಕ್ಷ್ಯ ಮತ್ತು ನಾಗರಿಕರ ನಿಯಂತ್ರಣ.",
+    dataTransparency: "ಡೇಟಾ ಪಾರದರ್ಶಕತೆ",
+    currentCatalogue: "ಪ್ರಸ್ತುತ ಪಟ್ಟಿಯಲ್ಲಿ ಏನಿದೆ?",
+    officialSource: "ಅಧಿಕೃತ ಮೂಲ",
+    coverageHonesty: "ವ್ಯಾಪ್ತಿಯ ಸ್ಪಷ್ಟತೆ",
+    responsibleUseBoundary: "ಜವಾಬ್ದಾರಿಯುತ ಬಳಕೆಯ ಮಿತಿ",
   },
   ta: {
     overview: "கண்ணோட்டம்", discover: "நலத்திட்டங்களைத் தேடு", profile: "எனது சுயவிவரம்", documents: "ஆவணங்கள்",
@@ -532,6 +616,34 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     distanceCourse: "உங்கள் படிப்பு டிப்ளமோ அல்லது தொலை/தொடர்புக் கல்வியா?",
     noAfterReview: "பட்டியலைச் சரிபார்த்த பிறகு இல்லை",
 
+
+    publishedBenefit: "வெளியிடப்பட்ட நன்மை",
+    metadataOnly: "மெட்டாடேட்டா மட்டும்",
+    addDocumentReference: "ஆவணக் குறிப்பைச் சேர்க்கவும்",
+    chooseFile: "கோப்பைத் தேர்ந்தெடுக்கவும்",
+    maxFileSize: "அதிகபட்சம் 12 MB",
+    yourRecords: "உங்கள் பதிவுகள்",
+    noDocumentReferences: "ஆவணக் குறிப்புகள் இன்னும் இல்லை",
+    documentChecklistEmpty: "கோப்பைச் சேர்த்ததும் உங்கள் பட்டியல் இங்கே தோன்றும்.",
+    noApplicationDrafts: "விண்ணப்ப வரைவுகள் இன்னும் இல்லை",
+    findBenefits: "நலத்திட்டங்களைத் தேடு",
+    applicant: "விண்ணப்பதாரர்",
+    location: "இடம்",
+    openChecks: "நிலுவைச் சரிபார்ப்புகள்",
+    markReviewed: "மதிப்பாய்வு செய்ததாகக் குறிக்கவும்",
+    openOfficialSource: "அதிகாரப்பூர்வ மூலத்தைத் திறக்கவும்",
+    addFollowup: "நினைவூட்டலைச் சேர்க்கவும்",
+    remove: "நீக்கு",
+    followupMemory: "நினைவூட்டல்கள்",
+    upcomingActions: "வரவிருக்கும் செயல்கள்",
+    done: "முடிந்தது",
+    ourApproach: "எங்கள் அணுகுமுறை",
+    clarityEvidenceControl: "தெளிவு, ஆதாரம் மற்றும் குடிமக்கள் கட்டுப்பாடு.",
+    dataTransparency: "தரவு வெளிப்படைத்தன்மை",
+    currentCatalogue: "தற்போதைய பட்டியலில் என்ன உள்ளது?",
+    officialSource: "அதிகாரப்பூர்வ மூலம்",
+    coverageHonesty: "கவரேஜ் வெளிப்படைத்தன்மை",
+    responsibleUseBoundary: "பொறுப்பான பயன்பாட்டு வரம்பு",
   },
   te: {
     overview: "అవలోకనం", discover: "ప్రయోజనాలను కనుగొనండి", profile: "నా ప్రొఫైల్", documents: "పత్రాలు",
@@ -651,6 +763,34 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     distanceCourse: "మీ కోర్సు డిప్లొమా లేదా దూర/కరస్పాండెన్స్ కోర్సా?",
     noAfterReview: "జాబితాను పరిశీలించిన తర్వాత కాదు",
 
+
+    publishedBenefit: "ప్రకటించిన ప్రయోజనం",
+    metadataOnly: "మెటాడేటా మాత్రమే",
+    addDocumentReference: "పత్రం సూచనను జోడించండి",
+    chooseFile: "ఫైల్‌ను ఎంచుకోండి",
+    maxFileSize: "గరిష్ఠం 12 MB",
+    yourRecords: "మీ రికార్డులు",
+    noDocumentReferences: "ఇంకా పత్ర సూచనలు లేవు",
+    documentChecklistEmpty: "ఫైల్ జోడించినప్పుడు మీ జాబితా ఇక్కడ కనిపిస్తుంది.",
+    noApplicationDrafts: "ఇంకా దరఖాస్తు ముసాయిదాలు లేవు",
+    findBenefits: "ప్రయోజనాలను వెతకండి",
+    applicant: "దరఖాస్తుదారు",
+    location: "ప్రాంతం",
+    openChecks: "పెండింగ్ తనిఖీలు",
+    markReviewed: "సమీక్షించినట్లు గుర్తించండి",
+    openOfficialSource: "అధికారిక మూలాన్ని తెరవండి",
+    addFollowup: "రిమైండర్ జోడించండి",
+    remove: "తొలగించండి",
+    followupMemory: "రిమైండర్లు",
+    upcomingActions: "తదుపరి చర్యలు",
+    done: "పూర్తయింది",
+    ourApproach: "మా విధానం",
+    clarityEvidenceControl: "స్పష్టత, ఆధారాలు మరియు పౌరుల నియంత్రణ.",
+    dataTransparency: "డేటా పారదర్శకత",
+    currentCatalogue: "ప్రస్తుత జాబితాలో ఏముంది?",
+    officialSource: "అధికారిక మూలం",
+    coverageHonesty: "కవరేజ్ స్పష్టత",
+    responsibleUseBoundary: "బాధ్యతాయుత వినియోగ పరిమితి",
   },
   ml: {
     overview: "അവലോകനം", discover: "ആനുകൂല്യങ്ങൾ കണ്ടെത്തുക", profile: "എന്റെ പ്രൊഫൈൽ", documents: "രേഖകൾ",
@@ -769,6 +909,34 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     execution: "പ്രവർത്തന ട്രേസ്",
     agentActions: "സിസ്റ്റം ചെയ്ത പ്രവർത്തനം",
 
+
+    publishedBenefit: "പ്രസിദ്ധീകരിച്ച ആനുകൂല്യം",
+    metadataOnly: "മെറ്റാഡാറ്റ മാത്രം",
+    addDocumentReference: "രേഖാ റഫറൻസ് ചേർക്കുക",
+    chooseFile: "ഫയൽ തിരഞ്ഞെടുക്കുക",
+    maxFileSize: "പരമാവധി 12 MB",
+    yourRecords: "നിങ്ങളുടെ രേഖകൾ",
+    noDocumentReferences: "രേഖാ റഫറൻസുകളൊന്നുമില്ല",
+    documentChecklistEmpty: "ഫയൽ ചേർക്കുമ്പോൾ നിങ്ങളുടെ പട്ടിക ഇവിടെ കാണാം.",
+    noApplicationDrafts: "അപേക്ഷാ ഡ്രാഫ്റ്റുകളൊന്നുമില്ല",
+    findBenefits: "ആനുകൂല്യങ്ങൾ കണ്ടെത്തുക",
+    applicant: "അപേക്ഷകൻ",
+    location: "സ്ഥലം",
+    openChecks: "പരിശോധിക്കാനുള്ളവ",
+    markReviewed: "പരിശോധിച്ചതായി അടയാളപ്പെടുത്തുക",
+    openOfficialSource: "ഔദ്യോഗിക ഉറവിടം തുറക്കുക",
+    addFollowup: "ഓർമ്മപ്പെടുത്തൽ ചേർക്കുക",
+    remove: "നീക്കം ചെയ്യുക",
+    followupMemory: "ഓർമ്മപ്പെടുത്തലുകൾ",
+    upcomingActions: "വരാനിരിക്കുന്ന നടപടികൾ",
+    done: "പൂർത്തിയായി",
+    ourApproach: "ഞങ്ങളുടെ സമീപനം",
+    clarityEvidenceControl: "വ്യക്തത, തെളിവ്, പൗരന്റെ നിയന്ത്രണം.",
+    dataTransparency: "ഡാറ്റാ സുതാര്യത",
+    currentCatalogue: "നിലവിലെ പട്ടികയിൽ എന്തുണ്ട്?",
+    officialSource: "ഔദ്യോഗിക ഉറവിടം",
+    coverageHonesty: "കവറേജ് സുതാര്യത",
+    responsibleUseBoundary: "ഉത്തരവാദിത്തമുള്ള ഉപയോഗത്തിന്റെ പരിധി",
   },
 };
 
@@ -1068,7 +1236,7 @@ export default function Home() {
         </div>
       </div>
       <p className="scheme-summary">{scheme.summary}</p>
-      <div className="scheme-benefit"><span>Published benefit</span><strong>{scheme.benefit}</strong></div>
+      <div className="scheme-benefit"><span>{t("publishedBenefit")}</span><strong>{scheme.benefit}</strong></div>
       {assessment && <div className={"assessment-banner " + assessment.state}>
         <span className="assessment-icon">{assessment.state === "not_matched" ? <X size={15}/> : assessment.state === "potential_match" ? <Check size={15}/> : <CircleAlert size={15}/>}</span>
         <div><strong>{statusLabel(assessment.state, t)}</strong><small>{assessment.headline}</small></div>
@@ -1317,13 +1485,13 @@ export default function Home() {
             <div className="page-title-row"><div><div className="eyebrow">EVIDENCE ORGANIZER</div><h1>{t("documentsTitle")}</h1><p>{t("documentsText")}</p></div><span className="private-chip"><LockKeyhole size={14}/> Metadata only</span></div>
             <div className="document-layout">
               <div className="panel upload-panel">
-                <div className="upload-illustration"><Upload size={27}/></div><h2>Add a document reference</h2><p>Choose a PDF or image to add its filename and basic metadata to this browser's checklist. The file itself is not uploaded, parsed or retained by the server.</p>
+                <div className="upload-illustration"><Upload size={27}/></div><h2>{t("addDocumentReference")}</h2><p>Choose a PDF or image to add its filename and basic metadata to this browser's checklist. The file itself is not uploaded, parsed or retained by the server.</p>
                 <label className="button button-primary upload-button"><Upload size={16}/> Choose a file<input type="file" accept=".pdf,image/*" onChange={(e) => addDocument(e.target.files?.[0])}/></label>
-                <div className="upload-limits"><span>PDF, JPG, PNG</span><span>Maximum 12 MB</span></div>
+                <div className="upload-limits"><span>PDF, JPG, PNG</span><span>{t("maxFileSize")}</span></div>
               </div>
               <div className="panel document-list-panel">
-                <div className="section-heading"><div><div className="eyebrow">YOUR RECORDS</div><h2>{documents.length} document references</h2></div><span className="section-index">LOCAL</span></div>
-                {documents.length === 0 ? <div className="empty-state compact"><FileText size={26}/><h3>No document references yet</h3><p>Your checklist will appear here when you add a file.</p></div> : <div className="document-list">{documents.map((doc) => <div className="document-row" key={doc.id}><div className="file-icon"><FileText size={19}/></div><div className="document-info"><strong>{doc.name}</strong><small>{doc.type} · {(doc.size / 1024).toFixed(0)} KB · Added {shortDate(doc.addedAt)}</small><em>{doc.status}</em></div><button className="icon-button" onClick={() => setDocuments((current) => current.filter((item) => item.id !== doc.id))} aria-label="Remove document reference"><X size={16}/></button></div>)}</div>}
+                <div className="section-heading"><div><div className="eyebrow">{t("yourRecords")}</div><h2>{documents.length} document references</h2></div><span className="section-index">LOCAL</span></div>
+                {documents.length === 0 ? <div className="empty-state compact"><FileText size={26}/><h3>{t("noDocumentReferences")}</h3><p>{t("documentChecklistEmpty")}</p></div> : <div className="document-list">{documents.map((doc) => <div className="document-row" key={doc.id}><div className="file-icon"><FileText size={19}/></div><div className="document-info"><strong>{doc.name}</strong><small>{doc.type} · {(doc.size / 1024).toFixed(0)} KB · Added {shortDate(doc.addedAt)}</small><em>{doc.status}</em></div><button className="icon-button" onClick={() => setDocuments((current) => current.filter((item) => item.id !== doc.id))} aria-label="Remove document reference"><X size={16}/></button></div>)}</div>}
               </div>
             </div>
             <div className="empty-guidance"><ShieldCheck size={17}/><span>For security, do not add Aadhaar images, bank statements or other sensitive identity documents to this prototype. Use synthetic sample files for demonstrations.</span></div>
@@ -1331,15 +1499,15 @@ export default function Home() {
 
           {tab === "applications" && <section className="page-section">
             <div className="page-title-row"><div><div className="eyebrow">APPLICATION LIFECYCLE</div><h1>{t("applicationsTitle")}</h1><p>{t("applicationsText")}</p></div><div className="private-chip"><ClipboardCheck size={14}/> {applications.length} saved</div></div>
-            {applications.length === 0 ? <div className="panel empty-large"><div className="empty-state"><ClipboardCheck size={32}/><h3>No application drafts yet</h3><p>Run an assessment, open a scheme and choose “Prepare draft” to create a reviewable application record.</p><button className="button button-primary" onClick={() => setTab("discover")}>Find benefits <ArrowRight size={15}/></button></div></div> :
-              <div className="application-list">{applications.map((application) => <article className="panel application-card" key={application.id}><div className="application-top"><div className="application-icon"><FileCheck2 size={20}/></div><div><span className="draft-label">PREPARATION DRAFT</span><h3>{application.schemeName}</h3><p>{application.id} · Created {shortDate(application.createdAt)}</p></div><span className="status-pill neutral">Not submitted</span></div><div className="application-meta"><div><small>Applicant</small><strong>{application.citizenName}</strong></div><div><small>Location</small><strong>{application.district}, {application.state}</strong></div><div><small>Open checks</small><strong>{application.assessmentState === "needs_verification" ? "Scheme source approval pending" : application.missingChecks.length + " require review"}</strong></div></div>
+            {applications.length === 0 ? <div className="panel empty-large"><div className="empty-state"><ClipboardCheck size={32}/><h3>{t("noApplicationDrafts")}</h3><p>Run an assessment, open a scheme and choose “Prepare draft” to create a reviewable application record.</p><button className="button button-primary" onClick={() => setTab("discover")}>Find benefits <ArrowRight size={15}/></button></div></div> :
+              <div className="application-list">{applications.map((application) => <article className="panel application-card" key={application.id}><div className="application-top"><div className="application-icon"><FileCheck2 size={20}/></div><div><span className="draft-label">PREPARATION DRAFT</span><h3>{application.schemeName}</h3><p>{application.id} · Created {shortDate(application.createdAt)}</p></div><span className="status-pill neutral">Not submitted</span></div><div className="application-meta"><div><small>{t("applicant")}</small><strong>{application.citizenName}</strong></div><div><small>{t("location")}</small><strong>{application.district}, {application.state}</strong></div><div><small>{t("openChecks")}</small><strong>{application.assessmentState === "needs_verification" ? "Scheme source approval pending" : application.missingChecks.length + " require review"}</strong></div></div>
                 <div className="draft-field-toolbar">
                   <button className="text-button" onClick={() => setExpandedApplication(expandedApplication === application.id ? "" : application.id)}>
                     {expandedApplication === application.id ? "Hide prepared fields" : "Review prepared fields"} <ChevronDown size={14}/>
                   </button>
                   {application.reviewedAt
                     ? <span className="reviewed-label"><CheckCircle2 size={13}/> Citizen review recorded · {shortDate(application.reviewedAt)}</span>
-                    : <button className="button button-small button-outline" onClick={() => setApplications((current) => current.map((item) => item.id === application.id ? { ...item, reviewedAt: new Date().toISOString(), status: "Reviewed by citizen — not submitted" } : item))}>Mark as reviewed</button>}
+                    : <button className="button button-small button-outline" onClick={() => setApplications((current) => current.map((item) => item.id === application.id ? { ...item, reviewedAt: new Date().toISOString(), status: "Reviewed by citizen — not submitted" } : item))}>{t("markReviewed")}</button>}
                 </div>
                 {expandedApplication === application.id && <div className="draft-field-grid">
                   {(application.fields || []).map((field) => <div className="draft-field" key={field.key}>
@@ -1348,23 +1516,23 @@ export default function Home() {
                   </div>)}
                   <p className="draft-field-note">These are profile preparation fields, not a verified mapping to an official department form. Confirm the form's current fields and values on the linked official source.</p>
                 </div>}
-                <p className="application-disclaimer"><CircleAlert size={15}/>{application.disclaimer}</p><div className="application-actions"><a className="text-button" href={application.sourceUrl} target="_blank" rel="noreferrer">Open official source <ArrowUpRight size={14}/></a><button className="button button-small button-outline" onClick={() => addFollowup(application)}><CalendarClock size={14}/> Add follow-up</button><button className="text-button danger-text" onClick={() => setApplications((current) => current.filter((item) => item.id !== application.id))}>Remove</button></div></article>)}</div>}
-            {tasks.length > 0 && <div className="panel followup-panel"><div className="section-heading"><div><div className="eyebrow">FOLLOW-UP MEMORY</div><h2>Upcoming actions</h2></div><span className="trace-count">{tasks.length} reminders</span></div>{tasks.map((task) => <div className="task-row" key={task.id}><div className="task-date"><CalendarClock size={17}/></div><div><strong>{task.title}</strong><small>Suggested date: {shortDate(task.dueAt)} · {task.note}</small></div><button className="text-button" onClick={() => setTasks((current) => current.filter((item) => item.id !== task.id))}>Done</button></div>)}</div>}
+                <p className="application-disclaimer"><CircleAlert size={15}/>{application.disclaimer}</p><div className="application-actions"><a className="text-button" href={application.sourceUrl} target="_blank" rel="noreferrer">Open official source <ArrowUpRight size={14}/></a><button className="button button-small button-outline" onClick={() => addFollowup(application)}><CalendarClock size={14}/> Add follow-up</button><button className="text-button danger-text" onClick={() => setApplications((current) => current.filter((item) => item.id !== application.id))}>{t("remove")}</button></div></article>)}</div>}
+            {tasks.length > 0 && <div className="panel followup-panel"><div className="section-heading"><div><div className="eyebrow">{t("followupMemory")}</div><h2>{t("upcomingActions")}</h2></div><span className="trace-count">{tasks.length} reminders</span></div>{tasks.map((task) => <div className="task-row" key={task.id}><div className="task-date"><CalendarClock size={17}/></div><div><strong>{task.title}</strong><small>Suggested date: {shortDate(task.dueAt)} · {task.note}</small></div><button className="text-button" onClick={() => setTasks((current) => current.filter((item) => item.id !== task.id))}>{t("done")}</button></div>)}</div>}
           </section>}
 
           {tab === "about" && <section className="page-section">
-            <div className="page-title-row"><div><div className="eyebrow">OUR APPROACH</div><h1>Clarity, evidence and citizen control.</h1><p>JanaSetu is an independent benefits navigation prototype. It complements official portals; it does not replace them.</p></div></div>
+            <div className="page-title-row"><div><div className="eyebrow">{t("ourApproach")}</div><h1>{t("clarityEvidenceControl")}</h1><p>JanaSetu is an independent benefits navigation prototype. It complements official portals; it does not replace them.</p></div></div>
             <div className="about-grid">
               <article className="panel about-card"><div className="about-icon"><Search size={19}/></div><h2>Discover</h2><p>Use one reusable citizen profile to select relevant pathways from a curated catalogue of official scheme references.</p></article>
               <article className="panel about-card"><div className="about-icon"><ShieldCheck size={19}/></div><h2>Explain</h2><p>Each screening condition shows the rule, the profile field used and whether the evidence is matched, not matched or unknown.</p></article>
               <article className="panel about-card"><div className="about-icon"><FileCheck2 size={19}/></div><h2>Prepare</h2><p>Generate a local draft and a document checklist for review. The prototype does not submit to government portals.</p></article>
               <article className="panel about-card"><div className="about-icon"><CalendarClock size={19}/></div><h2>Remember</h2><p>Keep application drafts and follow-up reminders in this browser so a citizen can resume the workflow.</p></article>
             </div>
-            <div className="panel source-panel"><div className="section-heading"><div><div className="eyebrow">DATA TRANSPARENCY</div><h2>What is in the current catalogue?</h2></div><span className="trace-count">{SCHEMES.length} built-in records</span></div>
+            <div className="panel source-panel"><div className="section-heading"><div><div className="eyebrow">{t("dataTransparency")}</div><h2>{t("currentCatalogue")}</h2></div><span className="trace-count">{SCHEMES.length} built-in records</span></div>
               {SCHEMES.map((scheme) => <div className="source-row" key={scheme.id}><div><strong>{scheme.name}</strong><small>{scheme.sourcePeriod}</small></div><a href={scheme.sourceUrl} target="_blank" rel="noreferrer">Official source <ArrowUpRight size={14}/></a></div>)}
-              <div className="source-disclaimer"><CircleAlert size={16}/><p><strong>Coverage honesty:</strong> JanaSetu has {SCHEMES.length} built-in records and a separate external open-data catalogue. It does not yet have complete, independently verified Central or State/UT scheme coverage. Selecting a State/UT personalizes profile context only; it does not mean that State’s catalogue is complete. Scheme records need an official source, eligibility conditions, application link, and last-verified date. Check myScheme and the relevant State portal for the full live catalogue.</p></div>
+              <div className="source-disclaimer"><CircleAlert size={16}/><p><strong>{t("coverageHonesty")}</strong> JanaSetu has {SCHEMES.length} built-in records and a separate external open-data catalogue. It does not yet have complete, independently verified Central or State/UT scheme coverage. Selecting a State/UT personalizes profile context only; it does not mean that State’s catalogue is complete. Scheme records need an official source, eligibility conditions, application link, and last-verified date. Check myScheme and the relevant State portal for the full live catalogue.</p></div>
             </div>
-            <div className="panel responsible-panel"><h2>Responsible-use boundary</h2><p>JanaSetu provides preliminary information and workflow support. It does not provide legal or official determinations, authenticate identity, make benefit decisions, guarantee receipt of benefits or act on behalf of a government department. Citizens should verify all details with the official source and responsible authority.</p><div className="responsible-links"><a href="https://www.myscheme.gov.in/" target="_blank" rel="noreferrer">myScheme <ArrowUpRight size={13}/></a><a href="https://web.umang.gov.in/" target="_blank" rel="noreferrer">UMANG <ArrowUpRight size={13}/></a><a href="https://locator.csccloud.in/" target="_blank" rel="noreferrer">CSC locator <ArrowUpRight size={13}/></a></div></div>
+            <div className="panel responsible-panel"><h2>{t("responsibleUseBoundary")}</h2><p>JanaSetu provides preliminary information and workflow support. It does not provide legal or official determinations, authenticate identity, make benefit decisions, guarantee receipt of benefits or act on behalf of a government department. Citizens should verify all details with the official source and responsible authority.</p><div className="responsible-links"><a href="https://www.myscheme.gov.in/" target="_blank" rel="noreferrer">myScheme <ArrowUpRight size={13}/></a><a href="https://web.umang.gov.in/" target="_blank" rel="noreferrer">UMANG <ArrowUpRight size={13}/></a><a href="https://locator.csccloud.in/" target="_blank" rel="noreferrer">CSC locator <ArrowUpRight size={13}/></a></div></div>
           </section>}
 
           <footer className="page-footer"><span>© 2026 JanaSetu · Independent public-benefits navigation</span><span><ShieldCheck size={13}/> Evidence-led. Human-controlled.</span></footer>
