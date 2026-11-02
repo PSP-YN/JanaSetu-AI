@@ -102,3 +102,14 @@ test("extension synthetic select mapping only chooses an exact matching option",
   expect(result.filled).toBe(1);
   await expect(page.locator("#state")).toHaveValue("Karnataka");
 });
+
+
+test("mobile viewport homepage has no serious or critical axe violations", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  const result = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+    .analyze();
+  const blocking = result.violations.filter(v => v.impact === "critical" || v.impact === "serious");
+  expect(blocking.map(v => ({ id: v.id, targets: v.nodes.map(n => n.target) }))).toEqual([]);
+});
