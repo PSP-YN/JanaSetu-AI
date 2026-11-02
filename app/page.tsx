@@ -207,6 +207,19 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     privacyTitle: "രൂപകൽപ്പനയിൽ തന്നെ സ്വകാര്യത",
     localProfile: "ഈ ബ്രൗസറിലെ പ്രാദേശിക പ്രൊഫൈൽ",
     humanHelp: "സർക്കാർ പദ്ധതികൾക്കായി സഹായം വേണോ?",
+    ownsHouse: "നിങ്ങളുടെ കുടുംബത്തിന് ഇന്ത്യയിൽ എവിടെയെങ്കിലും പക്കാ വീട് ഉണ്ടോ?",
+    govtHouse: "കഴിഞ്ഞ 20 വർഷത്തിനിടെ നിങ്ങളുടെ കുടുംബത്തിന് സർക്കാർ വീട് അനുവദിച്ചിട്ടുണ്ടോ?",
+    lpg: "നിങ്ങളുടെ വീട്ടിൽ ആർക്കെങ്കിലും LPG കണക്ഷൻ ഉണ്ടോ?",
+    poorDecl: "PMUY-ക്കുള്ള നിർദ്ദിഷ്ട ദരിദ്ര കുടുംബ പ്രഖ്യാപനം അപേക്ഷകന് നൽകാനാകുമോ?",
+    landRecords: "കൃഷിയോഗ്യ ഭൂമി സംസ്ഥാന/UT ഭൂ രേഖകളിൽ ഉണ്ടോ?",
+    kisanExclusion: "കുടുംബത്തിലെ ആരെങ്കിലും PM-KISAN ഒഴിവാക്കൽ വിഭാഗത്തിൽപ്പെടുന്നുണ്ടോ?",
+    currentlyStudent: "നിങ്ങൾ ഇപ്പോൾ വിദ്യാർത്ഥിയാണോ?",
+    percentile: "ബോർഡ്/സ്ട്രീമിൽ 80-ാം പെർസെന്റൈലിന് മുകളിലാണോ?",
+    undergrad: "സാധാരണ ബിരുദ കോഴ്‌സിൽ ചേർന്നിട്ടുണ്ടോ?",
+    scholarship: "മറ്റൊരു സ്കോളർഷിപ്പ് അല്ലെങ്കിൽ ഫീസ് റീഇംബഴ്‌സ്‌മെന്റ് ലഭിക്കുന്നുണ്ടോ?",
+    distanceCourse: "നിങ്ങളുടെ കോഴ്‌സ് ഡിപ്ലോമയോ ദൂര/കറസ്പോണ്ടൻസ് കോഴ്‌സോ ആണോ?",
+    noSensitive: "ഇവിടെ ആധാർ, ബാങ്ക് അക്കൗണ്ട് അല്ലെങ്കിൽ രേഖാ നമ്പർ ചോദിക്കുന്നില്ല.",
+    noAfterReview: "പട്ടിക പരിശോധിച്ചതിന് ശേഷം ഇല്ല",
   },
 };
 
@@ -652,25 +665,25 @@ export default function Home() {
 
                 <div className="form-section-title subsection"><span>02</span><div><h2>{t("housing")}</h2><p>{t("housingText")}</p></div></div>
                 <div className="form-grid">
-                  <Field label="Does your family own a pucca house anywhere in India?"><YesNo t={t} value={profile.ownsPuccaHouse} onChange={(v) => updateProfile("ownsPuccaHouse", v)} unknown/></Field>
-                  <Field label="Was your family allotted a government house in the last 20 years?"><Select value={profile.previousHousingBenefit} onChange={(v) => updateProfile("previousHousingBenefit", v as CitizenProfile["previousHousingBenefit"])}><option value="unknown">Not sure</option><option value="yes">Yes</option><option value="no">No</option></Select></Field>
-                  <Field label="Does anyone in your household have an LPG connection?"><YesNo t={t} value={profile.householdHasLpg} onChange={(v) => updateProfile("householdHasLpg", v)} unknown/></Field>
-                  <Field label="Can the applicant provide the prescribed poor-household declaration for PMUY?"><YesNo t={t} value={profile.poorHouseholdDeclaration} onChange={(v) => updateProfile("poorHouseholdDeclaration", v)} unknown/></Field>
+                  <Field label={t("ownsHouse")}><YesNo t={t} value={profile.ownsPuccaHouse} onChange={(v) => updateProfile("ownsPuccaHouse", v)} unknown/></Field>
+                  <Field label={t("govtHouse")}><Select value={profile.previousHousingBenefit} onChange={(v) => updateProfile("previousHousingBenefit", v as CitizenProfile["previousHousingBenefit"])}><option value="unknown">{t("notSure")}</option><option value="yes">{t("yes")}</option><option value="no">{t("no")}</option></Select></Field>
+                  <Field label={t("lpg")}><YesNo t={t} value={profile.householdHasLpg} onChange={(v) => updateProfile("householdHasLpg", v)} unknown/></Field>
+                  <Field label={t("poorDecl")}><YesNo t={t} value={profile.poorHouseholdDeclaration} onChange={(v) => updateProfile("poorHouseholdDeclaration", v)} unknown/></Field>
                 </div>
 
                 <div className="form-section-title subsection"><span>03</span><div><h2>{t("agri")}</h2><p>{t("agriText")}</p></div></div>
                 <div className="form-grid">
-                  <Field label="Is cultivable land recorded in the State/UT land records?"><YesNo t={t} value={profile.hasCultivableLand} onChange={(v) => updateProfile("hasCultivableLand", v)} unknown/></Field>
-                  <Field label="Does any family member fall under a PM-KISAN exclusion category?"><Select value={profile.pmKisanExcluded} onChange={(v) => updateProfile("pmKisanExcluded", v as CitizenProfile["pmKisanExcluded"])}><option value="unknown">Not sure</option><option value="yes">Yes</option><option value="no">No, after reviewing the list</option></Select></Field>
+                  <Field label={t("landRecords")}><YesNo t={t} value={profile.hasCultivableLand} onChange={(v) => updateProfile("hasCultivableLand", v)} unknown/></Field>
+                  <Field label={t("kisanExclusion")}><Select value={profile.pmKisanExcluded} onChange={(v) => updateProfile("pmKisanExcluded", v as CitizenProfile["pmKisanExcluded"])}><option value="unknown">{t("notSure")}</option><option value="yes">{t("yes")}</option><option value="no">{t("noAfterReview")}</option></Select></Field>
                 </div>
 
                 <div className="form-section-title subsection"><span>04</span><div><h2>{t("education")}</h2><p>{t("educationText")}</p></div></div>
                 <div className="form-grid">
-                  <Field label="Are you currently a student?"><YesNo t={t} value={profile.isStudent} onChange={(v) => updateProfile("isStudent", Boolean(v))}/></Field>
-                  <Field label="Above the 80th percentile in your Board / stream?"><YesNo t={t} value={profile.top20Percentile} onChange={(v) => updateProfile("top20Percentile", v)} unknown/></Field>
-                  <Field label="Enrolled in a regular undergraduate course?"><YesNo t={t} value={profile.regularUndergraduate} onChange={(v) => updateProfile("regularUndergraduate", v)} unknown/></Field>
-                  <Field label="Receiving another scholarship or fee reimbursement?"><YesNo t={t} value={profile.otherScholarship} onChange={(v) => updateProfile("otherScholarship", v)} unknown/></Field>
-                  <Field label="Is your course a diploma or distance / correspondence course?"><YesNo t={t} value={profile.diplomaOrDistance} onChange={(v) => updateProfile("diplomaOrDistance", v)} unknown/></Field>
+                  <Field label={t("currentlyStudent")}><YesNo t={t} value={profile.isStudent} onChange={(v) => updateProfile("isStudent", Boolean(v))}/></Field>
+                  <Field label={t("percentile")}><YesNo t={t} value={profile.top20Percentile} onChange={(v) => updateProfile("top20Percentile", v)} unknown/></Field>
+                  <Field label={t("undergrad")}><YesNo t={t} value={profile.regularUndergraduate} onChange={(v) => updateProfile("regularUndergraduate", v)} unknown/></Field>
+                  <Field label={t("scholarship")}><YesNo t={t} value={profile.otherScholarship} onChange={(v) => updateProfile("otherScholarship", v)} unknown/></Field>
+                  <Field label={t("distanceCourse")}><YesNo t={t} value={profile.diplomaOrDistance} onChange={(v) => updateProfile("diplomaOrDistance", v)} unknown/></Field>
                 </div>
                 <div className="form-footer"><span><LockKeyhole size={14}/> No Aadhaar, bank account or document number is requested here.</span><button className="button button-primary" onClick={() => { setNotice(t("saved")); runAssessment(); }}>{t("run")} <ArrowRight size={16}/></button></div>
               </div>
