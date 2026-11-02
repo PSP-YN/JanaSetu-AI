@@ -26,6 +26,22 @@ function aggregate(checks: RuleCheck[], mustVerify = false): "potential_match" |
 }
 
 export function evaluateScheme(scheme: Scheme, profile: CitizenProfile): Assessment {
+  // Fail closed: deterministic screening is disabled until two-person human
+  // source/rule approval is recorded in the catalogue. Missing means pending.
+  if (scheme.catalogueStatus === "rule-screened" && scheme.reviewStatus !== "approved") {
+    return {
+      schemeId: scheme.id,
+      state: "needs_verification",
+      headline: "Human review pending",
+      explanation: "This scheme's source and deterministic rules have not received recorded human approval. JanaSetu will not calculate or imply eligibility until that review is completed.",
+      checks: [],
+      nextActions: [
+        "Review the current official notification and amendments.",
+        "Obtain independent reviewer approval for the source and every rule.",
+        "Use the official department portal for authoritative eligibility confirmation."
+      ]
+    };
+  }
   let checks: RuleCheck[] = [];
   let nextActions: string[] = [];
   let mustVerify = false;
