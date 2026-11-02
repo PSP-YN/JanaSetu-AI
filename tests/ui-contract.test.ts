@@ -26,3 +26,11 @@ test("the visible hero renders translated dictionary values, not raw translation
   assert.doesNotMatch(page, />\s*heroTitle1\s*</);
   assert.doesNotMatch(page, />\s*heroTitle2\s*</);
 });
+
+test("six locales define the primary workspace shell translations", () => {
+  const required = ["skip", "workspace", "independent", "localFirst", "backup", "restore", "ecosystem", "prepLayer", "ecosystemText", "startSituation", "intakeNote", "speak", "gettingStarted", "createStep", "assessmentStep", "prepareStep", "profileCompleteness", "trustTitle", "unknown", "sourceRules", "humanApproval", "curated", "passport", "privacyBoundary", "intelligence", "execution", "agentActions"];
+  for (const locale of ["en", "hi", "kn", "ta", "te", "ml"]) {
+    const block = page.match(new RegExp("^  " + locale + ": \\{([\\s\\S]*?)^  \\},?", "m"))?.[1] || "";
+    for (const key of required) assert.match(block, new RegExp("\\b" + key + "\\s*:"), locale + " missing " + key);
+  }
+});
