@@ -61,7 +61,7 @@ test("extension synthetic form fills unique safe fields and skips sensitive or a
     </form>`);
   await page.addScriptTag({ path: "extension/fill.js" });
   const result = await page.evaluate(() => (window as any).fillProfileInPage({
-    fullName: "Synthetic Citizen", age: 34, state: "Karnataka", gender: "woman",
+    fullName: "Synthetic Citizen", age: 34, state: "Karnataka", district: "Mysuru", gender: "woman",
     annualIncome: 150000, occupation: "Farmer", residenceType: "urban",
     hasCultivableLand: true, pmKisanExcluded: "no", ownsPuccaHouse: false,
     previousHousingBenefit: "no", householdHasLpg: false, poorHouseholdDeclaration: true,
