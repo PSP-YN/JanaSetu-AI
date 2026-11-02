@@ -75,3 +75,18 @@ test("Tamil intake extracts supported facts without making an eligibility decisi
   assert.equal(result.updates.annualIncome, 200000);
   assert.ok(result.note.includes("Review every value"));
 });
+
+
+test("expanded catalogue has unique source-indexed records and explicit rule coverage", () => {
+  const ids = SCHEMES.map((scheme) => scheme.id);
+  assert.equal(new Set(ids).size, ids.length);
+  assert.equal(SCHEMES.length, 46);
+  assert.equal(SCHEMES.filter((scheme) => scheme.catalogueStatus === "rule-screened").length, 4);
+  assert.equal(SCHEMES.filter((scheme) => scheme.catalogueStatus === "catalogue-only").length, 42);
+});
+
+test("benefits agent does not silently eligibility-score catalogue-only records", () => {
+  const result = runBenefitsAgent(base);
+  assert.ok(result.schemes.every((scheme) => scheme.catalogueStatus === "rule-screened"));
+  assert.ok(!result.schemes.some((scheme) => scheme.catalogueStatus === "catalogue-only"));
+});
