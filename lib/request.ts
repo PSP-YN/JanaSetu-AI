@@ -1,24 +1,18 @@
 import { NextResponse } from "next/server";
 
-const tooLarge = () => NextResponse.json(
-  { error: "Request body is too large." },
-  { status: 413, headers: { "Cache-Control": "no-store" } }
-);
-
-export async function readJsonBody(
-  request: Request,
-  maxBytes = 16 * 1024
-): Promise<
+export async function readJsonBody(request: Request, maxBytes = 16 * 1024): Promise<
   | { ok: true; value: unknown }
   | { ok: false; response: NextResponse }
 > {
-  const declaredHeader = request.headers.get("content-length");
-  if (declaredHeader !== null) {
-    const declared = Number(declaredHeader);
-    if (!Number.isSafeInteger(declared) || declared < 0) {
-      return { ok: false, response: NextResponse.json({ error: "Invalid content length." }, { status: 400, headers: { "Cache-Control": "no-store" } }) };
+  const declared = request.headers.get("content-length");
+  if (declared !== null) {
+    const length = Number(declared);
+    if (!Number.isFinite(length) || length < 0) {
+      return { ok: false, response: NextResponse.json({ error: "Invalid Content-Length." }, { status: 400, headers: { "Cache-Control": "no-store" } }) };
     }
-    if (declared > maxBytes) return { ok: false, response: tooLarge() };
+    if (length > maxBytes) {
+      return { ok: false, response: NextResponse.json({ error: "Request body is too large." }, { status: 413, headers: { "Cache-Control": "no-store" } }) };
+    }
   }
 
   if (!request.body) {
@@ -34,8 +28,8 @@ export async function readJsonBody(
       if (done) break;
       total += value.byteLength;
       if (total > maxBytes) {
-        await reader.cancel("Request body limit exceeded.");
-        return { ok: false, response: tooLarge() };
+        await reader.cancel("Request body exceeds configured limit");
+        return { ok: false, response: NextResponse.json({ error: "Request body is too large." }, { status: 413, headers: { "Cache-Control": "no-store" } }) };
       }
       chunks.push(value);
     }
@@ -51,7 +45,6 @@ export async function readJsonBody(
     bytes.set(chunk, offset);
     offset += chunk.byteLength;
   }
-
   try {
     const raw = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
     return { ok: true, value: JSON.parse(raw) };
