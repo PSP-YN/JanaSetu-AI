@@ -11,13 +11,11 @@ const securityHeaders = [
 
 const config: NextConfig = {
   poweredByHeader: false,
+  experimental: {
+    serverActions: { bodySizeLimit: "2mb" }
+  },
   async headers() {
-    return [
-      {
-        source: "/:path*",
-        headers: securityHeaders
-      }
-    ];
+    return [{ source: "/:path*", headers: securityHeaders }];
   }
 };
 
