@@ -159,7 +159,35 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     applicationsTitle: "അപേക്ഷാ വർക്ക്‌സ്‌പേസ്", applicationsText: "ഇവ തയ്യാറാക്കിയ ഡ്രാഫ്റ്റുകൾ മാത്രമാണ്; സർക്കാർ പോർട്ടലിൽ സമർപ്പിച്ചിട്ടില്ല.",
     language: "ഭാഷ", allIndia: "എല്ലാ സംസ്ഥാനങ്ങൾക്കും കേന്ദ്രഭരണ പ്രദേശങ്ങൾക്കും", catalogue: "തിരഞ്ഞെടുത്ത കേന്ദ്ര പദ്ധതികളുടെ പൈലറ്റ്",
     official: "അന്തിമ തീരുമാനം ബന്ധപ്പെട്ട വകുപ്പിന്റേതാണ്", noUpload: "ഫയലുകൾ അപ്‌ലോഡ് ചെയ്യുന്നില്ല"
-  }
+    fullNameLabel: "പൂർണ്ണ പേര് (ഐച്ഛികം)",
+    ageLabel: "പ്രായം",
+    genderLabel: "ലിംഗം (ആവശ്യമെങ്കിൽ)",
+    stateLabel: "സംസ്ഥാനം / കേന്ദ്രഭരണ പ്രദേശം",
+    districtLabel: "ജില്ല (ഐച്ഛികം)",
+    residenceLabel: "താമസ പ്രദേശം",
+    incomeLabel: "വാർഷിക കുടുംബ വരുമാനം (₹)",
+    occupationLabel: "തൊഴിൽ",
+    chooseState: "സംസ്ഥാനം / കേന്ദ്രഭരണ പ്രദേശം തിരഞ്ഞെടുക്കുക",
+    select: "തിരഞ്ഞെടുക്കുക",
+    woman: "സ്ത്രീ",
+    man: "പുരുഷൻ",
+    otherGender: "മറ്റുള്ളവ / പറയാൻ താൽപ്പര്യമില്ല",
+    rural: "ഗ്രാമീണം",
+    urban: "നഗരം",
+    occupationSelect: "തൊഴിൽ തിരഞ്ഞെടുക്കുക",
+    farmer: "കർഷകൻ",
+    agriWorker: "കാർഷിക തൊഴിലാളി",
+    student: "വിദ്യാർത്ഥി",
+    selfEmployed: "സ്വയം തൊഴിൽ",
+    vendor: "തെരുവ് കച്ചവടക്കാരൻ",
+    salaried: "ശമ്പളമുള്ള ജീവനക്കാരൻ",
+    unemployed: "തൊഴിലില്ലാത്തവർ",
+    homemaker: "ഗൃഹിണി",
+    other: "മറ്റുള്ളവ",
+    yes: "അതെ",
+    no: "ഇല്ല",
+    notSure: "ഉറപ്പില്ല",
+  },
 };
 
 function formatMoney(value: number | "") {
@@ -629,14 +657,14 @@ export default function Home() {
               <div className="panel form-panel">
                 <div className="form-section-title"><span>01</span><div><h2>About you</h2><p>Basic details used to select applicable rule sets.</p></div></div>
                 <div className="form-grid">
-                  <Field label="Full name (optional)"><input placeholder="Enter your name" value={profile.fullName} onChange={(e) => updateProfile("fullName", e.target.value)}/></Field>
-                  <Field label="Age"><input type="number" min="0" max="120" placeholder="Age in years" value={profile.age} onChange={(e) => updateProfile("age", e.target.value === "" ? "" : Number(e.target.value))}/></Field>
-                  <Field label="Gender (where a scheme requires it)"><Select value={profile.gender} onChange={(v) => updateProfile("gender", v as CitizenProfile["gender"])}><option value="">Select</option><option value="woman">Woman</option><option value="man">Man</option><option value="other">Other / prefer not to say</option></Select></Field>
-                  <Field label="State / Union Territory"><Select value={profile.state} onChange={(v) => updateProfile("state", v)}><option value="">Choose your State / UT</option>{STATES_AND_UTS.map((state) => <option key={state}>{state}</option>)}</Select></Field>
-                  <Field label="District (optional)"><input placeholder="District or city" value={profile.district} onChange={(e) => updateProfile("district", e.target.value)}/></Field>
-                  <Field label="Area of residence"><Select value={profile.residenceType} onChange={(v) => updateProfile("residenceType", v as CitizenProfile["residenceType"])}><option value="">Select</option><option value="rural">Rural</option><option value="urban">Urban</option></Select></Field>
-                  <Field label="Annual household income (₹)" hint="Enter an approximate annual amount."><input type="number" min="0" placeholder="e.g. 150000" value={profile.annualIncome} onChange={(e) => updateProfile("annualIncome", e.target.value === "" ? "" : Number(e.target.value))}/></Field>
-                  <Field label="Occupation"><Select value={profile.occupation} onChange={(v) => updateProfile("occupation", v)}><option value="">Select occupation</option><option>Farmer</option><option>Agricultural worker</option><option>Student</option><option>Self-employed</option><option>Street vendor</option><option>Salaried employee</option><option>Unemployed</option><option>Homemaker</option><option>Other</option></Select></Field>
+                  <Field label={t("fullNameLabel")}><input placeholder={t("fullNameLabel")} value={profile.fullName} onChange={(e) => updateProfile("fullName", e.target.value)}/></Field>
+                  <Field label={t("ageLabel")}><input type="number" min="0" max="120" placeholder={t("ageLabel")} value={profile.age} onChange={(e) => updateProfile("age", e.target.value === "" ? "" : Number(e.target.value))}/></Field>
+                  <Field label={t("genderLabel")}><Select value={profile.gender} onChange={(v) => updateProfile("gender", v as CitizenProfile["gender"])}><option value="">{t("select")}</option><option value="woman">{t("woman")}</option><option value="man">{t("man")}</option><option value="other">{t("otherGender")}</option></Select></Field>
+                  <Field label={t("stateLabel")}><Select value={profile.state} onChange={(v) => updateProfile("state", v)}><option value="">{t("chooseState")}</option>{STATES_AND_UTS.map((state) => <option key={state}>{state}</option>)}</Select></Field>
+                  <Field label={t("districtLabel")}><input placeholder={t("districtLabel")} value={profile.district} onChange={(e) => updateProfile("district", e.target.value)}/></Field>
+                  <Field label={t("residenceLabel")}><Select value={profile.residenceType} onChange={(v) => updateProfile("residenceType", v as CitizenProfile["residenceType"])}><option value="">{t("select")}</option><option value="rural">{t("rural")}</option><option value="urban">{t("urban")}</option></Select></Field>
+                  <Field label={t("incomeLabel")} hint="Enter an approximate annual amount."><input type="number" min="0" placeholder="e.g. 150000" value={profile.annualIncome} onChange={(e) => updateProfile("annualIncome", e.target.value === "" ? "" : Number(e.target.value))}/></Field>
+                  <Field label={t("occupationLabel")}><Select value={profile.occupation} onChange={(v) => updateProfile("occupation", v)}><option value="">{t("occupationSelect")}</option><option>{t("farmer")}</option><option>{t("agriWorker")}</option><option>{t("student")}</option><option>{t("selfEmployed")}</option><option>{t("vendor")}</option><option>{t("salaried")}</option><option>{t("unemployed")}</option><option>{t("homemaker")}</option><option>{t("other")}</option></Select></Field>
                 </div>
 
                 <div className="form-section-title subsection"><span>02</span><div><h2>Housing and household</h2><p>These questions only screen the housing and LPG records shown in this catalogue.</p></div></div>
