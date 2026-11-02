@@ -809,14 +809,14 @@ export default function Home() {
 
   return (
     <div className="app-shell">
-      <a className="skip-link" href="#main-content">{t("skip").toUpperCase()}</a>
+      <a className="skip-link" href="#main-content">{t("skip")}</a>
       <aside className={"sidebar " + (showMobileNav ? "sidebar-open" : "")}>
         <div className="brand">
           <div className="brand-mark"><span>ज</span></div>
-          <div><strong>JanaSetu</strong><small>{t("benefitsAccess").toUpperCase()}</small></div>
+          <div><strong>JanaSetu</strong><small>{t("benefitsAccess")}</small></div>
           <button className="mobile-close" onClick={() => setShowMobileNav(false)} aria-label="Close navigation"><X size={18}/></button>
         </div>
-        <div className="sidebar-kicker">{t("workspace").toUpperCase()}</div>
+        <div className="sidebar-kicker">{t("workspace")}</div>
         <nav className="side-nav">
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -833,7 +833,7 @@ export default function Home() {
           <a href="https://locator.csccloud.in/" target="_blank" rel="noreferrer">Find a CSC <ArrowUpRight size={13}/></a>
         </div>
         <div className="sidebar-footer">
-          <ShieldCheck size={15}/><span>{t("independent").toUpperCase()}</span><span className="footer-policy-links"><a href="/privacy">Privacy</a><a href="/terms">Terms</a></span>
+          <ShieldCheck size={15}/><span>{t("independent")}</span><span className="footer-policy-links"><a href="/privacy">Privacy</a><a href="/terms">Terms</a></span>
         </div>
       </aside>
 
@@ -884,21 +884,21 @@ export default function Home() {
 
             <section className="ecosystem-panel">
               <div>
-                <div className="eyebrow">{t("ecosystem").toUpperCase()}</div>
-                <h2>{t("prepLayer").toUpperCase()}</h2>
-                <p>{t("ecosystemText").toUpperCase()}</p>
+                <div className="eyebrow">{t("ecosystem")}</div>
+                <h2>{t("prepLayer")}</h2>
+                <p>{t("ecosystemText")}</p>
               </div>
               <div className="ecosystem-links">
-                <a href="https://www.myscheme.gov.in/" target="_blank" rel="noreferrer">myScheme <ExternalLink size={12}/><small>{t("schemeDiscovery").toUpperCase()}</small></a>
-                <a href="https://web.umang.gov.in/" target="_blank" rel="noreferrer">UMANG <ExternalLink size={12}/><small>{t("govServices").toUpperCase()}</small></a>
-                <a href="https://www.digilocker.gov.in/" target="_blank" rel="noreferrer">DigiLocker <ExternalLink size={12}/><small>{t("digitalDocs").toUpperCase()}</small></a>
-                <a href="https://locator.csccloud.in/" target="_blank" rel="noreferrer">Common Service Centres <ExternalLink size={12}/><small>{t("assistedAccess").toUpperCase()}</small></a>
+                <a href="https://www.myscheme.gov.in/" target="_blank" rel="noreferrer">myScheme <ExternalLink size={12}/><small>{t("schemeDiscovery")}</small></a>
+                <a href="https://web.umang.gov.in/" target="_blank" rel="noreferrer">UMANG <ExternalLink size={12}/><small>{t("govServices")}</small></a>
+                <a href="https://www.digilocker.gov.in/" target="_blank" rel="noreferrer">DigiLocker <ExternalLink size={12}/><small>{t("digitalDocs")}</small></a>
+                <a href="https://locator.csccloud.in/" target="_blank" rel="noreferrer">Common Service Centres <ExternalLink size={12}/><small>{t("assistedAccess")}</small></a>
               </div>
             </section>
 
             <section className="panel intake-panel">
               <div className="intake-heading">
-                <div className="eyebrow">{t("startSituation").toUpperCase()}</div>
+                <div className="eyebrow">{t("startSituation")}</div>
                 <h2>{t("intakeTitle")}</h2>
                 <p>{t("intakeDescription")}</p>
               </div>
@@ -930,36 +930,36 @@ export default function Home() {
             </section>
 
             <div className="metric-grid">
-              <div className="metric-card"><div className="metric-icon green"><BookOpen size={18}/></div><div><strong>{SCHEMES.length.toString().padStart(2, "0")}</strong><span>{t("catalogueEntries").toUpperCase()}</span></div><small>{SCHEMES.filter((item) => item.catalogueStatus === "rule-screened").length} rule-screened · remainder require verification</small></div>
-              <div className="metric-card"><div className="metric-icon sand"><Globe2 size={18}/></div><div><strong>36</strong><span>{t("coverage")}</span></div><small>{t("stateSupport").toUpperCase()}</small></div>
-              <div className="metric-card"><div className="metric-icon clay"><MessageCircle size={18}/></div><div><strong>06</strong><span>{t("languages")}</span></div><small>{t("indianLanguages").toUpperCase()}</small></div>
-              <div className="metric-card"><div className="metric-icon ink"><ShieldCheck size={18}/></div><div><strong>{applications.length.toString().padStart(2, "0")}</strong><span>{t("draftApps").toUpperCase()}</span></div><small>{t("browserBackup").toUpperCase()}</small></div>
+              <div className="metric-card"><div className="metric-icon green"><BookOpen size={18}/></div><div><strong>{SCHEMES.length.toString().padStart(2, "0")}</strong><span>{t("catalogueEntries")}</span></div><small>{SCHEMES.filter((item) => item.catalogueStatus === "rule-screened").length} rule-screened · remainder require verification</small></div>
+              <div className="metric-card"><div className="metric-icon sand"><Globe2 size={18}/></div><div><strong>36</strong><span>{t("coverage")}</span></div><small>{t("stateSupport")}</small></div>
+              <div className="metric-card"><div className="metric-icon clay"><MessageCircle size={18}/></div><div><strong>06</strong><span>{t("languages")}</span></div><small>{t("indianLanguages")}</small></div>
+              <div className="metric-card"><div className="metric-icon ink"><ShieldCheck size={18}/></div><div><strong>{applications.length.toString().padStart(2, "0")}</strong><span>{t("draftApps")}</span></div><small>{t("browserBackup")}</small></div>
             </div>
 
             <div className="dashboard-grid">
               <section className="panel next-panel">
-                <div className="section-heading"><div><div className="eyebrow">{t("gettingStarted").toUpperCase()}</div><h2>{t("next")}</h2></div><span className="section-index">01—03</span></div>
+                <div className="section-heading"><div><div className="eyebrow">{t("gettingStarted")}</div><h2>{t("next")}</h2></div><span className="section-index">01—03</span></div>
                 <div className="step-list">
-                  <div className="step-row"><div className="step-number">01</div><div className="step-copy"><strong>{t("createStep").toUpperCase()}</strong><p>Share your State/UT, household and relevant circumstances.</p></div><button aria-label="Open citizen profile" onClick={() => setTab("profile")}><ArrowUpRight size={17}/></button></div>
-                  <div className="step-row"><div className="step-number">02</div><div className="step-copy"><strong>{t("assessmentStep").toUpperCase()}</strong><p>Review matching rules, unknown answers and official sources.</p></div><button aria-label="Run benefits assessment" onClick={runAssessment} disabled={!profile.state}><ArrowUpRight size={17}/></button></div>
-                  <div className="step-row"><div className="step-number">03</div><div className="step-copy"><strong>{t("prepareStep").toUpperCase()}</strong><p>Build a checklist and keep a draft for your own review.</p></div><button aria-label="Open application workspace" onClick={() => setTab("applications")}><ArrowUpRight size={17}/></button></div>
+                  <div className="step-row"><div className="step-number">01</div><div className="step-copy"><strong>{t("createStep")}</strong><p>Share your State/UT, household and relevant circumstances.</p></div><button aria-label="Open citizen profile" onClick={() => setTab("profile")}><ArrowUpRight size={17}/></button></div>
+                  <div className="step-row"><div className="step-number">02</div><div className="step-copy"><strong>{t("assessmentStep")}</strong><p>Review matching rules, unknown answers and official sources.</p></div><button aria-label="Run benefits assessment" onClick={runAssessment} disabled={!profile.state}><ArrowUpRight size={17}/></button></div>
+                  <div className="step-row"><div className="step-number">03</div><div className="step-copy"><strong>{t("prepareStep")}</strong><p>Build a checklist and keep a draft for your own review.</p></div><button aria-label="Open application workspace" onClick={() => setTab("applications")}><ArrowUpRight size={17}/></button></div>
                 </div>
-                <div className="profile-progress"><div className="progress-top"><span>{t("profileCompleteness").toUpperCase()}</span><strong>{progress}%</strong></div><div className="progress-track"><span style={{ width: progress + "%" }}/></div><small>{profileProgress} of 7 essential profile fields provided</small></div>
+                <div className="profile-progress"><div className="progress-top"><span>{t("profileCompleteness")}</span><strong>{progress}%</strong></div><div className="progress-track"><span style={{ width: progress + "%" }}/></div><small>{profileProgress} of 7 essential profile fields provided</small></div>
               </section>
               <section className="panel trust-panel">
-                <div className="trust-heading"><div className="trust-icon"><ShieldCheck size={22}/></div><div><div className="eyebrow">{t("builtTrust").toUpperCase()}</div><h2>{t("trustTitle").toUpperCase()}</h2></div></div>
+                <div className="trust-heading"><div className="trust-icon"><ShieldCheck size={22}/></div><div><div className="eyebrow">{t("builtTrust")}</div><h2>{t("trustTitle")}</h2></div></div>
                 <p>Every screening result shows the rule, the profile evidence used and the official source to check before acting.</p>
                 <div className="trust-points"><span><Check size={14}/> Unknown stays unknown</span><span><Check size={14}/> Source-linked rules</span><span><Check size={14}/> Human approval before action</span></div>
                 <button className="text-button" onClick={() => setTab("about")}>Read our approach <ArrowRight size={15}/></button>
               </section>
             </div>
 
-            <div className="section-heading featured-heading"><div><div className="eyebrow">{t("curated").toUpperCase()}</div><h2>{t("featured")}</h2></div><button className="text-button" onClick={() => setTab("discover")}>Explore all <ArrowRight size={15}/></button></div>
+            <div className="section-heading featured-heading"><div><div className="eyebrow">{t("curated")}</div><h2>{t("featured")}</h2></div><button className="text-button" onClick={() => setTab("discover")}>Explore all <ArrowRight size={15}/></button></div>
             <div className="scheme-grid">{SCHEMES.slice(0, 3).map(renderSchemeCard)}</div>
           </>}
 
           {tab === "profile" && <section className="page-section">
-            <div className="page-title-row"><div><div className="eyebrow">{t("passport").toUpperCase()}</div><h1>{t("profileTitle")}</h1><p>{t("profileText")}</p></div><span className="private-chip"><LockKeyhole size={14}/> {t("localProfile")}</span></div>
+            <div className="page-title-row"><div><div className="eyebrow">{t("passport")}</div><h1>{t("profileTitle")}</h1><p>{t("profileText")}</p></div><span className="private-chip"><LockKeyhole size={14}/> {t("localProfile")}</span></div>
             <div className="form-layout">
               <div className="panel form-panel">
                 <div className="form-section-title"><span>01</span><div><h2>{t("aboutYou")}</h2><p>{t("aboutYouText")}</p></div></div>
@@ -1003,18 +1003,18 @@ export default function Home() {
                   <div className="progress-ring" style={{ background: "#f6d6b8", border: "4px solid #c45a12" }}><div><strong>{progress}%</strong><small>complete</small></div></div>
                   <h3>{t("profileReady")}</h3><p>More complete answers reduce unknown screening conditions. You can leave any field blank and return later.</p>
                 </div>
-                <div className="panel aside-card privacy-card"><ShieldCheck size={22}/><h3>{t("privacyTitle")}</h3><p>Your profile, assessments and drafts stay in this browser. Screening and text extraction run locally in this prototype. Browser speech recognition may use your browser provider. When you use a government portal, that portal receives whatever you choose to enter or submit.</p><span>{t("privacyBoundary").toUpperCase()}</span></div>
+                <div className="panel aside-card privacy-card"><ShieldCheck size={22}/><h3>{t("privacyTitle")}</h3><p>Your profile, assessments and drafts stay in this browser. Screening and text extraction run locally in this prototype. Browser speech recognition may use your browser provider. When you use a government portal, that portal receives whatever you choose to enter or submit.</p><span>{t("privacyBoundary")}</span></div>
               </aside>
             </div>
           </section>}
 
           {tab === "discover" && <section className="page-section">
-            <div className="page-title-row"><div><div className="eyebrow">{t("intelligence").toUpperCase()}</div><h1>{t("screening")}</h1><p>Discover possible pathways and inspect the rule evidence before preparing a draft.</p></div><button className="button button-primary" onClick={runAssessment} disabled={busy}>{busy ? <><span className="spinner"/> Working…</> : <><Sparkles size={16}/>{t("run")}</>}</button></div>
+            <div className="page-title-row"><div><div className="eyebrow">{t("intelligence")}</div><h1>{t("screening")}</h1><p>Discover possible pathways and inspect the rule evidence before preparing a draft.</p></div><button className="button button-primary" onClick={runAssessment} disabled={busy}>{busy ? <><span className="spinner"/> Working…</> : <><Sparkles size={16}/>{t("run")}</>}</button></div>
             <div className="screening-summary">
               <div className="screen-summary-icon"><Activity size={20}/></div><div><strong>{assessments.length ? assessments.length + " relevant scheme records assessed" : "Your assessment is ready to run"}</strong><p>{assessments.length ? "The workflow used your saved profile and the current curated catalogue." : "Complete your profile first. The agent will select the applicable rule pathways."}</p></div><button className="text-button" onClick={() => setTab("profile")}>Edit profile <ArrowUpRight size={14}/></button>
             </div>
             {toolTrace.length > 0 && <div className="panel trace-panel">
-              <div className="section-heading"><div><div className="eyebrow">{t("execution").toUpperCase()}</div><h2>{t("agentActions").toUpperCase()}</h2></div><span className="trace-count">{toolTrace.length} tool steps</span></div>
+              <div className="section-heading"><div><div className="eyebrow">{t("execution")}</div><h2>{t("agentActions")}</h2></div><span className="trace-count">{toolTrace.length} tool steps</span></div>
               <div className="trace-list">{toolTrace.map((item) => <div className="trace-row" key={item.id}><span className="trace-check"><Check size={13}/></span><div><strong>{item.agent}</strong><small>{item.tool} · {item.detail}</small></div><span className="trace-duration">{item.durationMs} ms</span></div>)}</div>
               <p className="trace-note">This prototype uses deterministic server-side tools and a rule-based planner; it does not call an external LLM or government API.</p>
             </div>}
