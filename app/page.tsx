@@ -187,6 +187,23 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     yes: "അതെ",
     no: "ഇല്ല",
     notSure: "ഉറപ്പില്ല",
+    heroTitle1: "ഒരു പ്രൊഫൈൽ.",
+    heroTitle2: "അടുത്ത ഘട്ടങ്ങൾ വ്യക്തമായി.",
+    heroDescription: "പദ്ധതികൾ കണ്ടെത്തുന്നതിൽ മാത്രം നിൽക്കരുത്: ഏത് നിയമത്തിന് ഏത് തെളിവ് വേണം, എന്താണ് വ്യക്തമല്ലാത്തത്, ഇനി എന്ത് തയ്യാറാക്കണം എന്ന് മനസ്സിലാക്കുക.",
+    intakeTitle: "എന്ത് സഹായമാണ് വേണ്ടതെന്ന് JanaSetu-യോട് പറയുക.",
+    intakeDescription: "തിരഞ്ഞെടുത്ത ഭാഷയിൽ കുടുംബ വിവരങ്ങൾ എഴുതുക. പരിശോധനയ്ക്ക് മുമ്പ് പരിശോധിക്കാവുന്ന പ്രൊഫൈൽ വിവരങ്ങൾ നിർദ്ദേശിക്കും.",
+    aboutYou: "നിങ്ങളെക്കുറിച്ച്",
+    aboutYouText: "ബാധകമായ നിയമങ്ങൾ തിരഞ്ഞെടുക്കാൻ ആവശ്യമായ അടിസ്ഥാന വിവരങ്ങൾ.",
+    housing: "വീട്, കുടുംബം",
+    housingText: "ഈ ചോദ്യങ്ങൾ ഈ പട്ടികയിലെ ഭവന, LPG പദ്ധതികളുടെ പ്രാഥമിക പരിശോധനയ്ക്കു മാത്രമാണ്.",
+    agri: "കൃഷിയും ഒഴിവാക്കലുകളും",
+    agriText: "PM-KISAN പ്രാഥമിക പരിശോധനയ്ക്കായി; ഭൂ രേഖകളും ഒഴിവാക്കലുകളും ഔദ്യോഗികമായി പരിശോധിക്കണം.",
+    education: "വിദ്യാഭ്യാസം",
+    educationText: "PM-USP CSSS വിവരത്തിനായി; അക്കാദമിക് വർഷത്തിലെ നിയമങ്ങൾ വീണ്ടും പരിശോധിക്കുക.",
+    profileReady: "പ്രൊഫൈൽ തയ്യാറെടുപ്പ്",
+    privacyTitle: "രൂപകൽപ്പനയിൽ തന്നെ സ്വകാര്യത",
+    localProfile: "ഈ ബ്രൗസറിലെ പ്രാദേശിക പ്രൊഫൈൽ",
+    humanHelp: "സർക്കാർ പദ്ധതികൾക്കായി സഹായം വേണോ?",
   },
 };
 
@@ -521,7 +538,7 @@ export default function Home() {
         <div className="sidebar-spacer"/>
         <div className="sidebar-assist">
           <div className="assist-icon"><HandHeart size={18}/></div>
-          <strong>Need help with government benefits?</strong>
+          <strong>{t("humanHelp")}</strong>
           <p>Take your checklist to an authorized Common Service Centre or the responsible department.</p>
           <a href="https://locator.csccloud.in/" target="_blank" rel="noreferrer">Find a CSC <ArrowUpRight size={13}/></a>
         </div>
@@ -559,8 +576,8 @@ export default function Home() {
             <section className="hero-panel">
               <div className="hero-content">
                 <div className="hero-label"><span/> A CLEARER WAY FORWARD</div>
-                <h2>One profile.<br/><em>Clearer next steps.</em></h2>
-                <p>Go beyond discovery: see which rule needs which evidence, what is still unknown, and what to prepare next.</p>
+                <h2>{t("heroTitle1")}<br/><em>{t("heroTitle2")}</em></h2>
+                <p>{t("heroDescription")}</p>
                 <div className="hero-buttons">
                   <button className="button button-light" onClick={() => setTab("profile")}>{t("start")} <ArrowRight size={16}/></button>
                   <button className="button button-ghost" onClick={fillSample}>{t("sample")}</button>
@@ -592,8 +609,8 @@ export default function Home() {
             <section className="panel intake-panel">
               <div className="intake-heading">
                 <div className="eyebrow">START WITH YOUR SITUATION</div>
-                <h2>Tell JanaSetu what you need help with.</h2>
-                <p>Describe your household in your chosen language. We will suggest profile facts for you to review before any screening.</p>
+                <h2>{t("intakeTitle")}</h2>
+                <p>{t("intakeDescription")}</p>
               </div>
               <textarea
                 className="intake-text"
@@ -652,10 +669,10 @@ export default function Home() {
           </>}
 
           {tab === "profile" && <section className="page-section">
-            <div className="page-title-row"><div><div className="eyebrow">CITIZEN PASSPORT</div><h1>{t("profileTitle")}</h1><p>{t("profileText")}</p></div><span className="private-chip"><LockKeyhole size={14}/> Local browser profile</span></div>
+            <div className="page-title-row"><div><div className="eyebrow">CITIZEN PASSPORT</div><h1>{t("profileTitle")}</h1><p>{t("profileText")}</p></div><span className="private-chip"><LockKeyhole size={14}/> {t("localProfile")}</span></div>
             <div className="form-layout">
               <div className="panel form-panel">
-                <div className="form-section-title"><span>01</span><div><h2>About you</h2><p>Basic details used to select applicable rule sets.</p></div></div>
+                <div className="form-section-title"><span>01</span><div><h2>{t("aboutYou")}</h2><p>{t("aboutYouText")}</p></div></div>
                 <div className="form-grid">
                   <Field label={t("fullNameLabel")}><input placeholder={t("fullNameLabel")} value={profile.fullName} onChange={(e) => updateProfile("fullName", e.target.value)}/></Field>
                   <Field label={t("ageLabel")}><input type="number" min="0" max="120" placeholder={t("ageLabel")} value={profile.age} onChange={(e) => updateProfile("age", e.target.value === "" ? "" : Number(e.target.value))}/></Field>
@@ -667,7 +684,7 @@ export default function Home() {
                   <Field label={t("occupationLabel")}><Select value={profile.occupation} onChange={(v) => updateProfile("occupation", v)}><option value="">{t("occupationSelect")}</option><option>{t("farmer")}</option><option>{t("agriWorker")}</option><option>{t("student")}</option><option>{t("selfEmployed")}</option><option>{t("vendor")}</option><option>{t("salaried")}</option><option>{t("unemployed")}</option><option>{t("homemaker")}</option><option>{t("other")}</option></Select></Field>
                 </div>
 
-                <div className="form-section-title subsection"><span>02</span><div><h2>Housing and household</h2><p>These questions only screen the housing and LPG records shown in this catalogue.</p></div></div>
+                <div className="form-section-title subsection"><span>02</span><div><h2>{t("housing")}</h2><p>{t("housingText")}</p></div></div>
                 <div className="form-grid">
                   <Field label="Does your family own a pucca house anywhere in India?"><YesNo t={t} value={profile.ownsPuccaHouse} onChange={(v) => updateProfile("ownsPuccaHouse", v)} unknown/></Field>
                   <Field label="Was your family allotted a government house in the last 20 years?"><Select value={profile.previousHousingBenefit} onChange={(v) => updateProfile("previousHousingBenefit", v as CitizenProfile["previousHousingBenefit"])}><option value="unknown">Not sure</option><option value="yes">Yes</option><option value="no">No</option></Select></Field>
@@ -675,13 +692,13 @@ export default function Home() {
                   <Field label="Can the applicant provide the prescribed poor-household declaration for PMUY?"><YesNo t={t} value={profile.poorHouseholdDeclaration} onChange={(v) => updateProfile("poorHouseholdDeclaration", v)} unknown/></Field>
                 </div>
 
-                <div className="form-section-title subsection"><span>03</span><div><h2>Agriculture and exclusions</h2><p>For preliminary PM-KISAN screening; official land-record and exclusion checks are still required.</p></div></div>
+                <div className="form-section-title subsection"><span>03</span><div><h2>{t("agri")}</h2><p>{t("agriText")}</p></div></div>
                 <div className="form-grid">
                   <Field label="Is cultivable land recorded in the State/UT land records?"><YesNo t={t} value={profile.hasCultivableLand} onChange={(v) => updateProfile("hasCultivableLand", v)} unknown/></Field>
                   <Field label="Does any family member fall under a PM-KISAN exclusion category?"><Select value={profile.pmKisanExcluded} onChange={(v) => updateProfile("pmKisanExcluded", v as CitizenProfile["pmKisanExcluded"])}><option value="unknown">Not sure</option><option value="yes">Yes</option><option value="no">No, after reviewing the list</option></Select></Field>
                 </div>
 
-                <div className="form-section-title subsection"><span>04</span><div><h2>Education</h2><p>For the cited PM-USP CSSS reference; academic-year rules must be rechecked.</p></div></div>
+                <div className="form-section-title subsection"><span>04</span><div><h2>{t("education")}</h2><p>{t("educationText")}</p></div></div>
                 <div className="form-grid">
                   <Field label="Are you currently a student?"><YesNo t={t} value={profile.isStudent} onChange={(v) => updateProfile("isStudent", Boolean(v))}/></Field>
                   <Field label="Above the 80th percentile in your Board / stream?"><YesNo t={t} value={profile.top20Percentile} onChange={(v) => updateProfile("top20Percentile", v)} unknown/></Field>
@@ -694,9 +711,9 @@ export default function Home() {
               <aside className="profile-aside">
                 <div className="panel aside-card">
                   <div className="progress-ring" style={{ background: "#dce8d9", border: "4px solid #2d684b" }}><div><strong>{progress}%</strong><small>complete</small></div></div>
-                  <h3>Profile readiness</h3><p>More complete answers reduce unknown screening conditions. You can leave any field blank and return later.</p>
+                  <h3>{t("profileReady")}</h3><p>More complete answers reduce unknown screening conditions. You can leave any field blank and return later.</p>
                 </div>
-                <div className="panel aside-card privacy-card"><ShieldCheck size={22}/><h3>Privacy by design</h3><p>Profile and application records are saved in this browser. When you run an assessment or prepare a draft, relevant profile fields are sent to the app server for processing. The prototype does not intentionally persist them on the server. Avoid sensitive identifiers and real documents.</p><span>Prototype data boundary</span></div>
+                <div className="panel aside-card privacy-card"><ShieldCheck size={22}/><h3>{t("privacyTitle")}</h3><p>Profile and application records are saved in this browser. When you run an assessment or prepare a draft, relevant profile fields are sent to the app server for processing. The prototype does not intentionally persist them on the server. Avoid sensitive identifiers and real documents.</p><span>Prototype data boundary</span></div>
               </aside>
             </div>
           </section>}
