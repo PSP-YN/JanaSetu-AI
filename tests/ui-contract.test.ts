@@ -55,3 +55,24 @@ test("all six locale dictionaries have exact translation-key parity", () => {
   const baseline = JSON.stringify(keysByLocale.find(x => x.locale === "en")?.keys);
   for (const entry of keysByLocale) assert.equal(JSON.stringify(entry.keys), baseline, entry.locale + " translation keys differ from English");
 });
+
+test("every rendered translation key has an English fallback and every locale has localized coverage", () => {
+  const baseSource = page.slice(page.indexOf("const COPY:"), page.indexOf("const UI_COPY:"));
+  const extraSource = page.slice(page.indexOf("const UI_COPY:"), page.indexOf("\nfunction formatMoney"));
+  const locales = ["en", "hi", "kn", "ta", "te", "ml"];
+  const keysFor = (source: string, locale: string, supplemental: boolean) => {
+    const match = source.match(new RegExp("^  " + locale + ": \\{([\\s\\S]*?)" + (supplemental ? "\\}" : "^  \\},?") , "m"));
+    const block = match?.[1] || "";
+    return new Set(Array.from(block.matchAll(/\b([A-Za-z][A-Za-z0-9_]*)\s*:/g), m => m[1]));
+  };
+  const base = new Map(locales.map(locale => [locale, keysFor(baseSource, locale, false)]));
+  const extra = new Map(locales.map(locale => [locale, keysFor(extraSource, locale, true)]));
+  const englishKeys = new Set([...Array.from(base.get("en")!), ...Array.from(extra.get("en")!)]);
+  const renderedKeys = new Set(Array.from(page.matchAll(/\bt\("([A-Za-z][A-Za-z0-9_]*)"\)/g), m => m[1]));
+  for (const key of Array.from(renderedKeys)) assert.ok(englishKeys.has(key), `English fallback missing for ${key}`);
+  for (const locale of locales) {
+    for (const key of Array.from(extra.get("en")!)) {
+      assert.ok(extra.get(locale)!.has(key) || base.get(locale)!.has(key), `${locale} has no translated value for ${key}`);
+    }
+  }
+});

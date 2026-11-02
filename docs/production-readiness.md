@@ -1,10 +1,10 @@
 # Production readiness assessment
 
-**Status: prototype / controlled pilot candidate — not production-ready for real citizen records.**
+**Status: prototype demo candidate — not production-ready for real citizen records. Updated 3 November 2026.**
 
 This assessment is intentionally strict. A successful Next.js build and public deployment do not establish operational, security, privacy or legal readiness.
 
-## Changes delivered in the 2 November 2026 hardening pass
+## Changes delivered in the 2–3 November 2026 hardening pass
 
 - Fixed hero copy for all six configured interface locales and synchronized the document `lang` attribute.
 - Improved hero typography for Indic scripts and added keyboard skip navigation/focus treatment.
@@ -14,13 +14,17 @@ This assessment is intentionally strict. A successful Next.js build and public d
 - Published prototype privacy and terms notices. These are disclosures, not legal approval or a DPDP compliance certification.
 - Added white-box locale/extension safety tests and black-box HTTP checks for API validation, policy pages and source-monitor contract.
 
+- Expanded main-workspace UI localization and notification copy across English, Hindi, Kannada, Tamil, Telugu and Malayalam; added locale fallback coverage tests and cross-locale mobile navigation checks. Privacy/terms legal body text and canonical scheme data still need fluent translation review.
+- Added `package-lock.json` and switched CI to `npm ci` for reproducible installs.
+- Added Hugging Face search endpoint health reporting and a bounded page-filter fallback for the external catalogue search API. The fallback keeps the catalogue usable during upstream `/search` outages, but searches only the currently loaded dataset page until the user loads more.
+
 ## Verification evidence and remaining gaps
 
-The latest completed CI run before the final documentation-only update passed: unit tests, TypeScript, extension syntax/manifest validation, production dependency audit, Next.js production build and the then-current production HTTP smoke tests. A subsequent CI run adds black-box checks for policy pages and malformed API requests; it must pass before release promotion.
+Local verification on 3 November 2026 passed: 32 unit tests, 22 Playwright tests, TypeScript, extension syntax/manifest validation, production dependency audit (0 vulnerabilities), Next.js production build and local production smoke tests. GitHub CI and a new Vercel deployment still need to run against the updated commit.
 
 Not yet demonstrated:
-- Browser-driven end-to-end tests across all pages, devices and six locales.
-- Automated WCAG/axe audit plus manual keyboard and screen-reader review.
+- Full legal-page, canonical scheme-content and extension-popup translation across all six locales, with fluent-speaker review.
+- Manual keyboard, screen-reader, contrast, zoom and mobile review; axe scans currently cover critical/serious violations on main, privacy and terms pages.
 - Portal-by-portal extension mapping accuracy on representative official application forms.
 - Full review of every imported scheme record or independent approval of all four deterministic rules.
 - Penetration test, privacy impact assessment, qualified legal review, incident response and operational monitoring.

@@ -12,11 +12,13 @@ export async function GET() {
   const ageDays = Math.max(0, Math.floor((checkedAt.getTime() - snapshotAt.getTime()) / 86_400_000));
   let upstream: "available" | "unavailable" = "unavailable";
   let upstreamStatus: number | null = null;
+  let searchAvailability: "available" | "unavailable" = "unavailable";
+  let searchStatus: number | null = null;
 
   try {
     const response = await fetch(
       "https://huggingface.co/api/datasets/" + DATASET,
-      { method: "GET", signal: AbortSignal.timeout(8000), headers: { "User-Agent": "JanaSetu-AI-source-monitor/1.0" }, cache: "no-store" }
+      { method: "GET", signal: AbortSignal.timeout(5000), headers: { "User-Agent": "JanaSetu-AI-source-monitor/1.0" }, cache: "no-store" }
     );
     upstreamStatus = response.status;
     upstream = response.ok ? "available" : "unavailable";
@@ -24,10 +26,30 @@ export async function GET() {
     upstream = "unavailable";
   }
 
+  try {
+    const searchUrl = new URL("https://datasets-server.huggingface.co/search");
+    searchUrl.searchParams.set("dataset", DATASET);
+    searchUrl.searchParams.set("config", "default");
+    searchUrl.searchParams.set("split", "train");
+    searchUrl.searchParams.set("offset", "0");
+    searchUrl.searchParams.set("length", "1");
+    searchUrl.searchParams.set("query", "scheme");
+    const response = await fetch(searchUrl, {
+      method: "GET",
+      signal: AbortSignal.timeout(3000),
+      headers: { "User-Agent": "JanaSetu-AI-source-monitor/1.0" },
+      cache: "no-store"
+    });
+    searchStatus = response.status;
+    searchAvailability = response.ok ? "available" : "unavailable";
+  } catch {
+    searchAvailability = "unavailable";
+  }
+
   const freshness = ageDays > MAX_AGE_DAYS ? "stale" : "within_policy";
   return NextResponse.json({
     checkedAt: checkedAt.toISOString(),
-    overall: upstream === "available" && freshness === "within_policy" ? "healthy" : "attention_required",
+    overall: upstream === "available" && searchAvailability === "available" && freshness === "within_policy" ? "healthy" : "attention_required",
     sources: [{
       id: "smartduke-scheme-catalogue",
       publisher: "SmartDuke Technologies",
@@ -39,6 +61,9 @@ export async function GET() {
       freshnessThresholdDays: MAX_AGE_DAYS,
       availability: upstream,
       upstreamStatus,
+      searchAvailability,
+      searchStatus,
+      searchFallback: "page-filter",
       verification: "third_party_unverified",
       usePolicy: "Discovery only. Imported eligibility fields must not drive eligibility decisions."
     }, {

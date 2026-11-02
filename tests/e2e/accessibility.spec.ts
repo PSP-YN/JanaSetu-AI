@@ -24,6 +24,25 @@ test("all six language options update document language and selected locale", as
   }
 });
 
+test("main workspace labels and mobile navigation are translated for all six locales", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  const selector = page.locator(".language-control select");
+  const labels = [
+    ["en", "A CLEARER WAY FORWARD", "Open navigation"],
+    ["hi", "आगे बढ़ने का स्पष्ट रास्ता", "नेविगेशन खोलें"],
+    ["kn", "ಮುಂದಿನ ದಾರಿ ಸ್ಪಷ್ಟವಾಗಲಿ", "ನ್ಯಾವಿಗೇಶನ್ ತೆರೆಯಿರಿ"],
+    ["ta", "அடுத்த படி தெளிவாக", "வழிசெலுத்தலைத் திற"],
+    ["te", "తదుపరి దారి స్పష్టంగా", "నావిగేషన్ తెరవండి"],
+    ["ml", "അടുത്ത ഘട്ടം വ്യക്തം", "നാവിഗേഷൻ തുറക്കുക"]
+  ];
+  for (const [locale, hero, menuLabel] of labels) {
+    await selector.selectOption(locale);
+    await expect(page.locator(".hero-label")).toContainText(hero);
+    await expect(page.getByRole("button", { name: menuLabel })).toBeVisible();
+  }
+});
+
 test("security headers are served by the active Next.js configuration", async ({ request }) => {
   const response = await request.get("/");
   expect(response.ok()).toBeTruthy();
