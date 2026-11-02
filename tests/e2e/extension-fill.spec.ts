@@ -45,7 +45,8 @@ test("ambiguous duplicate labels are skipped rather than guessed", async ({ page
     <label>Applicant name <input name="primaryName"></label>
     <label>Applicant name <input name="secondaryName"></label>`);
   expect(result.filled).toBe(0);
-  await expect(page.locator("input")).toHaveValue(["", ""]);
+  await expect(page.locator('[name="primaryName"]')).toHaveValue("");
+  await expect(page.locator('[name="secondaryName"]')).toHaveValue("");
 });
 
 test("sensitive fields, hidden fields, disabled fields and consent checkboxes remain untouched", async ({ page }) => {
