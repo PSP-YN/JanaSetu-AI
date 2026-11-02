@@ -1,3 +1,4 @@
+import { KARNATAKA_BUDGET_LEADS } from "./karnataka-budget";
 export type RuleState = "matched" | "not_matched" | "unknown";
 export type AssessmentState = "potential_match" | "not_matched" | "needs_verification";
 
@@ -1352,6 +1353,7 @@ SCHEMES.push(...([
     "catalogueStatus": "catalogue-only",
     "jurisdiction": "state"
   }
+  ...KARNATAKA_BUDGET_LEADS
 ] as Scheme[]));
 
 export const LANGUAGE_OPTIONS = [
