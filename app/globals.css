@@ -671,3 +671,12 @@ input, select, textarea { min-height: 44px; }
 .main-area .intake-actions > span {
   color: #594331 !important;
 }
+
+
+/* Additional contrast corrections from the home-page axe report. */
+.sidebar-kicker,
+.system-status,
+.ecosystem-panel > div:first-child > p,
+.ecosystem-links a > small {
+  color: #594331 !important;
+}
