@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
   try {
     const parsed = await readJsonBody(request, 16 * 1024);
     if (!parsed.ok) return parsed.response;
-    const incoming = parsed.value;
+    const incoming = parsed.value && typeof parsed.value === "object" ? parsed.value as Record<string, unknown> : {};
     const profile = Object.fromEntries(
       allowedFields.map((field) => [field, incoming?.[field] ?? defaults[field]])
     ) as unknown as CitizenProfile;
