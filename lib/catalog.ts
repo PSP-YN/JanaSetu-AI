@@ -40,6 +40,8 @@ export interface Scheme {
   ruleNotes: string[];
   tags: string[];
   catalogueStatus?: "rule-screened" | "catalogue-only";
+  /** Human approval gate. Missing status is treated as pending, never approved. */
+  reviewStatus?: "pending" | "approved";
   jurisdiction?: "central" | "state" | "ut";
   applicationUrl?: string;
 }
@@ -75,6 +77,7 @@ export const SCHEMES: Scheme[] = [
   {
     id: "pm-kisan",
     catalogueStatus: "rule-screened",
+    reviewStatus: "pending",
     jurisdiction: "central",
     name: "PM-KISAN Samman Nidhi",
     category: "Agriculture",
