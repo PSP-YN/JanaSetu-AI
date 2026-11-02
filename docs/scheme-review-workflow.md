@@ -39,3 +39,8 @@ The four records are intentionally blocked. Prior spot checks found that the PM-
 6. Any source version change or material amendment resets status to pending.
 
 Do not collect real citizen data during review. Use synthetic profiles only.
+
+
+## Per-scheme review records
+
+Blank, versioned review records are maintained under `docs/scheme-reviews/` for PM-KISAN, PMAY-U 2.0, PMUY and PM-USP CSSS. Each record starts pending with two independent reviewer slots. Reviewers must attach evidence and complete the eligibility matrix before a maintainer can approve a rule version.
