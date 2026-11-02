@@ -33,10 +33,10 @@ test("language selector updates the document language", async ({ page }) => {
   const language = page.locator(".language-control select");
   await expect(language).toBeVisible();
   await language.selectOption("kn");
-  await expect(page.locator("html")).toHaveAttribute("lang", "kn");
+  await expect(page.locator("html")).toHaveAttribute("lang", "kn-IN");
   await expect(page.locator(".main-area")).toHaveAttribute("data-language", "kn");
   await language.selectOption("en");
-  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await expect(page.locator("html")).toHaveAttribute("lang", "en-IN");
 });
 
 test("skip link is keyboard reachable and targets main content", async ({ page }) => {
