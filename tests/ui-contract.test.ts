@@ -5,7 +5,7 @@ import { readFileSync } from "node:fs";
 const page = readFileSync(new URL("../app/page.tsx", import.meta.url), "utf8");
 
 test("hero title and description are translated in every supported locale", () => {
-  const localeBlocks = [...page.matchAll(/^  (en|hi|kn|ta|te|ml): \{([\s\S]*?)^  \},?$/gm)];
+  const localeBlocks = Array.from(page.matchAll(/^  (en|hi|kn|ta|te|ml): \{([\s\S]*?)^  \},?$/gm));
   assert.equal(localeBlocks.length, 6, "expected six explicit locale dictionaries");
   for (const [, locale, block] of localeBlocks) {
     for (const key of ["heroTitle1", "heroTitle2", "heroDescription"]) {
