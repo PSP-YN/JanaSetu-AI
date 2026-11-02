@@ -12,7 +12,10 @@ export async function GET(request: NextRequest) {
   });
   return NextResponse.json({
     total: results.length,
-    catalogueScope: "Curated central-scheme prototype catalogue; not a complete list of Indian government schemes.",
+    catalogueTotal: SCHEMES.length,
+    ruleScreenedTotal: SCHEMES.filter((scheme) => scheme.catalogueStatus === "rule-screened").length,
+    catalogueOnlyTotal: SCHEMES.filter((scheme) => scheme.catalogueStatus === "catalogue-only").length,
+    catalogueScope: "Partial source-linked catalogue: Central schemes, National Scholarship Portal AY 2026–27 entries and a Karnataka State starter set. Not a complete India-wide Central + State/UT directory.",
     schemes: results
   }, { headers: { "Cache-Control": "no-store" } });
 }
