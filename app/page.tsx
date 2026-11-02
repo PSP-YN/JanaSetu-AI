@@ -66,7 +66,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     saved: "Profile saved in this browser", view: "View details", prepare: "Prepare draft",
     noResult: "No screening results yet", noResultText: "Complete your profile and run an assessment to see relevant pathways.",
     match: "Potential match", review: "Needs verification", noMatch: "Not matched",
-    source: "Official source", privacy: "Profiles and drafts are saved in this browser. Assessment and draft requests send relevant fields to the app server for processing; do not enter sensitive identifiers.",
+    source: "Official source", privacy: "Your profile, assessment, drafts and reminders stay in this browser. JanaSetu performs the demo’s rule screening and text extraction locally. Exported backups are files you control. Browser speech recognition may process audio through your browser provider; external government portals receive data only if you choose to fill/submit there.",
     profileTitle: "Build your citizen profile", profileText: "Share only the details needed to screen the pathways in this catalogue.",
     documentsTitle: "Document checklist", documentsText: "Add file references to organize what you have. Prototype files are not uploaded to a server.",
     applicationsTitle: "Application workspace", applicationsText: "Drafts are preparation records. Nothing here has been submitted to a government portal.",
@@ -84,7 +84,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     view: "विवरण देखें", prepare: "ड्राफ़्ट तैयार करें", noResult: "अभी कोई जाँच परिणाम नहीं",
     noResultText: "प्रासंगिक विकल्प देखने के लिए प्रोफ़ाइल पूरी करें और आकलन चलाएँ।",
     match: "संभावित मिलान", review: "सत्यापन आवश्यक", noMatch: "मिलान नहीं",
-    source: "आधिकारिक स्रोत", privacy: "प्रोफ़ाइल और ड्राफ़्ट इसी ब्राउज़र में सहेजे जाते हैं। जाँच और ड्राफ़्ट अनुरोधों में संबंधित जानकारी ऐप सर्वर पर प्रसंस्करण के लिए भेजी जाती है; संवेदनशील पहचान संख्या न डालें।",
+    source: "आधिकारिक स्रोत", privacy: "आपकी प्रोफ़ाइल, जाँच, ड्राफ़्ट और रिमाइंडर इसी ब्राउज़र में रहते हैं। डेमो की नियम-जाँच और टेक्स्ट निष्कर्षण स्थानीय रूप से होता है। बैकअप फ़ाइल आपके नियंत्रण में है। ब्राउज़र वॉइस पहचान सेवा आपके ऑडियो को प्रोसेस कर सकती है; सरकारी पोर्टल को जानकारी तभी जाती है जब आप स्वयं वहाँ भरें/जमा करें।",
     profileTitle: "अपनी नागरिक प्रोफ़ाइल बनाएँ", profileText: "केवल आवश्यक जानकारी साझा करें।",
     documentsTitle: "दस्तावेज़ सूची", documentsText: "अपने दस्तावेज़ व्यवस्थित करने के लिए फ़ाइल संदर्भ जोड़ें। फ़ाइलें सर्वर पर अपलोड नहीं होतीं।",
     applicationsTitle: "आवेदन कार्यक्षेत्र", applicationsText: "ये तैयारी के ड्राफ़्ट हैं; कोई आवेदन सरकारी पोर्टल पर जमा नहीं हुआ है।",
@@ -102,7 +102,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     view: "ವಿವರಗಳನ್ನು ನೋಡಿ", prepare: "ಕರಡು ಸಿದ್ಧಪಡಿಸಿ", noResult: "ಇನ್ನೂ ಪರಿಶೀಲನಾ ಫಲಿತಾಂಶಗಳಿಲ್ಲ",
     noResultText: "ಸಂಬಂಧಿತ ಮಾರ್ಗಗಳನ್ನು ನೋಡಲು ಪ್ರೊಫೈಲ್ ಪೂರ್ಣಗೊಳಿಸಿ ಮತ್ತು ಮೌಲ್ಯಮಾಪನ ನಡೆಸಿ.",
     match: "ಸಂಭಾವ್ಯ ಹೊಂದಾಣಿಕೆ", review: "ಪರಿಶೀಲನೆ ಅಗತ್ಯ", noMatch: "ಹೊಂದಾಣಿಕೆ ಇಲ್ಲ",
-    source: "ಅಧಿಕೃತ ಮೂಲ", privacy: "ಪ್ರೊಫೈಲ್ ಮತ್ತು ಕರಡುಗಳು ಈ ಬ್ರೌಸರ್‌ನಲ್ಲಿ ಉಳಿಯುತ್ತವೆ. ಪರಿಶೀಲನೆ ಮತ್ತು ಕರಡು ವಿನಂತಿಗಳಲ್ಲಿ ಸಂಬಂಧಿತ ವಿವರಗಳು ಸಂಸ್ಕರಣೆಗೆ ಅಪ್ಲಿಕೇಶನ್ ಸರ್ವರ್‌ಗೆ ಕಳುಹಿಸಲಾಗುತ್ತವೆ; ಸೂಕ್ಷ್ಮ ಗುರುತು ಸಂಖ್ಯೆಗಳು ನಮೂದಿಸಬೇಡಿ.",
+    source: "ಅಧಿಕೃತ ಮೂಲ", privacy: "ನಿಮ್ಮ ಪ್ರೊಫೈಲ್, ಮೌಲ್ಯಮಾಪನ, ಕರಡು ಮತ್ತು ನೆನಪಿನ ಸೂಚನೆಗಳು ಈ ಬ್ರೌಸರ್‌ನಲ್ಲೇ ಉಳಿಯುತ್ತವೆ. ಡೆಮೊ ನಿಯಮ ಪರಿಶೀಲನೆ ಮತ್ತು ಪಠ್ಯ ಹೊರತೆಗೆಯುವಿಕೆ ಸ್ಥಳೀಯವಾಗಿ ನಡೆಯುತ್ತದೆ. ಬ್ಯಾಕಪ್ ನಿಮ್ಮ ನಿಯಂತ್ರಣದಲ್ಲಿರುತ್ತದೆ. ಬ್ರೌಸರ್ ಧ್ವನಿ ಗುರುತಿಸುವಿಕೆ ಸೇವೆ ಆಡಿಯೊವನ್ನು ಸಂಸ್ಕರಿಸಬಹುದು; ಸರ್ಕಾರಿ ಪೋರ್ಟಲ್‌ಗೆ ಮಾಹಿತಿ ನೀವು ಸ್ವತಃ ಭರ್ತಿ/ಸಲ್ಲಿಸಿದಾಗ ಮಾತ್ರ ಹೋಗುತ್ತದೆ.",
     profileTitle: "ನಿಮ್ಮ ನಾಗರಿಕ ಪ್ರೊಫೈಲ್ ರಚಿಸಿ", profileText: "ಅಗತ್ಯವಿರುವ ವಿವರಗಳನ್ನು ಮಾತ್ರ ಹಂಚಿಕೊಳ್ಳಿ.",
     documentsTitle: "ದಾಖಲೆಗಳ ಪಟ್ಟಿ", documentsText: "ದಾಖಲೆಗಳನ್ನು ವ್ಯವಸ್ಥಿತಗೊಳಿಸಲು ಫೈಲ್ ವಿವರ ಸೇರಿಸಿ. ಫೈಲ್‌ಗಳು ಸರ್ವರ್‌ಗೆ ಅಪ್‌ಲೋಡ್ ಆಗುವುದಿಲ್ಲ.",
     applicationsTitle: "ಅರ್ಜಿ ಕಾರ್ಯಕ್ಷೇತ್ರ", applicationsText: "ಇವು ಕರಡು ದಾಖಲೆಗಳು ಮಾತ್ರ; ಸರ್ಕಾರಿ ಪೋರ್ಟಲ್‌ಗೆ ಸಲ್ಲಿಸಲಾಗಿಲ್ಲ.",
@@ -120,7 +120,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     view: "விவரங்களைக் காண்க", prepare: "வரைவைத் தயாரி", noResult: "இன்னும் மதிப்பீட்டு முடிவுகள் இல்லை",
     noResultText: "தொடர்புடைய வழிகளைக் காண சுயவிவரத்தைப் பூர்த்தி செய்து மதிப்பீட்டை இயக்கவும்.",
     match: "சாத்தியமான பொருத்தம்", review: "சரிபார்ப்பு தேவை", noMatch: "பொருத்தமில்லை",
-    source: "அதிகாரப்பூர்வ ஆதாரம்", privacy: "சுயவிவரமும் வரைவுகளும் இந்த உலாவியில் சேமிக்கப்படும். மதிப்பீடு மற்றும் வரைவு கோரிக்கைகளில் தொடர்புடைய விவரங்கள் செயலாக்கத்திற்காக பயன்பாட்டு சேவையகத்திற்கு அனுப்பப்படும்; முக்கிய அடையாள எண்களை உள்ளிட வேண்டாம்.",
+    source: "அதிகாரப்பூர்வ ஆதாரம்", privacy: "உங்கள் சுயவிவரம், மதிப்பீடு, வரைவுகள் மற்றும் நினைவூட்டல்கள் இந்த உலாவியிலேயே இருக்கும். டெமோ விதி மதிப்பீடும் உரை பிரித்தெடுப்பும் உள்ளூரிலேயே நடக்கும். காப்புப் பிரதிக் கோப்பு உங்கள் கட்டுப்பாட்டில் இருக்கும். உலாவியின் குரல் அடையாள சேவை ஒலியை செயலாக்கலாம்; அரசு தளத்திற்கு நீங்கள் தானாகவே நிரப்ப/சமர்ப்பிக்கும்போது மட்டுமே தகவல் செல்லும்.",
     profileTitle: "குடிமகன் சுயவிவரத்தை உருவாக்கு", profileText: "தேவையான விவரங்களை மட்டும் பகிரவும்.",
     documentsTitle: "ஆவணப் பட்டியல்", documentsText: "கோப்பு குறிப்புகளைச் சேர்த்து ஒழுங்குபடுத்துங்கள். கோப்புகள் சேவையகத்தில் பதிவேற்றப்படாது.",
     applicationsTitle: "விண்ணப்பப் பணியிடம்", applicationsText: "இவை தயாரிப்பு வரைவுகள் மட்டுமே; அரசு தளத்தில் சமர்ப்பிக்கப்படவில்லை.",
@@ -138,7 +138,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     view: "వివరాలు చూడండి", prepare: "డ్రాఫ్ట్ సిద్ధం చేయండి", noResult: "ఇంకా పరిశీలన ఫలితాలు లేవు",
     noResultText: "సంబంధిత మార్గాలను చూడటానికి ప్రొఫైల్ పూర్తి చేసి అంచనాను అమలు చేయండి.",
     match: "సంభావ్య సరిపోలిక", review: "ధృవీకరణ అవసరం", noMatch: "సరిపోలలేదు",
-    source: "అధికారిక మూలం", privacy: "ప్రొఫైల్ మరియు డ్రాఫ్ట్‌లు ఈ బ్రౌజర్‌లో సేవ్ అవుతాయి. అంచనా మరియు డ్రాఫ్ట్ అభ్యర్థనల్లో సంబంధిత వివరాలు ప్రాసెసింగ్ కోసం యాప్ సర్వర్‌కు పంపబడతాయి; సున్నితమైన గుర్తింపు సంఖ్యలను నమోదు చేయవద్దు.",
+    source: "అధికారిక మూలం", privacy: "మీ ప్రొఫైల్, అంచనా, డ్రాఫ్ట్‌లు, రిమైండర్‌లు ఈ బ్రౌజర్‌లోనే ఉంటాయి. డెమో నియమ పరిశీలన, వచన విశ్లేషణ స్థానికంగానే జరుగుతాయి. బ్యాకప్ ఫైల్ మీ నియంత్రణలో ఉంటుంది. బ్రౌజర్ వాయిస్ గుర్తింపు సేవ ఆడియోను ప్రాసెస్ చేయవచ్చు; ప్రభుత్వ పోర్టల్‌కు మీరు స్వయంగా నింపి/సమర్పించినప్పుడే సమాచారం వెళ్తుంది.",
     profileTitle: "మీ పౌర ప్రొఫైల్‌ను సృష్టించండి", profileText: "అవసరమైన వివరాలను మాత్రమే పంచుకోండి.",
     documentsTitle: "పత్రాల జాబితా", documentsText: "పత్రాలను క్రమబద్ధీకరించడానికి ఫైల్ వివరాలను జోడించండి. ఫైళ్లు సర్వర్‌కు అప్‌లోడ్ కావు.",
     applicationsTitle: "దరఖాస్తుల కార్యస్థలం", applicationsText: "ఇవి తయారీ డ్రాఫ్ట్‌లు మాత్రమే; ప్రభుత్వ పోర్టల్‌కు సమర్పించబడలేదు.",
@@ -156,7 +156,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     view: "വിശദാംശങ്ങൾ കാണുക", prepare: "ഡ്രാഫ്റ്റ് തയ്യാറാക്കുക", noResult: "പരിശോധനാ ഫലങ്ങൾ ഇതുവരെ ഇല്ല",
     noResultText: "ബന്ധപ്പെട്ട വഴികൾ കാണാൻ പ്രൊഫൈൽ പൂരിപ്പിച്ച് വിലയിരുത്തൽ നടത്തുക.",
     match: "സാധ്യതയുള്ള പൊരുത്തം", review: "സ്ഥിരീകരണം ആവശ്യമാണ്", noMatch: "പൊരുത്തമില്ല",
-    source: "ഔദ്യോഗിക ഉറവിടം", privacy: "പ്രൊഫൈലും ഡ്രാഫ്റ്റുകളും ഈ ബ്രൗസറിൽ സൂക്ഷിക്കുന്നു. വിലയിരുത്തൽ, ഡ്രാഫ്റ്റ് അഭ്യർത്ഥനകളിൽ ബന്ധപ്പെട്ട വിവരങ്ങൾ പ്രോസസ്സിംഗിനായി ആപ്പ് സെർവറിലേക്ക് അയയ്ക്കും; സെൻസിറ്റീവ് തിരിച്ചറിയൽ നമ്പറുകൾ നൽകാതിരിക്കുക.",
+    source: "ഔദ്യോഗിക ഉറവിടം", privacy: "നിങ്ങളുടെ പ്രൊഫൈൽ, വിലയിരുത്തൽ, ഡ്രാഫ്റ്റുകൾ, ഓർമ്മപ്പെടുത്തലുകൾ ഈ ബ്രൗസറിൽ തന്നെ സൂക്ഷിക്കുന്നു. ഡെമോ നിയമ പരിശോധനയും ടെക്സ്റ്റ് വിശകലനവും പ്രാദേശികമായി നടക്കുന്നു. ബാക്കപ്പ് ഫയൽ നിങ്ങളുടെ നിയന്ത്രണത്തിലാണ്. ബ്രൗസറിന്റെ വോയ്സ് തിരിച്ചറിയൽ സേവനം ഓഡിയോ പ്രോസസ് ചെയ്യാം; സർക്കാർ പോർട്ടലിലേക്ക് നിങ്ങൾ സ്വയം പൂരിപ്പിക്കുകയോ സമർപ്പിക്കുകയോ ചെയ്താൽ മാത്രമേ വിവരങ്ങൾ പോകൂ.",
     profileTitle: "നിങ്ങളുടെ പൗര പ്രൊഫൈൽ സൃഷ്ടിക്കുക", profileText: "ആവശ്യമായ വിവരങ്ങൾ മാത്രം പങ്കിടുക.",
     documentsTitle: "രേഖാ ചെക്ക്‌ലിസ്റ്റ്", documentsText: "രേഖകൾ ക്രമീകരിക്കാൻ ഫയൽ വിവരങ്ങൾ ചേർക്കുക. ഫയലുകൾ സെർവറിലേക്ക് അപ്‌ലോഡ് ചെയ്യുന്നില്ല.",
     applicationsTitle: "അപേക്ഷാ വർക്ക്‌സ്‌പേസ്", applicationsText: "ഇവ തയ്യാറാക്കിയ ഡ്രാഫ്റ്റുകൾ മാത്രമാണ്; സർക്കാർ പോർട്ടലിൽ സമർപ്പിച്ചിട്ടില്ല.",
@@ -679,7 +679,7 @@ export default function Home() {
                   <div className="progress-ring" style={{ background: "#dce8d9", border: "4px solid #2d684b" }}><div><strong>{progress}%</strong><small>complete</small></div></div>
                   <h3>{t("profileReady")}</h3><p>More complete answers reduce unknown screening conditions. You can leave any field blank and return later.</p>
                 </div>
-                <div className="panel aside-card privacy-card"><ShieldCheck size={22}/><h3>{t("privacyTitle")}</h3><p>Profile and application records are saved in this browser. When you run an assessment or prepare a draft, relevant profile fields are sent to the app server for processing. The prototype does not intentionally persist them on the server. Avoid sensitive identifiers and real documents.</p><span>Prototype data boundary</span></div>
+                <div className="panel aside-card privacy-card"><ShieldCheck size={22}/><h3>{t("privacyTitle")}</h3><p>Your profile, assessments and drafts stay in this browser. Screening and text extraction run locally in this prototype. Browser speech recognition may use your browser provider. When you use a government portal, that portal receives whatever you choose to enter or submit.</p><span>Prototype data boundary</span></div>
               </aside>
             </div>
           </section>}
