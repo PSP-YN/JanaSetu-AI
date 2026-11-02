@@ -4,7 +4,8 @@
 
 ## Implemented baseline
 - HTTPS-only government-domain check in extension; explicit popup action; no form submission.
-- Request JSON size cap on intake, assessment and draft routes.
+- Streaming JSON byte cap on intake, assessment and draft routes (oversized chunked bodies are cancelled before full buffering).
+- Strict citizen-profile schema validation rejects unexpected keys, invalid types, out-of-range age/income and malformed enum values.
 - Security response headers configured in Next.js: nosniff, frame denial, strict referrer policy, permissions policy, HSTS and COOP.
 - Existing CI runs unit tests, TypeScript, extension syntax/manifest, production dependency audit, build and smoke tests.
 - Scheme screening fails closed until a scheme is explicitly marked approved.
