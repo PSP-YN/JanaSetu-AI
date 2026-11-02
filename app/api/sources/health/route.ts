@@ -4,8 +4,7 @@ const DATASET = "smartduketech/indian-government-schemes-2025";
 const SNAPSHOT_DATE = "2026-07-05";
 const MAX_AGE_DAYS = 90;
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 900;
 
 export async function GET() {
   const checkedAt = new Date();
@@ -50,5 +49,5 @@ export async function GET() {
       availability: "not_automatically_checked",
       usePolicy: "Do not scrape or automate access without written authorization. Review official scheme pages manually or use an approved API."
     }]
-  }, { headers: { "Cache-Control": "no-store" } });
+  }, { headers: { "Cache-Control": "public, s-maxage=900, stale-while-revalidate=3600" } });
 }
