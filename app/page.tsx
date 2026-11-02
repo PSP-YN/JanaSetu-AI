@@ -671,23 +671,23 @@ export default function Home() {
                 <div className="form-grid">
                   <Field label="Does your family own a pucca house anywhere in India?"><YesNo t={t} value={profile.ownsPuccaHouse} onChange={(v) => updateProfile("ownsPuccaHouse", v)} unknown/></Field>
                   <Field label="Was your family allotted a government house in the last 20 years?"><Select value={profile.previousHousingBenefit} onChange={(v) => updateProfile("previousHousingBenefit", v as CitizenProfile["previousHousingBenefit"])}><option value="unknown">Not sure</option><option value="yes">Yes</option><option value="no">No</option></Select></Field>
-                  <Field label="Does anyone in your household have an LPG connection?"><YesNo value={profile.householdHasLpg} onChange={(v) => updateProfile("householdHasLpg", v)} unknown/></Field>
-                  <Field label="Can the applicant provide the prescribed poor-household declaration for PMUY?"><YesNo value={profile.poorHouseholdDeclaration} onChange={(v) => updateProfile("poorHouseholdDeclaration", v)} unknown/></Field>
+                  <Field label="Does anyone in your household have an LPG connection?"><YesNo t={t} value={profile.householdHasLpg} onChange={(v) => updateProfile("householdHasLpg", v)} unknown/></Field>
+                  <Field label="Can the applicant provide the prescribed poor-household declaration for PMUY?"><YesNo t={t} value={profile.poorHouseholdDeclaration} onChange={(v) => updateProfile("poorHouseholdDeclaration", v)} unknown/></Field>
                 </div>
 
                 <div className="form-section-title subsection"><span>03</span><div><h2>Agriculture and exclusions</h2><p>For preliminary PM-KISAN screening; official land-record and exclusion checks are still required.</p></div></div>
                 <div className="form-grid">
-                  <Field label="Is cultivable land recorded in the State/UT land records?"><YesNo value={profile.hasCultivableLand} onChange={(v) => updateProfile("hasCultivableLand", v)} unknown/></Field>
+                  <Field label="Is cultivable land recorded in the State/UT land records?"><YesNo t={t} value={profile.hasCultivableLand} onChange={(v) => updateProfile("hasCultivableLand", v)} unknown/></Field>
                   <Field label="Does any family member fall under a PM-KISAN exclusion category?"><Select value={profile.pmKisanExcluded} onChange={(v) => updateProfile("pmKisanExcluded", v as CitizenProfile["pmKisanExcluded"])}><option value="unknown">Not sure</option><option value="yes">Yes</option><option value="no">No, after reviewing the list</option></Select></Field>
                 </div>
 
                 <div className="form-section-title subsection"><span>04</span><div><h2>Education</h2><p>For the cited PM-USP CSSS reference; academic-year rules must be rechecked.</p></div></div>
                 <div className="form-grid">
-                  <Field label="Are you currently a student?"><YesNo value={profile.isStudent} onChange={(v) => updateProfile("isStudent", Boolean(v))}/></Field>
-                  <Field label="Above the 80th percentile in your Board / stream?"><YesNo value={profile.top20Percentile} onChange={(v) => updateProfile("top20Percentile", v)} unknown/></Field>
-                  <Field label="Enrolled in a regular undergraduate course?"><YesNo value={profile.regularUndergraduate} onChange={(v) => updateProfile("regularUndergraduate", v)} unknown/></Field>
-                  <Field label="Receiving another scholarship or fee reimbursement?"><YesNo value={profile.otherScholarship} onChange={(v) => updateProfile("otherScholarship", v)} unknown/></Field>
-                  <Field label="Is your course a diploma or distance / correspondence course?"><YesNo value={profile.diplomaOrDistance} onChange={(v) => updateProfile("diplomaOrDistance", v)} unknown/></Field>
+                  <Field label="Are you currently a student?"><YesNo t={t} value={profile.isStudent} onChange={(v) => updateProfile("isStudent", Boolean(v))}/></Field>
+                  <Field label="Above the 80th percentile in your Board / stream?"><YesNo t={t} value={profile.top20Percentile} onChange={(v) => updateProfile("top20Percentile", v)} unknown/></Field>
+                  <Field label="Enrolled in a regular undergraduate course?"><YesNo t={t} value={profile.regularUndergraduate} onChange={(v) => updateProfile("regularUndergraduate", v)} unknown/></Field>
+                  <Field label="Receiving another scholarship or fee reimbursement?"><YesNo t={t} value={profile.otherScholarship} onChange={(v) => updateProfile("otherScholarship", v)} unknown/></Field>
+                  <Field label="Is your course a diploma or distance / correspondence course?"><YesNo t={t} value={profile.diplomaOrDistance} onChange={(v) => updateProfile("diplomaOrDistance", v)} unknown/></Field>
                 </div>
                 <div className="form-footer"><span><LockKeyhole size={14}/> No Aadhaar, bank account or document number is requested here.</span><button className="button button-primary" onClick={() => { setNotice(t("saved")); runAssessment(); }}>{t("run")} <ArrowRight size={16}/></button></div>
               </div>
@@ -711,6 +711,7 @@ export default function Home() {
               <div className="trace-list">{toolTrace.map((item) => <div className="trace-row" key={item.id}><span className="trace-check"><Check size={13}/></span><div><strong>{item.agent}</strong><small>{item.tool} · {item.detail}</small></div><span className="trace-duration">{item.durationMs} ms</span></div>)}</div>
               <p className="trace-note">This prototype uses deterministic server-side tools and a rule-based planner; it does not call an external LLM or government API.</p>
             </div>}
+            <div className="full-catalogue-cta"><div><strong>Need the full live Central + State/UT Government scheme list?</strong><p>The internal catalogue is a small pilot. Search the official myScheme portal for currently listed schemes across India.</p></div><a className="button button-primary" href="https://search.myscheme.gov.in/" target="_blank" rel="noreferrer">Search official myScheme <ExternalLink size={15}/></a></div>
             <div className="catalogue-controls">
               <div className="search-box"><Search size={17}/><input placeholder={t("search")} value={query} onChange={(e) => setQuery(e.target.value)}/>{query && <button onClick={() => setQuery("")}><X size={14}/></button>}</div>
               <label className="filter-select"><span>Category</span><select value={category} onChange={(e) => setCategory(e.target.value)}><option>All categories</option>{Array.from(new Set(SCHEMES.map((item) => item.category))).map((item) => <option key={item}>{item}</option>)}</select><ChevronDown size={14}/></label>
