@@ -22,7 +22,7 @@ type DraftField = { key: string; label: string; value: string; source: string; s
 type LocalApplication = {
   id: string; schemeId: string; schemeName: string; citizenName: string;
   state: string; district: string; status: string; createdAt: string;
-  reviewRequired: boolean; missingChecks: string[]; sourceUrl: string; disclaimer: string;
+  reviewRequired: boolean; assessmentState?: Assessment["state"]; missingChecks: string[]; sourceUrl: string; disclaimer: string;
   fields?: DraftField[]; reviewedAt?: string | null;
 };
 type LocalDocument = { id: string; name: string; type: string; size: number; addedAt: string; status: string };
@@ -36,6 +36,23 @@ const STORAGE = {
   tasks: "janSetu.tasks.v1",
   assessments: "janSetu.assessments.v1"
 };
+
+function invalidateUnapprovedAssessments(value: unknown): Assessment[] {
+  if (!Array.isArray(value)) return [];
+  return value.filter((item): item is Assessment => Boolean(item && typeof item === "object" && typeof item.schemeId === "string"))
+    .map((item) => {
+      const scheme = SCHEMES.find((entry) => entry.id === item.schemeId);
+      if (!scheme || scheme.reviewStatus === "approved") return item;
+      return {
+        ...item,
+        state: "needs_verification" as const,
+        headline: "Human review pending",
+        explanation: "This saved result predates the current scheme approval state. Its earlier match result has been invalidated. Do not treat it as an eligibility decision.",
+        checks: [],
+        nextActions: ["Wait for two independent source and rule approvals.", "Verify current conditions with the official department."]
+      };
+    });
+}
 
 const EMPTY_PROFILE: CitizenProfile = {
   fullName: "", age: "", gender: "", state: "", district: "", residenceType: "",
@@ -917,7 +934,7 @@ export default function Home() {
       setApplications(read(STORAGE.applications, []));
       setDocuments(read(STORAGE.documents, []));
       setTasks(read(STORAGE.tasks, []));
-      setAssessments(read(STORAGE.assessments, []));
+      setAssessments(invalidateUnapprovedAssessments(read(STORAGE.assessments, [])));
     } catch {
       setNotice("Some saved browser data could not be read. You can continue with a fresh profile.");
     }
@@ -953,7 +970,7 @@ export default function Home() {
     try {
       const data = JSON.parse(await file.text());
       if (data?.app !== "JanaSetu" || data?.schemaVersion !== 1 || !data?.profile) throw new Error("This is not a supported JanaSetu backup file.");
-      setProfile(data.profile); setLanguage(data.language || "en"); setApplications(Array.isArray(data.applications) ? data.applications : []); setDocuments(Array.isArray(data.documents) ? data.documents : []); setTasks(Array.isArray(data.tasks) ? data.tasks : []); setAssessments(Array.isArray(data.assessments) ? data.assessments : []);
+      setProfile(data.profile); setLanguage(data.language || "en"); setApplications(Array.isArray(data.applications) ? data.applications : []); setDocuments(Array.isArray(data.documents) ? data.documents : []); setTasks(Array.isArray(data.tasks) ? data.tasks : []); setAssessments(invalidateUnapprovedAssessments(data.assessments));
       setTab("profile"); setNotice("Backup restored in this browser. Review imported details before use.");
     } catch (error) { setNotice(error instanceof Error ? error.message : "Unable to restore this backup."); } finally { setBackupBusy(false); }
   };
@@ -1367,7 +1384,7 @@ export default function Home() {
           {tab === "applications" && <section className="page-section">
             <div className="page-title-row"><div><div className="eyebrow">APPLICATION LIFECYCLE</div><h1>{t("applicationsTitle")}</h1><p>{t("applicationsText")}</p></div><div className="private-chip"><ClipboardCheck size={14}/> {applications.length} saved</div></div>
             {applications.length === 0 ? <div className="panel empty-large"><div className="empty-state"><ClipboardCheck size={32}/><h3>No application drafts yet</h3><p>Run an assessment, open a scheme and choose “Prepare draft” to create a reviewable application record.</p><button className="button button-primary" onClick={() => setTab("discover")}>Find benefits <ArrowRight size={15}/></button></div></div> :
-              <div className="application-list">{applications.map((application) => <article className="panel application-card" key={application.id}><div className="application-top"><div className="application-icon"><FileCheck2 size={20}/></div><div><span className="draft-label">PREPARATION DRAFT</span><h3>{application.schemeName}</h3><p>{application.id} · Created {shortDate(application.createdAt)}</p></div><span className="status-pill neutral">Not submitted</span></div><div className="application-meta"><div><small>Applicant</small><strong>{application.citizenName}</strong></div><div><small>Location</small><strong>{application.district}, {application.state}</strong></div><div><small>Open checks</small><strong>{application.missingChecks.length} require review</strong></div></div>
+              <div className="application-list">{applications.map((application) => <article className="panel application-card" key={application.id}><div className="application-top"><div className="application-icon"><FileCheck2 size={20}/></div><div><span className="draft-label">PREPARATION DRAFT</span><h3>{application.schemeName}</h3><p>{application.id} · Created {shortDate(application.createdAt)}</p></div><span className="status-pill neutral">Not submitted</span></div><div className="application-meta"><div><small>Applicant</small><strong>{application.citizenName}</strong></div><div><small>Location</small><strong>{application.district}, {application.state}</strong></div><div><small>Open checks</small><strong>{application.assessmentState === "needs_verification" ? "Scheme source approval pending" : application.missingChecks.length + " require review"}</strong></div></div>
                 <div className="draft-field-toolbar">
                   <button className="text-button" onClick={() => setExpandedApplication(expandedApplication === application.id ? "" : application.id)}>
                     {expandedApplication === application.id ? "Hide prepared fields" : "Review prepared fields"} <ChevronDown size={14}/>
