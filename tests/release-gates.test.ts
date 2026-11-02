@@ -80,3 +80,15 @@ test("profile validation fills omitted optional fields with safe defaults", () =
   assert.equal(profile?.hasCultivableLand, null);
   assert.equal(profile?.fullName, "");
 });
+
+
+test("bounded JSON parser rejects non-object payloads at the profile boundary", async () => {
+  const request = new Request("https://example.test/api", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: "null"
+  });
+  const result = await readJsonBody(request, 128);
+  assert.equal(result.ok, true);
+  if (result.ok) assert.equal(result.value, null);
+});
