@@ -77,3 +77,14 @@ test("extension synthetic form fills unique safe fields and skips sensitive or a
   await expect(page.locator("#duplicate1")).toHaveValue("");
   await expect(page.locator("#duplicate2")).toHaveValue("");
 });
+
+
+test("mobile navigation opens, changes sections and closes", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Open navigation" }).click();
+  await expect(page.locator(".sidebar")).toHaveClass(/sidebar-open/);
+  await page.getByRole("button", { name: "Find benefits" }).click();
+  await expect(page.locator(".sidebar")).not.toHaveClass(/sidebar-open/);
+  await expect(page.locator(".main-area")).toBeVisible();
+});
