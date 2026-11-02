@@ -86,3 +86,12 @@ The source register reports a 2026–27 budget snapshot and a model-generated cl
 Dataset attribution: Urban Morph, [schemes](https://github.com/urbanmorph/schemes), derived data CC BY 4.0. Code in that repository is MIT. Original Karnataka budget documents remain attributable to the Government of Karnataka. Dataset snapshot: FY 2026–27; classification build: 1 November 2026.
 
 Current catalogue breakdown after this import: **142 records = 4 rule-screened + 138 catalogue-only**, including 96 Karnataka budget-derived leads. This is not a complete national catalogue. The budget import does not use or reproduce the myScheme-derived files in that repository.
+
+
+## CC BY 4.0 external catalogue source
+
+JanaSetu Discover integrates paginated keyword search over the Hugging Face Dataset Viewer for [SmartDuke Technologies' Indian Government Schemes Dataset 2026](https://huggingface.co/datasets/smartduketech/indian-government-schemes-2025), license CC BY 4.0. The dataset card states 4,693 records and a July 2026 snapshot, with original source myScheme and structured parsing by SmartDuke Technologies. This source is third-party, machine-parsed and not independently verified by JanaSetu. Imported records remain catalogue-only. The parser's age, gender, caste, income, BPL, disability and state fields are intentionally not used by the eligibility evaluator. Each record links to the scheme URL supplied by the dataset; verify it before applying.
+
+The app proxies requests through `/api/schemes/open-data`, requests up to 50 rows at a time from the Hugging Face Dataset Viewer, caches responses for one hour, and allows keyword search and pagination. This is an external dependency, not a locally mirrored/offline catalogue. If it is unavailable, the local catalogue and official myScheme link remain accessible.
+
+**Attribution:** SmartDuke Technologies, *Indian Government Schemes Dataset 2026*, CC BY 4.0, Hugging Face. Source snapshot: 5 July 2026. https://huggingface.co/datasets/smartduketech/indian-government-schemes-2025
