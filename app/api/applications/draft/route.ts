@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { readJsonBody } from "@/lib/request";
 import { SCHEMES } from "@/lib/catalog";
 import { evaluateScheme } from "@/lib/agent";
-import type { CitizenProfile } from "@/lib/catalog";
+import { parseCitizenProfile } from "@/lib/profile-validation";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -15,9 +15,9 @@ export async function POST(request: NextRequest) {
     const scheme = SCHEMES.find((item) => item.id === body?.schemeId);
     if (!scheme) return NextResponse.json({ error: "Scheme not found in the prototype catalogue." }, { status: 404 });
 
-    const profile = body?.profile as CitizenProfile;
-    if (!profile || typeof profile !== "object" || typeof profile.state !== "string") {
-      return NextResponse.json({ error: "A citizen profile with a State/UT is required." }, { status: 400 });
+    const profile = parseCitizenProfile(body?.profile);
+    if (!profile || !profile.state) {
+      return NextResponse.json({ error: "A valid citizen profile with a State/UT is required." }, { status: 400 });
     }
 
     const assessment = evaluateScheme(scheme, profile);
