@@ -645,3 +645,36 @@ input, select, textarea { min-height: 44px; }
 .footer-policy-links { display: inline-flex; gap: 10px; margin-left: auto; }
 .footer-policy-links a { color: inherit; font-size: 12px; text-decoration: underline; text-underline-offset: 3px; }
 .footer-policy-links a:focus-visible { outline: 2px solid #b45309; outline-offset: 3px; }
+
+
+/* WCAG AA contrast remediation from the first automated axe scan. */
+:root {
+  --forest: #a9440b;
+  --forest-dark: #71300f;
+  --muted: #594331;
+  --muted-2: #594331;
+}
+.main-area small,
+.main-area .eyebrow,
+.main-area .scheme-category,
+.main-area .scheme-benefit span,
+.main-area .scheme-summary,
+.main-area .source-period,
+.main-area .text-button,
+.main-area .source-dot,
+.main-area .date-chip,
+.main-area .trace-count,
+.main-area .catalogue-load-more small,
+.sidebar-kicker,
+.sidebar-assist p,
+.sidebar-footer,
+.page-footer,
+.footer-policy-links a {
+  color: #594331;
+}
+.button-primary,
+button.button-primary,
+a.button-primary {
+  background-color: #a9440b;
+  border-color: #a9440b;
+}
