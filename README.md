@@ -4,7 +4,7 @@
 
 JanaSetu is an independent benefits-readiness prototype. It is designed to complement official discovery and service platforms by connecting a citizen's stated facts to source-linked screening conditions, evidence gaps, draft preparation and next actions.
 
-> **Important:** JanaSetu is not a government website or an official eligibility authority. The current prototype contains a small, curated set of Central Government scheme references. Screening results are preliminary and must be verified with the relevant department. It does not submit applications to government systems.
+> **Important:** JanaSetu is not a government website or an official eligibility authority. The current prototype contains 142 source-linked records: four Central records with deterministic prototype screening, 42 official-source catalogue records, and 96 Karnataka budget-derived discovery leads. The budget leads are model-classified and not human-reviewed; they are not verified eligibility records. Screening results are preliminary and must be verified with the relevant department. It does not submit applications to government systems.
 
 ## Product principles
 
@@ -36,7 +36,7 @@ npm run build
 
 - Citizen profile for all 28 States and 8 Union Territories.
 - Interface language selector: English, Hindi, Kannada, Tamil, Telugu and Malayalam.
-- Partial source-linked catalogue with Central scheme references, National Scholarship Portal AY 2026–27 entries and a Karnataka State starter set; only four records currently have deterministic eligibility screening.
+- 142 source-linked records: four rule-screened Central records, 42 catalogue-only official-source records and 96 Karnataka FY 2026–27 budget-derived discovery leads; only four records have deterministic eligibility screening.
 - Server-side screening workflow exposed through `POST /api/agent/run`.
 - Explicit planner, scheme retrieval, deterministic rule evaluation, evidence-link construction and next-action generation.
 - Application draft endpoint and a local application tracker.
@@ -62,7 +62,7 @@ The prototype uses a partial source-linked catalogue built from public official 
 
 - **Backup / Restore:** export profile, language, assessments, drafts, document metadata and follow-up records as a versioned local JSON file. Keep it private; it contains personal profile data.
 - **Experimental Chrome extension:** [installation and safety guide](docs/extension.md). It fills matching fields only after the citizen clicks and reviews the portal. It does not submit applications.
-- **Scheme catalogue coverage:** [coverage, source policy and expansion plan](docs/scheme-catalogue-coverage.md). The built-in catalogue is a partial Central + Karnataka starter set, including AY 2026–27 NSP entries. Only four records are rule-screened. Use [official myScheme search](https://search.myscheme.gov.in/) for the current full Central + State/UT catalogue.
+- **Scheme catalogue coverage:** [coverage, source policy and expansion plan](docs/scheme-catalogue-coverage.md). The built-in catalogue has 142 records: 4 rule-screened Central records, 42 catalogue-only official-source records and 96 Karnataka budget-derived discovery leads. The 96 budget leads are model-classified and not human-reviewed; they must be verified with the department. Only four records are rule-screened. Use [official myScheme search](https://search.myscheme.gov.in/) for the current full Central + State/UT catalogue.
 
 ## License
 
