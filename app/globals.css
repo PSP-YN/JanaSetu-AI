@@ -686,3 +686,7 @@ input, select, textarea { min-height: 44px; }
 .intake-heading > p {
   color: #594331 !important;
 }
+
+
+/* Axe: intake helper copy is 10px; use a dark neutral that clears 4.5:1. */
+.intake-heading > p { color: #594331 !important; }
