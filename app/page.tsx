@@ -290,6 +290,11 @@ export default function Home() {
   const [openDataError, setOpenDataError] = useState("");
 
   const t = (key: string) => COPY[language][key] || COPY.en[key] || key;
+
+  useEffect(() => {
+    const locale: Record<LanguageCode, string> = { en: "en-IN", hi: "hi-IN", kn: "kn-IN", ta: "ta-IN", te: "te-IN", ml: "ml-IN" };
+    document.documentElement.lang = locale[language] || "en-IN";
+  }, [language]);
   const activeResults = useMemo(() => {
     const matches = (scheme: (typeof SCHEMES)[number]) => {
       const matchesText = [scheme.name, scheme.category, scheme.summary, scheme.ministry, scheme.geography].join(" ").toLowerCase().includes(query.toLowerCase());
@@ -576,7 +581,7 @@ export default function Home() {
         </div>
       </aside>
 
-      <main className="main-area">
+      <main className="main-area" id="main-content" data-language={language}>
         <header className="topbar">
           <div className="topbar-left">
             <button className="mobile-menu" onClick={() => setShowMobileNav(true)} aria-label="Open navigation"><Menu size={20}/></button>
