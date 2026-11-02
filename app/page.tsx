@@ -676,7 +676,7 @@ export default function Home() {
               </div>
               <aside className="profile-aside">
                 <div className="panel aside-card">
-                  <div className="progress-ring" style={{ background: "#dce8d9", border: "4px solid #2d684b" }}><div><strong>{progress}%</strong><small>complete</small></div></div>
+                  <div className="progress-ring" style={{ background: "#f6d6b8", border: "4px solid #c45a12" }}><div><strong>{progress}%</strong><small>complete</small></div></div>
                   <h3>{t("profileReady")}</h3><p>More complete answers reduce unknown screening conditions. You can leave any field blank and return later.</p>
                 </div>
                 <div className="panel aside-card privacy-card"><ShieldCheck size={22}/><h3>{t("privacyTitle")}</h3><p>Your profile, assessments and drafts stay in this browser. Screening and text extraction run locally in this prototype. Browser speech recognition may use your browser provider. When you use a government portal, that portal receives whatever you choose to enter or submit.</p><span>Prototype data boundary</span></div>
