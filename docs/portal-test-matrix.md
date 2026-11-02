@@ -13,17 +13,17 @@
 
 | Fixture | Form shape | Expected result | Status |
 |---|---|---|---|
-| Basic HTML | Label + input text, number, select | Correct labelled fields fill | Not run |
+| Basic HTML | Label + input text, number, select | Correct labelled fields fill | Automated synthetic fixture added; CI execution pending |
 | Radio groups | Gender / rural-urban radio labels | Only exact unambiguous option selected | Not run |
 | Checkboxes | Boolean consent / declarations | Never infer consent; leave declaration unchecked | Not run |
 | React controlled fields | Input value setter + input/change events | Framework state updates; visible value persists | Not run |
 | Vue controlled fields | v-model fields | Visible value and app state agree | Not run |
 | Dynamic form | Fields added after initial page load | Fill uses current visible DOM only | Not run |
-| Duplicate labels | Multiple applicant/household name fields | Ambiguous matches skipped | Not run |
+| Duplicate labels | Multiple applicant/household name fields | Ambiguous matches skipped | Automated synthetic fixture added; CI execution pending |
 | Localized labels | Hindi/Kannada/Tamil/Telugu/Malayalam labels | Exact aliases map; unknown labels skipped | Not run |
 | Select options | Different labels/value casing | Only exact semantic match; no first-option fallback | Not run |
 | Iframe / shadow DOM | Cross-origin iframe and shadow root | Unsupported contexts skipped, no broad traversal | Not run |
-| Sensitive fields | OTP, CAPTCHA, Aadhaar, bank, password, file | Always skipped | Not run |
+| Sensitive fields | OTP, CAPTCHA, Aadhaar, bank, password, file | Always skipped | Automated synthetic fixture added; CI execution pending |
 | Hostile page | deceptive labels, offscreen/hidden/disabled inputs | Hidden/disabled and ambiguous fields skipped | Not run |
 | Non-government origin | lookalike hostname and HTTP | Fill blocked | Not run |
 
