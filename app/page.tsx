@@ -74,6 +74,49 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     applicationsTitle: "Application workspace", applicationsText: "Drafts are preparation records. Nothing here has been submitted to a government portal.",
     language: "Language", allIndia: "Designed for every State and Union Territory", catalogue: "Source-linked Central + Karnataka starter catalogue · partial coverage",
     official: "Official decision remains with the department", noUpload: "Files are not uploaded"
+    skip: "Skip to main content",
+    benefitsAccess: "BENEFITS ACCESS",
+    workspace: "GOVERNMENT BENEFITS WORKSPACE",
+    independent: "Independent public-service navigator",
+    localFirst: "Local-first prototype",
+    backup: "Backup",
+    restore: "Restore",
+    evidence: "Evidence linked",
+    nextReady: "Next action ready",
+    noSensitive: "No Aadhaar or bank-account number required in this prototype.",
+    ecosystem: "BUILT FOR THE REAL PUBLIC-SERVICE ECOSYSTEM",
+    prepLayer: "A preparation layer — not another government portal.",
+    ecosystemText: "Use JanaSetu to organise your evidence and next steps. Official platforms and departments remain authoritative for scheme information, document services and application submission.",
+    schemeDiscovery: "Scheme discovery",
+    govServices: "Government services",
+    digitalDocs: "Digital documents",
+    assistedAccess: "Assisted access",
+    startSituation: "START WITH YOUR SITUATION",
+    intakeNote: "Text extraction is a suggestion. Check every field. Browser speech recognition may use your browser provider.",
+    speak: "Speak",
+    catalogueEntries: "Catalogue entries",
+    stateSupport: "State/UT selection supported",
+    indianLanguages: "English + 5 Indian languages",
+    draftApps: "Draft applications",
+    browserBackup: "Browser-only · backup to move devices",
+    gettingStarted: "GETTING STARTED",
+    createStep: "Create your citizen profile",
+    assessmentStep: "Run an evidence-led assessment",
+    prepareStep: "Prepare your next action",
+    profileCompleteness: "Profile completeness",
+    builtTrust: "BUILT AROUND TRUST",
+    trustTitle: "Know why. Know what’s next.",
+    unknown: "Unknown stays unknown",
+    sourceRules: "Source-linked rules",
+    humanApproval: "Human approval before action",
+    readApproach: "Read our approach",
+    curated: "CURATED NATIONAL CATALOGUE",
+    exploreAll: "Explore all",
+    passport: "CITIZEN PASSPORT",
+    privacyBoundary: "Prototype data boundary",
+    intelligence: "SCHEME INTELLIGENCE",
+    execution: "EXECUTION TRACE",
+    agentActions: "What the agent did",
   },
   hi: {
     overview: "अवलोकन", discover: "लाभ खोजें", profile: "मेरी प्रोफ़ाइल", documents: "दस्तावेज़",
@@ -94,6 +137,49 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     applicationsTitle: "आवेदन कार्यक्षेत्र", applicationsText: "ये तैयारी के ड्राफ़्ट हैं; कोई आवेदन सरकारी पोर्टल पर जमा नहीं हुआ है।",
     language: "भाषा", allIndia: "हर राज्य और केंद्र शासित प्रदेश के लिए", catalogue: "चयनित केंद्रीय योजनाओं का पायलट",
     official: "अंतिम निर्णय संबंधित विभाग का होगा", noUpload: "फ़ाइलें अपलोड नहीं होतीं"
+    skip: "मुख्य सामग्री पर जाएँ",
+    benefitsAccess: "लाभ तक पहुँच",
+    workspace: "सरकारी लाभ कार्यक्षेत्र",
+    independent: "स्वतंत्र सार्वजनिक सेवा मार्गदर्शक",
+    localFirst: "स्थानीय-प्रथम प्रोटोटाइप",
+    backup: "बैकअप",
+    restore: "पुनर्स्थापित करें",
+    evidence: "स्रोत प्रमाण जुड़ा है",
+    nextReady: "अगला कदम तैयार",
+    noSensitive: "इस प्रोटोटाइप में आधार या बैंक खाता संख्या आवश्यक नहीं है।",
+    ecosystem: "वास्तविक सार्वजनिक सेवा व्यवस्था के लिए",
+    prepLayer: "तैयारी का माध्यम — कोई सरकारी पोर्टल नहीं।",
+    ecosystemText: "अपने प्रमाण और अगले कदम व्यवस्थित करने के लिए JanaSetu का उपयोग करें। योजनाओं, दस्तावेज़ सेवाओं और आवेदन जमा करने के लिए आधिकारिक विभाग ही प्रामाणिक हैं।",
+    schemeDiscovery: "योजना खोज",
+    govServices: "सरकारी सेवाएँ",
+    digitalDocs: "डिजिटल दस्तावेज़",
+    assistedAccess: "सहायता प्राप्त सेवा",
+    startSituation: "अपनी स्थिति से शुरू करें",
+    intakeNote: "पाठ से निकली जानकारी केवल सुझाव है। हर फ़ील्ड जाँचें। ब्राउज़र वॉइस सेवा ऑडियो संसाधित कर सकती है।",
+    speak: "बोलें",
+    catalogueEntries: "सूची में प्रविष्टियाँ",
+    stateSupport: "राज्य/केंद्रशासित प्रदेश चयन उपलब्ध",
+    indianLanguages: "अंग्रेज़ी + 5 भारतीय भाषाएँ",
+    draftApps: "आवेदन के ड्राफ़्ट",
+    browserBackup: "केवल ब्राउज़र में · डिवाइस बदलने के लिए बैकअप",
+    gettingStarted: "शुरू करें",
+    createStep: "अपनी नागरिक प्रोफ़ाइल बनाएँ",
+    assessmentStep: "प्रमाण-आधारित आकलन चलाएँ",
+    prepareStep: "अगला कदम तैयार करें",
+    profileCompleteness: "प्रोफ़ाइल पूर्णता",
+    builtTrust: "विश्वास को ध्यान में रखकर",
+    trustTitle: "कारण जानें। अगला कदम समझें।",
+    unknown: "अज्ञात जानकारी अज्ञात ही रहेगी",
+    sourceRules: "स्रोत-संदर्भित नियम",
+    humanApproval: "कार्रवाई से पहले मानव स्वीकृति",
+    readApproach: "हमारा तरीका पढ़ें",
+    curated: "राष्ट्रीय योजना सूची",
+    exploreAll: "सभी देखें",
+    passport: "नागरिक प्रोफ़ाइल",
+    privacyBoundary: "प्रोटोटाइप डेटा सीमा",
+    intelligence: "योजना जानकारी",
+    execution: "कार्रवाई का विवरण",
+    agentActions: "सिस्टम ने क्या किया",
   },
   kn: {
     overview: "ಅವಲೋಕನ", discover: "ಸೌಲಭ್ಯಗಳನ್ನು ಹುಡುಕಿ", profile: "ನನ್ನ ಪ್ರೊಫೈಲ್", documents: "ದಾಖಲೆಗಳು",
@@ -114,6 +200,49 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     applicationsTitle: "ಅರ್ಜಿ ಕಾರ್ಯಕ್ಷೇತ್ರ", applicationsText: "ಇವು ಕರಡು ದಾಖಲೆಗಳು ಮಾತ್ರ; ಸರ್ಕಾರಿ ಪೋರ್ಟಲ್‌ಗೆ ಸಲ್ಲಿಸಲಾಗಿಲ್ಲ.",
     language: "ಭಾಷೆ", allIndia: "ಪ್ರತಿ ರಾಜ್ಯ ಮತ್ತು ಕೇಂದ್ರಾಡಳಿತ ಪ್ರದೇಶಕ್ಕಾಗಿ", catalogue: "ಆಯ್ದ ಕೇಂದ್ರ ಯೋಜನೆಗಳ ಪೈಲಟ್",
     official: "ಅಂತಿಮ ನಿರ್ಧಾರ ಸಂಬಂಧಿತ ಇಲಾಖೆಯದು", noUpload: "ಫೈಲ್ ಅಪ್‌ಲೋಡ್ ಆಗುವುದಿಲ್ಲ"
+    skip: "ಮುಖ್ಯ ವಿಷಯಕ್ಕೆ ತೆರಳಿ",
+    benefitsAccess: "ಸೌಲಭ್ಯಗಳ ಪ್ರವೇಶ",
+    workspace: "ಸರ್ಕಾರಿ ಸೌಲಭ್ಯ ಕಾರ್ಯಕ್ಷೇತ್ರ",
+    independent: "ಸ್ವತಂತ್ರ ಸಾರ್ವಜನಿಕ ಸೇವಾ ಮಾರ್ಗದರ್ಶಿ",
+    localFirst: "ಸ್ಥಳೀಯ-ಪ್ರಥಮ ಮಾದರಿ",
+    backup: "ಬ್ಯಾಕಪ್",
+    restore: "ಮರುಸ್ಥಾಪಿಸಿ",
+    evidence: "ಮೂಲ ಸಾಕ್ಷ್ಯ ಜೋಡಿಸಲಾಗಿದೆ",
+    nextReady: "ಮುಂದಿನ ಕ್ರಮ ಸಿದ್ಧ",
+    noSensitive: "ಈ ಮಾದರಿಯಲ್ಲಿ ಆಧಾರ್ ಅಥವಾ ಬ್ಯಾಂಕ್ ಖಾತೆ ಸಂಖ್ಯೆ ಅಗತ್ಯವಿಲ್ಲ.",
+    ecosystem: "ನೈಜ ಸಾರ್ವಜನಿಕ ಸೇವಾ ವ್ಯವಸ್ಥೆಗಾಗಿ ನಿರ್ಮಿಸಲಾಗಿದೆ",
+    prepLayer: "ಸಿದ್ಧತಾ ವೇದಿಕೆ — ಮತ್ತೊಂದು ಸರ್ಕಾರಿ ಪೋರ್ಟಲ್ ಅಲ್ಲ.",
+    ecosystemText: "ನಿಮ್ಮ ಸಾಕ್ಷ್ಯ ಮತ್ತು ಮುಂದಿನ ಹಂತಗಳನ್ನು ವ್ಯವಸ್ಥಿತಗೊಳಿಸಲು JanaSetu ಬಳಸಿ. ಯೋಜನೆ ಮಾಹಿತಿ, ದಾಖಲೆ ಸೇವೆ ಮತ್ತು ಅರ್ಜಿ ಸಲ್ಲಿಕೆಗೆ ಅಧಿಕೃತ ಇಲಾಖೆಗಳೇ ಅಂತಿಮ ಮೂಲ.",
+    schemeDiscovery: "ಯೋಜನೆ ಹುಡುಕಾಟ",
+    govServices: "ಸರ್ಕಾರಿ ಸೇವೆಗಳು",
+    digitalDocs: "ಡಿಜಿಟಲ್ ದಾಖಲೆಗಳು",
+    assistedAccess: "ಸಹಾಯಿತ ಸೇವೆ",
+    startSituation: "ನಿಮ್ಮ ಪರಿಸ್ಥಿತಿಯಿಂದ ಪ್ರಾರಂಭಿಸಿ",
+    intakeNote: "ಪಠ್ಯದಿಂದ ಪಡೆದ ಮಾಹಿತಿ ಕೇವಲ ಸಲಹೆ. ಪ್ರತಿಯೊಂದು ಕ್ಷೇತ್ರ ಪರಿಶೀಲಿಸಿ. ಬ್ರೌಸರ್ ಧ್ವನಿ ಸೇವೆ ಆಡಿಯೊವನ್ನು ಸಂಸ್ಕರಿಸಬಹುದು.",
+    speak: "ಮಾತನಾಡಿ",
+    catalogueEntries: "ಪಟ್ಟಿಯ ದಾಖಲೆಗಳು",
+    stateSupport: "ರಾಜ್ಯ/ಕೇಂದ್ರಾಡಳಿತ ಪ್ರದೇಶ ಆಯ್ಕೆ ಲಭ್ಯ",
+    indianLanguages: "ಇಂಗ್ಲಿಷ್ + 5 ಭಾರತೀಯ ಭಾಷೆಗಳು",
+    draftApps: "ಅರ್ಜಿ ಕರಡುಗಳು",
+    browserBackup: "ಬ್ರೌಸರ್‌ನಲ್ಲೇ · ಸಾಧನ ಬದಲಾವಣೆಗೆ ಬ್ಯಾಕಪ್",
+    gettingStarted: "ಪ್ರಾರಂಭಿಸಿ",
+    createStep: "ನಿಮ್ಮ ನಾಗರಿಕ ಪ್ರೊಫೈಲ್ ರಚಿಸಿ",
+    assessmentStep: "ಸಾಕ್ಷ್ಯಾಧಾರಿತ ಮೌಲ್ಯಮಾಪನ ನಡೆಸಿ",
+    prepareStep: "ಮುಂದಿನ ಕ್ರಮ ಸಿದ್ಧಪಡಿಸಿ",
+    profileCompleteness: "ಪ್ರೊಫೈಲ್ ಪೂರ್ಣತೆ",
+    builtTrust: "ನಂಬಿಕೆಯನ್ನು ಆಧರಿಸಿ",
+    trustTitle: "ಕಾರಣ ತಿಳಿಯಿರಿ. ಮುಂದಿನ ಹಂತ ತಿಳಿಯಿರಿ.",
+    unknown: "ಅಜ್ಞಾತವು ಅಜ್ಞಾತವಾಗಿಯೇ ಉಳಿಯುತ್ತದೆ",
+    sourceRules: "ಮೂಲ-ಸೂಚನೆಯ ನಿಯಮಗಳು",
+    humanApproval: "ಕ್ರಮಕ್ಕೂ ಮೊದಲು ಮಾನವ ಅನುಮೋದನೆ",
+    readApproach: "ನಮ್ಮ ವಿಧಾನ ಓದಿ",
+    curated: "ರಾಷ್ಟ್ರೀಯ ಯೋಜನೆಗಳ ಪಟ್ಟಿ",
+    exploreAll: "ಎಲ್ಲವನ್ನೂ ನೋಡಿ",
+    passport: "ನಾಗರಿಕ ಪ್ರೊಫೈಲ್",
+    privacyBoundary: "ಮಾದರಿ ಡೇಟಾ ಮಿತಿ",
+    intelligence: "ಯೋಜನೆ ಮಾಹಿತಿ",
+    execution: "ಕಾರ್ಯಗತಗೊಳಿಸುವ ಹಾದಿ",
+    agentActions: "ಸಿಸ್ಟಮ್ ಮಾಡಿದ ಕೆಲಸ",
   },
   ta: {
     overview: "கண்ணோட்டம்", discover: "நலத்திட்டங்களைத் தேடு", profile: "எனது சுயவிவரம்", documents: "ஆவணங்கள்",
@@ -134,6 +263,49 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     applicationsTitle: "விண்ணப்பப் பணியிடம்", applicationsText: "இவை தயாரிப்பு வரைவுகள் மட்டுமே; அரசு தளத்தில் சமர்ப்பிக்கப்படவில்லை.",
     language: "மொழி", allIndia: "அனைத்து மாநிலங்கள் மற்றும் யூனியன் பிரதேசங்களுக்காக", catalogue: "தேர்ந்தெடுக்கப்பட்ட மத்திய திட்டங்களின் முன்னோடி",
     official: "இறுதி முடிவு சம்பந்தப்பட்ட துறையின்து", noUpload: "கோப்புகள் பதிவேற்றப்படாது"
+    skip: "முக்கிய உள்ளடக்கத்திற்குச் செல்",
+    benefitsAccess: "நலன்களை அணுகுதல்",
+    workspace: "அரசு நலன் பணியிடம்",
+    independent: "சுயாதீன பொது சேவை வழிகாட்டி",
+    localFirst: "உள்ளூரை முதன்மைப்படுத்தும் முன்மாதிரி",
+    backup: "காப்புப்பிரதி",
+    restore: "மீட்டமை",
+    evidence: "ஆதாரம் இணைக்கப்பட்டது",
+    nextReady: "அடுத்த செயல் தயார்",
+    noSensitive: "இந்த முன்மாதிரியில் ஆதார் அல்லது வங்கிக் கணக்கு எண் தேவையில்லை.",
+    ecosystem: "உண்மையான பொது சேவை அமைப்பிற்காக உருவாக்கப்பட்டது",
+    prepLayer: "தயாரிப்பு உதவி தளம் — மற்றொரு அரசு இணையதளம் அல்ல.",
+    ecosystemText: "உங்கள் ஆதாரங்களையும் அடுத்த படிகளையும் ஒழுங்குபடுத்த JanaSetu-ஐப் பயன்படுத்துங்கள். திட்டத் தகவல், ஆவணச் சேவைகள் மற்றும் விண்ணப்பச் சமர்ப்பிப்புக்கு அதிகாரப்பூர்வ துறைகளே ஆதாரம்.",
+    schemeDiscovery: "திட்டத் தேடல்",
+    govServices: "அரசு சேவைகள்",
+    digitalDocs: "மின்னணு ஆவணங்கள்",
+    assistedAccess: "உதவியுடன் அணுகல்",
+    startSituation: "உங்கள் சூழ்நிலையிலிருந்து தொடங்குங்கள்",
+    intakeNote: "உரையிலிருந்து எடுக்கப்படும் தகவல் ஒரு பரிந்துரை மட்டுமே. ஒவ்வொரு புலத்தையும் சரிபார்க்கவும். உலாவி குரல் சேவை ஒலியைச் செயலாக்கலாம்.",
+    speak: "பேசுங்கள்",
+    catalogueEntries: "பட்டியல் பதிவுகள்",
+    stateSupport: "மாநிலம்/யூனியன் பிரதேசத் தேர்வு ஆதரவு",
+    indianLanguages: "ஆங்கிலம் + 5 இந்திய மொழிகள்",
+    draftApps: "விண்ணப்ப வரைவு",
+    browserBackup: "உலாவியில் மட்டும் · சாதனம் மாற்ற காப்புப்பிரதி",
+    gettingStarted: "தொடங்குதல்",
+    createStep: "குடிமகன் சுயவிவரத்தை உருவாக்கு",
+    assessmentStep: "ஆதார அடிப்படையிலான மதிப்பீட்டை இயக்கு",
+    prepareStep: "அடுத்த செயலைத் தயார் செய்",
+    profileCompleteness: "சுயவிவர நிறைவு",
+    builtTrust: "நம்பிக்கையை மையமாகக் கொண்டு",
+    trustTitle: "ஏன் என்பதை அறிக. அடுத்து என்ன என்பதை அறிக.",
+    unknown: "தெரியாதது தெரியாததாகவே இருக்கும்",
+    sourceRules: "ஆதாரத்துடன் இணைந்த விதிகள்",
+    humanApproval: "செயலுக்கு முன் மனித ஒப்புதல்",
+    readApproach: "எங்கள் அணுகுமுறையைப் படிக்கவும்",
+    curated: "தேசிய திட்டப் பட்டியல்",
+    exploreAll: "அனைத்தையும் காண்க",
+    passport: "குடிமகன் சுயவிவரம்",
+    privacyBoundary: "முன்மாதிரி தரவு வரம்பு",
+    intelligence: "திட்டத் தகவல்",
+    execution: "செயல்பாட்டு தடம்",
+    agentActions: "அமைப்பு செய்தவை",
   },
   te: {
     overview: "అవలోకనం", discover: "ప్రయోజనాలను కనుగొనండి", profile: "నా ప్రొఫైల్", documents: "పత్రాలు",
@@ -154,6 +326,49 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     applicationsTitle: "దరఖాస్తుల కార్యస్థలం", applicationsText: "ఇవి తయారీ డ్రాఫ్ట్‌లు మాత్రమే; ప్రభుత్వ పోర్టల్‌కు సమర్పించబడలేదు.",
     language: "భాష", allIndia: "అన్ని రాష్ట్రాలు మరియు కేంద్రపాలిత ప్రాంతాల కోసం", catalogue: "ఎంచుకున్న కేంద్ర పథకాల పైలట్",
     official: "చివరి నిర్ణయం సంబంధిత శాఖదే", noUpload: "ఫైళ్లు అప్‌లోడ్ కావు"
+    skip: "ప్రధాన విషయానికి వెళ్లండి",
+    benefitsAccess: "ప్రయోజనాల ప్రాప్యత",
+    workspace: "ప్రభుత్వ ప్రయోజనాల కార్యస్థలం",
+    independent: "స్వతంత్ర ప్రజా సేవల మార్గదర్శి",
+    localFirst: "స్థానిక ప్రాధాన్య నమూనా",
+    backup: "బ్యాకప్",
+    restore: "పునరుద్ధరించు",
+    evidence: "ఆధారాలు జోడించబడ్డాయి",
+    nextReady: "తదుపరి చర్య సిద్ధం",
+    noSensitive: "ఈ నమూనాలో ఆధార్ లేదా బ్యాంకు ఖాతా సంఖ్య అవసరం లేదు.",
+    ecosystem: "నిజమైన ప్రజా సేవల వ్యవస్థ కోసం నిర్మించబడింది",
+    prepLayer: "సిద్ధత వేదిక — మరో ప్రభుత్వ పోర్టల్ కాదు.",
+    ecosystemText: "మీ ఆధారాలు, తదుపరి చర్యలను క్రమబద్ధం చేయడానికి JanaSetu ఉపయోగించండి. పథకాల సమాచారం, పత్ర సేవలు, దరఖాస్తుల సమర్పణకు అధికారిక శాఖలే ప్రామాణికం.",
+    schemeDiscovery: "పథకాల అన్వేషణ",
+    govServices: "ప్రభుత్వ సేవలు",
+    digitalDocs: "డిజిటల్ పత్రాలు",
+    assistedAccess: "సహాయక ప్రాప్యత",
+    startSituation: "మీ పరిస్థితితో ప్రారంభించండి",
+    intakeNote: "వచనం నుంచి తీసిన సమాచారం సూచన మాత్రమే. ప్రతి ఫీల్డ్‌ను తనిఖీ చేయండి. బ్రౌజర్ వాయిస్ సేవ ఆడియోను ప్రాసెస్ చేయవచ్చు.",
+    speak: "మాట్లాడండి",
+    catalogueEntries: "కేటలాగ్ నమోదులు",
+    stateSupport: "రాష్ట్రం/కేంద్రపాలిత ప్రాంతం ఎంపిక",
+    indianLanguages: "ఆంగ్లం + 5 భారతీయ భాషలు",
+    draftApps: "దరఖాస్తు ముసాయిదాలు",
+    browserBackup: "బ్రౌజర్‌లో మాత్రమే · పరికరం మార్చడానికి బ్యాకప్",
+    gettingStarted: "ప్రారంభించండి",
+    createStep: "మీ పౌర ప్రొఫైల్ సృష్టించండి",
+    assessmentStep: "ఆధారాలతో ప్రయోజన అంచనా నడపండి",
+    prepareStep: "తదుపరి చర్య సిద్ధం చేయండి",
+    profileCompleteness: "ప్రొఫైల్ పూర్తి స్థాయి",
+    builtTrust: "నమ్మకాన్ని ఆధారంగా చేసుకుని",
+    trustTitle: "ఎందుకో తెలుసుకోండి. తర్వాత ఏమిటో తెలుసుకోండి.",
+    unknown: "తెలియనిది తెలియనిదిగానే ఉంటుంది",
+    sourceRules: "మూల ఆధారిత నియమాలు",
+    humanApproval: "చర్యకు ముందు మానవ ఆమోదం",
+    readApproach: "మా విధానాన్ని చదవండి",
+    curated: "జాతీయ పథకాల జాబితా",
+    exploreAll: "అన్నీ చూడండి",
+    passport: "పౌర ప్రొఫైల్",
+    privacyBoundary: "నమూనా డేటా పరిమితి",
+    intelligence: "పథకాల సమాచారం",
+    execution: "కార్యాచరణ ట్రేస్",
+    agentActions: "సిస్టమ్ చేసిన పని",
   },
   ml: {
     overview: "അവലോകനം", discover: "ആനുകൂല്യങ്ങൾ കണ്ടെത്തുക", profile: "എന്റെ പ്രൊഫൈൽ", documents: "രേഖകൾ",
@@ -229,6 +444,49 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     distanceCourse: "നിങ്ങളുടെ കോഴ്‌സ് ഡിപ്ലോമയോ ദൂര/കറസ്പോണ്ടൻസ് കോഴ്‌സോ ആണോ?",
     noSensitive: "ഇവിടെ ആധാർ, ബാങ്ക് അക്കൗണ്ട് അല്ലെങ്കിൽ രേഖാ നമ്പർ ചോദിക്കുന്നില്ല.",
     noAfterReview: "പട്ടിക പരിശോധിച്ചതിന് ശേഷം ഇല്ല",
+    skip: "പ്രധാന ഉള്ളടക്കത്തിലേക്ക് പോകുക",
+    benefitsAccess: "ആനുകൂല്യങ്ങളിലേക്കുള്ള പ്രവേശനം",
+    workspace: "സർക്കാർ ആനുകൂല്യ പ്രവർത്തനമേഖല",
+    independent: "സ്വതന്ത്ര പൊതുസേവന മാർഗദർശി",
+    localFirst: "ലോക്കൽ-ഫസ്റ്റ് മാതൃക",
+    backup: "ബാക്കപ്പ്",
+    restore: "പുനഃസ്ഥാപിക്കുക",
+    evidence: "തെളിവ് ബന്ധിപ്പിച്ചു",
+    nextReady: "അടുത്ത നടപടി തയ്യാറാണ്",
+    noSensitive: "ഈ മാതൃകയിൽ ആധാർ അല്ലെങ്കിൽ ബാങ്ക് അക്കൗണ്ട് നമ്പർ ആവശ്യമില്ല.",
+    ecosystem: "യഥാർത്ഥ പൊതുസേവന സംവിധാനത്തിനായി നിർമ്മിച്ചത്",
+    prepLayer: "തയ്യാറെടുപ്പ് സഹായം — മറ്റൊരു സർക്കാർ പോർട്ടൽ അല്ല.",
+    ecosystemText: "തെളിവുകളും അടുത്ത നടപടികളും ക്രമീകരിക്കാൻ JanaSetu ഉപയോഗിക്കുക. പദ്ധതി വിവരങ്ങൾക്കും രേഖാ സേവനങ്ങൾക്കും അപേക്ഷ സമർപ്പണത്തിനും ഔദ്യോഗിക വകുപ്പുകളാണ് പ്രാമാണികം.",
+    schemeDiscovery: "പദ്ധതി കണ്ടെത്തൽ",
+    govServices: "സർക്കാർ സേവനങ്ങൾ",
+    digitalDocs: "ഡിജിറ്റൽ രേഖകൾ",
+    assistedAccess: "സഹായത്തോടെയുള്ള പ്രവേശനം",
+    startSituation: "നിങ്ങളുടെ സാഹചര്യത്തിൽ നിന്ന് ആരംഭിക്കുക",
+    intakeNote: "ടെക്സ്റ്റിൽ നിന്ന് ലഭിക്കുന്ന വിവരങ്ങൾ നിർദ്ദേശം മാത്രമാണ്. ഓരോ ഫീൽഡും പരിശോധിക്കുക. ബ്രൗസർ വോയ്സ് സേവനം ഓഡിയോ പ്രോസസ് ചെയ്യാം.",
+    speak: "സംസാരിക്കുക",
+    catalogueEntries: "കാറ്റലോഗ് രേഖകൾ",
+    stateSupport: "സംസ്ഥാനം/കേന്ദ്രഭരണ പ്രദേശം തിരഞ്ഞെടുക്കാം",
+    indianLanguages: "ഇംഗ്ലീഷ് + 5 ഇന്ത്യൻ ഭാഷകൾ",
+    draftApps: "അപേക്ഷാ കരടുകൾ",
+    browserBackup: "ബ്രൗസറിൽ മാത്രം · ഉപകരണം മാറ്റാൻ ബാക്കപ്പ്",
+    gettingStarted: "തുടങ്ങാം",
+    createStep: "നിങ്ങളുടെ പൗര പ്രൊഫൈൽ സൃഷ്ടിക്കുക",
+    assessmentStep: "തെളിവ് അടിസ്ഥാനമാക്കിയ വിലയിരുത്തൽ നടത്തുക",
+    prepareStep: "അടുത്ത നടപടി തയ്യാറാക്കുക",
+    profileCompleteness: "പ്രൊഫൈൽ പൂർത്തീകരണം",
+    builtTrust: "വിശ്വാസത്തെ അടിസ്ഥാനമാക്കി",
+    trustTitle: "കാരണം അറിയുക. അടുത്ത നടപടി മനസ്സിലാക്കുക.",
+    unknown: "അറിയാത്തത് അറിയാത്തതായിരിക്കും",
+    sourceRules: "ഉറവിടം ബന്ധിപ്പിച്ച നിയമങ്ങൾ",
+    humanApproval: "നടപടിക്ക് മുമ്പ് മനുഷ്യ അംഗീകാരം",
+    readApproach: "ഞങ്ങളുടെ സമീപനം വായിക്കുക",
+    curated: "ദേശീയ പദ്ധതികളുടെ പട്ടിക",
+    exploreAll: "എല്ലാം കാണുക",
+    passport: "പൗര പ്രൊഫൈൽ",
+    privacyBoundary: "മാതൃകാ ഡാറ്റ പരിധി",
+    intelligence: "പദ്ധതി വിവരങ്ങൾ",
+    execution: "പ്രവർത്തന ട്രേസ്",
+    agentActions: "സിസ്റ്റം ചെയ്ത പ്രവർത്തനം",
   },
 };
 
@@ -551,14 +809,14 @@ export default function Home() {
 
   return (
     <div className="app-shell">
-      <a className="skip-link" href="#main-content">Skip to main content</a>
+      <a className="skip-link" href="#main-content">{t("skip").toUpperCase()}</a>
       <aside className={"sidebar " + (showMobileNav ? "sidebar-open" : "")}>
         <div className="brand">
           <div className="brand-mark"><span>ज</span></div>
-          <div><strong>JanaSetu</strong><small>BENEFITS ACCESS</small></div>
+          <div><strong>JanaSetu</strong><small>{t("benefitsAccess").toUpperCase()}</small></div>
           <button className="mobile-close" onClick={() => setShowMobileNav(false)} aria-label="Close navigation"><X size={18}/></button>
         </div>
-        <div className="sidebar-kicker">GOVERNMENT BENEFITS WORKSPACE</div>
+        <div className="sidebar-kicker">{t("workspace").toUpperCase()}</div>
         <nav className="side-nav">
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -575,7 +833,7 @@ export default function Home() {
           <a href="https://locator.csccloud.in/" target="_blank" rel="noreferrer">Find a CSC <ArrowUpRight size={13}/></a>
         </div>
         <div className="sidebar-footer">
-          <ShieldCheck size={15}/><span>Independent public-service navigator</span><span className="footer-policy-links"><a href="/privacy">Privacy</a><a href="/terms">Terms</a></span>
+          <ShieldCheck size={15}/><span>{t("independent").toUpperCase()}</span><span className="footer-policy-links"><a href="/privacy">Privacy</a><a href="/terms">Terms</a></span>
         </div>
       </aside>
 
@@ -626,21 +884,21 @@ export default function Home() {
 
             <section className="ecosystem-panel">
               <div>
-                <div className="eyebrow">BUILT FOR THE REAL PUBLIC-SERVICE ECOSYSTEM</div>
-                <h2>A preparation layer — not another government portal.</h2>
-                <p>Use JanaSetu to organise your evidence and next steps. Official platforms and departments remain authoritative for scheme information, document services and application submission.</p>
+                <div className="eyebrow">{t("ecosystem").toUpperCase()}</div>
+                <h2>{t("prepLayer").toUpperCase()}</h2>
+                <p>{t("ecosystemText").toUpperCase()}</p>
               </div>
               <div className="ecosystem-links">
-                <a href="https://www.myscheme.gov.in/" target="_blank" rel="noreferrer">myScheme <ExternalLink size={12}/><small>Scheme discovery</small></a>
-                <a href="https://web.umang.gov.in/" target="_blank" rel="noreferrer">UMANG <ExternalLink size={12}/><small>Government services</small></a>
-                <a href="https://www.digilocker.gov.in/" target="_blank" rel="noreferrer">DigiLocker <ExternalLink size={12}/><small>Digital documents</small></a>
-                <a href="https://locator.csccloud.in/" target="_blank" rel="noreferrer">Common Service Centres <ExternalLink size={12}/><small>Assisted access</small></a>
+                <a href="https://www.myscheme.gov.in/" target="_blank" rel="noreferrer">myScheme <ExternalLink size={12}/><small>{t("schemeDiscovery").toUpperCase()}</small></a>
+                <a href="https://web.umang.gov.in/" target="_blank" rel="noreferrer">UMANG <ExternalLink size={12}/><small>{t("govServices").toUpperCase()}</small></a>
+                <a href="https://www.digilocker.gov.in/" target="_blank" rel="noreferrer">DigiLocker <ExternalLink size={12}/><small>{t("digitalDocs").toUpperCase()}</small></a>
+                <a href="https://locator.csccloud.in/" target="_blank" rel="noreferrer">Common Service Centres <ExternalLink size={12}/><small>{t("assistedAccess").toUpperCase()}</small></a>
               </div>
             </section>
 
             <section className="panel intake-panel">
               <div className="intake-heading">
-                <div className="eyebrow">START WITH YOUR SITUATION</div>
+                <div className="eyebrow">{t("startSituation").toUpperCase()}</div>
                 <h2>{t("intakeTitle")}</h2>
                 <p>{t("intakeDescription")}</p>
               </div>
@@ -672,36 +930,36 @@ export default function Home() {
             </section>
 
             <div className="metric-grid">
-              <div className="metric-card"><div className="metric-icon green"><BookOpen size={18}/></div><div><strong>{SCHEMES.length.toString().padStart(2, "0")}</strong><span>Catalogue entries</span></div><small>{SCHEMES.filter((item) => item.catalogueStatus === "rule-screened").length} rule-screened · remainder require verification</small></div>
-              <div className="metric-card"><div className="metric-icon sand"><Globe2 size={18}/></div><div><strong>36</strong><span>{t("coverage")}</span></div><small>State/UT selection supported</small></div>
-              <div className="metric-card"><div className="metric-icon clay"><MessageCircle size={18}/></div><div><strong>06</strong><span>{t("languages")}</span></div><small>English + 5 Indian languages</small></div>
-              <div className="metric-card"><div className="metric-icon ink"><ShieldCheck size={18}/></div><div><strong>{applications.length.toString().padStart(2, "0")}</strong><span>Draft applications</span></div><small>Browser-only · backup to move devices</small></div>
+              <div className="metric-card"><div className="metric-icon green"><BookOpen size={18}/></div><div><strong>{SCHEMES.length.toString().padStart(2, "0")}</strong><span>{t("catalogueEntries").toUpperCase()}</span></div><small>{SCHEMES.filter((item) => item.catalogueStatus === "rule-screened").length} rule-screened · remainder require verification</small></div>
+              <div className="metric-card"><div className="metric-icon sand"><Globe2 size={18}/></div><div><strong>36</strong><span>{t("coverage")}</span></div><small>{t("stateSupport").toUpperCase()}</small></div>
+              <div className="metric-card"><div className="metric-icon clay"><MessageCircle size={18}/></div><div><strong>06</strong><span>{t("languages")}</span></div><small>{t("indianLanguages").toUpperCase()}</small></div>
+              <div className="metric-card"><div className="metric-icon ink"><ShieldCheck size={18}/></div><div><strong>{applications.length.toString().padStart(2, "0")}</strong><span>{t("draftApps").toUpperCase()}</span></div><small>{t("browserBackup").toUpperCase()}</small></div>
             </div>
 
             <div className="dashboard-grid">
               <section className="panel next-panel">
-                <div className="section-heading"><div><div className="eyebrow">GETTING STARTED</div><h2>{t("next")}</h2></div><span className="section-index">01—03</span></div>
+                <div className="section-heading"><div><div className="eyebrow">{t("gettingStarted").toUpperCase()}</div><h2>{t("next")}</h2></div><span className="section-index">01—03</span></div>
                 <div className="step-list">
-                  <div className="step-row"><div className="step-number">01</div><div className="step-copy"><strong>Create your citizen profile</strong><p>Share your State/UT, household and relevant circumstances.</p></div><button aria-label="Open citizen profile" onClick={() => setTab("profile")}><ArrowUpRight size={17}/></button></div>
-                  <div className="step-row"><div className="step-number">02</div><div className="step-copy"><strong>Run an evidence-led assessment</strong><p>Review matching rules, unknown answers and official sources.</p></div><button aria-label="Run benefits assessment" onClick={runAssessment} disabled={!profile.state}><ArrowUpRight size={17}/></button></div>
-                  <div className="step-row"><div className="step-number">03</div><div className="step-copy"><strong>Prepare your next action</strong><p>Build a checklist and keep a draft for your own review.</p></div><button aria-label="Open application workspace" onClick={() => setTab("applications")}><ArrowUpRight size={17}/></button></div>
+                  <div className="step-row"><div className="step-number">01</div><div className="step-copy"><strong>{t("createStep").toUpperCase()}</strong><p>Share your State/UT, household and relevant circumstances.</p></div><button aria-label="Open citizen profile" onClick={() => setTab("profile")}><ArrowUpRight size={17}/></button></div>
+                  <div className="step-row"><div className="step-number">02</div><div className="step-copy"><strong>{t("assessmentStep").toUpperCase()}</strong><p>Review matching rules, unknown answers and official sources.</p></div><button aria-label="Run benefits assessment" onClick={runAssessment} disabled={!profile.state}><ArrowUpRight size={17}/></button></div>
+                  <div className="step-row"><div className="step-number">03</div><div className="step-copy"><strong>{t("prepareStep").toUpperCase()}</strong><p>Build a checklist and keep a draft for your own review.</p></div><button aria-label="Open application workspace" onClick={() => setTab("applications")}><ArrowUpRight size={17}/></button></div>
                 </div>
-                <div className="profile-progress"><div className="progress-top"><span>Profile completeness</span><strong>{progress}%</strong></div><div className="progress-track"><span style={{ width: progress + "%" }}/></div><small>{profileProgress} of 7 essential profile fields provided</small></div>
+                <div className="profile-progress"><div className="progress-top"><span>{t("profileCompleteness").toUpperCase()}</span><strong>{progress}%</strong></div><div className="progress-track"><span style={{ width: progress + "%" }}/></div><small>{profileProgress} of 7 essential profile fields provided</small></div>
               </section>
               <section className="panel trust-panel">
-                <div className="trust-heading"><div className="trust-icon"><ShieldCheck size={22}/></div><div><div className="eyebrow">BUILT AROUND TRUST</div><h2>Know why. Know what’s next.</h2></div></div>
+                <div className="trust-heading"><div className="trust-icon"><ShieldCheck size={22}/></div><div><div className="eyebrow">{t("builtTrust").toUpperCase()}</div><h2>{t("trustTitle").toUpperCase()}</h2></div></div>
                 <p>Every screening result shows the rule, the profile evidence used and the official source to check before acting.</p>
                 <div className="trust-points"><span><Check size={14}/> Unknown stays unknown</span><span><Check size={14}/> Source-linked rules</span><span><Check size={14}/> Human approval before action</span></div>
                 <button className="text-button" onClick={() => setTab("about")}>Read our approach <ArrowRight size={15}/></button>
               </section>
             </div>
 
-            <div className="section-heading featured-heading"><div><div className="eyebrow">CURATED NATIONAL CATALOGUE</div><h2>{t("featured")}</h2></div><button className="text-button" onClick={() => setTab("discover")}>Explore all <ArrowRight size={15}/></button></div>
+            <div className="section-heading featured-heading"><div><div className="eyebrow">{t("curated").toUpperCase()}</div><h2>{t("featured")}</h2></div><button className="text-button" onClick={() => setTab("discover")}>Explore all <ArrowRight size={15}/></button></div>
             <div className="scheme-grid">{SCHEMES.slice(0, 3).map(renderSchemeCard)}</div>
           </>}
 
           {tab === "profile" && <section className="page-section">
-            <div className="page-title-row"><div><div className="eyebrow">CITIZEN PASSPORT</div><h1>{t("profileTitle")}</h1><p>{t("profileText")}</p></div><span className="private-chip"><LockKeyhole size={14}/> {t("localProfile")}</span></div>
+            <div className="page-title-row"><div><div className="eyebrow">{t("passport").toUpperCase()}</div><h1>{t("profileTitle")}</h1><p>{t("profileText")}</p></div><span className="private-chip"><LockKeyhole size={14}/> {t("localProfile")}</span></div>
             <div className="form-layout">
               <div className="panel form-panel">
                 <div className="form-section-title"><span>01</span><div><h2>{t("aboutYou")}</h2><p>{t("aboutYouText")}</p></div></div>
@@ -745,18 +1003,18 @@ export default function Home() {
                   <div className="progress-ring" style={{ background: "#f6d6b8", border: "4px solid #c45a12" }}><div><strong>{progress}%</strong><small>complete</small></div></div>
                   <h3>{t("profileReady")}</h3><p>More complete answers reduce unknown screening conditions. You can leave any field blank and return later.</p>
                 </div>
-                <div className="panel aside-card privacy-card"><ShieldCheck size={22}/><h3>{t("privacyTitle")}</h3><p>Your profile, assessments and drafts stay in this browser. Screening and text extraction run locally in this prototype. Browser speech recognition may use your browser provider. When you use a government portal, that portal receives whatever you choose to enter or submit.</p><span>Prototype data boundary</span></div>
+                <div className="panel aside-card privacy-card"><ShieldCheck size={22}/><h3>{t("privacyTitle")}</h3><p>Your profile, assessments and drafts stay in this browser. Screening and text extraction run locally in this prototype. Browser speech recognition may use your browser provider. When you use a government portal, that portal receives whatever you choose to enter or submit.</p><span>{t("privacyBoundary").toUpperCase()}</span></div>
               </aside>
             </div>
           </section>}
 
           {tab === "discover" && <section className="page-section">
-            <div className="page-title-row"><div><div className="eyebrow">SCHEME INTELLIGENCE</div><h1>{t("screening")}</h1><p>Discover possible pathways and inspect the rule evidence before preparing a draft.</p></div><button className="button button-primary" onClick={runAssessment} disabled={busy}>{busy ? <><span className="spinner"/> Working…</> : <><Sparkles size={16}/>{t("run")}</>}</button></div>
+            <div className="page-title-row"><div><div className="eyebrow">{t("intelligence").toUpperCase()}</div><h1>{t("screening")}</h1><p>Discover possible pathways and inspect the rule evidence before preparing a draft.</p></div><button className="button button-primary" onClick={runAssessment} disabled={busy}>{busy ? <><span className="spinner"/> Working…</> : <><Sparkles size={16}/>{t("run")}</>}</button></div>
             <div className="screening-summary">
               <div className="screen-summary-icon"><Activity size={20}/></div><div><strong>{assessments.length ? assessments.length + " relevant scheme records assessed" : "Your assessment is ready to run"}</strong><p>{assessments.length ? "The workflow used your saved profile and the current curated catalogue." : "Complete your profile first. The agent will select the applicable rule pathways."}</p></div><button className="text-button" onClick={() => setTab("profile")}>Edit profile <ArrowUpRight size={14}/></button>
             </div>
             {toolTrace.length > 0 && <div className="panel trace-panel">
-              <div className="section-heading"><div><div className="eyebrow">EXECUTION TRACE</div><h2>What the agent did</h2></div><span className="trace-count">{toolTrace.length} tool steps</span></div>
+              <div className="section-heading"><div><div className="eyebrow">{t("execution").toUpperCase()}</div><h2>{t("agentActions").toUpperCase()}</h2></div><span className="trace-count">{toolTrace.length} tool steps</span></div>
               <div className="trace-list">{toolTrace.map((item) => <div className="trace-row" key={item.id}><span className="trace-check"><Check size={13}/></span><div><strong>{item.agent}</strong><small>{item.tool} · {item.detail}</small></div><span className="trace-duration">{item.durationMs} ms</span></div>)}</div>
               <p className="trace-note">This prototype uses deterministic server-side tools and a rule-based planner; it does not call an external LLM or government API.</p>
             </div>}
