@@ -270,13 +270,52 @@ export default function Home() {
   const [showMobileNav, setShowMobileNav] = useState(false);
   const [expandedScheme, setExpandedScheme] = useState("");
   const [backupBusy, setBackupBusy] = useState(false);
+  const [openDataSchemes, setOpenDataSchemes] = useState<(typeof SCHEMES)[number][]>([]);
+  const [openDataTotal, setOpenDataTotal] = useState(4693);
+  const [openDataOffset, setOpenDataOffset] = useState(0);
+  const [openDataNext, setOpenDataNext] = useState<number | null>(0);
+  const [openDataLoading, setOpenDataLoading] = useState(false);
+  const [openDataError, setOpenDataError] = useState("");
 
   const t = (key: string) => COPY[language][key] || COPY.en[key] || key;
-  const activeResults = useMemo(() => SCHEMES.filter((scheme) => {
-    const matchesText = [scheme.name, scheme.category, scheme.summary, scheme.ministry, scheme.geography].join(" ").toLowerCase().includes(query.toLowerCase());
-    const matchesCategory = category === "All categories" || scheme.category === category;
-    return matchesText && matchesCategory;
-  }), [category, query]);
+  const activeResults = useMemo(() => {
+    const matches = (scheme: (typeof SCHEMES)[number]) => {
+      const matchesText = [scheme.name, scheme.category, scheme.summary, scheme.ministry, scheme.geography].join(" ").toLowerCase().includes(query.toLowerCase());
+      const matchesCategory = category === "All categories" || scheme.category.split(",").map((item) => item.trim()).includes(category);
+      return matchesText && matchesCategory;
+    };
+    const local = SCHEMES.filter(matches);
+    const names = new Set(local.map((scheme) => scheme.name.trim().toLowerCase()));
+    const external = openDataSchemes.filter((scheme) => {
+      const matchesCategory = category === "All categories" || scheme.category.split(",").map((item) => item.trim()).includes(category);
+      return matchesCategory && !names.has(scheme.name.trim().toLowerCase());
+    });
+    return [...local, ...external];
+  }, [category, query, openDataSchemes]);
+
+  useEffect(() => {
+    if (tab !== "discover") return;
+    const controller = new AbortController();
+    const timer = window.setTimeout(async () => {
+      setOpenDataLoading(true);
+      setOpenDataError("");
+      try {
+        const params = new URLSearchParams({ q: query, offset: String(openDataOffset), limit: "50" });
+        const response = await fetch("/api/schemes/open-data?" + params.toString(), { signal: controller.signal });
+        if (!response.ok) throw new Error("Open catalogue source unavailable. Use the official myScheme link while it recovers.");
+        const data = await response.json();
+        const records = Array.isArray(data.records) ? data.records as (typeof SCHEMES)[number][] : [];
+        setOpenDataTotal(Number(data.total || 4693));
+        setOpenDataNext(typeof data.nextOffset === "number" ? data.nextOffset : null);
+        setOpenDataSchemes((current) => openDataOffset === 0 ? records : [...current, ...records]);
+      } catch (error) {
+        if (!(error instanceof DOMException && error.name === "AbortError")) setOpenDataError(error instanceof Error ? error.message : "Unable to load open data.");
+      } finally {
+        if (!controller.signal.aborted) setOpenDataLoading(false);
+      }
+    }, query ? 300 : 0);
+    return () => { controller.abort(); window.clearTimeout(timer); };
+  }, [tab, query, openDataOffset]);
 
   useEffect(() => {
     try {
@@ -706,14 +745,17 @@ export default function Home() {
               <div className="trace-list">{toolTrace.map((item) => <div className="trace-row" key={item.id}><span className="trace-check"><Check size={13}/></span><div><strong>{item.agent}</strong><small>{item.tool} · {item.detail}</small></div><span className="trace-duration">{item.durationMs} ms</span></div>)}</div>
               <p className="trace-note">This prototype uses deterministic server-side tools and a rule-based planner; it does not call an external LLM or government API.</p>
             </div>}
-            <div className="full-catalogue-cta"><div><strong>Need the full live Central + State/UT Government scheme list?</strong><p>The catalogue now includes Central scheme references, National Scholarship Portal AY 2026–27 listings and a Karnataka State starter set. Many entries are source-indexed only; other State/UT catalogues still need verified ingestion. Use myScheme for the full live national directory.</p></div><a className="button button-primary" href="https://search.myscheme.gov.in/" target="_blank" rel="noreferrer">Search official myScheme <ExternalLink size={15}/></a></div>
+            <div className="full-catalogue-cta"><div><strong>Need the full live Central + State/UT Government scheme list?</strong><p>JanaSetu includes its own 142 source-linked records plus keyword-searchable, paginated access to an external 4,693-record CC BY 4.0 dataset. Imported records are discovery-only; their eligibility fields are not used for screening. Verify current rules and application deadlines with official departments.</p></div><a className="button button-primary" href="https://search.myscheme.gov.in/" target="_blank" rel="noreferrer">Search official myScheme <ExternalLink size={15}/></a></div>
             <div className="catalogue-controls">
-              <div className="search-box"><Search size={17}/><input placeholder={t("search")} value={query} onChange={(e) => setQuery(e.target.value)}/>{query && <button onClick={() => setQuery("")}><X size={14}/></button>}</div>
-              <label className="filter-select"><span>Category</span><select value={category} onChange={(e) => setCategory(e.target.value)}><option>All categories</option>{Array.from(new Set(SCHEMES.map((item) => item.category))).map((item) => <option key={item}>{item}</option>)}</select><ChevronDown size={14}/></label>
+              <div className="search-box"><Search size={17}/><input placeholder={t("search")} value={query} onChange={(e) => { setQuery(e.target.value); setOpenDataOffset(0); }}/>{query && <button onClick={() => setQuery("")}><X size={14}/></button>}</div>
+              <label className="filter-select"><span>Category</span><select value={category} onChange={(e) => setCategory(e.target.value)}><option>All categories</option>{Array.from(new Set([...SCHEMES.map((item) => item.category), ...openDataSchemes.flatMap((item) => item.category.split(",").map((category) => category.trim()))])).filter(Boolean).sort().map((item) => <option key={item}>{item}</option>)}</select><ChevronDown size={14}/></label>
             </div>
-            <div className="catalogue-head"><span>{activeResults.length} catalogue records · {SCHEMES.filter((item) => item.catalogueStatus === "rule-screened").length} rule-screened</span><span>Source-linked · verify current rules and deadlines</span></div>
+            <div className="catalogue-head"><span>{activeResults.length} displayed · {openDataTotal.toLocaleString("en-IN")} open-data rows · {SCHEMES.filter((item) => item.catalogueStatus === "rule-screened").length} rule-screened</span><span>Source-linked · verify current rules and deadlines</span></div>
+            <div className="source-disclaimer"><CircleAlert size={16}/><p><strong>Open dataset attribution:</strong> SmartDuke Technologies, Indian Government Schemes Dataset 2026, CC BY 4.0. Dataset snapshot: 5 July 2026. Eligibility data is machine-parsed and is not used to determine eligibility. Confirm every scheme and application route with its official source.</p></div>
+            {openDataError && <div className="source-disclaimer"><CircleAlert size={16}/><p>{openDataError}</p></div>}
             {activeResults.length ? <div className="scheme-grid">{activeResults.map(renderSchemeCard)}</div> : <div className="empty-state"><Search size={28}/><h3>No scheme records found</h3><p>Try another keyword or category.</p><button className="text-button" onClick={() => { setQuery(""); setCategory("All categories"); }}>Clear filters</button></div>}
-            {assessments.length === 0 && <div className="empty-guidance"><CircleAlert size={17}/><span>Results are not personalized until you run the assessment. The curated catalogue is not a complete list of Indian schemes.</span></div>}
+            {openDataNext !== null && <div className="catalogue-load-more"><button className="button button-secondary" disabled={openDataLoading} onClick={() => setOpenDataOffset(openDataNext)}>{openDataLoading ? <><span className="spinner"/> Loading open-data records…</> : "Load next 50 dataset records"}</button><small>External dataset browsing is paginated. Search the dataset by keyword above.</small></div>}
+            {assessments.length === 0 && <div className="empty-guidance"><CircleAlert size={17}/><span>Results are not personalized until you run the assessment. Only four JanaSetu records have deterministic eligibility rules. External dataset records are catalogue-only.</span></div>}
           </section>}
 
           {tab === "documents" && <section className="page-section">
@@ -763,9 +805,9 @@ export default function Home() {
               <article className="panel about-card"><div className="about-icon"><FileCheck2 size={19}/></div><h2>Prepare</h2><p>Generate a local draft and a document checklist for review. The prototype does not submit to government portals.</p></article>
               <article className="panel about-card"><div className="about-icon"><CalendarClock size={19}/></div><h2>Remember</h2><p>Keep application drafts and follow-up reminders in this browser so a citizen can resume the workflow.</p></article>
             </div>
-            <div className="panel source-panel"><div className="section-heading"><div><div className="eyebrow">DATA TRANSPARENCY</div><h2>What is in the current catalogue?</h2></div><span className="trace-count">4 curated records</span></div>
+            <div className="panel source-panel"><div className="section-heading"><div><div className="eyebrow">DATA TRANSPARENCY</div><h2>What is in the current catalogue?</h2></div><span className="trace-count">{SCHEMES.length} built-in records</span></div>
               {SCHEMES.map((scheme) => <div className="source-row" key={scheme.id}><div><strong>{scheme.name}</strong><small>{scheme.sourcePeriod}</small></div><a href={scheme.sourceUrl} target="_blank" rel="noreferrer">Official source <ArrowUpRight size={14}/></a></div>)}
-              <div className="source-disclaimer"><CircleAlert size={16}/><p><strong>Coverage honesty:</strong> The prototype currently has {SCHEMES.length} curated Central Government scheme records. It does not yet include every Central or State/UT scheme. Selecting a State/UT personalizes profile context only; it does not mean that State’s catalogue is complete. Scheme records need an official source, eligibility conditions, application link, and last-verified date. Check myScheme and the relevant State portal for the full live catalogue.</p></div>
+              <div className="source-disclaimer"><CircleAlert size={16}/><p><strong>Coverage honesty:</strong> JanaSetu has {SCHEMES.length} built-in records and a separate external open-data catalogue. It does not yet have complete, independently verified Central or State/UT scheme coverage. Selecting a State/UT personalizes profile context only; it does not mean that State’s catalogue is complete. Scheme records need an official source, eligibility conditions, application link, and last-verified date. Check myScheme and the relevant State portal for the full live catalogue.</p></div>
             </div>
             <div className="panel responsible-panel"><h2>Responsible-use boundary</h2><p>JanaSetu provides preliminary information and workflow support. It does not provide legal or official determinations, authenticate identity, make benefit decisions, guarantee receipt of benefits or act on behalf of a government department. Citizens should verify all details with the official source and responsible authority.</p><div className="responsible-links"><a href="https://www.myscheme.gov.in/" target="_blank" rel="noreferrer">myScheme <ArrowUpRight size={13}/></a><a href="https://web.umang.gov.in/" target="_blank" rel="noreferrer">UMANG <ArrowUpRight size={13}/></a><a href="https://locator.csccloud.in/" target="_blank" rel="noreferrer">CSC locator <ArrowUpRight size={13}/></a></div></div>
           </section>}
