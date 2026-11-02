@@ -680,3 +680,9 @@ input, select, textarea { min-height: 44px; }
 .ecosystem-links a > small {
   color: #594331 !important;
 }
+
+
+/* Intake helper copy is small text and must meet WCAG AA contrast. */
+.intake-heading > p {
+  color: #594331 !important;
+}
