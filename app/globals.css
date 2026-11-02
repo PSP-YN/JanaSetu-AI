@@ -657,3 +657,17 @@ input, select, textarea { min-height: 44px; }
   outline: 3px solid #71300f;
   outline-offset: 3px;
 }
+
+
+/* Specific high-density dashboard copy found by automated axe scans. */
+.main-area .metric-card small,
+.main-area .eyebrow,
+.main-area .step-number,
+.main-area .profile-progress small,
+.main-area .scheme-title-wrap p,
+.main-area .scheme-benefit span,
+.main-area .section-index,
+.main-area .progress-top > span,
+.main-area .intake-actions > span {
+  color: #594331 !important;
+}
