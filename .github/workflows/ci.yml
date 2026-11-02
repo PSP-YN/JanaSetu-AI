@@ -78,3 +78,15 @@ jobs:
               throw new Error("Scheme catalogue smoke test failed");
             }
           '
+
+          curl --fail --silent http://127.0.0.1:3000/api/sources/health > /tmp/janasetu-sources.json
+          node -e '
+            const fs = require("node:fs");
+            const report = JSON.parse(fs.readFileSync("/tmp/janasetu-sources.json", "utf8"));
+            if (!Array.isArray(report.sources) || !report.sources.some((source) => source.id === "smartduke-scheme-catalogue")) {
+              throw new Error("Source freshness monitoring contract failed");
+            }
+            if (!report.sources.some((source) => source.id === "official-myscheme" && source.availability === "not_automatically_checked")) {
+              throw new Error("Official myScheme must not be automatically scraped");
+            }
+          '
