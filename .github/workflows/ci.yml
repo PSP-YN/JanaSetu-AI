@@ -90,3 +90,20 @@ jobs:
               throw new Error("Official myScheme must not be automatically scraped");
             }
           '
+
+          curl --fail --silent http://127.0.0.1:3000/privacy > /tmp/janasetu-privacy.html
+          curl --fail --silent http://127.0.0.1:3000/terms > /tmp/janasetu-terms.html
+          node -e '
+            const fs = require("node:fs");
+            for (const path of ["/tmp/janasetu-privacy.html", "/tmp/janasetu-terms.html"]) {
+              const html = fs.readFileSync(path, "utf8");
+              if (!html.includes("JanaSetu") || html.length < 500) throw new Error("Policy page smoke test failed: " + path);
+            }
+          '
+
+          intake_status=$(curl --silent --output /tmp/janasetu-intake-error.json --write-out "%{http_code}" -X POST http://127.0.0.1:3000/api/intake/parse -H "Content-Type: application/json" --data "{}")
+          test "$intake_status" = "400"
+          draft_status=$(curl --silent --output /tmp/janasetu-draft-error.json --write-out "%{http_code}" -X POST http://127.0.0.1:3000/api/applications/draft -H "Content-Type: application/json" --data '{"schemeId":"not-a-scheme","profile":{"state":"Karnataka"}}')
+          test "$draft_status" = "404"
+          agent_status=$(curl --silent --output /tmp/janasetu-agent-error.json --write-out "%{http_code}" -X POST http://127.0.0.1:3000/api/agent/run -H "Content-Type: application/json" --data '{"fullName":"'$(printf 'x%.0s' {1..101})'","state":"Karnataka"}')
+          test "$agent_status" = "400"
