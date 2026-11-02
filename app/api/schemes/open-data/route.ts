@@ -95,7 +95,8 @@ export async function GET(request: NextRequest) {
   try {
     const response = await fetch(endpoint, {
       headers: { "User-Agent": "JanaSetu-AI/0.2 (open-data scheme catalogue)" },
-      next: { revalidate: 3600 }
+      next: { revalidate: 3600 },
+      signal: AbortSignal.timeout(10000)
     });
     if (!response.ok) {
       return NextResponse.json({ error: "Open-data source is temporarily unavailable.", source: "Hugging Face Dataset Viewer", status: response.status }, { status: 502 });
