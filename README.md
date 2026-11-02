@@ -67,3 +67,10 @@ The prototype uses a partial source-linked catalogue built from public official 
 ## License
 
 All rights reserved. This repository is published for evaluation and demonstration. No government affiliation or endorsement is implied.
+
+
+## Open-data scheme catalogue
+
+JanaSetu's Discover view now includes paginated, keyword-searchable records from the public Hugging Face Dataset Viewer for [SmartDuke Technologies — Indian Government Schemes Dataset 2026](https://huggingface.co/datasets/smartduketech/indian-government-schemes-2025), published under **CC BY 4.0**. Dataset snapshot: 5 July 2026. Attribution: SmartDuke Technologies, SchemeFit dataset, CC BY 4.0. The dataset card says its source is myScheme and that the publisher's parser produced the structured eligibility fields. These are **third-party machine-parsed data**, not official JanaSetu rules. JanaSetu does not use imported eligibility fields to decide whether a person qualifies. Users must verify current rules, benefits, application dates and destination URLs against the linked government department/myScheme page. Dataset viewer availability is an external dependency; JanaSetu shows an error and preserves the official myScheme link if it is unavailable.
+
+This open-data integration does not claim all 4,693 rows are current active schemes or officially verified. The row count reflects the dataset snapshot and can change.
