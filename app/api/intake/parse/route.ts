@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { readJsonBody } from "@/lib/request";
 import { parseCitizenMessage } from "@/lib/intake";
 
 export const runtime = "nodejs";
@@ -6,7 +7,9 @@ export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const parsed = await readJsonBody(request, 16 * 1024);
+    if (!parsed.ok) return parsed.response;
+    const body = parsed.value as Record<string, unknown>;
     const message = typeof body?.message === "string" ? body.message.trim() : "";
     if (!message) {
       return NextResponse.json({ error: "Describe your situation in text before continuing." }, { status: 400 });
