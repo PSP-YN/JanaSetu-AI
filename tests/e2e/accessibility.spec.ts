@@ -24,6 +24,16 @@ test("all six language options update document language and selected locale", as
   }
 });
 
+test("security headers are served by the active Next.js configuration", async ({ request }) => {
+  const response = await request.get("/");
+  expect(response.ok()).toBeTruthy();
+  const headers = response.headers();
+  expect(headers["x-frame-options"]).toBe("DENY");
+  expect(headers["x-content-type-options"]).toBe("nosniff");
+  expect(headers["referrer-policy"]).toBe("strict-origin-when-cross-origin");
+  expect(headers["x-powered-by"]).toBeUndefined();
+});
+
 test("skip navigation is keyboard reachable and moves to main content", async ({ page }) => {
   await page.goto("/");
   await page.keyboard.press("Tab");
