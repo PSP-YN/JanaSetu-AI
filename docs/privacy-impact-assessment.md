@@ -2,7 +2,7 @@
 
 **Status: DRAFT FOR QUALIFIED REVIEW. Not a legal opinion, DPIA approval or compliance certification.**  
 **Scope:** JanaSetu web prototype, browser storage, JSON backup/restore, callable API routes, browser speech recognition, open-data proxy and optional browser extension.  
-**Implementation review date:** 2 November 2026. Re-check against the exact deployed commit before relying on this inventory.
+**Implementation review date:** 4 November 2026. Re-check against the exact deployed commit before relying on this inventory.
 
 ## 1. Product purpose and boundaries
 
@@ -73,3 +73,10 @@ The current app's localStorage data persists until the user deletes it or clears
 - Next review date:
 
 No approval is implied until this section is completed by the qualified reviewer and the actual production deployment is checked against the assessment.
+
+
+## DPDP legal review preparation — 4 November 2026
+
+The official MeitY source page now lists the Digital Personal Data Protection Rules, 2025, a corrigendum dated 16 December 2025 and the official enforcement timeline. The Act and Rules have phased commencement dates; the legal-review plan records the extracted dates and primary Gazette links. Counsel must verify the exact current Gazette/corrigendum position and later notifications before giving advice.
+
+This PIA remains a draft. It is not a DPIA approval, legal opinion or compliance certification. See docs/review-plans/legal-review.md for the required counsel deliverables and docs/review-plans/language-review.md for the six-locale human review plan.
