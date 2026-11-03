@@ -1,11 +1,158 @@
 {
+  "schemaVersion": 2,
+  "packetGeneratedAt": "2026-11-04",
   "schemeId": "pm-ujjwala",
   "canonicalName": "Pradhan Mantri Ujjwala Yojana 2.0",
-  "primaryOfficialSource": "https://www.pmuy.gov.in/",
+  "primaryOfficialSource": "https://www.pmuy.gov.in/ujjwala2.html",
   "reviewStatus": "pending",
-  "ruleVersion": null,
-  "sourceVersion": null,
-  "sourceCheckedAt": null,
+  "sourceReviewStatus": "partial_current_source_review_not_approval",
+  "ruleVersion": "lib/agent.ts at main commit f6034c1f1671dfe5b2eab9cf8ac940e76c1176a4 (rule logic unchanged in this refresh); lib/catalog.ts source metadata refreshed in this branch.",
+  "sourceVersion": "Official PMUY 2.0 eligibility page and FAQ live snapshots checked 2026-11-04; page publication/revision dates not exposed.",
+  "sourceCheckedAt": "2026-11-04",
+  "sourceEvidence": [
+    {
+      "title": "New Ujjwala 2.0 Connection — eligibility and documents",
+      "url": "https://www.pmuy.gov.in/ujjwala2.html",
+      "issuer": "Ministry of Petroleum and Natural Gas / PMUY",
+      "publishedOrRevised": "Page revision date not stated",
+      "checkedAt": "2026-11-04",
+      "status": "official_live_scheme_page",
+      "facts": [
+        "Applicant must be a woman aged 18 years or above.",
+        "No other LPG connection from any OMC may exist within the same household.",
+        "Applicant must belong to a poor household based on prescribed deprivation declaration.",
+        "Page lists KYC, applicant Aadhaar, family-composition proof, adult family members' Aadhaar, address proof where required, bank details and deprivation declaration.",
+        "Migrant applicants may use prescribed self-declarations for address and family composition."
+      ]
+    },
+    {
+      "title": "PMUY official FAQ",
+      "url": "https://www.pmuy.gov.in/faq.html",
+      "issuer": "Ministry of Petroleum and Natural Gas / PMUY",
+      "publishedOrRevised": "FAQ revision date not stated",
+      "checkedAt": "2026-11-04",
+      "status": "official_live_faq",
+      "facts": [
+        "FAQ Q1–Q2 describes adult woman from poor household and says the deprivation declaration is the basic criterion for poor household.",
+        "FAQ Q1 ties no-existing-LPG check to any family member listed in the family-composition document.",
+        "FAQ Q6 lists KYC, Aadhaar of applicant and adult family members, address/family-composition evidence, bank details and deprivation declaration.",
+        "FAQ Q17 says biometric Aadhaar authentication is mandatory at the LPG distributor.",
+        "FAQ Q31 says PNG connection holders cannot receive a PMUY connection or a non-PMUY subsidized LPG connection.",
+        "FAQ Q3 lists security-deposit-free connection, no installation charges, cylinder, regulator, hose, DGCC booklet, free first refill(s) and free two-burner stove."
+      ]
+    },
+    {
+      "title": "PMUY deprivation declaration",
+      "url": "https://www.pmuy.gov.in/documents/Deprivation_Declaration_for_Poor_Households_English.pdf",
+      "issuer": "PMUY / Ministry of Petroleum and Natural Gas",
+      "publishedOrRevised": "Form revision date not established",
+      "checkedAt": "2026-11-04",
+      "status": "official_form",
+      "facts": [
+        "Form contains a deprivation checklist and exclusion criteria; the complete checklist must be reviewed by human reviewers and not reduced to a generic poverty checkbox."
+      ]
+    }
+  ],
+  "eligibilityMatrix": [
+    {
+      "condition": "Applicant is an adult woman aged at least 18",
+      "source": "Eligibility page criteria 1; FAQ Q1, Q12–Q15",
+      "implementation": "Gender=woman and age>=18",
+      "gap": "Basic predicate aligns, but source identity/age verification is not performed and edge cases are unverified.",
+      "reviewerAction": "Confirm current age/identity proof and how the app should phrase self-declared facts."
+    },
+    {
+      "condition": "Poor household based on prescribed deprivation declaration",
+      "source": "Eligibility page criterion 3; FAQ Q1–Q2; declaration form",
+      "implementation": "Boolean poorHouseholdDeclaration",
+      "gap": "The form's deprivation checklist is not represented; declaration is not verified.",
+      "reviewerAction": "Map all checklist items and confirm current form version; avoid collecting sensitive details unnecessarily."
+    },
+    {
+      "condition": "No LPG connection registered to any family member in household composition document",
+      "source": "Eligibility page criterion 2; FAQ Q1",
+      "implementation": "Boolean householdHasLpg",
+      "gap": "No family composition, OMC connection search, split-family, PNG or prior-connection status verification.",
+      "reviewerAction": "Define household membership based on current KYC documents and how split households / migrated households are handled."
+    },
+    {
+      "condition": "KYC, Aadhaar, address, family composition, bank details and migrant exceptions",
+      "source": "Eligibility page documents; FAQ Q6",
+      "implementation": "Displayed document checklist only",
+      "gap": "No verification; no safe way to assess completeness, biometric eKYC or current approved POA list.",
+      "reviewerAction": "Keep personal documents out of JanaSetu; use official distributor/OMC verification."
+    },
+    {
+      "condition": "Biometric Aadhaar authentication and PNG restriction",
+      "source": "FAQ Q17 and Q31",
+      "implementation": "Not represented in rule checks",
+      "gap": "Potentially material disqualification / process conditions omitted.",
+      "reviewerAction": "Decide how these conditions affect routing and ensure the UI does not imply connection approval."
+    }
+  ],
+  "boundaryTests": [
+    {
+      "id": "PMUY-01",
+      "scenario": "Woman aged 17 years 364 days vs 18 years on application date",
+      "expected": "Under-18 must not pass; exact date-of-birth evidence belongs to official process.",
+      "reviewFixtureStatus": "proposed_not_executed",
+      "executionEvidence": null
+    },
+    {
+      "id": "PMUY-02",
+      "scenario": "Adult woman with a poor-household declaration but an LPG connection held by any family member in the family-composition record",
+      "expected": "Not a potential match; household-level check must be complete.",
+      "reviewFixtureStatus": "proposed_not_executed",
+      "executionEvidence": null
+    },
+    {
+      "id": "PMUY-03",
+      "scenario": "Applicant belongs to poor household but only a male adult is available",
+      "expected": "FAQ says no PMUY connection; verify exact current policy wording.",
+      "reviewFixtureStatus": "proposed_not_executed",
+      "executionEvidence": null
+    },
+    {
+      "id": "PMUY-04",
+      "scenario": "Migrant applicant uses prescribed self-declaration for address/family composition",
+      "expected": "Apply only the published migrant exception; do not generalize to other documents.",
+      "reviewFixtureStatus": "proposed_not_executed",
+      "executionEvidence": null
+    },
+    {
+      "id": "PMUY-05",
+      "scenario": "Household has PNG connection",
+      "expected": "Follow FAQ Q31 restriction; official OMC confirmation required.",
+      "reviewFixtureStatus": "proposed_not_executed",
+      "executionEvidence": null
+    },
+    {
+      "id": "PMUY-06",
+      "scenario": "Deprivation checklist contains any exclusion or unknown response",
+      "expected": "needs_verification until current form and decision rules are independently reviewed.",
+      "reviewFixtureStatus": "proposed_not_executed",
+      "executionEvidence": null
+    }
+  ],
+  "amendmentsReviewed": [
+    {
+      "item": "Live PMUY 2.0 eligibility page checked 04.11.2026.",
+      "status": "inspected_not_exhaustive"
+    },
+    {
+      "item": "Live PMUY FAQ checked 04.11.2026; page does not state revision date.",
+      "status": "inspected_not_exhaustive"
+    },
+    {
+      "item": "Official deprivation declaration PDF identified; full legal/operational checklist approval remains outstanding.",
+      "status": "inspected_not_exhaustive"
+    }
+  ],
+  "unresolvedQuestions": [
+    "Confirm the latest PMUY extension/allocation orders and any subsequent amendments to connection benefits and eligibility.",
+    "Confirm the current deprivation declaration form/version and all checklist items; do not infer poverty from income alone.",
+    "Verify FAQ Q17 biometric eKYC process and Q31 PNG condition against current OMC instructions."
+  ],
   "reviewers": [
     {
       "role": "independent_source_reviewer",
@@ -24,8 +171,5 @@
       "evidence": []
     }
   ],
-  "eligibilityMatrix": [],
-  "boundaryTests": [],
-  "amendmentsReviewed": [],
-  "approvalNote": "Do not set reviewStatus to approved until both independent reviewers sign off and the evidence is merged in a reviewed pull request."
+  "approvalNote": "Do not set reviewStatus to approved until two independent human reviewers have separately completed and signed the source and rule reviews, all material questions are resolved, boundary fixtures are executed, and the reviewed evidence is merged. AI-assisted source preparation is not approval."
 }
