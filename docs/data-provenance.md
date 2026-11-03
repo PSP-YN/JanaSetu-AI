@@ -80,7 +80,7 @@ Prototype status: **academic-year verification required**. This code is not a cl
 
 The catalogue was expanded using the public National Scholarship Portal AY 2026–27 listing, Ministry/department pages, Government district portals and public government-hosted programme documents.
 
-The expanded catalogue contains 46 records: four Central records with deterministic prototype screening and 42 additional source-indexed records. The 42 new records are catalogue-only: they do not run eligibility logic. NSP deadlines were recorded as they appeared on 2 November 2026 and must be rechecked before application.
+The expanded catalogue contains 46 records: four Central records with deterministic prototype rules (all pending two independent human approvals) and 42 additional source-indexed records. The 42 new records are catalogue-only: they do not run eligibility logic. NSP deadlines were recorded as they appeared on 2 November 2026 and must be rechecked before application.
 
 Specific caveats:
 - PM-JAY eligibility is not checked against a beneficiary database.

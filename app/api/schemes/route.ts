@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
     catalogueTotal: SCHEMES.length,
     ruleScreenedTotal: SCHEMES.filter((scheme) => scheme.catalogueStatus === "rule-screened").length,
     catalogueOnlyTotal: SCHEMES.filter((scheme) => scheme.catalogueStatus === "catalogue-only").length,
-    catalogueScope: "142 source-linked records: 4 rule-screened Central records, 42 catalogue-only official-source records, and 96 Karnataka FY 2026–27 budget-derived discovery leads. Not a complete India-wide Central + State/UT directory.",
+    catalogueScope: "142 source-linked records: 4 Central rule prototypes pending two independent human approvals, 42 catalogue-only official-source records, and 96 Karnataka FY 2026–27 budget-derived discovery leads. Not a complete India-wide Central + State/UT directory.",
     schemes: results
   }, { headers: { "Cache-Control": "no-store" } });
 }

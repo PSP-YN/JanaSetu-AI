@@ -25,7 +25,7 @@ Last reviewed in repository: 2 November 2026.
 
 ## Current release boundary
 
-- Only four Central scheme records have deterministic prototype screening.
+- Only four Central scheme records have deterministic prototype rules, and all remain pending two independent human approvals.
 - The 4,693-row SmartDuke dataset is a third-party discovery catalogue, not an official or complete national scheme database.
 - The 96 Karnataka budget-derived records are leads, not verified schemes.
 - The source monitor checks availability of the third-party dataset metadata endpoint and reports snapshot age. It does not certify record accuracy or automatically scrape myScheme.

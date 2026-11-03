@@ -110,3 +110,42 @@ test("imported application drafts cannot retain a reviewed state for a pending s
   assert.equal(safe[0].reviewedAt, null);
   assert.match(safe[0].status, /Scheme review pending/);
 });
+
+test("profile validation accepts blank optional State/UT but rejects whitespace and unknown locations", () => {
+  assert.equal(parseCitizenProfile({ state: "" })?.state, "");
+  assert.equal(parseCitizenProfile({ state: "   " }), null);
+  assert.equal(parseCitizenProfile({ state: "Atlantis" }), null);
+  assert.equal(parseCitizenProfile({ state: "Karnataka " }), null);
+});
+
+test("saved assessments for removed schemes are invalidated instead of retaining old matches", () => {
+  const old = [{ schemeId: "deleted-scheme", state: "potential_match" as const, headline: "Potential match", explanation: "Old", checks: [], nextActions: [], schemeReviewStatusAtAssessment: "approved" as const }];
+  const safe = invalidateUnapprovedAssessments(old);
+  assert.equal(safe[0].state, "needs_verification");
+  assert.match(safe[0].headline, /no longer in the current catalogue/i);
+  assert.equal(safe[0].checks.length, 0);
+});
+
+test("legacy assessments are re-run after a scheme becomes approved", () => {
+  const approved = SCHEMES.map((scheme) => scheme.id === "pm-kisan" ? { ...scheme, reviewStatus: "approved" as const } : scheme);
+  const legacy = [{ schemeId: "pm-kisan", state: "potential_match" as const, headline: "Old positive", explanation: "Old", checks: [], nextActions: [] }];
+  const safe = invalidateUnapprovedAssessments(legacy, approved);
+  assert.equal(safe[0].state, "needs_verification");
+  assert.match(safe[0].headline, /re-run assessment/i);
+});
+
+test("saved applications for removed schemes are marked unavailable and require review", () => {
+  const old = [{ schemeId: "removed-scheme", reviewRequired: false, assessmentState: "potential_match" as const, status: "Reviewed", reviewedAt: "2026-01-01" }];
+  const safe = invalidateUnapprovedApplications(old);
+  assert.equal(safe[0].reviewRequired, true);
+  assert.equal(safe[0].schemeReviewStatus, "missing");
+  assert.equal(safe[0].assessmentState, "needs_verification");
+  assert.equal(safe[0].reviewedAt, null);
+  assert.match(safe[0].status, /no longer in the current catalogue/i);
+});
+
+test("translated occupation values normalize to stable canonical profile values", () => {
+  assert.equal(parseCitizenProfile({ occupation: "ಕೃಷಿ ಕಾರ್ಮಿಕ" })?.occupation, "Agricultural worker");
+  assert.equal(parseCitizenProfile({ occupation: "किसान" })?.occupation, "Farmer");
+  assert.equal(parseCitizenProfile({ occupation: "unknown occupation" }), null);
+});

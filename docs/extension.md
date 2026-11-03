@@ -1,6 +1,6 @@
 # JanaSetu Form Assistant (experimental)
 
-This extension is a local, user-triggered form-filling prototype. It is not a government integration and does not automate application submission.
+This extension is a local, user-triggered form-filling prototype. It is not a government integration and does not intentionally submit forms or upload files. It dispatches input/change events so websites can recognize filled values; a portal may react to those events, including by navigating or submitting. Inspect the page after filling.
 
 ## Install locally (Chrome / Chromium / Edge)
 
@@ -11,7 +11,7 @@ This extension is a local, user-triggered form-filling prototype. It is not a go
 5. Choose **Load unpacked** and select the repository's `extension` folder.
 6. Open the official scheme portal in a tab.
 7. Click the extension icon, choose the exported JanaSetu JSON file, and click **Import reviewed profile**.
-8. Click **Fill fields on active tab**. Review every populated field. Submit only when you decide to.
+8. Click **Fill fields on active tab**. After filling, check whether the portal reacted or navigated. Review every populated field and submit only if the page has not already advanced and you decide to continue.
 
 ## Safety and limitations
 
@@ -19,7 +19,7 @@ This extension is a local, user-triggered form-filling prototype. It is not a go
 - Form matching is heuristic (visible labels, placeholders, names and IDs) and uses whole-word/phrase alias matching to avoid substring collisions such as `username` being treated as `name`.
 - Select controls are filled only when exactly one enabled option has an exact normalized label or value match. Partial matches, missing options and duplicate matching options are skipped and are not counted as filled.
 - Boolean declaration checkboxes are deliberately not auto-checked. Unknown or ambiguous values stay unchanged.
-- It does not click Submit/Apply, upload files, solve CAPTCHA, bypass authentication, or claim to have applied.
+- The extension itself does not click Submit/Apply, call form submission APIs or upload files. Portal scripts may react to the input/change events it dispatches; inspect the page after filling. It does not solve CAPTCHA, bypass authentication or claim to have applied.
 - Profile data is imported into extension storage on the current browser profile. Treat the backup as private; delete it when no longer needed.
 - Do not import Aadhaar, bank account, OTP, or other highly sensitive identifiers into this prototype.
 - Test only with dummy data before use on official portals.

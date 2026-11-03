@@ -36,10 +36,23 @@ test("six locales define the primary workspace shell translations", () => {
   }
 });
 
+test("main UI extension guidance discloses portal-side field-change reactions in all six locales", () => {
+  const uiCopy = page.slice(page.indexOf("const UI_COPY:"), page.indexOf("\nfunction formatMoney"));
+  const localeBlocks = Array.from(uiCopy.matchAll(/^  (en|hi|kn|ta|te|ml): \{([\s\S]*?)^  \},?$/gm));
+  const caveats: Record<string, string> = {
+    en: "Portal scripts may react to field changes", hi: "पोर्टल की स्क्रिप्ट", kn: "ಪೋರ್ಟಲ್ ಸ್ಕ್ರಿಪ್ಟ್‌ಗಳು",
+    ta: "போர்டல் ஸ்கிரிப்டுகள்", te: "పోర్టల్ స్క్రిప్ట్‌లు", ml: "പോർട്ടൽ സ്ക്രിപ്റ്റുകൾ"
+  };
+  for (const [, locale, block] of localeBlocks) {
+    const helper = block.match(/manualSubmit:"([^"]*)"/)?.[1] || "";
+    assert.ok(helper.includes(caveats[locale]), `${locale} manualSubmit helper omits portal-side reaction warning`);
+  }
+});
+
 test("locale dictionaries do not define duplicate keys", () => {
   const localeBlocks = Array.from(page.matchAll(/^  (en|hi|kn|ta|te|ml): \{([\s\S]*?)^  \},?$/gm));
   for (const [, locale, block] of localeBlocks) {
-    const keys = Array.from(block.matchAll(/(?:^|,)\s*([A-Za-z][A-Za-z0-9_]*)\s*:/gm), match => match[1]);
+    const keys = Array.from(block.matchAll(/(?:^|,)\s*["\']?([A-Za-z][A-Za-z0-9_-]*)["\']?\s*:/gm), match => match[1]);
     assert.equal(new Set(keys).size, keys.length, locale + " contains duplicate translation keys");
   }
 });
@@ -48,10 +61,31 @@ test("locale dictionaries do not define duplicate keys", () => {
 test("all six locale dictionaries have exact translation-key parity", () => {
   const localeBlocks = Array.from(page.matchAll(/^  (en|hi|kn|ta|te|ml): \{([\s\S]*?)^  \},?$/gm));
   const keysByLocale = localeBlocks.map(([, locale, block]) => {
-    const keys = Array.from(block.matchAll(/(?:^|,)\s*([A-Za-z][A-Za-z0-9_]*)\s*:/gm), match => match[1]);
+    const keys = Array.from(block.matchAll(/(?:^|,)\s*["\']?([A-Za-z][A-Za-z0-9_-]*)["\']?\s*:/gm), match => match[1]);
     return { locale, keys: Array.from(new Set(keys)).sort() };
   });
   assert.equal(keysByLocale.length, 6);
   const baseline = JSON.stringify(keysByLocale.find(x => x.locale === "en")?.keys);
   for (const entry of keysByLocale) assert.equal(JSON.stringify(entry.keys), baseline, entry.locale + " translation keys differ from English");
+});
+
+test("every rendered translation key has an English fallback and every locale has localized coverage", () => {
+  const baseSource = page.slice(page.indexOf("const COPY:"), page.indexOf("const UI_COPY:"));
+  const extraSource = page.slice(page.indexOf("const UI_COPY:"), page.indexOf("\nfunction formatMoney"));
+  const locales = ["en", "hi", "kn", "ta", "te", "ml"];
+  const keysFor = (source: string, locale: string, supplemental: boolean) => {
+    const match = supplemental ? source.match(new RegExp("^  " + locale + ": \\{([^\\n]*)\\}", "m")) : source.match(new RegExp("^  " + locale + ": \\{([\\s\\S]*?)^  \\},?", "m"));
+    const block = match?.[1] || "";
+    return new Set(Array.from(block.matchAll(/\b([A-Za-z][A-Za-z0-9_]*)\s*:/g), m => m[1]));
+  };
+  const base = new Map(locales.map(locale => [locale, keysFor(baseSource, locale, false)]));
+  const extra = new Map(locales.map(locale => [locale, keysFor(extraSource, locale, true)]));
+  const englishKeys = new Set([...Array.from(base.get("en")!), ...Array.from(extra.get("en")!)]);
+  const renderedKeys = new Set(Array.from(page.matchAll(/\bt\("([A-Za-z][A-Za-z0-9_]*)"\)/g), m => m[1]));
+  for (const key of Array.from(renderedKeys)) assert.ok(englishKeys.has(key), `English fallback missing for ${key}`);
+  for (const locale of locales) {
+    for (const key of Array.from(extra.get("en")!)) {
+      assert.ok(extra.get(locale)!.has(key) || base.get(locale)!.has(key), `${locale} has no translated value for ${key}`);
+    }
+  }
 });

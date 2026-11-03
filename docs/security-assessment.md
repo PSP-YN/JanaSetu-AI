@@ -3,7 +3,7 @@
 **Status: Engineering controls in progress; no independent penetration test has been performed.**
 
 ## Implemented baseline
-- HTTPS-only government-domain check in extension; explicit popup action; no form submission.
+- HTTPS-only government-domain check and explicit popup action. The extension has no direct form-submission API calls; dispatched input/change events may trigger portal-side behavior.
 - Streaming JSON byte cap on intake, assessment and draft routes (oversized chunked bodies are cancelled before full buffering).
 - Strict citizen-profile schema validation rejects unexpected keys, invalid types, out-of-range age/income and malformed enum values.
 - Security response headers configured in Next.js: nosniff, frame denial, strict referrer policy, permissions policy, HSTS and COOP.

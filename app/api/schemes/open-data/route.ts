@@ -3,7 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 const DATASET = "smartduketech/indian-government-schemes-2025";
 const SNAPSHOT = "2026-07-05";
 const DATASET_ATTRIBUTION = "SmartDuke Technologies, Indian Government Schemes Dataset 2026 (CC BY 4.0), Hugging Face. Source snapshot 5 July 2026.";
-export const revalidate = 3600;
+// Keep the route response dynamic so fallback and full-search responses can set different CDN TTLs.
+// Upstream dataset fetches remain independently cached for one hour below.
+export const revalidate = 0;
 
 function parseJsonList(value: unknown): string[] {
   if (Array.isArray(value)) return value.map(String);
@@ -84,25 +86,63 @@ export async function GET(request: NextRequest) {
   const q = (params.get("q") || "").trim().slice(0, 120);
   const offset = Math.max(0, Math.min(100000, Number(params.get("offset") || 0) || 0));
   const length = Math.max(1, Math.min(100, Number(params.get("limit") || 50) || 50));
-  const endpoint = new URL(q ? "https://datasets-server.huggingface.co/search" : "https://datasets-server.huggingface.co/rows");
-  endpoint.searchParams.set("dataset", DATASET);
-  endpoint.searchParams.set("config", "default");
-  endpoint.searchParams.set("split", "train");
-  endpoint.searchParams.set("offset", String(offset));
-  endpoint.searchParams.set("length", String(length));
-  if (q) endpoint.searchParams.set("query", q);
+  const endpointFor = (path: "search" | "rows") => {
+    const endpoint = new URL("https://datasets-server.huggingface.co/" + path);
+    endpoint.searchParams.set("dataset", DATASET);
+    endpoint.searchParams.set("config", "default");
+    endpoint.searchParams.set("split", "train");
+    endpoint.searchParams.set("offset", String(offset));
+    endpoint.searchParams.set("length", String(length));
+    if (path === "search" && q) endpoint.searchParams.set("query", q);
+    return endpoint;
+  };
+
+  const headers = { "User-Agent": "JanaSetu-AI/0.2 (open-data scheme catalogue)" };
+  let data: { rows?: Array<{ row?: Record<string, unknown> }>; num_rows_total?: number } | null = null;
+  let searchMode: "server-search" | "page-filter" | "browse" = q ? "server-search" : "browse";
 
   try {
-    const response = await fetch(endpoint, {
-      headers: { "User-Agent": "JanaSetu-AI/0.2 (open-data scheme catalogue)" },
-      next: { revalidate: 3600 },
-      signal: AbortSignal.timeout(10000)
-    });
-    if (!response.ok) {
-      return NextResponse.json({ error: "Open-data source is temporarily unavailable.", source: "Hugging Face Dataset Viewer", status: response.status }, { status: 502 });
+    if (q) {
+      // HF's /search endpoint has occasionally stalled while its Hub auth check runs.
+      // Keep it bounded and fall back to a page from /rows so the catalogue remains usable.
+      try {
+        const searchResponse = await fetch(endpointFor("search"), {
+          headers, next: { revalidate: 3600 }, signal: AbortSignal.timeout(3500)
+        });
+        if (searchResponse.ok) data = await searchResponse.json();
+      } catch {
+        data = null;
+      }
     }
-    const data = await response.json();
-    const rows = Array.isArray(data.rows) ? data.rows.map((entry: { row?: Record<string, unknown> }) => normalize(entry.row || {})) : [];
+
+    if (!data) {
+      const rowsResponse = await fetch(endpointFor("rows"), {
+        headers, next: { revalidate: 3600 }, signal: AbortSignal.timeout(5000)
+      });
+      if (!rowsResponse.ok) {
+        return NextResponse.json({ error: "Open-data source is temporarily unavailable.", source: "Hugging Face Dataset Viewer", status: rowsResponse.status }, { status: 502 });
+      }
+      data = await rowsResponse.json();
+      if (q) searchMode = "page-filter";
+    }
+
+    if (!data) return NextResponse.json({ error: "Unable to reach the open-data catalogue right now." }, { status: 502 });
+    const sourceRows = Array.isArray(data.rows) ? data.rows : [];
+    const queryTerms = q.toLocaleLowerCase().split(/\s+/).filter(Boolean);
+    const selectedRows = searchMode === "page-filter" ? sourceRows.filter((entry) => {
+      const row = entry.row || {};
+      const haystack = [row.slug, row.name, row.description, row.ministry, row.department, row.state, row.category, row.beneficiary_type]
+        .map((value) => typeof value === "string" ? value : value == null ? "" : JSON.stringify(value))
+        .join(" ").toLocaleLowerCase();
+      return queryTerms.every((term) => haystack.includes(term));
+    }) : sourceRows;
+    const records = selectedRows.map((entry) => normalize(entry.row || {}));
+    const pageHasMore = sourceRows.length === length;
+
+    const cacheControl = searchMode === "page-filter"
+      ? "public, s-maxage=60, stale-while-revalidate=300"
+      : "public, s-maxage=3600, stale-while-revalidate=86400";
+
     return NextResponse.json({
       source: DATASET_ATTRIBUTION,
       sourceUrl: "https://huggingface.co/datasets/" + DATASET,
@@ -111,10 +151,12 @@ export async function GET(request: NextRequest) {
       total: Number(data.num_rows_total || 4693),
       offset,
       limit: length,
-      nextOffset: rows.length === length ? offset + rows.length : null,
-      records: rows,
-      warning: "Catalogue discovery only. Source content and machine-parsed eligibility may be stale or inaccurate. Do not use this dataset alone for official eligibility decisions."
-    }, { headers: { "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400" } });
+      nextOffset: pageHasMore ? offset + sourceRows.length : null,
+      records,
+      searchMode,
+      warning: "Catalogue discovery only. Source content and machine-parsed eligibility may be stale or inaccurate. Do not use this dataset alone for official eligibility decisions.",
+      searchFallbackWarning: searchMode === "page-filter" ? "Hugging Face search is temporarily unavailable. Search is filtering this page only; load further pages to continue." : undefined
+    }, { headers: { "Cache-Control": cacheControl } });
   } catch {
     return NextResponse.json({ error: "Unable to reach the open-data catalogue right now." }, { status: 502 });
   }

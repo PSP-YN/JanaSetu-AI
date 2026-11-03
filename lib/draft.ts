@@ -1,10 +1,10 @@
-import { SCHEMES, type CitizenProfile } from "./catalog";
+import { SCHEMES, STATES_AND_UTS, type CitizenProfile, type Scheme } from "./catalog";
 import { evaluateScheme } from "./agent";
 
-export function createDraftRecord(schemeId: string, profile: CitizenProfile) {
-  const scheme = SCHEMES.find((item) => item.id === schemeId);
+export function createDraftRecord(schemeId: string, profile: CitizenProfile, schemes: Scheme[] = SCHEMES) {
+  const scheme = schemes.find((item) => item.id === schemeId);
   if (!scheme) throw new Error("Scheme not found in the curated catalogue.");
-  if (!profile || typeof profile !== "object" || typeof profile.state !== "string" || !profile.state) {
+  if (!profile || typeof profile !== "object" || typeof profile.state !== "string" || !STATES_AND_UTS.includes(profile.state)) {
     throw new Error("Select a State/UT before preparing a draft.");
   }
   const assessment = evaluateScheme(scheme, profile);
@@ -22,7 +22,9 @@ export function createDraftRecord(schemeId: string, profile: CitizenProfile) {
   const draft = {
     id: "JS-" + new Date().toISOString().slice(0, 10).replaceAll("-", "") + "-" + Math.random().toString(36).slice(2, 7).toUpperCase(),
     schemeId: scheme.id, schemeName: scheme.name, citizenName: profile.fullName || "Citizen",
-    state: profile.state, district: profile.district || "Not provided", status: assessment.state === "needs_verification" ? "Scheme review pending — not an eligibility result" : "Draft prepared",
+    state: profile.state, district: profile.district || "Not provided",
+    schemeReviewStatus: scheme.reviewStatus ?? "pending",
+    status: scheme.reviewStatus !== "approved" ? "Scheme review pending — not an eligibility result" : "Draft prepared — eligibility requires official verification",
     createdAt: new Date().toISOString(), reviewRequired: true, assessmentState: assessment.state,
     missingChecks: missing.map((item) => item.label), fields, reviewedAt: null,
     sourceUrl: scheme.sourceUrl,

@@ -31,6 +31,7 @@ export function evaluateScheme(scheme: Scheme, profile: CitizenProfile): Assessm
   if (scheme.reviewStatus !== "approved") {
     return {
       schemeId: scheme.id,
+      schemeReviewStatusAtAssessment: "pending",
       state: "needs_verification",
       headline: "Human review pending",
       explanation: "This scheme's source and deterministic rules have not received recorded human approval. JanaSetu will not calculate or imply eligibility until that review is completed.",
@@ -98,7 +99,7 @@ export function evaluateScheme(scheme: Scheme, profile: CitizenProfile): Assessm
       ? "The supplied profile matches the screening conditions represented in this prototype. Final eligibility remains with the responsible authority."
       : "The screening found a possible pathway, but missing facts, complex rules or current-year verification prevent a reliable conclusion.";
 
-  return { schemeId: scheme.id, state, headline, explanation, checks, nextActions };
+  return { schemeId: scheme.id, schemeReviewStatusAtAssessment: "approved", state, headline, explanation, checks, nextActions };
 }
 
 function relevantSchemes(profile: CitizenProfile): Scheme[] {

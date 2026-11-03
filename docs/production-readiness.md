@@ -1,26 +1,30 @@
 # Production readiness assessment
 
-**Status: prototype / controlled pilot candidate — not production-ready for real citizen records.**
+**Status: locally verified prototype release candidate — not production-ready for real citizen records. Updated 3 November 2026.**
 
 This assessment is intentionally strict. A successful Next.js build and public deployment do not establish operational, security, privacy or legal readiness.
 
-## Changes delivered in the 2 November 2026 hardening pass
+## Changes delivered in the 2–3 November 2026 hardening pass
 
 - Fixed hero copy for all six configured interface locales and synchronized the document `lang` attribute.
 - Improved hero typography for Indic scripts and added keyboard skip navigation/focus treatment.
-- Added source-age/availability reporting for the third-party dataset. The current 5 July 2026 snapshot exceeds the 90-day freshness policy as of 2 November 2026, so the monitor should report attention required.
+- Added source-age/availability reporting for the third-party dataset. The 5 July 2026 snapshot is 121 days old on 3 November 2026 and exceeds the 90-day freshness policy; the monitor must report attention required.
 - Added source-governance register and official-source spot-check notes. PM-USP AY 2026–27 window dates were inconsistent across official NSP search pages; treat the current application window as uncertain.
-- Restricted the extension to HTTPS `.gov.in` and `.nic.in` hosts, with explicit click-to-fill and no submission behaviour.
-- Published prototype privacy and terms notices. These are disclosures, not legal approval or a DPDP compliance certification.
+- Restricted the extension to HTTPS `.gov.in` and `.nic.in` hosts, with explicit click-to-fill and no direct form-submission API calls. Portal scripts may react to dispatched field-change events.
+- Published prototype privacy and terms notices with six-locale page content. Translations are unreviewed drafts; these notices are not legal approval or a DPDP compliance certification.
 - Added white-box locale/extension safety tests and black-box HTTP checks for API validation, policy pages and source-monitor contract.
+
+- Expanded main-workspace UI localization, counts, dates, status copy and notifications across English, Hindi, Kannada, Tamil, Telugu and Malayalam. Privacy/Terms pages, convenience scheme summaries and extension popup now have six-locale content; fluent-speaker and qualified legal review remain outstanding.
+- Added `package-lock.json` and switched CI to `npm ci` for reproducible installs.
+- Added Hugging Face search endpoint health reporting and a bounded page-filter fallback for the external catalogue search API. The fallback keeps the catalogue usable during upstream `/search` outages, but searches only the currently loaded dataset page until the user loads more.
 
 ## Verification evidence and remaining gaps
 
-The latest completed CI run before the final documentation-only update passed: unit tests, TypeScript, extension syntax/manifest validation, production dependency audit, Next.js production build and the then-current production HTTP smoke tests. A subsequent CI run adds black-box checks for policy pages and malformed API requests; it must pass before release promotion.
+Local verification on 3 November 2026 passed: 50 unit tests, 35 Playwright tests against a production-mode local server, TypeScript, extension syntax/Manifest V3 validation, locale key-parity checks, production dependency audit (0 vulnerabilities), Next.js production build and local production smoke tests. PR #6 tracks the integrated release; only checks and the Preview for its latest head count as release evidence.
 
 Not yet demonstrated:
-- Browser-driven end-to-end tests across all pages, devices and six locales.
-- Automated WCAG/axe audit plus manual keyboard and screen-reader review.
+- Fluent-speaker review of the implemented six-locale workspace, legal pages, convenience scheme translations and extension popup. Official source records remain source-authoritative and may remain in their original language.
+- Manual keyboard, screen-reader, contrast, zoom and mobile review; axe scans currently cover critical/serious violations on main, privacy and terms pages.
 - Portal-by-portal extension mapping accuracy on representative official application forms.
 - Full review of every imported scheme record or independent approval of all four deterministic rules.
 - Penetration test, privacy impact assessment, qualified legal review, incident response and operational monitoring.
@@ -30,12 +34,18 @@ Not yet demonstrated:
 
 - Public Next.js application deployed on Vercel.
 - CI runs unit tests, TypeScript checks, production dependency audit, production build and HTTP smoke checks.
-- Deterministic rule screening for four curated Central Government scheme records.
+- Four built-in deterministic scheme rules, all fail-closed pending independent human source/rule approval; they must not be treated as approved eligibility decisions.
 - Source links and source-period labels on catalogue records.
 - Multilingual text intake patterns and optional browser speech recognition.
-- Browser-local profile, assessment, draft, document metadata and reminder records.
-- Human review marker; no automatic government submission.
+- Browser-local profile, assessment, draft, document metadata and reminder records; backup restore validates imported data and forces assessments to be rerun.
+- Human review marker; JanaSetu makes no direct form-submission API calls. The experimental extension dispatches field-change events, which portal scripts may react to; check the page after filling.
 - No Aadhaar or bank-account fields requested by the prototype.
+
+## Current Vercel deployment observations — 3 November 2026
+
+- Production `https://jana-setu-ai.vercel.app`: root, `/api/health`, `/api/schemes`, `/privacy` and `/terms` returned HTTP 200; `/api/schemes/open-data?q=farmer` returned HTTP 502.
+- Existing Phase 2 preview `https://janasetu-qjy21mmr2-pspyn.vercel.app`: the same checked routes, including open-data search, returned HTTP 200. It is based on an earlier Phase 2 commit, not the current integrated local release candidate.
+- The integrated release is tracked in [PR #6](https://github.com/PSP-YN/JanaSetu-AI/pull/6). Its Preview must be checked against the latest PR head. Do not promote an older preview as a substitute for the exact tested tree. No production deployment has been made from this release candidate.
 
 ## Blocking requirements before real citizen use
 
