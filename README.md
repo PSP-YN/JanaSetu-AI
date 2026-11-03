@@ -1,16 +1,18 @@
 # JanaSetu AI
 
-**Understand what you may qualify for. Prepare what comes next.**\n\nLive prototype: https://janasetu-ai-pspyn.vercel.app
+**Understand what you may qualify for. Prepare what comes next.**
+
+Live prototype: https://jana-setu-ai.vercel.app
 
 JanaSetu is an independent benefits-readiness prototype. It is designed to complement official discovery and service platforms by connecting a citizen's stated facts to source-linked screening conditions, evidence gaps, draft preparation and next actions.
 
-> **Important:** JanaSetu is not a government website or an official eligibility authority. The current prototype contains 142 source-linked records: four Central records with deterministic prototype screening, 42 official-source catalogue records, and 96 Karnataka budget-derived discovery leads. The budget leads are model-classified and not human-reviewed; they are not verified eligibility records. Screening results are preliminary and must be verified with the relevant department. It does not submit applications to government systems.
+> **Important:** JanaSetu is not a government website or an official eligibility authority. The current prototype contains 142 source-linked records: four Central records with deterministic rule prototypes, all pending two independent human approvals, 42 official-source catalogue records, and 96 Karnataka budget-derived discovery leads. The budget leads are model-classified and not human-reviewed; they are not verified eligibility records. Screening results are preliminary and must be verified with the relevant department. JanaSetu does not intentionally submit applications. The experimental extension dispatches field-change events; portal scripts may react, so inspect the page after filling.
 
 ## Product principles
 
 - Evidence before recommendations: each screening result links to its source and rule conditions.
 - Unknown is not false: missing or uncertain facts produce a verification state.
-- Human control: application drafts are never submitted automatically.
+- Human control: JanaSetu does not intentionally submit application drafts. The experimental extension only fills fields after a click; portal-side scripts may still react to field changes.
 - Minimal data: the prototype does not request Aadhaar numbers, bank account numbers or other high-risk identifiers.
 - Honest coverage: all Indian States and Union Territories can be selected in a profile; this does **not** mean every state scheme is currently catalogued.
 
@@ -36,7 +38,7 @@ npm run build
 
 - Citizen profile for all 28 States and 8 Union Territories.
 - Interface language selector: English, Hindi, Kannada, Tamil, Telugu and Malayalam.
-- 142 source-linked records: four rule-screened Central records, 42 catalogue-only official-source records and 96 Karnataka FY 2026–27 budget-derived discovery leads; only four records have deterministic eligibility screening.
+- 142 source-linked records: four Central records with deterministic rule prototypes (all pending two independent human approvals), 42 catalogue-only official-source records and 96 Karnataka FY 2026–27 budget-derived discovery leads.
 - Server-side screening workflow exposed through `POST /api/agent/run`.
 - Explicit planner, scheme retrieval, deterministic rule evaluation, evidence-link construction and next-action generation.
 - Application draft endpoint and a local application tracker.
@@ -58,14 +60,14 @@ See:
 
 ## Data and integrations
 
-The prototype uses a partial source-linked catalogue built from public official sources and public government pages. It does not bulk-copy myScheme, claim API access it does not have, or infer official application status. Four records have deterministic prototype screening; additional entries are catalogue-only and require manual verification. Scheme rules and deadlines can change; verify the linked official source before acting.
+The prototype uses a partial source-linked catalogue built from public official sources and public government pages. It does not bulk-copy myScheme, claim API access it does not have, or infer official application status. Four records have deterministic rule prototypes, all pending two independent human approvals; additional entries are catalogue-only and require manual verification. Scheme rules and deadlines can change; verify the linked official source before acting.
 
 
 ## Local continuity and portal form assistance
 
 - **Backup / Restore:** export profile, language, assessments, drafts, document metadata and follow-up records as a versioned local JSON file. Keep it private; it contains personal profile data.
-- **Experimental Chrome extension:** [installation and safety guide](docs/extension.md). It fills matching fields only after the citizen clicks and reviews the portal. It does not submit applications.
-- **Scheme catalogue coverage:** [coverage, source policy and expansion plan](docs/scheme-catalogue-coverage.md). The built-in catalogue has 142 records: 4 rule-screened Central records, 42 catalogue-only official-source records and 96 Karnataka budget-derived discovery leads. The 96 budget leads are model-classified and not human-reviewed; they must be verified with the department. Only four records are rule-screened. Use [official myScheme search](https://search.myscheme.gov.in/) for the current full Central + State/UT catalogue.
+- **Experimental Chrome extension:** [installation and safety guide](docs/extension.md). It fills matching fields only after the citizen clicks and reviews the portal. It does not intentionally submit applications; portal scripts may react to field-change events, so check the page after filling.
+- **Scheme catalogue coverage:** [coverage, source policy and expansion plan](docs/scheme-catalogue-coverage.md). The built-in catalogue has 142 records: 4 Central rule prototypes pending independent human approval, 42 catalogue-only official-source records and 96 Karnataka budget-derived discovery leads. The 96 budget leads are model-classified and not human-reviewed; they must be verified with the department. Only four records have deterministic prototype rules, and all remain pending independent human approval. Use [official myScheme search](https://search.myscheme.gov.in/) for the current full Central + State/UT catalogue.
 
 ## License
 
@@ -92,3 +94,12 @@ The current application is a prototype. Read the evidence and approval requireme
 - [Security assessment and independent test scope](docs/security-assessment.md)
 
 **Important:** the four deterministic scheme records are now fail-closed and remain blocked until human approval is explicitly recorded. Synthetic CI tests do not constitute portal compatibility certification, legal review, DPIA approval, manual accessibility sign-off or an independent penetration test.
+
+
+## Project documentation
+
+- [Contributing](CONTRIBUTING.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Security policy](SECURITY.md)
+- [Changelog](CHANGELOG.md)
+- [Project documentation](docs/)
