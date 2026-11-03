@@ -1,11 +1,155 @@
 {
+  "schemaVersion": 2,
+  "packetGeneratedAt": "2026-11-04",
   "schemeId": "pmay-u-2",
   "canonicalName": "Pradhan Mantri Awas Yojana — Urban 2.0",
-  "primaryOfficialSource": "https://pmay-urban.gov.in/",
+  "primaryOfficialSource": "https://pmay-urban.gov.in/guideline",
   "reviewStatus": "pending",
-  "ruleVersion": null,
-  "sourceVersion": null,
-  "sourceCheckedAt": null,
+  "sourceReviewStatus": "partial_current_source_review_not_approval",
+  "ruleVersion": "lib/agent.ts at main commit f6034c1f1671dfe5b2eab9cf8ac940e76c1176a4 (rule logic unchanged in this refresh); lib/catalog.ts source metadata refreshed in this branch.",
+  "sourceVersion": "PMAY-U 2.0 Scheme Guidelines September 2024; AHP SOP April 2026; full amendment and vertical review not complete.",
+  "sourceCheckedAt": "2026-11-04",
+  "sourceEvidence": [
+    {
+      "title": "PMAY-U official guideline index",
+      "url": "https://pmay-urban.gov.in/guideline",
+      "issuer": "Ministry of Housing and Urban Affairs, Government of India",
+      "publishedOrRevised": "Live index checked 04 November 2026",
+      "checkedAt": "2026-11-04",
+      "status": "official_current_index",
+      "facts": [
+        "Index lists PMAY-U 2.0 English and Hindi Scheme Guidelines dated September 2024.",
+        "Index lists Affordable Housing in Partnership Standard Operating Procedure dated April 2026.",
+        "Index also lists legacy PMAY-U amendments; applicability to PMAY-U 2.0 must be distinguished by reviewers."
+      ]
+    },
+    {
+      "title": "PMAY-U 2.0 Scheme Guidelines (English)",
+      "url": "https://pmay-urban.gov.in/uploads/guidelines/Operational-Guidelines-of-PMAY-U-2.pdf",
+      "issuer": "Ministry of Housing and Urban Affairs",
+      "publishedOrRevised": "September 2024",
+      "checkedAt": "2026-11-04",
+      "status": "official_primary_guideline",
+      "facts": [
+        "Beneficiary family comprises husband, wife and unmarried sons and/or unmarried daughters.",
+        "Urban EWS/LIG/MIG families must not own a pucca house in the name of the beneficiary or any family member anywhere in India, subject to guideline provisions.",
+        "Central annual household income bands: EWS up to ₹3 lakh; LIG ₹3 lakh to ₹6 lakh; MIG ₹6 lakh to ₹9 lakh. States/UTs may redefine EWS with Ministry concurrence.",
+        "Guideline states prior allotment under a government housing scheme in the preceding 20 years in urban or rural areas disqualifies the family; parent housing-benefit provision is separately framed as a prioritisation rule.",
+        "The scheme contains distinct verticals (BLC, AHP, ARH and ISS) with component-specific conditions."
+      ]
+    },
+    {
+      "title": "Affordable Housing in Partnership SOP",
+      "url": "https://pmay-urban.gov.in/uploads/guidelines/AHP-SOP.pdf",
+      "issuer": "Ministry of Housing and Urban Affairs",
+      "publishedOrRevised": "April 2026 (as titled in official index)",
+      "checkedAt": "2026-11-04",
+      "status": "official_operational_sop",
+      "facts": [
+        "Current official index lists this SOP for AHP. It must be read alongside the 2024 scheme guidelines and applicable State/UT instructions."
+      ]
+    }
+  ],
+  "eligibilityMatrix": [
+    {
+      "condition": "Urban residence and applicable urban local body jurisdiction",
+      "source": "Guidelines §§1.3, 3.1",
+      "implementation": "User-selected residenceType equals urban",
+      "gap": "No ULB, urban-area residence evidence or migration/parental-house nuances.",
+      "reviewerAction": "Define required residency proof and how rural-house ownership affects the no-pucca-house condition."
+    },
+    {
+      "condition": "Beneficiary family definition and no pucca house anywhere in India",
+      "source": "Guidelines §§1.3, 3.1",
+      "implementation": "One boolean ownsPuccaHouse",
+      "gap": "No household members, ownership shares, definition of pucca house, rural house check or exceptions.",
+      "reviewerAction": "Map each family member and ownership condition; define evidence and edge cases."
+    },
+    {
+      "condition": "Income band EWS/LIG/MIG and State/UT EWS flexibility",
+      "source": "Guidelines §§2 and 3.3",
+      "implementation": "Annual income <= ₹9 lakh",
+      "gap": "Does not distinguish EWS/LIG/MIG, household income evidence, State/UT EWS redefinition or component-specific income criteria.",
+      "reviewerAction": "Create vertical-specific income bands and current State/UT overrides with source references."
+    },
+    {
+      "condition": "No housing-scheme allotment in preceding 20 years",
+      "source": "Guidelines §3.2",
+      "implementation": "One yes/no previousHousingBenefit field",
+      "gap": "No scheme/date/beneficiary family member/urban-rural distinction; parent housing benefit is a separate prioritisation clause.",
+      "reviewerAction": "Separate disqualification from prioritisation and define exact 20-year calculation."
+    },
+    {
+      "condition": "Vertical-specific conditions (BLC/AHP/ARH/ISS)",
+      "source": "Guidelines §§5.1–5.4 and applicable SOPs",
+      "implementation": "No vertical selection or vertical-specific rules",
+      "gap": "The generic screen cannot establish project, land title, beneficiary contribution, loan/property limits or other component conditions.",
+      "reviewerAction": "Do not enable deterministic assessment until vertical-specific rule packs and State/ULB workflows are reviewed."
+    }
+  ],
+  "boundaryTests": [
+    {
+      "id": "PMAY-01",
+      "scenario": "Household income exactly ₹3,00,000 / ₹6,00,000 / ₹9,00,000",
+      "expected": "Reviewer must confirm inclusive band boundaries and any State/UT override.",
+      "reviewFixtureStatus": "proposed_not_executed",
+      "executionEvidence": null
+    },
+    {
+      "id": "PMAY-02",
+      "scenario": "Applicant owns no urban house but another defined family member owns a pucca house elsewhere in India",
+      "expected": "Do not return a potential match; family-wide ownership must be checked.",
+      "reviewFixtureStatus": "proposed_not_executed",
+      "executionEvidence": null
+    },
+    {
+      "id": "PMAY-03",
+      "scenario": "Prior government housing allotment 19 years 11 months ago vs 20 years 1 day ago",
+      "expected": "Reviewer must define effective date and exact cutoff; no rounded-year logic.",
+      "reviewFixtureStatus": "proposed_not_executed",
+      "executionEvidence": null
+    },
+    {
+      "id": "PMAY-04",
+      "scenario": "Applicant's parent received a house under an earlier scheme but applicant/family did not",
+      "expected": "Apply the distinct parent-benefit prioritisation clause; do not misclassify as automatic disqualification.",
+      "reviewFixtureStatus": "proposed_not_executed",
+      "executionEvidence": null
+    },
+    {
+      "id": "PMAY-05",
+      "scenario": "Rural household or house in rural area",
+      "expected": "Route to PMAY-G or apply the exact PMAY-U rule; do not assume urban eligibility.",
+      "reviewFixtureStatus": "proposed_not_executed",
+      "executionEvidence": null
+    },
+    {
+      "id": "PMAY-06",
+      "scenario": "ISS loan/property amounts or BLC land-title/beneficiary-contribution criteria are missing",
+      "expected": "needs_verification; vertical-specific evidence is required.",
+      "reviewFixtureStatus": "proposed_not_executed",
+      "executionEvidence": null
+    }
+  ],
+  "amendmentsReviewed": [
+    {
+      "item": "September 2024 PMAY-U 2.0 Scheme Guidelines inspected.",
+      "status": "inspected_not_exhaustive"
+    },
+    {
+      "item": "April 2026 AHP SOP identified and inspected at high level; full operational implementation and other vertical SOPs remain open.",
+      "status": "inspected_not_exhaustive"
+    },
+    {
+      "item": "Official guideline index checked 04.11.2026; legacy amendments listed but not all reconciled.",
+      "status": "inspected_not_exhaustive"
+    }
+  ],
+  "unresolvedQuestions": [
+    "Review all four verticals and all relevant current SOPs/circulars; only AHP SOP April 2026 was identified in this pass.",
+    "Confirm which legacy PMAY-U amendments remain applicable to PMAY-U 2.0; do not conflate them.",
+    "Confirm current State/UT EWS definitions, urban residency evidence and ULB verification process."
+  ],
   "reviewers": [
     {
       "role": "independent_source_reviewer",
@@ -24,8 +168,5 @@
       "evidence": []
     }
   ],
-  "eligibilityMatrix": [],
-  "boundaryTests": [],
-  "amendmentsReviewed": [],
-  "approvalNote": "Do not set reviewStatus to approved until both independent reviewers sign off and the evidence is merged in a reviewed pull request."
+  "approvalNote": "Do not set reviewStatus to approved until two independent human reviewers have separately completed and signed the source and rule reviews, all material questions are resolved, boundary fixtures are executed, and the reviewed evidence is merged. AI-assisted source preparation is not approval."
 }
