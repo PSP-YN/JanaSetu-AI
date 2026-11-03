@@ -1,7 +1,7 @@
 # Phase 2 — Localization, accessibility and deployment assessment
 
 **Updated:** 3 November 2026
-**Status:** Local release candidate verified; not production-ready for real citizen data.
+**Status:** Prototype deployed to Vercel production; not production-ready for real citizen data.
 
 ## Implemented
 
@@ -34,15 +34,16 @@ Latest complete application verification:
 - Local production smoke: `/api/health`, `/api/schemes` (142 records), `/api/sources/health`, `/api/schemes/open-data?q=farmer`, `/privacy` and `/terms` returned HTTP 200.
 - `git diff --check`: passed.
 
-The integrated release is tracked in [PR #6](https://github.com/PSP-YN/JanaSetu-AI/pull/6). GitHub CI and the Vercel Preview must be green for the latest PR head before merge; older successful runs or previews do not validate a newer commit.
+The integrated release was merged by [PR #6](https://github.com/PSP-YN/JanaSetu-AI/pull/6) as commit `493d0c2414cfd1028b8f9887644355f6deb03dcc`. GitHub Actions run `41691385168` passed; the exact-commit Vercel Preview and six-locale accessibility checks passed before merge. The merge triggered the production deployment.
 
-## Live Vercel observations
+## Live Vercel observations — 3 November 2026
 
-- Current production domain: `https://jana-setu-ai.vercel.app`.
-- Production root, `/api/health`, `/api/schemes`, `/privacy` and `/terms` returned HTTP 200 during the 3 November check.
-- Production `/api/schemes/open-data?q=farmer` returned **HTTP 502**.
-- Existing Phase 2 preview `https://janasetu-qjy21mmr2-pspyn.vercel.app` returned HTTP 200 for the same open-data query and the other checked routes. That preview belongs to the earlier `phase2-localization-search-fallback` branch/commit `4aca454`; it is not the current integrated release candidate and must not be promoted as a substitute for the tested tree.
-- No production deployment of the release candidate has been made. Preview deployments are for validation only.
+- Production domain: [https://jana-setu-ai.vercel.app](https://jana-setu-ai.vercel.app). Production deployment `janasetu-82sqegccz-pspyn.vercel.app` is READY for main commit `493d0c2414cfd1028b8f9887644355f6deb03dcc` (deployment `dpl_3GR7ZgPtByT2QpSTVnyhWiiC9vdX`).
+- Production HTTP smoke: `/`, `/api/health`, `/api/schemes` (142 records), `/api/sources/health`, `/api/schemes/open-data?q=farmer` (3 page-filter results with warning), `/privacy` and `/terms` all returned HTTP 200. Required security headers were present.
+- Production source health correctly reports `attention_required`: the 5 July 2026 third-party snapshot is stale and upstream search is unavailable. The bounded current-page fallback returns results, but it is not a complete search across the full catalogue.
+- Production browser checks: all six locales across home, Privacy and Terms passed **18/18** checks; critical/serious axe violations: **0**; browser page errors: **0**.
+- The Preview for the exact release commit `afb09ff4ee5d578eec5418f4b8edcfec863c6009` was READY and passed the same 18/18 locale/accessibility checks before merge.
+- PR #6 is merged; PRs #4 and #5 were closed as superseded and their stale feature branches deleted. `main` now requires the CI workflow, Vercel and Vercel Preview Comments checks, requires conversation resolution, and blocks force-pushes/deletion.
 
 ## Remaining release gates
 
@@ -55,4 +56,4 @@ The integrated release is tracked in [PR #6](https://github.com/PSP-YN/JanaSetu-
 
 ## Deployment decision
 
-The code is a **locally verified prototype release candidate**, suitable for a reviewed GitHub pull request and a fresh Vercel Preview. It is not certified for public-service decisions or real sensitive citizen records. Do not promote to production or accept real citizen data until the external gates above are closed and the new Preview is validated against the exact release commit.
+The code is a **deployed public prototype**, not a certified public-service decision system. The deployment is for demonstration and synthetic-data evaluation only. Do not use real sensitive citizen records or represent results as official eligibility decisions. A controlled pilot or public-service launch remains blocked until the external governance, freshness, language, legal, privacy and security gates above are closed.

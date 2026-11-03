@@ -1,6 +1,6 @@
 # Production readiness assessment
 
-**Status: locally verified prototype release candidate — not production-ready for real citizen records. Updated 3 November 2026.**
+**Status: deployed prototype — not production-ready for real citizen records. Updated 3 November 2026.**
 
 This assessment is intentionally strict. A successful Next.js build and public deployment do not establish operational, security, privacy or legal readiness.
 
@@ -20,7 +20,7 @@ This assessment is intentionally strict. A successful Next.js build and public d
 
 ## Verification evidence and remaining gaps
 
-Local verification on 3 November 2026 passed: 50 unit tests, 35 Playwright tests against a production-mode local server, TypeScript, extension syntax/Manifest V3 validation, locale key-parity checks, production dependency audit (0 vulnerabilities), Next.js production build and local production smoke tests. PR #6 tracks the integrated release; only checks and the Preview for its latest head count as release evidence.
+Local verification on 3 November 2026 passed: 50 unit tests, 35 Playwright tests against a freshly built production-mode local server, TypeScript, extension syntax/Manifest V3 validation, locale key-parity checks, production dependency audit (0 vulnerabilities), Next.js production build and local production smoke tests. PR #6 was squash-merged to main as `493d0c2414cfd1028b8f9887644355f6deb03dcc`; GitHub Actions run `41691385168` passed. The Vercel production deployment is READY and passed live HTTP plus six-locale browser/accessibility checks.
 
 Not yet demonstrated:
 - Fluent-speaker review of the implemented six-locale workspace, legal pages, convenience scheme translations and extension popup. Official source records remain source-authoritative and may remain in their original language.
@@ -43,9 +43,12 @@ Not yet demonstrated:
 
 ## Current Vercel deployment observations — 3 November 2026
 
-- Production `https://jana-setu-ai.vercel.app`: root, `/api/health`, `/api/schemes`, `/privacy` and `/terms` returned HTTP 200; `/api/schemes/open-data?q=farmer` returned HTTP 502.
-- Existing Phase 2 preview `https://janasetu-qjy21mmr2-pspyn.vercel.app`: the same checked routes, including open-data search, returned HTTP 200. It is based on an earlier Phase 2 commit, not the current integrated local release candidate.
-- The integrated release is tracked in [PR #6](https://github.com/PSP-YN/JanaSetu-AI/pull/6). Its Preview must be checked against the latest PR head. Do not promote an older preview as a substitute for the exact tested tree. No production deployment has been made from this release candidate.
+- Production domain [`https://jana-setu-ai.vercel.app`](https://jana-setu-ai.vercel.app) is live on main commit `493d0c2414cfd1028b8f9887644355f6deb03dcc`; Vercel deployment `dpl_3GR7ZgPtByT2QpSTVnyhWiiC9vdX` is READY.
+- Live smoke: `/`, `/api/health`, `/api/schemes` (142 records), `/api/sources/health`, `/api/schemes/open-data?q=farmer` (3 current-page fallback results), `/privacy` and `/terms` returned HTTP 200. Security headers were present.
+- Source monitor remains `attention_required`: upstream metadata is reachable, upstream `/search` is unavailable, and the third-party catalogue snapshot is stale. The page-filter fallback is bounded to the currently loaded source page and displays a warning; it must not be described as complete catalogue search.
+- Production browser checks passed for English, Hindi, Kannada, Tamil, Telugu and Malayalam across home, Privacy and Terms: **18/18**; critical/serious axe violations: **0**; browser page errors: **0**.
+- The production deployment was automatically created by merging [PR #6](https://github.com/PSP-YN/JanaSetu-AI/pull/6). PRs #4 and #5 were closed as superseded; their stale branches were deleted.
+- `main` requires the CI workflow, Vercel and Vercel Preview Comments checks; it requires conversation resolution and blocks force-pushes and deletion.
 
 ## Blocking requirements before real citizen use
 
@@ -74,7 +77,7 @@ Not yet demonstrated:
 - Add browser-based end-to-end tests for core journeys and accessibility checks.
 - Add rate limiting, request-size limits, bot protection, structured redacted logs and error monitoring.
 - Add backup/restore tests, incident response, dependency update automation and vulnerability remediation SLAs.
-- Configure Vercel deployment checks so production promotion is gated by required GitHub checks.
+- Keep `main` branch protection enabled: require the CI workflow, Vercel and Vercel Preview Comments checks; require conversation resolution; block force-pushes and branch deletion.
 - Add staging/production separation and rollback runbooks.
 - Complete an independent penetration test and privacy/security review.
 
