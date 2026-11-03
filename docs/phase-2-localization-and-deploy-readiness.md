@@ -12,7 +12,7 @@
 - Added translation-key parity checks for the main UI and extension popup, plus cross-locale Playwright checks for workspace navigation, profile labels, legal routes and accessibility.
 - Added strict backup validation: profile/state validation, 5 MB cap, sanitized document metadata, trusted catalogue URLs, and restored assessments forced to require a fresh evaluation.
 - Tightened assessment/draft safety so pending, missing or removed schemes cannot retain a positive/previously reviewed result.
-- Improved extension identity matching so a full name is not copied into first-name, last-name or username fields. The extension remains HTTPS `.gov.in` / `.nic.in` only, manual click-to-fill, and never submits or uploads documents.
+- Improved extension identity matching so a full name is not copied into first-name, last-name or username fields. The extension remains HTTPS `.gov.in` / `.nic.in` only and manual click-to-fill. It does not intentionally submit forms or upload documents, but portal scripts may react to field-change events.
 - Changed CI installation to reproducible `npm ci`, added a lockfile, and made the browser suite run against a built production server. CI now builds before starting Playwright.
 - Added bounded Hugging Face Dataset Viewer `/search` fallback. If `/search` is unavailable, the API filters the current `/rows` page and clearly reports page-only search; pagination advances by source rows.
 - Source health separately reports metadata and search availability.
@@ -21,7 +21,7 @@
 
 Latest complete application verification:
 
-- Unit tests: **47 passed**.
+- Unit tests: **48 passed**.
 - Playwright: **31 passed** against the production-mode local server.
 - TypeScript: passed.
 - Next.js production build: passed.

@@ -19,7 +19,7 @@ test("form assistant has no automatic submission or document upload code", () =>
 
 test("form assistant requires an explicit user click before filling", () => {
   assert.match(extension, /getElementById\("fill"\)\.addEventListener\("click"/);
-  assert.match(popupHtml, /Review every field and submit manually/);
+  assert.match(popupHtml, /Portal scripts may react to field changes/);
 });
 
 test("extension popup translations have six-locale key parity and cover every HTML label", () => {
@@ -33,4 +33,9 @@ test("extension popup translations have six-locale key parity and cover every HT
   for (const entry of keysByLocale) assert.equal(JSON.stringify(Array.from(entry.keys).sort()), baseline, `${entry.locale} popup translation keys differ from English`);
   const htmlKeys = Array.from(popupHtml.matchAll(/data-i18n="([^"]+)"/g), match => match[1]);
   for (const entry of keysByLocale) for (const key of htmlKeys) assert.ok(entry.keys.has(key), `${entry.locale} is missing popup label ${key}`);
+  const portalCaveats: Record<string, string> = {
+    en: "Portal scripts may react to field changes", hi: "पोर्टल की स्क्रिप्ट", kn: "ಪೋರ್ಟಲ್ ಸ್ಕ್ರಿಪ್ಟ್‌ಗಳು",
+    ta: "போர்டல் ஸ்கிரிப்டுகள்", te: "పోర్టల్ స్క్రిప్ట్‌లు", ml: "പോർട്ടൽ സ്ക്രിപ്റ്റുകൾ"
+  };
+  for (const [, locale, block] of localeBlocks) assert.ok(block.includes(portalCaveats[locale]), `${locale} warning must explain that portal scripts may react to field changes`);
 });

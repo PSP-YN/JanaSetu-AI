@@ -36,6 +36,19 @@ test("six locales define the primary workspace shell translations", () => {
   }
 });
 
+test("main UI extension guidance discloses portal-side field-change reactions in all six locales", () => {
+  const uiCopy = page.slice(page.indexOf("const UI_COPY:"), page.indexOf("\nfunction formatMoney"));
+  const localeBlocks = Array.from(uiCopy.matchAll(/^  (en|hi|kn|ta|te|ml): \{([\s\S]*?)^  \},?$/gm));
+  const caveats: Record<string, string> = {
+    en: "Portal scripts may react to field changes", hi: "पोर्टल की स्क्रिप्ट", kn: "ಪೋರ್ಟಲ್ ಸ್ಕ್ರಿಪ್ಟ್‌ಗಳು",
+    ta: "போர்டல் ஸ்கிரிப்டுகள்", te: "పోర్టల్ స్క్రిప్ట్‌లు", ml: "പോർട്ടൽ സ്ക്രിപ്റ്റുകൾ"
+  };
+  for (const [, locale, block] of localeBlocks) {
+    const helper = block.match(/manualSubmit:"([^"]*)"/)?.[1] || "";
+    assert.ok(helper.includes(caveats[locale]), `${locale} manualSubmit helper omits portal-side reaction warning`);
+  }
+});
+
 test("locale dictionaries do not define duplicate keys", () => {
   const localeBlocks = Array.from(page.matchAll(/^  (en|hi|kn|ta|te|ml): \{([\s\S]*?)^  \},?$/gm));
   for (const [, locale, block] of localeBlocks) {

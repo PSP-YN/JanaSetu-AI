@@ -10,7 +10,7 @@ This assessment is intentionally strict. A successful Next.js build and public d
 - Improved hero typography for Indic scripts and added keyboard skip navigation/focus treatment.
 - Added source-age/availability reporting for the third-party dataset. The 5 July 2026 snapshot is 121 days old on 3 November 2026 and exceeds the 90-day freshness policy; the monitor must report attention required.
 - Added source-governance register and official-source spot-check notes. PM-USP AY 2026–27 window dates were inconsistent across official NSP search pages; treat the current application window as uncertain.
-- Restricted the extension to HTTPS `.gov.in` and `.nic.in` hosts, with explicit click-to-fill and no submission behaviour.
+- Restricted the extension to HTTPS `.gov.in` and `.nic.in` hosts, with explicit click-to-fill and no direct form-submission API calls. Portal scripts may react to dispatched field-change events.
 - Published prototype privacy and terms notices with six-locale page content. Translations are unreviewed drafts; these notices are not legal approval or a DPDP compliance certification.
 - Added white-box locale/extension safety tests and black-box HTTP checks for API validation, policy pages and source-monitor contract.
 
@@ -20,7 +20,7 @@ This assessment is intentionally strict. A successful Next.js build and public d
 
 ## Verification evidence and remaining gaps
 
-Local verification on 3 November 2026 passed: 47 unit tests, 31 Playwright tests against a production-mode local server, TypeScript, extension syntax/Manifest V3 validation, locale key-parity checks, production dependency audit (0 vulnerabilities), Next.js production build and local production smoke tests. GitHub CI and a new Vercel deployment still need to run against the exact integrated release commit.
+Local verification on 3 November 2026 passed: 48 unit tests, 31 Playwright tests against a production-mode local server, TypeScript, extension syntax/Manifest V3 validation, locale key-parity checks, production dependency audit (0 vulnerabilities), Next.js production build and local production smoke tests. GitHub CI and a new Vercel deployment still need to run against the exact integrated release commit.
 
 Not yet demonstrated:
 - Fluent-speaker review of the implemented six-locale workspace, legal pages, convenience scheme translations and extension popup. Official source records remain source-authoritative and may remain in their original language.
@@ -38,7 +38,7 @@ Not yet demonstrated:
 - Source links and source-period labels on catalogue records.
 - Multilingual text intake patterns and optional browser speech recognition.
 - Browser-local profile, assessment, draft, document metadata and reminder records; backup restore validates imported data and forces assessments to be rerun.
-- Human review marker; no automatic government submission.
+- Human review marker; JanaSetu makes no direct form-submission API calls. The experimental extension dispatches field-change events, which portal scripts may react to; check the page after filling.
 - No Aadhaar or bank-account fields requested by the prototype.
 
 ## Current Vercel deployment observations — 3 November 2026

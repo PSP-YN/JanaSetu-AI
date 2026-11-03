@@ -4,7 +4,7 @@ const COPY = {
     title: "JanaSetu Form Assistant",
     intro: "Import a citizen-reviewed JanaSetu JSON backup, then fill matching fields on the active government portal.",
     backupLabel: "Select JanaSetu backup (.json)", importBtn: "Import reviewed profile", fillBtn: "Fill fields on active tab",
-    warning: "This extension only fills visible matching fields after you click. It never submits, uploads documents, or clicks Apply. Review every field and submit manually.",
+    warning: "This extension only fills visible matching fields after you click. It does not intentionally submit forms or upload documents. Portal scripts may react to field changes; check the page after filling and review every field before proceeding.",
     chooseBackup: "Choose a JanaSetu JSON backup first.", invalidBackup: "Invalid JanaSetu backup.",
     imported: "Profile imported into extension storage on this device.", importFailed: "Import failed.", profileFirst: "Import a profile first.",
     openPortal: "Open an official government portal tab first.", blockedDomain: "For safety, autofill is limited to HTTPS .gov.in and .nic.in portals. Use manual entry on other sites.",
@@ -14,7 +14,7 @@ const COPY = {
     title: "JanaSetu फ़ॉर्म सहायक",
     intro: "नागरिक द्वारा जाँचा गया JanaSetu JSON बैकअप आयात करें, फिर सक्रिय सरकारी पोर्टल पर मिलते-जुलते फ़ील्ड भरें।",
     backupLabel: "JanaSetu बैकअप चुनें (.json)", importBtn: "जाँची गई प्रोफ़ाइल आयात करें", fillBtn: "सक्रिय टैब के फ़ील्ड भरें",
-    warning: "यह एक्सटेंशन आपके क्लिक के बाद केवल दिखाई देने वाले मिलते-जुलते फ़ील्ड भरता है। यह फ़ॉर्म जमा नहीं करता, दस्तावेज़ अपलोड नहीं करता और Apply पर क्लिक नहीं करता। हर फ़ील्ड जाँचें और स्वयं जमा करें।",
+    warning: "यह एक्सटेंशन आपके क्लिक के बाद केवल दिखाई देने वाले मेल खाते फ़ील्ड भरता है। यह जानबूझकर फ़ॉर्म जमा या दस्तावेज़ अपलोड नहीं करता। पोर्टल की स्क्रिप्ट फ़ील्ड बदलने पर प्रतिक्रिया दे सकती हैं; भरने के बाद पेज जाँचें और आगे बढ़ने से पहले हर फ़ील्ड की समीक्षा करें।",
     chooseBackup: "पहले JanaSetu JSON बैकअप चुनें।", invalidBackup: "JanaSetu बैकअप मान्य नहीं है।",
     imported: "प्रोफ़ाइल इस डिवाइस के एक्सटेंशन स्टोरेज में आयात की गई।", importFailed: "आयात विफल हुआ।", profileFirst: "पहले प्रोफ़ाइल आयात करें।",
     openPortal: "पहले सरकारी पोर्टल का टैब खोलें।", blockedDomain: "सुरक्षा के लिए ऑटोफ़िल केवल HTTPS .gov.in और .nic.in पोर्टलों पर उपलब्ध है। अन्य साइटों पर जानकारी स्वयं भरें।",
@@ -24,7 +24,7 @@ const COPY = {
     title: "JanaSetu ಫಾರ್ಮ್ ಸಹಾಯಕ",
     intro: "ನಾಗರಿಕ ಪರಿಶೀಲಿಸಿದ JanaSetu JSON ಬ್ಯಾಕಪ್ ಆಮದು ಮಾಡಿ, ನಂತರ ತೆರೆದ ಸರ್ಕಾರಿ ಪೋರ್ಟಲ್‌ನ ಹೊಂದಾಣಿಕೆಯ ಕ್ಷೇತ್ರಗಳನ್ನು ತುಂಬಿ.",
     backupLabel: "JanaSetu ಬ್ಯಾಕಪ್ ಆಯ್ಕೆಮಾಡಿ (.json)", importBtn: "ಪರಿಶೀಲಿಸಿದ ಪ್ರೊಫೈಲ್ ಆಮದು ಮಾಡಿ", fillBtn: "ಸಕ್ರಿಯ ಟ್ಯಾಬ್‌ನ ಕ್ಷೇತ್ರಗಳನ್ನು ತುಂಬಿ",
-    warning: "ನೀವು ಕ್ಲಿಕ್ ಮಾಡಿದ ನಂತರ ಮಾತ್ರ ಈ ವಿಸ್ತರಣೆ ಕಾಣುವ ಹೊಂದಾಣಿಕೆಯ ಕ್ಷೇತ್ರಗಳನ್ನು ತುಂಬುತ್ತದೆ. ಇದು ಅರ್ಜಿಯನ್ನು ಸಲ್ಲಿಸುವುದಿಲ್ಲ, ದಾಖಲೆಗಳನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡುವುದಿಲ್ಲ ಅಥವಾ Apply ಕ್ಲಿಕ್ ಮಾಡುವುದಿಲ್ಲ. ಪ್ರತಿಯೊಂದು ಕ್ಷೇತ್ರವನ್ನು ಪರಿಶೀಲಿಸಿ; ಸಲ್ಲಿಸುವುದು ನಿಮ್ಮ ನಿರ್ಧಾರ.",
+    warning: "ನೀವು ಕ್ಲಿಕ್ ಮಾಡಿದ ನಂತರ ಮಾತ್ರ ಈ ವಿಸ್ತರಣೆ ಕಾಣುವ ಹೊಂದಾಣಿಕೆಯ ಕ್ಷೇತ್ರಗಳನ್ನು ತುಂಬುತ್ತದೆ. ಇದು ಉದ್ದೇಶಪೂರ್ವಕವಾಗಿ ಫಾರ್ಮ್ ಸಲ್ಲಿಸುವುದಿಲ್ಲ ಅಥವಾ ದಾಖಲೆಗಳನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡುವುದಿಲ್ಲ. ಕ್ಷೇತ್ರ ಬದಲಾವಣೆಗಳಿಗೆ ಪೋರ್ಟಲ್ ಸ್ಕ್ರಿಪ್ಟ್‌ಗಳು ಪ್ರತಿಕ್ರಿಯಿಸಬಹುದು; ತುಂಬಿದ ನಂತರ ಪುಟವನ್ನು ಪರಿಶೀಲಿಸಿ. ಮುಂದುವರಿಯುವ ಮೊದಲು ಪ್ರತಿಯೊಂದು ಕ್ಷೇತ್ರವನ್ನೂ ಪರಿಶೀಲಿಸಿ.",
     chooseBackup: "ಮೊದಲು JanaSetu JSON ಬ್ಯಾಕಪ್ ಆಯ್ಕೆಮಾಡಿ.", invalidBackup: "JanaSetu ಬ್ಯಾಕಪ್ ಮಾನ್ಯವಾಗಿಲ್ಲ.",
     imported: "ಪ್ರೊಫೈಲ್ ಈ ಸಾಧನದ ವಿಸ್ತರಣೆ ಸಂಗ್ರಹಣೆಗೆ ಆಮದು ಮಾಡಲಾಗಿದೆ.", importFailed: "ಆಮದು ವಿಫಲವಾಗಿದೆ.", profileFirst: "ಮೊದಲು ಪ್ರೊಫೈಲ್ ಆಮದು ಮಾಡಿ.",
     openPortal: "ಮೊದಲು ಅಧಿಕೃತ ಸರ್ಕಾರಿ ಪೋರ್ಟಲ್ ಟ್ಯಾಬ್ ತೆರೆಯಿರಿ.", blockedDomain: "ಸುರಕ್ಷತೆಗಾಗಿ HTTPS .gov.in ಮತ್ತು .nic.in ಪೋರ್ಟಲ್‌ಗಳಲ್ಲಿ ಮಾತ್ರ ಸ್ವಯಂ-ಭರ್ತಿ ಅನುಮತಿಸಲಾಗಿದೆ. ಇತರ ತಾಣಗಳಲ್ಲಿ ಕೈಯಾರೆ ನಮೂದಿಸಿ.",
@@ -34,7 +34,7 @@ const COPY = {
     title: "JanaSetu படிவ உதவியாளர்",
     intro: "குடிமகன் சரிபார்த்த JanaSetu JSON காப்புப்பிரதியை இறக்குமதி செய்து, திறந்துள்ள அரசு தளத்தில் பொருந்தும் புலங்களை நிரப்பவும்.",
     backupLabel: "JanaSetu காப்புப்பிரதியைத் தேர்ந்தெடுக்கவும் (.json)", importBtn: "சரிபார்த்த சுயவிவரத்தை இறக்குமதி செய்", fillBtn: "செயலில் உள்ள தாவல் புலங்களை நிரப்பு",
-    warning: "நீங்கள் கிளிக் செய்த பிறகே இந்த நீட்டிப்பு காணக்கூடிய பொருந்தும் புலங்களை நிரப்பும். இது விண்ணப்பத்தைச் சமர்ப்பிக்காது, ஆவணங்களைப் பதிவேற்றாது, Apply-ஐ கிளிக் செய்யாது. ஒவ்வொரு புலத்தையும் சரிபார்த்து நீங்களே சமர்ப்பிக்கவும்.",
+    warning: "நீங்கள் கிளிக் செய்த பிறகே இந்த நீட்டிப்பு காணக்கூடிய பொருந்தும் புலங்களை நிரப்பும். இது திட்டமிட்டு படிவங்களைச் சமர்ப்பிக்கவோ ஆவணங்களைப் பதிவேற்றவோ செய்யாது. புல மாற்றங்களுக்கு போர்டல் ஸ்கிரிப்டுகள் பதிலளிக்கலாம்; நிரப்பிய பிறகு பக்கத்தைச் சரிபார்க்கவும். தொடர்வதற்கு முன் ஒவ்வொரு புலத்தையும் சரிபார்க்கவும்.",
     chooseBackup: "முதலில் JanaSetu JSON காப்புப்பிரதியைத் தேர்ந்தெடுக்கவும்.", invalidBackup: "JanaSetu காப்புப்பிரதி செல்லுபடியாகாது.",
     imported: "சுயவிவரம் இந்தச் சாதனத்தின் நீட்டிப்பு சேமிப்பகத்தில் இறக்குமதி செய்யப்பட்டது.", importFailed: "இறக்குமதி தோல்வியடைந்தது.", profileFirst: "முதலில் சுயவிவரத்தை இறக்குமதி செய்யவும்.",
     openPortal: "முதலில் அதிகாரப்பூர்வ அரசு தாவலைத் திறக்கவும்.", blockedDomain: "பாதுகாப்புக்காக HTTPS .gov.in மற்றும் .nic.in தளங்களில் மட்டுமே தானியங்கி நிரப்பு அனுமதிக்கப்படுகிறது. பிற தளங்களில் கைமுறையாக உள்ளிடவும்.",
@@ -44,7 +44,7 @@ const COPY = {
     title: "JanaSetu ఫారమ్ సహాయకుడు",
     intro: "పౌరుడు సమీక్షించిన JanaSetu JSON బ్యాకప్‌ను దిగుమతి చేసి, తెరిచిన ప్రభుత్వ పోర్టల్‌లో సరిపోలే ఫీల్డ్‌లను నింపండి.",
     backupLabel: "JanaSetu బ్యాకప్ ఎంచుకోండి (.json)", importBtn: "సమీక్షించిన ప్రొఫైల్ దిగుమతి చేయండి", fillBtn: "ప్రస్తుత ట్యాబ్ ఫీల్డ్‌లను నింపండి",
-    warning: "మీరు క్లిక్ చేసిన తర్వాత మాత్రమే ఈ ఎక్స్‌టెన్షన్ కనిపించే సరిపోలే ఫీల్డ్‌లను నింపుతుంది. ఇది దరఖాస్తును సమర్పించదు, పత్రాలను అప్‌లోడ్ చేయదు లేదా Apply క్లిక్ చేయదు. ప్రతి ఫీల్డ్‌ను సమీక్షించి, మీరే సమర్పించండి.",
+    warning: "మీరు క్లిక్ చేసిన తర్వాత మాత్రమే ఈ ఎక్స్‌టెన్షన్ కనిపించే సరిపోలే ఫీల్డ్‌లను నింపుతుంది. ఇది ఉద్దేశపూర్వకంగా ఫారమ్‌లను సమర్పించదు లేదా పత్రాలను అప్‌లోడ్ చేయదు. ఫీల్డ్ మార్పులకు పోర్టల్ స్క్రిప్ట్‌లు స్పందించవచ్చు; నింపిన తర్వాత పేజీని తనిఖీ చేయండి. కొనసాగించే ముందు ప్రతి ఫీల్డ్‌ను సమీక్షించండి.",
     chooseBackup: "ముందుగా JanaSetu JSON బ్యాకప్ ఎంచుకోండి.", invalidBackup: "JanaSetu బ్యాకప్ చెల్లదు.",
     imported: "ప్రొఫైల్ ఈ పరికరంలోని ఎక్స్‌టెన్షన్ నిల్వలో దిగుమతి చేయబడింది.", importFailed: "దిగుమతి విఫలమైంది.", profileFirst: "ముందుగా ప్రొఫైల్‌ను దిగుమతి చేయండి.",
     openPortal: "ముందుగా అధికారిక ప్రభుత్వ పోర్టల్ ట్యాబ్‌ను తెరవండి.", blockedDomain: "భద్రత కోసం HTTPS .gov.in మరియు .nic.in పోర్టల్‌లలో మాత్రమే ఆటోఫిల్ అనుమతించబడుతుంది. ఇతర సైట్‌లలో చేతితో నమోదు చేయండి.",
@@ -54,7 +54,7 @@ const COPY = {
     title: "JanaSetu ഫോം സഹായി",
     intro: "പൗരൻ പരിശോധിച്ച JanaSetu JSON ബാക്കപ്പ് ഇറക്കുമതി ചെയ്ത് തുറന്നിരിക്കുന്ന സർക്കാർ പോർട്ടലിലെ പൊരുത്തമുള്ള ഫീൽഡുകൾ പൂരിപ്പിക്കുക.",
     backupLabel: "JanaSetu ബാക്കപ്പ് തിരഞ്ഞെടുക്കുക (.json)", importBtn: "പരിശോധിച്ച പ്രൊഫൈൽ ഇറക്കുമതി ചെയ്യുക", fillBtn: "സജീവ ടാബിലെ ഫീൽഡുകൾ പൂരിപ്പിക്കുക",
-    warning: "നിങ്ങൾ ക്ലിക്ക് ചെയ്തതിന് ശേഷമേ ഈ എക്സ്റ്റൻഷൻ കാണുന്ന പൊരുത്തമുള്ള ഫീൽഡുകൾ പൂരിപ്പിക്കൂ. ഇത് അപേക്ഷ സമർപ്പിക്കുകയോ രേഖകൾ അപ്‌ലോഡ് ചെയ്യുകയോ Apply ക്ലിക്ക് ചെയ്യുകയോ ഇല്ല. ഓരോ ഫീൽഡും പരിശോധിച്ച് നിങ്ങൾ തന്നെ സമർപ്പിക്കുക.",
+    warning: "നിങ്ങൾ ക്ലിക്ക് ചെയ്തതിന് ശേഷമേ ഈ എക്സ്റ്റൻഷൻ കാണുന്ന പൊരുത്തമുള്ള ഫീൽഡുകൾ പൂരിപ്പിക്കൂ. ഇത് ഉദ്ദേശ്യപൂർവം ഫോമുകൾ സമർപ്പിക്കുകയോ രേഖകൾ അപ്‌ലോഡ് ചെയ്യുകയോ ഇല്ല. ഫീൽഡ് മാറ്റങ്ങളോട് പോർട്ടൽ സ്ക്രിപ്റ്റുകൾ പ്രതികരിച്ചേക്കാം; പൂരിപ്പിച്ച ശേഷം പേജ് പരിശോധിക്കുക. തുടരുന്നതിന് മുമ്പ് ഓരോ ഫീൽഡും പരിശോധിക്കുക.",
     chooseBackup: "ആദ്യം JanaSetu JSON ബാക്കപ്പ് തിരഞ്ഞെടുക്കുക.", invalidBackup: "JanaSetu ബാക്കപ്പ് സാധുവല്ല.",
     imported: "പ്രൊഫൈൽ ഈ ഉപകരണത്തിലെ എക്സ്റ്റൻഷൻ സംഭരണത്തിലേക്ക് ഇറക്കുമതി ചെയ്തു.", importFailed: "ഇറക്കുമതി പരാജയപ്പെട്ടു.", profileFirst: "ആദ്യം പ്രൊഫൈൽ ഇറക്കുമതി ചെയ്യുക.",
     openPortal: "ആദ്യം ഔദ്യോഗിക സർക്കാർ പോർട്ടൽ ടാബ് തുറക്കുക.", blockedDomain: "സുരക്ഷയ്ക്കായി HTTPS .gov.in, .nic.in പോർട്ടലുകളിൽ മാത്രമാണ് ഓട്ടോഫിൽ അനുവദിക്കുന്നത്. മറ്റ് സൈറ്റുകളിൽ കൈകൊണ്ട് നൽകുക.",
@@ -98,7 +98,7 @@ function setLanguage(language) {
   });
 }
 
-(async () => {
+const popupReady = (async () => {
   try {
     const saved = await chrome.storage.local.get(["language"]);
     setLanguage(saved.language || "en");
@@ -106,6 +106,7 @@ function setLanguage(language) {
 })();
 
 document.getElementById("save").addEventListener("click", async () => {
+  await popupReady;
   const file = document.getElementById("backup").files?.[0];
   if (!file) { say("chooseBackup"); return; }
   try {
@@ -121,6 +122,7 @@ document.getElementById("save").addEventListener("click", async () => {
 
 document.getElementById("fill").addEventListener("click", async () => {
   try {
+    await popupReady;
     const { profile, language } = await chrome.storage.local.get(["profile", "language"]);
     setLanguage(language || currentLanguage);
     if (!profile) { say("profileFirst"); return; }

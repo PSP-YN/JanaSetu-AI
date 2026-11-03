@@ -10,7 +10,7 @@ JanaSetu contains **46 source-linked scheme records**:
 - **6 additional Central references**: AB-PMJAY, PMMVY 2.0, PMSBY, PMJJBY, PMFBY and MGNREGA.
 - **6 Karnataka State references**: Shakti, Anna Bhagya, Gruha Lakshmi, Gruha Jyothi, Yuva Nidhi and CMKKY.
 
-The breakdown is **4 rule-screened + 42 catalogue-only = 46**. The added 42 records are source-indexed; JanaSetu does not automatically decide eligibility for them. The catalogue is a starter set, not a complete India-wide directory. State-specific coverage outside Karnataka remains incomplete.
+The breakdown is **4 rule-screened + 42 catalogue-only = 46**. Here, `rule-screened` means a deterministic prototype rule exists; it does not mean the rule is approved. All four currently remain pending two independent human source/rule approvals and fail closed until both approvals are recorded. The added 42 records are source-indexed; JanaSetu does not automatically decide eligibility for them. The catalogue is a starter set, not a complete India-wide directory. State-specific coverage outside Karnataka remains incomplete.
 
 ## NSP application-window snapshot
 

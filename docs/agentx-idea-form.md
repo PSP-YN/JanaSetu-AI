@@ -44,7 +44,7 @@ Designed for all 28 States and 8 Union Territories. Interface languages in the p
 - User-entered screening answers are not treated as authenticated government records.
 - Each record links to an official source and identifies the rule period or verification caveat.
 - Unknown or unverified evidence prevents a positive eligibility conclusion.
-- The system does not submit applications or fabricate government application IDs/status.
+- JanaSetu does not intentionally submit applications or fabricate government application IDs/status. The experimental extension fills fields only after a user click; portal scripts may react to those field changes.
 - Human review is required before any consequential external action.
 - Prototype profile, document references, drafts and reminders are browser-local; relevant profile fields are sent to the app server for assessment/draft processing. File binaries are not uploaded or parsed.
 
