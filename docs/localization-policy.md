@@ -23,4 +23,4 @@ Translate all application chrome and interaction copy: navigation, tabs, form la
 6. Unreviewed translations must be labelled draft/machine-assisted or not presented as official.
 
 ## Current implementation status
-The shared profile and intake dictionary has been expanded in the current hardening branch. This is not evidence that every hard-coded label on every tab, privacy/terms route, dynamic API response or extension popup has been translated. Complete all-route review and fluent-speaker approval remain release gates.
+The application has automated six-locale checks for the main routes, privacy and terms pages, and extension popup. These checks establish locale rendering and key coverage only; they do not establish natural fluency, legal equivalence or culturally correct scheme terminology. Fluent-speaker review across English (en-IN), Hindi, Kannada, Tamil, Telugu and Malayalam remains a release gate. Review dynamic API messages, accessibility names, date/number formatting, official-source labels and extension workflows in addition to static page copy.
