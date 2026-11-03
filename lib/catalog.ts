@@ -56,6 +56,8 @@ export interface RuleCheck {
 
 export interface Assessment {
   schemeId: string;
+  /** Approval state at the time of evaluation; legacy assessments without this must be re-run. */
+  schemeReviewStatusAtAssessment?: "pending" | "approved";
   state: AssessmentState;
   headline: string;
   explanation: string;

@@ -24,6 +24,25 @@ test("all six language options update document language and selected locale", as
   }
 });
 
+test("main workspace labels and mobile navigation are translated for all six locales", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  const selector = page.locator(".language-control select");
+  const labels = [
+    ["en", "A CLEARER WAY FORWARD", "Open navigation"],
+    ["hi", "आगे बढ़ने का स्पष्ट रास्ता", "नेविगेशन खोलें"],
+    ["kn", "ಮುಂದಿನ ದಾರಿ ಸ್ಪಷ್ಟವಾಗಲಿ", "ನ್ಯಾವಿಗೇಶನ್ ತೆರೆಯಿರಿ"],
+    ["ta", "அடுத்த படி தெளிவாக", "வழிசெலுத்தலைத் திற"],
+    ["te", "తదుపరి దారి స్పష్టంగా", "నావిగేషన్ తెరవండి"],
+    ["ml", "അടുത്ത ഘട്ടം വ്യക്തം", "നാവിഗേഷൻ തുറക്കുക"]
+  ];
+  for (const [locale, hero, menuLabel] of labels) {
+    await selector.selectOption(locale);
+    await expect(page.locator(".hero-label")).toContainText(hero);
+    await expect(page.getByRole("button", { name: menuLabel })).toBeVisible();
+  }
+});
+
 test("security headers are served by the active Next.js configuration", async ({ request }) => {
   const response = await request.get("/");
   expect(response.ok()).toBeTruthy();
@@ -32,6 +51,9 @@ test("security headers are served by the active Next.js configuration", async ({
   expect(headers["x-content-type-options"]).toBe("nosniff");
   expect(headers["referrer-policy"]).toBe("strict-origin-when-cross-origin");
   expect(headers["content-security-policy-report-only"]).toContain("frame-ancestors 'none'");
+  expect(headers["content-security-policy-report-only"]).toContain("https://datasets-server.huggingface.co");
+  expect(headers["content-security-policy-report-only"]).not.toContain("connect-src 'self' https:;");
+  expect(headers["content-security-policy-report-only"]).not.toMatch(/,\s*default-src/);
   expect(headers["x-powered-by"]).toBeUndefined();
 });
 
@@ -108,4 +130,78 @@ test("mobile viewport homepage has no serious or critical axe violations", async
     .analyze();
   const blocking = result.violations.filter(v => v.impact === "critical" || v.impact === "serious");
   expect(blocking.map(v => ({ id: v.id, targets: v.nodes.map(n => n.target) }))).toEqual([]);
+});
+
+test("primary navigation, profile labels and occupation values stay localized/canonical across language changes", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/");
+  const selector = page.locator(".language-control select");
+  const expected = [
+    { code: "en", nav: ["Overview", "Find benefits", "My profile", "Documents", "My applications", "How it works"], name: "Full name", occupation: "Occupation" },
+    { code: "hi", nav: ["अवलोकन", "लाभ खोजें", "मेरी प्रोफ़ाइल", "दस्तावेज़", "मेरे आवेदन", "यह कैसे काम करता है"], name: "पूरा नाम", occupation: "व्यवसाय" },
+    { code: "kn", nav: ["ಅವಲೋಕನ", "ಸೌಲಭ್ಯಗಳನ್ನು ಹುಡುಕಿ", "ನನ್ನ ಪ್ರೊಫೈಲ್", "ದಾಖಲೆಗಳು", "ನನ್ನ ಅರ್ಜಿಗಳು", "ಇದು ಹೇಗೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ"], name: "ಪೂರ್ಣ ಹೆಸರು", occupation: "ಉದ್ಯೋಗ" },
+    { code: "ta", nav: ["கண்ணோட்டம்", "நலத்திட்டங்களைத் தேடு", "எனது சுயவிவரம்", "ஆவணங்கள்", "எனது விண்ணப்பங்கள்", "இது எவ்வாறு செயல்படுகிறது"], name: "முழுப் பெயர்", occupation: "தொழில்" },
+    { code: "te", nav: ["అవలోకనం", "ప్రయోజనాలను కనుగొనండి", "నా ప్రొఫైల్", "పత్రాలు", "నా దరఖాస్తులు", "ఇది ఎలా పనిచేస్తుంది"], name: "పూర్తి పేరు", occupation: "వృత్తి" },
+    { code: "ml", nav: ["അവലോകനം", "ആനുകൂല്യങ്ങൾ കണ്ടെത്തുക", "എന്റെ പ്രൊഫൈൽ", "രേഖകൾ", "എന്റെ അപേക്ഷകൾ", "ഇത് എങ്ങനെ പ്രവർത്തിക്കുന്നു"], name: "പൂർണ്ണ പേര് (ഐച്ഛികം)", occupation: "തൊഴിൽ" }
+  ];
+  for (const locale of expected) {
+    await selector.selectOption(locale.code);
+    const nav = (await page.locator(".nav-item").allInnerTexts()).map((label) => label.trim());
+    expect(nav).toEqual(locale.nav);
+    await page.locator(".nav-item").nth(2).click();
+    await expect(page.getByLabel(locale.name)).toBeVisible();
+    const occupation = page.getByLabel(locale.occupation);
+    await occupation.selectOption("Farmer");
+    await expect(occupation).toHaveValue("Farmer");
+  }
+});
+
+test("privacy and terms routes fully switch headings and document language across six locales", async ({ page }) => {
+  const locales = [
+    ["en", "en-IN", "Privacy notice", "Terms and limitations"],
+    ["hi", "hi-IN", "गोपनीयता सूचना", "नियम और सीमाएँ"],
+    ["kn", "kn-IN", "ಗೌಪ್ಯತಾ ಸೂಚನೆ", "ನಿಯಮಗಳು ಮತ್ತು ಮಿತಿಗಳು"],
+    ["ta", "ta-IN", "தனியுரிமை அறிவிப்பு", "விதிமுறைகள் மற்றும் வரம்புகள்"],
+    ["te", "te-IN", "గోప్యతా నోటీసు", "నిబంధనలు మరియు పరిమితులు"],
+    ["ml", "ml-IN", "സ്വകാര്യതാ അറിയിപ്പ്", "നിബന്ധനകളും പരിമിതികളും"]
+  ];
+  await page.goto("/privacy");
+  for (const [code, lang, privacyTitle, termsTitle] of locales) {
+    await page.locator(".legal-toolbar select").selectOption(code);
+    await expect(page.locator("h1")).toHaveText(privacyTitle);
+    await expect(page.locator("html")).toHaveAttribute("lang", lang);
+    await page.goto("/terms");
+    await expect(page.locator("h1")).toHaveText(termsTitle);
+    await expect(page.locator("html")).toHaveAttribute("lang", lang);
+    await page.goto("/privacy");
+  }
+});
+
+test("localized privacy and terms pages have no serious or critical axe violations", async ({ page }) => {
+  const locales = ["en", "hi", "kn", "ta", "te", "ml"];
+  for (const locale of locales) {
+    for (const route of ["/privacy", "/terms"]) {
+      await page.goto(route);
+      await page.locator(".legal-toolbar select").selectOption(locale);
+      await expect(page.locator("h1")).toBeVisible();
+      const result = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "best-practice"]).analyze();
+      const blocking = result.violations.filter((v) => v.impact === "critical" || v.impact === "serious");
+      expect(blocking.map(v => ({ id: v.id, impact: v.impact, targets: v.nodes.map(n => n.target) }))).toEqual([]);
+    }
+  }
+});
+
+
+test("hero focus outline and primary button text remain high-contrast", async ({ page }) => {
+  await page.goto("/");
+  const heroButton = page.locator(".hero-panel button").first();
+  await expect(heroButton).toBeVisible();
+  await heroButton.focus();
+  await expect(heroButton).toBeFocused();
+  await page.waitForTimeout(250); // Allow the focus-ring transition to finish before reading computed styles.
+  const focusStyle = await heroButton.evaluate((element) => ({ outlineStyle: getComputedStyle(element).outlineStyle, boxShadow: getComputedStyle(element).boxShadow }));
+  expect(focusStyle.outlineStyle).toBe("solid");
+  expect(focusStyle.boxShadow).toContain("rgb(255, 248, 241)");
+  const primaryButton = page.locator(".button-primary").first();
+  expect(await primaryButton.evaluate((element) => getComputedStyle(element).color)).toBe("rgb(255, 255, 255)");
 });

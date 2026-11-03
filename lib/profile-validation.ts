@@ -1,4 +1,4 @@
-import type { CitizenProfile } from "./catalog";
+import { STATES_AND_UTS, type CitizenProfile } from "./catalog";
 
 const keys: (keyof CitizenProfile)[] = [
   "fullName", "age", "gender", "state", "district", "residenceType", "annualIncome",
@@ -8,6 +8,17 @@ const keys: (keyof CitizenProfile)[] = [
   "diplomaOrDistance"
 ];
 
+const OCCUPATION_ALIASES: Record<string, string> = {
+  farmer: "Farmer", "किसान": "Farmer", "ರೈತ": "Farmer", "விவசாயி": "Farmer", "రైతు": "Farmer", "കർഷകൻ": "Farmer",
+  "agricultural worker": "Agricultural worker", "कृषि श्रमिक": "Agricultural worker", "ಕೃಷಿ ಕಾರ್ಮಿಕ": "Agricultural worker", "வேளாண் தொழிலாளர்": "Agricultural worker", "వ్యవసాయ కార్మికుడు": "Agricultural worker", "കൃഷിത്തൊഴിലാളി": "Agricultural worker",
+  student: "Student", "छात्र": "Student", "ವಿದ್ಯಾರ್ಥಿ": "Student", "மாணவர்": "Student", "విద్యార్థి": "Student", "വിദ്യാർത്ഥി": "Student",
+  "self-employed": "Self-employed", "स्व-रोज़गार": "Self-employed", "ಸ್ವಯಂ ಉದ್ಯೋಗಿ": "Self-employed", "சுயதொழில்": "Self-employed", "స్వయం ఉపాధి": "Self-employed", "സ്വയം തൊഴിൽ": "Self-employed",
+  vendor: "Vendor", "विक्रेता": "Vendor", "ವ್ಯಾಪಾರಿ": "Vendor", "விற்பனையாளர்": "Vendor", "విక్రేత": "Vendor", "വിൽപ്പനക്കാരൻ": "Vendor",
+  salaried: "Salaried", "वेतनभोगी": "Salaried", "ಸಂಬಳದ ಉದ್ಯೋಗಿ": "Salaried", "சம்பளப் பணியாளர்": "Salaried", "వేతన ఉద్యోగి": "Salaried", "ശമ്പളക്കാരൻ": "Salaried",
+  unemployed: "Unemployed", "बेरोज़गार": "Unemployed", "ನಿರುದ್ಯೋಗಿ": "Unemployed", "வேலைஇல்லாதவர்": "Unemployed", "నిరుద్యోగి": "Unemployed", "തൊഴിൽരഹിതൻ": "Unemployed",
+  homemaker: "Homemaker", "गृहिणी": "Homemaker", "ಗೃಹಿಣಿ": "Homemaker", "இல்லத்தரசி": "Homemaker", "വീട്ടമ്മ": "Homemaker",
+  other: "Other", "अन्य": "Other", "ಇತರೆ": "Other", "மற்றவை": "Other", "ఇతర": "Other", "മറ്റുള്ളവ": "Other"
+};
 const isBoolOrNull = (value: unknown): value is boolean | null => value === null || typeof value === "boolean";
 const isNumberOrEmpty = (value: unknown, max: number): value is number | "" =>
   value === "" || (typeof value === "number" && Number.isFinite(value) && value >= 0 && value <= max);
@@ -29,11 +40,16 @@ export function parseCitizenProfile(value: unknown): CitizenProfile | null {
   if (typeof profile.fullName !== "string" || profile.fullName.length > 100) return null;
   if (!isNumberOrEmpty(profile.age, 120) || (typeof profile.age === "number" && !Number.isInteger(profile.age))) return null;
   if (!["", "woman", "man", "other"].includes(profile.gender)) return null;
-  if (typeof profile.state !== "string" || profile.state.length > 80) return null;
+  if (typeof profile.state !== "string" || profile.state.length > 80 || profile.state !== profile.state.trim()) return null;
+  if (profile.state !== "" && !STATES_AND_UTS.includes(profile.state)) return null;
   if (typeof profile.district !== "string" || profile.district.length > 100) return null;
   if (!["", "urban", "rural"].includes(profile.residenceType)) return null;
   if (!isNumberOrEmpty(profile.annualIncome, 100_000_000)) return null;
   if (typeof profile.occupation !== "string" || profile.occupation.length > 100) return null;
+  const occupation = profile.occupation.trim();
+  const canonicalOccupation = OCCUPATION_ALIASES[occupation.toLocaleLowerCase()] || OCCUPATION_ALIASES[occupation] || occupation;
+  if (!["", "Farmer", "Agricultural worker", "Student", "Self-employed", "Vendor", "Salaried", "Unemployed", "Homemaker", "Other"].includes(canonicalOccupation)) return null;
+  profile.occupation = canonicalOccupation;
   if (!isBoolOrNull(profile.hasCultivableLand) || !isBoolOrNull(profile.ownsPuccaHouse) ||
       !isBoolOrNull(profile.householdHasLpg) || !isBoolOrNull(profile.poorHouseholdDeclaration) ||
       !isBoolOrNull(profile.top20Percentile) || !isBoolOrNull(profile.regularUndergraduate) ||

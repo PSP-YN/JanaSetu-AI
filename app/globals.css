@@ -648,15 +648,19 @@ input, select, textarea { min-height: 44px; }
 
 
 /* Text contrast: all non-decorative copy in the application shell must meet AA. */
-.main-area :where(p, small, span, li, label, dt, dd),
-.sidebar :where(p, small, span, li, label, dt, dd) {
+.main-area :where(p, small, span, li, label, dt, dd):not(.button-primary):not(.button-primary *),
+.sidebar :where(p, small, span, li, label, dt, dd):not(.button-primary):not(.button-primary *) {
   color: #594331;
 }
-.main-area :where(a, button):focus-visible,
 .sidebar :where(a, button):focus-visible {
   outline: 3px solid #71300f;
   outline-offset: 3px;
 }
+.hero-panel :where(a, button):focus-visible {
+  outline: 3px solid #fff8f1;
+  outline-offset: 3px;
+}
+.hero-panel .hero-content p { color: #fff8f1 !important; }
 
 
 /* Specific high-density dashboard copy found by automated axe scans. */
@@ -690,3 +694,23 @@ input, select, textarea { min-height: 44px; }
 
 /* Axe: intake helper copy is 10px; use a dark neutral that clears 4.5:1. */
 .intake-heading > p { color: #594331 !important; }
+
+.legal-page { color: #3b2a1d; line-height: 1.7; }
+.legal-page h1 { margin: 16px 0; font-size: clamp(2rem, 4vw, 2.6rem); color: #71300f; }
+.legal-page h2 { margin: 26px 0 8px; font-size: 1.2rem; color: #71300f; }
+.legal-page p, .legal-page li { color: #4f3b2c; }
+.legal-toolbar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+.legal-toolbar a { color: #7c2d12; font-weight: 700; }
+.legal-toolbar label { display: flex; align-items: center; gap: 8px; color: #4f3b2c; }
+.legal-toolbar select { border: 1px solid #c9a78b; border-radius: 8px; padding: 7px 10px; background: #fff; color: #3b2a1d; }
+.legal-updated { font-size: .85rem; font-weight: 650; }
+.legal-translation-notice { border: 1px solid #e0b38c; border-radius: 10px; background: #fff2e5; padding: 12px 14px; color: #5a341d !important; font-size: .9rem; }
+.source-language-notice { margin: 8px 0 16px; padding: 10px 12px; border-radius: 8px; border: 1px solid #e7c8a8; background: #fff8f1; color: #5c3b22; font-size: .82rem; line-height: 1.5; }
+
+/* Keep keyboard and programmatic focus visible against the dark hero surface. */
+.hero-panel button:focus,
+.hero-panel a:focus {
+  outline: 3px solid #fff8f1;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px #fff8f1 !important;
+}

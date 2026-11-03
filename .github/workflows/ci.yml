@@ -30,13 +30,16 @@ jobs:
           node-version: "22"
 
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: Run unit tests
         run: npm test
 
       - name: Type-check
         run: npm run typecheck
+
+      - name: Build production application
+        run: npm run build
 
       - name: Install Chromium for browser tests
         run: npx playwright install --with-deps chromium
@@ -52,9 +55,6 @@ jobs:
 
       - name: Audit production dependencies
         run: npm audit --omit=dev --audit-level=high
-
-      - name: Build production application
-        run: npm run build
 
       - name: Smoke-test production server
         shell: bash

@@ -6,11 +6,12 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   reporter: "list",
-  use: { baseURL: "http://127.0.0.1:3000", trace: "retain-on-failure", ...devices["Desktop Chrome"] },
+  workers: process.env.CI ? 2 : 4,
+  use: { baseURL: "http://127.0.0.1:3002", trace: "retain-on-failure", ...devices["Desktop Chrome"] },
   webServer: {
-    command: "npm run dev -- --hostname 127.0.0.1",
-    url: "http://127.0.0.1:3000/api/health",
-    reuseExistingServer: !process.env.CI,
+    command: "npm run start -- --hostname 127.0.0.1 --port 3002",
+    url: "http://127.0.0.1:3002/api/health",
+    reuseExistingServer: false,
     timeout: 120_000
   }
 });
