@@ -44,3 +44,22 @@ Do not collect real citizen data during review. Use synthetic profiles only.
 ## Per-scheme review records
 
 Blank, versioned review records are maintained under `docs/scheme-reviews/` for PM-KISAN, PMAY-U 2.0, PMUY and PM-USP CSSS. Each record starts pending with two independent reviewer slots. Reviewers must attach evidence and complete the eligibility matrix before a maintainer can approve a rule version.
+
+
+## Review packet refresh — 4 November 2026
+
+The four structured review packets have been populated with:
+- Official source URLs, issuing authority, publication/revision date where known, and date checked.
+- A current-source evidence summary with an explicit distinction between live portal snapshots and historical guideline documents.
+- A condition-by-condition comparison of the current implementation against the source.
+- Material omissions and questions for the independent source and rule reviewers.
+- Proposed boundary fixtures marked proposed_not_executed; they are not represented as passing tests.
+- Two independent reviewer slots, both intentionally blank and pending.
+
+Packet files:
+- docs/scheme-reviews/pm-kisan.json
+- docs/scheme-reviews/pmay-u-2.json
+- docs/scheme-reviews/pm-ujjwala.json
+- docs/scheme-reviews/pm-usp-csss.json
+
+The 4 November refresh is partial. It does not claim exhaustive amendment research. Any disagreement, missing source, unverified condition or missing evidence keeps the scheme pending. No AI-generated assessment can fill either reviewer slot.
