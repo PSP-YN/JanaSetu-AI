@@ -1,11 +1,155 @@
 {
+  "schemaVersion": 2,
+  "packetGeneratedAt": "2026-11-04",
   "schemeId": "pm-usp-csss",
-  "canonicalName": "Central Sector Scheme of Scholarship for College and University Students",
-  "primaryOfficialSource": "https://scholarships.gov.in/",
+  "canonicalName": "PM-USP Central Sector Scheme of Scholarship for College and University Students (CSSS)",
+  "primaryOfficialSource": "https://scholarships.gov.in/All-Scholarships",
   "reviewStatus": "pending",
-  "ruleVersion": null,
-  "sourceVersion": null,
-  "sourceCheckedAt": null,
+  "sourceReviewStatus": "partial_current_source_review_not_approval",
+  "ruleVersion": "lib/agent.ts at main commit f6034c1f1671dfe5b2eab9cf8ac940e76c1176a4 (rule logic unchanged in this refresh); lib/catalog.ts source metadata refreshed in this branch.",
+  "sourceVersion": "NSP AY 2026-27 renewal listing checked 2026-11-04; scheme specifications updated 07.02.2024; detailed FAQ is AY 2025-26.",
+  "sourceCheckedAt": "2026-11-04",
+  "sourceEvidence": [
+    {
+      "title": "National Scholarship Portal — live CSSS entry",
+      "url": "https://scholarships.gov.in/All-Scholarships",
+      "issuer": "Department of Higher Education / National Scholarship Portal",
+      "publishedOrRevised": "AY 2026-27 listing; live snapshot 04 November 2026",
+      "checkedAt": "2026-11-04",
+      "status": "official_live_academic_year_listing",
+      "facts": [
+        "CSSS entry states renewal open from 01.06.2026.",
+        "Renewal student application deadline is 30.11.2026.",
+        "Defective application and institute verification deadlines are 15.12.2026; DNO/SNO/MNO verification deadline is 31.12.2026.",
+        "The listing labels these dates for renewal. Do not treat them as a fresh-application window."
+      ]
+    },
+    {
+      "title": "CSSS Specifications / Guidelines",
+      "url": "https://scholarships.gov.in/public/schemeGuidelines/CSSS_GUIDLINES_07022024_updated.pdf",
+      "issuer": "Department of Higher Education, Ministry of Education",
+      "publishedOrRevised": "Updated 07 February 2024 (as indicated by filename)",
+      "checkedAt": "2026-11-04",
+      "status": "official_scheme_guideline",
+      "facts": [
+        "Official NSP CSSS entry links this scheme specification; reviewer must reconcile its exact clauses with AY 2026-27 notices."
+      ]
+    },
+    {
+      "title": "PM-USP CSSS FAQ 2025-26",
+      "url": "https://scholarships.gov.in/public/schemeGuidelines/FAQ_DOHE_CSSS.pdf",
+      "issuer": "Department of Higher Education, Ministry of Education",
+      "publishedOrRevised": "AY 2025-26",
+      "checkedAt": "2026-11-04",
+      "status": "official_faq_prior_academic_year",
+      "facts": [
+        "Fresh: above 80th percentile of successful candidates in relevant stream from the Board; regular course, not correspondence/distance; family income up to ₹4.5 lakh; no other scholarship or fee reimbursement; diploma students and students who took a drop after Class XII are excluded.",
+        "Selection methodology includes gender, stream and category allocation and 5% horizontal reservation for benchmark disabilities (40% or more), from allocated State Board slots.",
+        "Renewal requires at least 50% marks and at least 75% attendance; yearly renewal; total duration not exceeding five years, subject to conditions.",
+        "FAQ describes scholarship rates of ₹12,000/year at graduation for first three years, ₹20,000/year at postgraduate level and course-specific technical-course rates."
+      ]
+    }
+  ],
+  "eligibilityMatrix": [
+    {
+      "condition": "Fresh applicant: Board percentile, stream, current Class XII year and first-year regular UG admission",
+      "source": "AY 2025-26 FAQ §§1,2,10; 2024 specifications",
+      "implementation": "Boolean top20Percentile plus regularUndergraduate",
+      "gap": "No Board-specific percentile list, exam year, first-year admission status, quota allocation or source evidence.",
+      "reviewerAction": "Separate fresh eligibility from renewal and verify AY 2026-27 fresh rules and each Board's published list."
+    },
+    {
+      "condition": "Fresh applicant income <= ₹4.5 lakh and no other scholarship/fee reimbursement",
+      "source": "AY 2025-26 FAQ eligibility conditions",
+      "implementation": "Annual income <= ₹4.5 lakh and otherScholarship boolean",
+      "gap": "Household income evidence, income certificate standards and current-year continuation not established.",
+      "reviewerAction": "Confirm exact income definition, evidence and whether 2026-27 guidelines changed."
+    },
+    {
+      "condition": "No diploma, distance/correspondence course or drop after Class XII",
+      "source": "AY 2025-26 FAQ fresh eligibility",
+      "implementation": "regularUndergraduate and diplomaOrDistance booleans",
+      "gap": "Drop-after-Class-XII is not represented; course type and duration are not verified.",
+      "reviewerAction": "Add explicit fields only after reviewer confirms current official rules."
+    },
+    {
+      "condition": "Renewal: marks, attendance, prior award, year and duration",
+      "source": "AY 2025-26 FAQ §§4–5, 10(b)",
+      "implementation": "No renewal-specific fields",
+      "gap": "Cannot establish prior award, renewal year, 50% marks, 75% attendance or five-year cap.",
+      "reviewerAction": "Create a separate renewal rule pack; do not reuse fresh rules."
+    },
+    {
+      "condition": "AY 2026-27 application window and verification workflow",
+      "source": "Live NSP CSSS entry",
+      "implementation": "Static sourcePeriod string only",
+      "gap": "Current listing is renewal-only and dates are dynamic; fresh window is not established by this listing.",
+      "reviewerAction": "Display renewal-only date scope, fetch current listing before showing dates and suppress expired/stale dates."
+    }
+  ],
+  "boundaryTests": [
+    {
+      "id": "CSSS-01",
+      "scenario": "Class XII percentile exactly at 80th vs above 80th percentile",
+      "expected": "Reviewer must confirm exact percentile/list semantics and Board-specific slot list.",
+      "reviewFixtureStatus": "proposed_not_executed",
+      "executionEvidence": null
+    },
+    {
+      "id": "CSSS-02",
+      "scenario": "Fresh applicant took a drop after Class XII",
+      "expected": "AY 2025-26 FAQ says excluded; confirm for AY 2026-27 before encoding.",
+      "reviewFixtureStatus": "proposed_not_executed",
+      "executionEvidence": null
+    },
+    {
+      "id": "CSSS-03",
+      "scenario": "Family income exactly ₹4,50,000 vs ₹4,50,001",
+      "expected": "Reviewer must confirm inclusive threshold and current income definition.",
+      "reviewFixtureStatus": "proposed_not_executed",
+      "executionEvidence": null
+    },
+    {
+      "id": "CSSS-04",
+      "scenario": "Renewal applicant has 49% marks or 74% attendance",
+      "expected": "AY 2025-26 FAQ states 50% and 75%; current-year confirmation required.",
+      "reviewFixtureStatus": "proposed_not_executed",
+      "executionEvidence": null
+    },
+    {
+      "id": "CSSS-05",
+      "scenario": "Renewal applicant has no prior CSSS award / gap year / course change",
+      "expected": "needs_verification until current renewal continuity rules are confirmed.",
+      "reviewFixtureStatus": "proposed_not_executed",
+      "executionEvidence": null
+    },
+    {
+      "id": "CSSS-06",
+      "scenario": "NSP 30.11.2026 renewal deadline is displayed as a fresh-application deadline",
+      "expected": "Must fail validation; live entry explicitly scopes deadline to renewal.",
+      "reviewFixtureStatus": "proposed_not_executed",
+      "executionEvidence": null
+    }
+  ],
+  "amendmentsReviewed": [
+    {
+      "item": "Live NSP CSSS entry checked 04.11.2026; renewal dates extracted from exact scheme entry in page HTML.",
+      "status": "inspected_not_exhaustive"
+    },
+    {
+      "item": "CSSS specifications PDF updated 07.02.2024 identified via live NSP entry.",
+      "status": "inspected_not_exhaustive"
+    },
+    {
+      "item": "AY 2025-26 Ministry FAQ inspected; not treated as proof of unchanged AY 2026-27 fresh rules.",
+      "status": "inspected_not_exhaustive"
+    }
+  ],
+  "unresolvedQuestions": [
+    "Download and compare the 2026-27 CSSS specifications/FAQ linked by NSP; the detailed FAQ inspected is AY 2025-26.",
+    "Confirm whether fresh applications are open for AY 2026-27 and obtain the current fresh deadline; do not infer from renewal entry.",
+    "Verify Board-wise top-20 percentile lists, current merit allocation, course exclusions, renewal and scholarship rates."
+  ],
   "reviewers": [
     {
       "role": "independent_source_reviewer",
@@ -24,8 +168,5 @@
       "evidence": []
     }
   ],
-  "eligibilityMatrix": [],
-  "boundaryTests": [],
-  "amendmentsReviewed": [],
-  "approvalNote": "Do not set reviewStatus to approved until both independent reviewers sign off and the evidence is merged in a reviewed pull request."
+  "approvalNote": "Do not set reviewStatus to approved until two independent human reviewers have separately completed and signed the source and rule reviews, all material questions are resolved, boundary fixtures are executed, and the reviewed evidence is merged. AI-assisted source preparation is not approval."
 }
