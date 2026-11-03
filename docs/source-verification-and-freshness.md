@@ -2,7 +2,7 @@
 
 **Operational status: attention required — not approved for real-citizen eligibility decisions.**
 
-Last reviewed in repository: 2 November 2026.
+Last reviewed in repository: 4 November 2026.
 
 ## Source register
 
