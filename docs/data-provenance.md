@@ -1,6 +1,6 @@
 # Scheme catalogue: data provenance and rule notes
 
-**Access/review date:** 1 November 2026  
+**Access/review date:** 4 November 2026  
 **Scope:** Four selected Central Government scheme references.  
 **Coverage statement:** This is not a complete India-wide scheme catalogue. State and Union Territory profile selection is implemented; state-specific schemes are not yet loaded.
 
@@ -98,3 +98,30 @@ Specific caveats:
 - Access path: Hugging Face Dataset Viewer API (public, paginated): https://datasets-server.huggingface.co
 - Data fields are not official JanaSetu eligibility rules; no automatic screening is run on them.
 - Dataset card warns users to verify scheme information at the official portal. Currentness, source URL accuracy and completeness are not guaranteed by JanaSetu.
+
+
+## Official source refresh — 4 November 2026
+
+The four rule-screened catalogue records were rechecked against official sources. Their sourceChecked metadata was updated to 2026-11-04. Their reviewStatus values remain pending; the eligibility engine continues to return needs_verification before evaluating any rule.
+
+### PM-KISAN
+- Operational Guidelines currently linked by the official portal are revised 29 March 2020. They contain the family definition, exclusion classes and land cut-off / succession provisions.
+- The live portal snapshot checked 4 November 2026 reports the 24th instalment released on 30 October 2026, mandatory eKYC for registered farmers, and temporary withholding of suspected post-01.02.2019 land-acquisition / multiple-family-member cases pending physical verification.
+- The 2020 guideline is not a complete current amendment register. A reviewer must reconcile later circulars and current portal instructions before any rule approval.
+
+### PMAY-U 2.0
+- The official guideline index checked 4 November 2026 lists the English/Hindi September 2024 PMAY-U 2.0 guidelines and the April 2026 AHP SOP.
+- The guideline defines beneficiary family as husband, wife and unmarried sons/daughters; states central EWS/LIG/MIG annual household-income bands of up to ₹3 lakh, ₹3–6 lakh and ₹6–9 lakh; includes a State/UT EWS redefinition mechanism with Ministry concurrence; and states a 20-year prior government-housing allotment restriction.
+- Parent housing-benefit prioritisation is a distinct clause and must not be collapsed into the 20-year disqualification. BLC, AHP, ARH and ISS need separate rule review.
+
+### PMUY 2.0
+- The live eligibility page and FAQ checked 4 November 2026 describe an adult woman aged 18+, poor-household deprivation declaration, no existing OMC LPG connection among family members listed in the family-composition document, mandatory biometric Aadhaar authentication, and migrant document exceptions.
+- The FAQ lists the connection components and says PNG connection holders cannot receive a PMUY connection or non-PMUY subsidized LPG connection.
+- The complete current deprivation declaration checklist and OMC instructions require human review. JanaSetu must not collect Aadhaar or bank documents.
+
+### PM-USP CSSS
+- The exact live NSP CSSS entry checked 4 November 2026 shows renewal only: open from 1 June 2026, student application through 30 November 2026, defective/institute verification through 15 December 2026 and DNO/SNO/MNO verification through 31 December 2026.
+- The linked specifications PDF is updated 7 February 2024. The detailed FAQ located is for AY 2025–26 and is not sufficient by itself to prove that fresh-application or renewal rules remain unchanged for AY 2026–27.
+- The 30 November 2026 date must never be presented as a fresh-application deadline.
+
+The full source evidence, current code mapping, gaps, proposed boundary fixtures and unresolved questions are in the four JSON review packets under docs/scheme-reviews/. These are prepared review materials, not signed human approvals.
