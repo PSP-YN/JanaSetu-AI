@@ -20,7 +20,7 @@ This assessment is intentionally strict. A successful Next.js build and public d
 
 ## Verification evidence and remaining gaps
 
-Local verification on 3 November 2026 passed: 48 unit tests, 31 Playwright tests against a production-mode local server, TypeScript, extension syntax/Manifest V3 validation, locale key-parity checks, production dependency audit (0 vulnerabilities), Next.js production build and local production smoke tests. GitHub CI and a new Vercel deployment still need to run against the exact integrated release commit.
+Local verification on 3 November 2026 passed: 50 unit tests, 35 Playwright tests against a production-mode local server, TypeScript, extension syntax/Manifest V3 validation, locale key-parity checks, production dependency audit (0 vulnerabilities), Next.js production build and local production smoke tests. PR #6 tracks the integrated release; only checks and the Preview for its latest head count as release evidence.
 
 Not yet demonstrated:
 - Fluent-speaker review of the implemented six-locale workspace, legal pages, convenience scheme translations and extension popup. Official source records remain source-authoritative and may remain in their original language.
@@ -45,7 +45,7 @@ Not yet demonstrated:
 
 - Production `https://jana-setu-ai.vercel.app`: root, `/api/health`, `/api/schemes`, `/privacy` and `/terms` returned HTTP 200; `/api/schemes/open-data?q=farmer` returned HTTP 502.
 - Existing Phase 2 preview `https://janasetu-qjy21mmr2-pspyn.vercel.app`: the same checked routes, including open-data search, returned HTTP 200. It is based on an earlier Phase 2 commit, not the current integrated local release candidate.
-- The current local release candidate has not been pushed or deployed. Do not promote the older preview as a substitute for the exact tested tree.
+- The integrated release is tracked in [PR #6](https://github.com/PSP-YN/JanaSetu-AI/pull/6). Its Preview must be checked against the latest PR head. Do not promote an older preview as a substitute for the exact tested tree. No production deployment has been made from this release candidate.
 
 ## Blocking requirements before real citizen use
 

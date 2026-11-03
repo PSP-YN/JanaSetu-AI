@@ -63,6 +63,25 @@ const COPY = {
 };
 
 
+const OCCUPATION_ALIASES = {
+  farmer: "Farmer", "किसान": "Farmer", "ರೈತ": "Farmer", "விவசாயி": "Farmer", "రైతు": "Farmer", "കർഷകൻ": "Farmer",
+  "agricultural worker": "Agricultural worker", "कृषि श्रमिक": "Agricultural worker", "ಕೃಷಿ ಕಾರ್ಮಿಕ": "Agricultural worker", "வேளாண் தொழிலாளர்": "Agricultural worker", "వ్యవసాయ కార్మికుడు": "Agricultural worker", "കൃഷിത്തൊഴിലാളി": "Agricultural worker",
+  student: "Student", "छात्र": "Student", "ವಿದ್ಯಾರ್ಥಿ": "Student", "மாணவர்": "Student", "విద్యార్థి": "Student", "വിദ്യാർത്ഥി": "Student",
+  "self-employed": "Self-employed", "स्व-रोज़गार": "Self-employed", "ಸ್ವಯಂ ಉದ್ಯೋಗಿ": "Self-employed", "சுயதொழில்": "Self-employed", "స్వయం ఉపాధి": "Self-employed", "സ്വയം തൊഴിൽ": "Self-employed",
+  vendor: "Vendor", "विक्रेता": "Vendor", "ವ್ಯಾಪಾರಿ": "Vendor", "விற்பனையாளர்": "Vendor", "విక్రేత": "Vendor", "വിൽപ്പനക്കാരൻ": "Vendor",
+  salaried: "Salaried", "वेतनभोगी": "Salaried", "ಸಂಬಳದ ಉದ್ಯೋಗಿ": "Salaried", "சம்பளப் பணியாளர்": "Salaried", "వేతన ఉద్యోగి": "Salaried", "ശമ്പളക്കാരൻ": "Salaried",
+  unemployed: "Unemployed", "बेरोज़गार": "Unemployed", "ನಿರುದ್ಯೋಗಿ": "Unemployed", "வேலைஇல்லாதவர்": "Unemployed", "నిరుద్యోగి": "Unemployed", "തൊഴിൽരഹിതൻ": "Unemployed",
+  homemaker: "Homemaker", "गृहिणी": "Homemaker", "ಗೃಹಿಣಿ": "Homemaker", "இல்லத்தரசி": "Homemaker", "വീട്ടമ്മ": "Homemaker",
+  other: "Other", "अन्य": "Other", "ಇತರೆ": "Other", "மற்றவை": "Other", "ఇతర": "Other", "മറ്റുള്ളവ": "Other"
+};
+const ALLOWED_OCCUPATIONS = new Set(["", "Farmer", "Agricultural worker", "Student", "Self-employed", "Vendor", "Salaried", "Unemployed", "Homemaker", "Other"]);
+function normalizeOccupation(value) {
+  if (typeof value !== "string" || value.length > 100) return null;
+  const trimmed = value.trim();
+  const canonical = OCCUPATION_ALIASES[trimmed.toLocaleLowerCase()] || OCCUPATION_ALIASES[trimmed] || trimmed;
+  return ALLOWED_OCCUPATIONS.has(canonical) ? canonical : null;
+}
+
 const MAX_BACKUP_BYTES = 5 * 1024 * 1024;
 const STATES_AND_UTS = ["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal","Andaman and Nicobar Islands","Chandigarh","Dadra and Nagar Haveli and Daman and Diu","Delhi","Jammu and Kashmir","Ladakh","Lakshadweep","Puducherry"];
 function isValidProfile(profile) {
@@ -76,7 +95,7 @@ function isValidProfile(profile) {
   if (typeof profile.district !== "string" || profile.district.length > 100) return false;
   if (!["", "urban", "rural"].includes(profile.residenceType)) return false;
   if (!(profile.annualIncome === "" || (typeof profile.annualIncome === "number" && Number.isFinite(profile.annualIncome) && profile.annualIncome >= 0 && profile.annualIncome <= 100000000))) return false;
-  if (typeof profile.occupation !== "string" || profile.occupation.length > 100) return false;
+  if (normalizeOccupation(profile.occupation) === null) return false;
   for (const key of ["hasCultivableLand","ownsPuccaHouse","householdHasLpg","poorHouseholdDeclaration","top20Percentile","regularUndergraduate","otherScholarship","diplomaOrDistance"]) if (profile[key] !== null && typeof profile[key] !== "boolean") return false;
   if (!["yes","no","unknown"].includes(profile.pmKisanExcluded) || !["yes","no","unknown"].includes(profile.previousHousingBenefit)) return false;
   return typeof profile.isStudent === "boolean";
@@ -114,7 +133,8 @@ document.getElementById("save").addEventListener("click", async () => {
     const data = JSON.parse(await file.text());
     if (data?.app !== "JanaSetu" || data?.schemaVersion !== 1 || !isValidProfile(data?.profile)) throw new Error(getCopy("invalidBackup"));
     const language = Object.prototype.hasOwnProperty.call(COPY, data.language) ? data.language : "en";
-    await chrome.storage.local.set({ profile: data.profile, language, importedAt: new Date().toISOString() });
+    const profile = { ...data.profile, occupation: normalizeOccupation(data.profile.occupation) };
+    await chrome.storage.local.set({ profile, language, importedAt: new Date().toISOString() });
     setLanguage(language);
     say("imported");
   } catch (error) { say("importFailed"); }
@@ -127,13 +147,14 @@ document.getElementById("fill").addEventListener("click", async () => {
     setLanguage(language || currentLanguage);
     if (!profile) { say("profileFirst"); return; }
     if (!isValidProfile(profile)) { say("invalidBackup"); return; }
+    const normalizedProfile = { ...profile, occupation: normalizeOccupation(profile.occupation) };
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (!tab?.id || !tab.url) { say("openPortal"); return; }
     const portalUrl = new URL(tab.url);
     const host = portalUrl.hostname.toLowerCase();
     const approvedHost = portalUrl.protocol === "https:" && (host === "gov.in" || host.endsWith(".gov.in") || host === "nic.in" || host.endsWith(".nic.in"));
     if (!approvedHost) { say("blockedDomain"); return; }
-    const result = await chrome.scripting.executeScript({ target: { tabId: tab.id }, func: fillProfileInPage, args: [profile] });
+    const result = await chrome.scripting.executeScript({ target: { tabId: tab.id }, func: fillProfileInPage, args: [normalizedProfile] });
     const count = result?.[0]?.result?.filled ?? 0;
     if (count) say("fillOk", { count }); else say("noFields");
   } catch (error) { say("fillFail"); }

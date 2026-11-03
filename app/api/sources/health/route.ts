@@ -41,7 +41,12 @@ export async function GET() {
       cache: "no-store"
     });
     searchStatus = response.status;
-    searchAvailability = response.ok ? "available" : "unavailable";
+    if (response.ok) {
+      const payload = await response.json() as { rows?: unknown };
+      searchAvailability = Array.isArray(payload?.rows) ? "available" : "unavailable";
+    } else {
+      searchAvailability = "unavailable";
+    }
   } catch {
     searchAvailability = "unavailable";
   }

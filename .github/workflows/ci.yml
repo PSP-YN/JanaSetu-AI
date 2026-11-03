@@ -38,13 +38,10 @@ jobs:
       - name: Type-check
         run: npm run typecheck
 
-      - name: Build production application
-        run: npm run build
-
       - name: Install Chromium for browser tests
         run: npx playwright install --with-deps chromium
 
-      - name: Run browser accessibility tests
+      - name: Build production app and run browser accessibility tests
         run: npm run test:e2e
 
       - name: Validate Chrome extension syntax and manifest

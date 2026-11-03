@@ -76,7 +76,7 @@ function parseDraftFields(value: unknown): DraftField[] | undefined {
   });
 }
 
-export function parseBackupApplications(value: unknown): LocalApplicationRecord[] {
+export function parseBackupApplications(value: unknown, options: { trustLocalStorage?: boolean } = {}): LocalApplicationRecord[] {
   if (!Array.isArray(value)) return [];
   return value.slice(0, 100).flatMap((item): LocalApplicationRecord[] => {
     if (!item || typeof item !== "object") return [];
@@ -91,25 +91,28 @@ export function parseBackupApplications(value: unknown): LocalApplicationRecord[
     const createdAt = iso(record.createdAt) || new Date().toISOString();
     const missingChecks = Array.isArray(record.missingChecks) ? record.missingChecks.slice(0, 50).flatMap((check) => { const v = text(check, 200); return v ? [v] : []; }) : [];
     const reviewedAt = iso(record.reviewedAt);
+    const preserveReviewedState = options.trustLocalStorage === true && scheme?.reviewStatus === "approved" && record.reviewRequired === false && reviewedAt !== null;
     return [{
       id: appId, schemeId, schemeName: scheme?.name || schemeName, citizenName, state, district,
       status: scheme?.reviewStatus === "approved" ? "Draft prepared — eligibility requires official verification" : scheme ? "Scheme review pending — not an eligibility result" : "Scheme no longer in the current catalogue — verify manually",
-      createdAt, reviewRequired: true, assessmentState: enumAssessment(record.assessmentState),
+      createdAt, reviewRequired: !preserveReviewedState, assessmentState: enumAssessment(record.assessmentState),
       schemeReviewStatus: scheme?.reviewStatus ?? "missing", missingChecks,
       sourceUrl: scheme?.sourceUrl || "https://www.myscheme.gov.in/",
       disclaimer: "This is a preparation draft created by JanaSetu. It has not been submitted to a government portal.",
-      fields: parseDraftFields(record.fields), reviewedAt: null
+      fields: parseDraftFields(record.fields), reviewedAt: preserveReviewedState ? reviewedAt : null
     }];
   });
 }
 
-export function parseBackupAssessments(value: unknown): Assessment[] {
+export function parseBackupAssessments(value: unknown, options: { trustLocalStorage?: boolean } = {}): Assessment[] {
   if (!Array.isArray(value)) return [];
   return value.slice(0, 100).flatMap((item): Assessment[] => {
     if (!item || typeof item !== "object") return [];
     const record = item as Record<string, unknown>;
     const schemeId = text(record.schemeId, 100), headline = text(record.headline, 300), explanation = text(record.explanation, 3000);
     if (!schemeId || !headline || !explanation) return [];
+    const scheme = SCHEMES.find((entry) => entry.id === schemeId);
+    const preserveApprovalSnapshot = options.trustLocalStorage === true && scheme?.reviewStatus === "approved" && record.schemeReviewStatusAtAssessment === "approved";
     const checks = Array.isArray(record.checks) ? record.checks.slice(0, 100).flatMap((check): Assessment["checks"] => {
       if (!check || typeof check !== "object") return [];
       const row = check as Record<string, unknown>;
@@ -119,6 +122,6 @@ export function parseBackupAssessments(value: unknown): Assessment[] {
     }) : [];
     const nextActions = Array.isArray(record.nextActions) ? record.nextActions.slice(0, 50).flatMap((action) => { const v = text(action, 500); return v ? [v] : []; }) : [];
     return [{ schemeId, state: enumAssessment(record.state), headline, explanation, checks, nextActions,
-      schemeReviewStatusAtAssessment: "pending" }];
+      schemeReviewStatusAtAssessment: preserveApprovalSnapshot ? "approved" : "pending" }];
   });
 }

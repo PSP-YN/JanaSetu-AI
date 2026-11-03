@@ -28,6 +28,7 @@ test("open-data catalogue falls back to page filtering when HF search is unavail
     const body = await response.json();
     assert.equal(response.status, 200);
     assert.equal(body.searchMode, "page-filter");
+    assert.equal(response.headers.get("Cache-Control"), "public, s-maxage=60, stale-while-revalidate=300", "degraded page-only results should have a short shared-cache lifetime");
     assert.equal(body.records.length, 1);
     assert.equal(body.records[0].id, "open-education-aid");
     assert.equal(body.nextOffset, 2, "pagination must advance based on fetched rows, not filtered matches");

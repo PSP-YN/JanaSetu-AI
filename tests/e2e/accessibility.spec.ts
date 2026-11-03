@@ -43,6 +43,14 @@ test("main workspace labels and mobile navigation are translated for all six loc
   }
 });
 
+test("localized scheme search includes translated summary and benefit text", async ({ page }) => {
+  await page.goto("/");
+  await page.locator(".language-control select").selectOption("hi");
+  await page.locator(".nav-item").nth(1).click();
+  await page.locator(".search-box input").fill("किसान परिवारों");
+  await expect(page.locator(".scheme-grid")).toContainText("पात्र भूमि-धारक किसान परिवारों");
+});
+
 test("security headers are served by the active Next.js configuration", async ({ request }) => {
   const response = await request.get("/");
   expect(response.ok()).toBeTruthy();

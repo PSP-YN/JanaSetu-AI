@@ -12,17 +12,19 @@
 - Added translation-key parity checks for the main UI and extension popup, plus cross-locale Playwright checks for workspace navigation, profile labels, legal routes and accessibility.
 - Added strict backup validation: profile/state validation, 5 MB cap, sanitized document metadata, trusted catalogue URLs, and restored assessments forced to require a fresh evaluation.
 - Tightened assessment/draft safety so pending, missing or removed schemes cannot retain a positive/previously reviewed result.
-- Improved extension identity matching so a full name is not copied into first-name, last-name or username fields. The extension remains HTTPS `.gov.in` / `.nic.in` only and manual click-to-fill. It does not intentionally submit forms or upload documents, but portal scripts may react to field-change events.
-- Changed CI installation to reproducible `npm ci`, added a lockfile, and made the browser suite run against a built production server. CI now builds before starting Playwright.
+- Improved extension identity matching so a full name is not copied into first-name, last-name, username or relative-name fields. Imported occupation values now use the same canonical allowlist/alias normalization as the app. The extension remains HTTPS `.gov.in` / `.nic.in` only and manual click-to-fill. It does not intentionally submit forms or upload documents, but portal scripts may react to field-change events.
+- Changed CI installation to reproducible `npm ci` and made `npm run test:e2e` build the current source before starting Playwright, preventing stale `.next` output from being tested. CI uses the same command.
 - Added bounded Hugging Face Dataset Viewer `/search` fallback. If `/search` is unavailable, the API filters the current `/rows` page and clearly reports page-only search; pagination advances by source rows.
-- Source health separately reports metadata and search availability.
+- Source health separately reports metadata and search availability, parsing the search JSON body before reporting availability. Degraded page-only search results use a 60-second shared-cache lifetime instead of the full-search one-hour cache.
+- Local catalogue search includes the current locale's translated scheme summaries, benefits and rule notes.
+- Local browser hydration preserves valid citizen review markers and approved-rule snapshots only for schemes currently approved; untrusted backup imports still reset those markers.
 
 ## Local verification — Fedora workstation
 
 Latest complete application verification:
 
-- Unit tests: **48 passed**.
-- Playwright: **31 passed** against the production-mode local server.
+- Unit tests: **50 passed**.
+- Playwright: **35 passed** against the production-mode local server.
 - TypeScript: passed.
 - Next.js production build: passed.
 - `npm audit --omit=dev --audit-level=high`: **0 vulnerabilities**.
@@ -32,7 +34,7 @@ Latest complete application verification:
 - Local production smoke: `/api/health`, `/api/schemes` (142 records), `/api/sources/health`, `/api/schemes/open-data?q=farmer`, `/privacy` and `/terms` returned HTTP 200.
 - `git diff --check`: passed.
 
-These are local results. The integrated release branch is not yet pushed, and GitHub CI has not yet run against this exact tree.
+The integrated release is tracked in [PR #6](https://github.com/PSP-YN/JanaSetu-AI/pull/6). GitHub CI and the Vercel Preview must be green for the latest PR head before merge; older successful runs or previews do not validate a newer commit.
 
 ## Live Vercel observations
 
@@ -40,7 +42,7 @@ These are local results. The integrated release branch is not yet pushed, and Gi
 - Production root, `/api/health`, `/api/schemes`, `/privacy` and `/terms` returned HTTP 200 during the 3 November check.
 - Production `/api/schemes/open-data?q=farmer` returned **HTTP 502**.
 - Existing Phase 2 preview `https://janasetu-qjy21mmr2-pspyn.vercel.app` returned HTTP 200 for the same open-data query and the other checked routes. That preview belongs to the earlier `phase2-localization-search-fallback` branch/commit `4aca454`; it is not the current integrated release candidate and must not be promoted as a substitute for the tested tree.
-- No deployment of the current local release candidate has been made.
+- No production deployment of the release candidate has been made. Preview deployments are for validation only.
 
 ## Remaining release gates
 

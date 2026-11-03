@@ -137,6 +137,10 @@ export async function GET(request: NextRequest) {
     const records = selectedRows.map((entry) => normalize(entry.row || {}));
     const pageHasMore = sourceRows.length === length;
 
+    const cacheControl = searchMode === "page-filter"
+      ? "public, s-maxage=60, stale-while-revalidate=300"
+      : "public, s-maxage=3600, stale-while-revalidate=86400";
+
     return NextResponse.json({
       source: DATASET_ATTRIBUTION,
       sourceUrl: "https://huggingface.co/datasets/" + DATASET,
@@ -150,7 +154,7 @@ export async function GET(request: NextRequest) {
       searchMode,
       warning: "Catalogue discovery only. Source content and machine-parsed eligibility may be stale or inaccurate. Do not use this dataset alone for official eligibility decisions.",
       searchFallbackWarning: searchMode === "page-filter" ? "Hugging Face search is temporarily unavailable. Search is filtering this page only; load further pages to continue." : undefined
-    }, { headers: { "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400" } });
+    }, { headers: { "Cache-Control": cacheControl } });
   } catch {
     return NextResponse.json({ error: "Unable to reach the open-data catalogue right now." }, { status: 502 });
   }

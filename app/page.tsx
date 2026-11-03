@@ -852,7 +852,9 @@ export default function Home() {
   }, [language]);
   const activeResults = useMemo(() => {
     const matches = (scheme: (typeof SCHEMES)[number]) => {
-      const matchesText = [scheme.name, scheme.category, scheme.summary, scheme.ministry, scheme.geography].join(" ").toLowerCase().includes(query.toLowerCase());
+      const translated = localizedSchemeText(scheme.id, language);
+      const matchesText = [scheme.name, scheme.category, scheme.summary, scheme.ministry, scheme.geography, translated?.summary, translated?.benefit, ...(translated?.ruleNotes ?? [])]
+        .filter(Boolean).join(" ").toLocaleLowerCase().includes(query.toLocaleLowerCase());
       const matchesCategory = category === "All categories" || scheme.category.split(",").map((item) => item.trim()).includes(category);
       return matchesText && matchesCategory;
     };
@@ -863,7 +865,7 @@ export default function Home() {
       return matchesCategory && !names.has(scheme.name.trim().toLowerCase());
     });
     return [...local, ...external];
-  }, [category, query, openDataSchemes]);
+  }, [category, language, query, openDataSchemes]);
 
   useEffect(() => {
     if (tab !== "discover") return;
@@ -900,10 +902,10 @@ export default function Home() {
       const storedProfile = parseBackupProfile(read(STORAGE.profile, EMPTY_PROFILE));
       setProfile(storedProfile || EMPTY_PROFILE);
       setLanguage(parseBackupLanguage(read(STORAGE.language, "en")));
-      setApplications(invalidateUnapprovedApplications(parseBackupApplications(read(STORAGE.applications, []))));
+      setApplications(invalidateUnapprovedApplications(parseBackupApplications(read(STORAGE.applications, []), { trustLocalStorage: true })));
       setDocuments(parseBackupDocuments(read(STORAGE.documents, [])));
       setTasks(parseBackupTasks(read(STORAGE.tasks, [])));
-      setAssessments(invalidateUnapprovedAssessments(parseBackupAssessments(read(STORAGE.assessments, []))));
+      setAssessments(invalidateUnapprovedAssessments(parseBackupAssessments(read(STORAGE.assessments, []), { trustLocalStorage: true })));
       if (!storedProfile) setNotice(t("noticeStorageRecovered"));
     } catch {
       setNotice(t("noticeStorageRecovered"));

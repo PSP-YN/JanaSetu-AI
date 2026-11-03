@@ -8,10 +8,10 @@ Security fixes are targeted at the current default branch unless the project doc
 
 Please do not publish exploitable vulnerability details in public issues or pull requests.
 
-Use GitHub private vulnerability reporting if enabled for this repository:
+Use the repository’s enabled GitHub private vulnerability reporting channel:
 https://github.com/PSP-YN/JanaSetu-AI/security/advisories/new
 
-If private reporting is unavailable, contact the maintainer privately through GitHub. Include the affected version or commit, impact, reproduction steps, and a minimal proof of concept. Do not include real personal data or live credentials.
+Include the affected version or commit, impact, reproduction steps, and a minimal proof of concept. Do not include real personal data or live credentials.
 
 ## Response
 

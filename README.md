@@ -71,7 +71,7 @@ The prototype uses a partial source-linked catalogue built from public official 
 
 ## License
 
-All rights reserved. This repository is published for evaluation and demonstration. No government affiliation or endorsement is implied.
+This project is licensed under the MIT License; see [LICENSE](LICENSE). No government affiliation or endorsement is implied.
 
 
 ## Open-data scheme catalogue

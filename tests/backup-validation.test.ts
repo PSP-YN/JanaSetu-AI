@@ -49,3 +49,33 @@ test("backup assessments always require a fresh evaluation after restore", () =>
   assert.equal(assessment.length, 1);
   assert.equal(assessment[0].schemeReviewStatusAtAssessment, "pending");
 });
+
+
+test("trusted localStorage hydration preserves approved scheme snapshots and citizen review markers", () => {
+  const scheme = SCHEMES[0];
+  const previousStatus = scheme.reviewStatus;
+  scheme.reviewStatus = "approved";
+  try {
+    const applicationRecord = {
+      id: "JS-20261103-ABCDE", schemeId: scheme.id, schemeName: scheme.name,
+      citizenName: "Synthetic Citizen", state: "Karnataka", district: "Mysuru",
+      reviewRequired: false, createdAt: "2026-11-03T00:00:00Z", reviewedAt: "2026-11-03T01:00:00Z"
+    };
+    const untrustedImport = parseBackupApplications([applicationRecord]);
+    const trustedLocal = parseBackupApplications([applicationRecord], { trustLocalStorage: true });
+    assert.equal(untrustedImport[0].reviewRequired, true);
+    assert.equal(untrustedImport[0].reviewedAt, null);
+    assert.equal(trustedLocal[0].reviewRequired, false);
+    assert.equal(trustedLocal[0].reviewedAt, "2026-11-03T01:00:00.000Z");
+
+    const assessmentRecord = {
+      schemeId: scheme.id, state: "potential_match", headline: "Previous result",
+      explanation: "Synthetic local assessment", checks: [], nextActions: [],
+      schemeReviewStatusAtAssessment: "approved"
+    };
+    assert.equal(parseBackupAssessments([assessmentRecord])[0].schemeReviewStatusAtAssessment, "pending");
+    assert.equal(parseBackupAssessments([assessmentRecord], { trustLocalStorage: true })[0].schemeReviewStatusAtAssessment, "approved");
+  } finally {
+    scheme.reviewStatus = previousStatus;
+  }
+});

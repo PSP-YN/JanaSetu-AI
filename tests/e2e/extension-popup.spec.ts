@@ -63,6 +63,28 @@ test("extension popup rejects deceptive non-government hostnames", async ({ page
   expect(call).toBeNull();
 });
 
+test("extension rejects unsupported occupations during profile import", async ({ page }) => {
+  await openPopup(page);
+  await page.locator("#backup").setInputFiles({
+    name: "unsupported-occupation.json", mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify({ app: "JanaSetu", schemaVersion: 1, language: "en", profile: { ...syntheticProfile, occupation: "Government Employee" } }))
+  });
+  await page.locator("#save").click();
+  await expect(page.locator("#status")).toContainText("Import failed");
+  expect(await page.evaluate(() => (window as any).__popupStorage.profile)).toBeUndefined();
+});
+
+test("extension normalizes a localized occupation alias during backup import", async ({ page }) => {
+  await openPopup(page);
+  await page.locator("#backup").setInputFiles({
+    name: "localized-occupation.json", mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify({ app: "JanaSetu", schemaVersion: 1, language: "hi", profile: { ...syntheticProfile, occupation: "किसान" } }))
+  });
+  await page.locator("#save").click();
+  await expect(page.locator("#status")).toContainText("प्रोफ़ाइल");
+  expect(await page.evaluate(() => (window as any).__popupStorage.profile.occupation)).toBe("Farmer");
+});
+
 test("extension rejects malformed profile backups before storing citizen data", async ({ page }) => {
   await openPopup(page);
   await page.locator("#backup").setInputFiles({
