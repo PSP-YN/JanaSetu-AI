@@ -3,7 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 const DATASET = "smartduketech/indian-government-schemes-2025";
 const SNAPSHOT = "2026-07-05";
 const DATASET_ATTRIBUTION = "SmartDuke Technologies, Indian Government Schemes Dataset 2026 (CC BY 4.0), Hugging Face. Source snapshot 5 July 2026.";
-export const revalidate = 3600;
+// Keep the route response dynamic so fallback and full-search responses can set different CDN TTLs.
+// Upstream dataset fetches remain independently cached for one hour below.
+export const revalidate = 0;
 
 function parseJsonList(value: unknown): string[] {
   if (Array.isArray(value)) return value.map(String);
