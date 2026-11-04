@@ -20,7 +20,7 @@ Use the current privacy impact assessment draft and inspect the exact deployed c
 - Data fields collected: name, age, gender, state, district, residence type, income, occupation, scheme answers, free-text intake, draft records, document metadata and imported/exported backups.
 - Browser localStorage persistence and the user-controlled JSON backup/import process.
 - Main-interface screening, intake parsing and draft preparation are browser-side; separately callable API routes can receive profile/text payloads from other clients. Verify request-body logging and provider retention.
-- Open-data search terms are forwarded to Hugging Face; confirm whether query terms can contain personal data and whether logs retain them.
+- Open-data search terms are currently matched against the bundled SmartDuke snapshot locally and are not forwarded to Hugging Face; source-health monitoring separately checks publisher metadata and endpoint availability. Verify hosting/CDN logs and retention for query terms.
 - Browser speech recognition may involve the browser/OS speech provider; determine notice and consent requirements.
 - Hosting/CDN/security logs, analytics, error monitoring, regions, retention, subprocessors and cross-border transfers.
 - Extension data stored in chrome.storage.local and values intentionally filled into a third-party government website after user action. Review risk of portal scripts reacting to input/change events.
@@ -37,7 +37,7 @@ Use the current privacy impact assessment draft and inspect the exact deployed c
 - Verify whether the product must support correction, erasure, access, grievance and nomination requests, and define an operational contact and response process.
 
 ### Aadhaar and government-service boundaries
-- Confirm that JanaSetu must not collect or store Aadhaar numbers, Aadhaar images, OTPs, bank credentials or biometric data.
+- Confirm that JanaSetu must not collect or store Aadhaar numbers, Aadhaar images, OTPs, bank credentials or biometric data. The April 2026 PMAY-U AHP SOP and current PMUY source pages explicitly require Aadhaar/family Aadhaar and bank information in official government/OMC application flows; those requirements must not be copied into JanaSetu intake forms.
 - Review any extension autofill, Aadhaar-related wording and external portal links against the Aadhaar Act, UIDAI directions and current authentication/e-KYC rules.
 - Confirm the app does not imply government affiliation, official eligibility, entitlement, approval or guaranteed benefit.
 - Review disclaimers, scheme summaries, application guidance, complaints routing and any future monetisation or referral arrangements.

@@ -35,6 +35,10 @@ One person must not fill both roles. Each reviewer must provide name, organizati
 Do not use real citizen data during review. Use synthetic profiles. Do not set any packet to approved merely because the research or tests were prepared by an AI assistant.
 
 
+## Current source reconciliation
+
+- [Four-scheme source reconciliation (4 November 2026)](source-reconciliation-2026-11-04.md) records current official notices and unresolved source conflicts.
+
 ## Catalogue review artifacts — 4 November 2026
 
 - `../catalogue-review-register.csv` contains all 138 built-in catalogue-only records, each exactly once, with review status and a specific human action. It distinguishes 96 Karnataka budget line-item leads from 42 official-source scheme references.

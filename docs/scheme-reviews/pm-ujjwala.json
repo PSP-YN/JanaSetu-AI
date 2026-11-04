@@ -51,6 +51,45 @@
       "facts": [
         "Form contains a deprivation checklist and exclusion criteria; the complete checklist must be reviewed by human reviewers and not reduced to a generic poverty checkbox."
       ]
+    },
+    {
+      "title": "PMUY About page — 25 lakh connection extension and eligible household categories",
+      "url": "https://www.pmuy.gov.in/about.html",
+      "issuer": "Ministry of Petroleum and Natural Gas / PMUY",
+      "publishedOrRevised": "Live page checked 4 November 2026; no page revision date stated",
+      "checkedAt": "2026-11-04",
+      "status": "official_live_scheme_page",
+      "facts": [
+        "Government approved an additional 25 lakh LPG connections, taking the stated overall target to 10.6 crore; the page says these connections are being released.",
+        "The page lists eligible adult-woman household categories including SC, ST, PMAY-G, Most Backward Classes, AAY, tea/ex-tea garden tribes, forest dwellers, island/river-island residents, SECC AHL TIN and poor households under the 14-point declaration.",
+        "Applicant must be at least 18 and there must be no other LPG connection in the household.",
+        "The page lists KYC, ration card or family-composition evidence, Aadhaar of applicant and adult family members, address proof and bank account/IFSC."
+      ]
+    },
+    {
+      "title": "PMUY official eKYC page — face-based Aadhaar authentication",
+      "url": "https://www.pmuy.gov.in/e-kyc.html",
+      "issuer": "Ministry of Petroleum and Natural Gas / PMUY",
+      "publishedOrRevised": "Live page checked 4 November 2026; no page revision date stated",
+      "checkedAt": "2026-11-04",
+      "status": "official_live_operational_process",
+      "facts": [
+        "The official page describes self face-based biometric Aadhaar authentication (eKYC) using the Oil Marketing Company mobile app together with Aadhaar FaceRD.",
+        "This process must be reconciled with PMUY FAQ language about biometric authentication at the distributor; do not assume one replaces the other."
+      ]
+    },
+    {
+      "title": "PMUY live homepage — 25 lakh extension progress and assistance amounts",
+      "url": "https://www.pmuy.gov.in/index.aspx",
+      "issuer": "Ministry of Petroleum and Natural Gas / Oil Marketing Companies",
+      "publishedOrRevised": "Portal achievement figures as at 23 September 2026; home page checked 4 November 2026",
+      "checkedAt": "2026-11-04",
+      "status": "official_live_portal_with_cross_page_amount_conflict",
+      "facts": [
+        "Homepage reports 2,442,525 connections released under the latest 25 lakh extension as at 23 September 2026.",
+        "Homepage benefit section states cash assistance of ₹2,050 for a 14.2 kg connection and ₹1,300 for a 5 kg connection, plus free first refill and stove.",
+        "The official About page separately states ₹1,600 and ₹1,150 respectively; these official pages conflict. Do not encode a benefit amount until the current governing order/OMC instructions are reconciled."
+      ]
     }
   ],
   "eligibilityMatrix": [
@@ -149,9 +188,12 @@
     }
   ],
   "unresolvedQuestions": [
-    "Confirm the latest PMUY extension/allocation orders and any subsequent amendments to connection benefits and eligibility.",
-    "Confirm the current deprivation declaration form/version and all checklist items; do not infer poverty from income alone.",
-    "Verify FAQ Q17 biometric eKYC process and Q31 PNG condition against current OMC instructions."
+    "Obtain the Cabinet/Ministry order for the additional 25 lakh allocation and verify the current remaining allocation and application window.",
+    "Reconcile the ₹2,050/₹1,300 amounts on the live home page with ₹1,600/₹1,150 on the About page using the latest governing order and OMC instructions; do not display a single amount as authoritative until resolved.",
+    "Confirm the current deprivation declaration form version and every checklist item; do not infer poor-household status from income alone.",
+    "Reconcile FAQ biometric-at-distributor language with the face-based self-eKYC app process and any distributor KYC requirements.",
+    "Confirm the PNG connection restriction and household membership rules with current Ministry/OMC instructions.",
+    "JanaSetu must not collect Aadhaar copies, Aadhaar numbers, OTPs, bank details, ration-card images or family Aadhaar data; route applicants to authorized OMC/CSC channels."
   ],
   "reviewers": [
     {

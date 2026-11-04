@@ -10,15 +10,18 @@
 - [CSSS specifications](https://scholarships.gov.in/public/schemeGuidelines/CSSS_GUIDLINES_07022024_updated.pdf) — updated 7 February 2024 (as indicated by the filename).
 - [PM-USP CSSS FAQ](https://scholarships.gov.in/public/schemeGuidelines/FAQ_DOHE_CSSS.pdf) — AY 2025–26.
 
-## Current AY 2026–27 window — renewal only
+## Current AY 2026–27 window — official portal conflict
 
-The exact live NSP entry states:
-- Renewal open from 1 June 2026.
-- Student renewal application through 30 November 2026.
-- Defective-application and institute verification through 15 December 2026.
-- DNO/SNO/MNO verification through 31 December 2026.
+The two live official NSP pages disagree:
 
-These are explicitly renewal dates. **Do not display 30 November 2026 as a fresh-application deadline.** The current listing does not establish the fresh-application window.
+| Official page | Student renewal deadline | Institute verification | DNO/SNO/MNO or L2 verification |
+|---|---:|---:|---:|
+| [All-Scholarships CSSS entry](https://scholarships.gov.in/All-Scholarships) | 30 September 2026 | 15 October 2026 | 30 October 2026 |
+| [NSP Students announcements](https://scholarships.gov.in/Students) | 31 October 2026 | 15 November 2026 | 30 November 2026 |
+
+Both entries label the dates as renewal dates. The Students page says renewal is currently open even though its student deadline had passed by 4 November 2026. The public portal page footer says last updated June 2026. This is an unresolved official-source conflict, not a date we can safely choose between.
+
+**Do not show the application as open, do not show 30 November as the student deadline, and do not infer any fresh-application window.** Require a current authenticated NSP scheme record or written Ministry/NSP clarification.
 
 ## Rule facts from the AY 2025–26 FAQ — current-year confirmation required
 
@@ -32,10 +35,11 @@ The prototype checks a student flag, percentile boolean, regular-course/diploma-
 
 ## Reviewer tasks
 
-1. Obtain and compare current AY 2026–27 specifications and FAQs; the AY 2025–26 FAQ is not proof of unchanged current-year rules.
-2. Verify fresh application status and deadline separately from renewal.
-3. Validate Board-wise percentile lists, stream/category/gender allocation and disability reservation.
-4. Validate course type, year of Class XII, drop rule, income evidence and scholarship overlap.
-5. Create separate fresh and renewal rule packs and review all proposed fixtures in the JSON packet.
+1. Obtain written NSP/Department of Higher Education clarification resolving the conflicting AY 2026–27 renewal deadlines.
+2. Obtain current AY 2026–27 specifications and FAQ; the AY 2025–26 FAQ is not proof of unchanged current-year rules.
+3. Verify fresh application status and deadline separately from renewal.
+4. Validate Board-wise percentile lists, stream/category/gender allocation and disability reservation.
+5. Validate course type, year of Class XII, drop rule, income evidence and scholarship overlap.
+6. Create separate fresh and renewal rule packs and review all proposed fixtures in the JSON packet.
 
 **Decision remains pending.** Do not use a renewal deadline as a fresh deadline or present a self-declared percentile as verified merit eligibility.

@@ -4,17 +4,17 @@
 
 ## Current integrated catalogue
 
-JanaSetu contains **46 source-linked scheme records**:
+JanaSetu contains **46 source-linked scheme references** plus 96 Karnataka budget-derived line-item leads (142 built-in records total):
 - **4 rule-screened Central records** with deterministic prototype checks: PM-KISAN, PMAY-U 2.0, PMUY 2.0 and PM-USP CSSS.
-- **30 additional National Scholarship Portal records** from the AY 2026–27 public listing, including visible application-window dates as checked on 2 November 2026.
+- **30 additional National Scholarship Portal records** from the AY 2026–27 public listing. Scheme-specific status and deadlines require exact-entry verification; no universal deadline is assumed.
 - **6 additional Central references**: AB-PMJAY, PMMVY 2.0, PMSBY, PMJJBY, PMFBY and MGNREGA.
 - **6 Karnataka State references**: Shakti, Anna Bhagya, Gruha Lakshmi, Gruha Jyothi, Yuva Nidhi and CMKKY.
 
-The breakdown is **4 rule-screened + 42 catalogue-only = 46**. Here, `rule-screened` means a deterministic prototype rule exists; it does not mean the rule is approved. All four currently remain pending two independent human source/rule approvals and fail closed until both approvals are recorded. The added 42 records are source-indexed; JanaSetu does not automatically decide eligibility for them. The catalogue is a starter set, not a complete India-wide directory. State-specific coverage outside Karnataka remains incomplete.
+The built-in catalogue contains **142 records**: 4 deterministic rule prototypes, 42 official-source scheme references and 96 Karnataka FY 2026–27 budget-derived line-item leads. The 138 catalogue-only records are the 42 scheme references plus 96 budget leads. `rule-screened` means a deterministic prototype rule exists; it does not mean approved. All four rule prototypes remain pending two independent human approvals and fail closed. Budget line items are not confirmed citizen-facing schemes. This is a starter catalogue, not a complete India-wide directory; State/UT coverage remains incomplete.
 
 ## NSP application-window snapshot
 
-The National Scholarship Portal AY 2026–27 listing was accessed on 2 November 2026. Many student application entries showed a **30 November 2026** deadline; selected entries showed **15 November 2026**; some fresh applications were already shown closed on **31 October 2026**. PM-USP CSSS was shown as renewal-only in the live listing. These are point-in-time portal observations, not guarantees that an application window remains open. Recheck NSP and the scheme-specific Specifications/FAQ before advising a student.
+The National Scholarship Portal AY 2026–27 listing was rechecked on 4 November 2026. Scheme-specific windows vary; PM-USP CSSS itself has conflicting official renewal dates between the All-Scholarships and Students pages. The catalogue register therefore does not apply a universal 30 November deadline. Every NSP record requires its exact scheme Specifications/FAQ and current portal status before advising a student.
 
 ## Official sources used
 
@@ -55,7 +55,7 @@ rule-screened means deterministic eligibility checks exist in the app and are li
 
 ## Source-specific limitations
 
-- NSP deadlines are a snapshot checked 2 November 2026; dates can change and some listed fresh applications were already closed.
+- NSP listings were rechecked 4 November 2026. Scheme-specific deadlines vary; PM-USP CSSS has conflicting official renewal dates between NSP pages. No universal deadline is assumed.
 - PM-USP CSSS current AY 2026–27 fresh/renewal rules must be confirmed; the existing rule summary references the AY 2025–26 FAQ.
 - Yuva Nidhi source is explicitly a 2024 draft. Its older batch dates must not be treated as current eligibility rules.
 - Gruha Jyothi source is a Government-hosted policy study, not a current ESCOM billing circular. Confirm current household entitlement with the electricity provider.

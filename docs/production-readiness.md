@@ -20,7 +20,7 @@ This assessment is intentionally strict. A successful Next.js build and public d
 
 ## Verification evidence and remaining gaps
 
-Local verification on 4 November 2026 passed: 54 unit tests, 35 Playwright tests against a freshly built production-mode local server, TypeScript, extension syntax/Manifest V3 validation, locale key-parity checks, production dependency audit (0 vulnerabilities), Next.js production build and local production smoke tests. PR #6 was squash-merged to main as `493d0c2414cfd1028b8f9887644355f6deb03dcc`; GitHub Actions run `41691385168` passed. The Vercel production deployment is READY and passed live HTTP plus six-locale browser/accessibility checks.
+Local verification on 4 November 2026 passed: 56 unit tests, 35 Playwright tests against a freshly built production-mode local server, TypeScript, extension syntax/Manifest V3 validation, locale key-parity checks, production dependency audit (0 vulnerabilities), Next.js production build and local production smoke tests. PR #6 was squash-merged to main as `493d0c2414cfd1028b8f9887644355f6deb03dcc`; GitHub Actions run `41691385168` passed. The Vercel production deployment is READY and passed live HTTP plus six-locale browser/accessibility checks.
 
 Not yet demonstrated:
 - Fluent-speaker review of the implemented six-locale workspace, legal pages, convenience scheme translations and extension popup. Official source records remain source-authoritative and may remain in their original language.
@@ -45,7 +45,7 @@ Not yet demonstrated:
 
 - Production domain [`https://jana-setu-ai.vercel.app`](https://jana-setu-ai.vercel.app) is live on main commit `493d0c2414cfd1028b8f9887644355f6deb03dcc`; Vercel deployment `dpl_3GR7ZgPtByT2QpSTVnyhWiiC9vdX` is READY.
 - Live smoke on the prior production release: `/`, `/api/health`, `/api/schemes` (142 records), `/api/sources/health`, `/api/schemes/open-data?q=farmer`, `/privacy` and `/terms` returned HTTP 200. The new branch adds a full-index search smoke test and updated provenance counts.
-- Source monitor remains `attention_required`: upstream metadata is reachable, upstream `/search` is unavailable, and the third-party catalogue snapshot is stale. The page-filter fallback is bounded to the currently loaded source page and displays a warning; it must not be described as complete catalogue search.
+- Source monitor remains `attention_required`: publisher metadata and `/rows` are reachable, upstream `/search` is unavailable, and the 5 July 2026 third-party snapshot is stale. The application searches the complete local 4,693-row index and displays a stale-snapshot/fallback warning; it is not a current official catalogue.
 - Production browser checks passed for English, Hindi, Kannada, Tamil, Telugu and Malayalam across home, Privacy and Terms: **18/18**; critical/serious axe violations: **0**; browser page errors: **0**.
 - The production deployment was automatically created by merging [PR #6](https://github.com/PSP-YN/JanaSetu-AI/pull/6). PRs #4 and #5 were closed as superseded; their stale branches were deleted.
 - `main` requires the CI workflow, Vercel and Vercel Preview Comments checks; it requires conversation resolution and blocks force-pushes and deletion.

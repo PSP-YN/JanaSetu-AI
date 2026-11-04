@@ -47,6 +47,32 @@
       "facts": [
         "FAQ inspected; targeted extraction did not establish eKYC wording. Use the live portal for the current eKYC notice."
       ]
+    },
+    {
+      "title": "Cabinet approval — continuation of PM-KISAN 2026–27 to 2030–31",
+      "url": "https://pmkisan.gov.in/PressRelease.aspx",
+      "issuer": "Press Information Bureau / Cabinet / Department of Agriculture & Farmers Welfare",
+      "publishedOrRevised": "Cabinet approval listed on official PM-KISAN press-release index; individual release date must be confirmed from the release record",
+      "checkedAt": "2026-11-04",
+      "status": "official_continuation_announcement_index_not_full_amendment",
+      "facts": [
+        "Official PM-KISAN press-release index lists Cabinet approval to continue PM-KISAN from FY 2026–27 through FY 2030–31 with a financial outlay of ₹3.15 lakh crore.",
+        "The continuation announcement does not itself supply a replacement operational guideline or establish that the 2020 eligibility clauses have been amended.",
+        "Reviewer must obtain the underlying Cabinet/PIB release and any subsequent revised operational guidelines or circulars before approving rule version."
+      ]
+    },
+    {
+      "title": "PM-KISAN current portal notice — 24th instalment and eKYC",
+      "url": "https://pmkisan.gov.in/",
+      "issuer": "Department of Agriculture & Farmers Welfare / Government of India",
+      "publishedOrRevised": "24th instalment released 30 October 2026; live notice checked 4 November 2026",
+      "checkedAt": "2026-11-04",
+      "status": "official_live_operational_notice",
+      "facts": [
+        "The portal states the 24th instalment was released on 30 October 2026.",
+        "eKYC is mandatory for registered PM-KISAN farmers; biometric eKYC is available through CSC VLE logins, the PM-KISAN mobile app and authorized State user logins.",
+        "The portal flags suspected post-01.02.2019 land acquisitions and multiple family-member claims for temporary withholding pending physical verification. These are operational flags, not a substitute for adjudicating the underlying guideline and exception facts."
+      ]
     }
   ],
   "eligibilityMatrix": [
@@ -141,9 +167,11 @@
     }
   ],
   "unresolvedQuestions": [
-    "Find and reconcile every post-29.03.2020 central circular, clarification, SOP and current portal notice; no exhaustive amendment register was established in this pass.",
-    "Verify exact current eKYC process, land-record cut-off implementation, duplicate-beneficiary policy and State/UT exceptions.",
-    "Do not encode ₹6,000 or current installment state as guaranteed entitlement or payment."
+    "Obtain the underlying Cabinet/PIB continuation release and all post-29.03.2020 central amendments, clarifications, State/UT exceptions and current operational circulars; the official portal archive index alone is not a complete amendment register.",
+    "Confirm whether the 2026–27 to 2030–31 continuation has been accompanied by a revised operational guideline or only continuation of the existing scheme.",
+    "Verify the exact current eKYC methods, biometric exception paths, land-record cut-off implementation, succession/transfer cases, duplicate-family policy and State/UT exceptions.",
+    "Treat the portal’s suspected-case temporary withholding notice as a manual verification trigger, not an automatic ineligibility rule.",
+    "Do not encode ₹6,000 or any instalment state as guaranteed entitlement or payment; verify current operational release and beneficiary status."
   ],
   "reviewers": [
     {

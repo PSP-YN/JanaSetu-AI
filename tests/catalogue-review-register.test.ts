@@ -19,3 +19,11 @@ test("the 138-record review register covers every catalogue-only built-in record
   assert.deepEqual(ids.sort(), expected);
   assert.ok(lines.slice(1).every((line) => line.includes('"pending"')));
 });
+
+
+test("NSP catalogue records do not carry a universal AY 2026-27 deadline", () => {
+  const nsp = SCHEMES.filter((scheme) => scheme.sourceName === "National Scholarship Portal — AY 2026–27 listing");
+  assert.equal(nsp.length, 30);
+  assert.ok(nsp.every((scheme) => scheme.sourcePeriod.includes("scheme-specific status and deadlines vary")));
+  assert.ok(nsp.every((scheme) => !scheme.sourcePeriod.includes("30 November 2026")));
+});

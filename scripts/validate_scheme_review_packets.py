@@ -24,4 +24,16 @@ for path in files:
     assert all(reviewer.get("name") is None and reviewer.get("decision") == "pending" and reviewer.get("reviewedAt") is None and not reviewer.get("evidence") for reviewer in reviewers), f"{scheme}: reviewer slots must remain blank pending human sign-off"
     assert "AI-assisted" in packet.get("approvalNote", ""), f"{scheme}: missing AI-not-approval boundary"
 assert found == EXPECTED, f"Missing packets: {sorted(EXPECTED - found)}"
+# Guard against previously discovered source conflicts being flattened or misrepresented.
+packets = {json.loads(path.read_text("utf-8"))["schemeId"]: json.loads(path.read_text("utf-8")) for path in (ROOT / "docs/scheme-reviews").glob("*.json")}
+csss_facts = " ".join(str(item) for evidence in packets["pm-usp-csss"].get("sourceEvidence", []) for item in evidence.get("facts", []))
+assert "30.09.2026" in csss_facts and "31.10.2026" in csss_facts, "CSSS official deadline conflict must remain documented"
+assert "30.11.2026" not in packets["pm-usp-csss"]["sourceEvidence"][0]["facts"][1], "Do not use 30 November as the CSSS student deadline"
+pmuy_facts = " ".join(str(item) for evidence in packets["pm-ujjwala"].get("sourceEvidence", []) for item in evidence.get("facts", []))
+assert "₹2,050" in pmuy_facts and "₹1,600" in pmuy_facts, "PMUY benefit amount conflict must remain documented"
+pmay_facts = json.dumps(packets["pmay-u-2"].get("sourceEvidence", []), ensure_ascii=False)
+assert "39-page PDF" in pmay_facts and "Aadhaar OTP" in pmay_facts, "Full AHP SOP review findings must remain in the packet"
+pmk_facts = " ".join(str(item) for evidence in packets["pm-kisan"].get("sourceEvidence", []) for item in evidence.get("facts", []))
+assert "2030–31" in pmk_facts and "24th instalment" in pmk_facts, "PM-KISAN continuation and latest portal notice must remain in the packet"
+
 print(f"Validated {len(found)} independent-review packets: all pending, two distinct blank human reviewers each.")

@@ -48,6 +48,36 @@
       "facts": [
         "Current official index lists this SOP for AHP. It must be read alongside the 2024 scheme guidelines and applicable State/UT instructions."
       ]
+    },
+    {
+      "title": "PMAY-U 2.0 Affordable Housing in Partnership Standard Operating Procedure",
+      "url": "https://pmay-urban.gov.in/uploads/guidelines/AHP-SOP.pdf",
+      "issuer": "Ministry of Housing and Urban Affairs, Government of India",
+      "publishedOrRevised": "April 2026; 39-page PDF downloaded and text-extracted 4 November 2026",
+      "checkedAt": "2026-11-04",
+      "status": "official_current_component_sop_full_text_reviewed",
+      "facts": [
+        "The SOP covers public/private project registration, project appraisal/approval, beneficiary application, State/UT/ULB roles, monitoring, allotment and handover.",
+        "A beneficiary family includes husband, wife and unmarried sons/daughters; the application flow requires details of all family members including Aadhaar details, date of birth, relationship and occupation.",
+        "AHP EWS/LIG/MIG income bands are up to ₹3 lakh, ₹3–6 lakh and ₹6–9 lakh respectively, subject to the master guideline and State/UT EWS flexibility.",
+        "The AHP application flow includes Aadhaar OTP authentication, family details, existing-house and income details, income-certificate upload, project selection and active bank-account/IFSC details. One Aadhaar number can be used for only one form; the SOP states a married female applicant must provide husband Aadhaar details. JanaSetu must not collect Aadhaar, OTP or bank credentials.",
+        "The SOP states that mere submission does not create a right to benefits; approval/release depends on due diligence, verification and compliance. It also contains a prior-housing exclusion for AHP that must be reconciled with the master guideline’s 20-year rule; the master Scheme Guidelines prevail where there is a conflict.",
+        "The SOP describes a five-year lock-in before a beneficiary may voluntarily opt for buy-back of an allotted AHP house; this is post-allotment process, not an eligibility input.",
+        "Project-side AHP conditions include project/land appraisal and EWS project composition requirements; these must not be confused with individual household eligibility."
+      ]
+    },
+    {
+      "title": "Angikaar 2026 Operational Guidelines",
+      "url": "https://pmay-urban.gov.in/uploads/Angikaar-2026-Guidelines.pdf",
+      "issuer": "Ministry of Housing and Urban Affairs, Government of India",
+      "publishedOrRevised": "May 2026",
+      "checkedAt": "2026-11-04",
+      "status": "official_current_outreach_guideline_not_eligibility_amendment",
+      "facts": [
+        "The 2026 last-mile outreach campaign ran from 4 May to 31 July 2026.",
+        "The document concerns outreach, application facilitation, project completion, geo-tagging, occupancy and convergence; it is not a replacement for PMAY-U 2.0 beneficiary eligibility rules.",
+        "The PMAY-U guideline index lists the April 2026 AHP SOP and the September 2024 master guidelines; no separate current SOP for all other verticals was identified in this review."
+      ]
     }
   ],
   "eligibilityMatrix": [
@@ -146,9 +176,11 @@
     }
   ],
   "unresolvedQuestions": [
-    "Review all four verticals and all relevant current SOPs/circulars; only AHP SOP April 2026 was identified in this pass.",
-    "Confirm which legacy PMAY-U amendments remain applicable to PMAY-U 2.0; do not conflate them.",
-    "Confirm current State/UT EWS definitions, urban residency evidence and ULB verification process."
+    "Review the four verticals independently and identify all applicable current SOPs, circulars and State/UT implementation orders; only the April 2026 AHP SOP was fully extracted in this pass.",
+    "Obtain written interpretation of the AHP SOP prior-housing exclusion against the master Scheme Guidelines’ 20-year rule; the master guidelines state that they prevail in case of conflict.",
+    "Confirm current State/UT EWS income modifications, urban-residency evidence, ULB verification and project-specific eligibility requirements.",
+    "Do not collect Aadhaar numbers, Aadhaar OTPs, family Aadhaar, bank account details or income documents in JanaSetu; refer applicants to the official PMAY-U portal/ULB/CSC.",
+    "Do not reduce vertical-specific AHP/ISS/BLC/ARH requirements to the prototype’s generic household fields."
   ],
   "reviewers": [
     {

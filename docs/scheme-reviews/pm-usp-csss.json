@@ -16,12 +16,13 @@
       "issuer": "Department of Higher Education / National Scholarship Portal",
       "publishedOrRevised": "AY 2026-27 listing; live snapshot 04 November 2026",
       "checkedAt": "2026-11-04",
-      "status": "official_live_academic_year_listing",
+      "status": "official_live_listing_with_conflicting_official_deadlines",
       "facts": [
-        "CSSS entry states renewal open from 01.06.2026.",
-        "Renewal student application deadline is 30.11.2026.",
-        "Defective application and institute verification deadlines are 15.12.2026; DNO/SNO/MNO verification deadline is 31.12.2026.",
-        "The listing labels these dates for renewal. Do not treat them as a fresh-application window."
+        "The live All-Scholarships CSSS entry shows renewal open from 01.06.2026, student application deadline 30.09.2026, defective application and institute verification deadlines 15.10.2026, and DNO/SNO/MNO verification deadline 30.10.2026.",
+        "These dates are explicitly for renewal, not fresh applications.",
+        "The separate NSP Students announcement says renewal student applications close 31.10.2026, institute verification closes 15.11.2026 and L2 verification closes 30.11.2026.",
+        "The two official NSP pages conflict on the student renewal deadline and verification dates. As of 04.11.2026, all stated student-application deadlines have passed, but verification windows differ. Do not show the application as open or infer the applicable date without written NSP/Ministry clarification.",
+        "No current fresh-application window for AY 2026-27 was established from these pages."
       ]
     },
     {
@@ -47,6 +48,19 @@
         "Selection methodology includes gender, stream and category allocation and 5% horizontal reservation for benchmark disabilities (40% or more), from allocated State Board slots.",
         "Renewal requires at least 50% marks and at least 75% attendance; yearly renewal; total duration not exceeding five years, subject to conditions.",
         "FAQ describes scholarship rates of ₹12,000/year at graduation for first three years, ₹20,000/year at postgraduate level and course-specific technical-course rates."
+      ]
+    },
+    {
+      "title": "NSP AY 2026-27 Students announcements — renewal dates",
+      "url": "https://scholarships.gov.in/Students",
+      "issuer": "Department of Higher Education / National Scholarship Portal",
+      "publishedOrRevised": "AY 2026-27 portal announcement; checked 4 November 2026",
+      "checkedAt": "2026-11-04",
+      "status": "official_live_announcement_conflicts_with_all_scholarships_listing",
+      "facts": [
+        "Announcement says renewal student applications close 31.10.2026, institute verification 15.11.2026 and L2 verification 30.11.2026.",
+        "Announcement text says renewal applications are currently open even though the stated student deadline has passed as of 4 November 2026; this is internally stale/inconsistent.",
+        "This is a renewal announcement, not evidence of a fresh-application window."
       ]
     }
   ],
@@ -146,9 +160,11 @@
     }
   ],
   "unresolvedQuestions": [
-    "Download and compare the 2026-27 CSSS specifications/FAQ linked by NSP; the detailed FAQ inspected is AY 2025-26.",
-    "Confirm whether fresh applications are open for AY 2026-27 and obtain the current fresh deadline; do not infer from renewal entry.",
-    "Verify Board-wise top-20 percentile lists, current merit allocation, course exclusions, renewal and scholarship rates."
+    "Obtain written NSP/Department of Higher Education clarification resolving the conflicting AY 2026-27 renewal deadlines: All-Scholarships page (30 September / 15 October / 30 October) versus Students announcement (31 October / 15 November / 30 November).",
+    "Confirm the actual current application and verification status from the authenticated NSP scheme record; do not use the stale public announcement’s “currently open” wording.",
+    "Obtain the current AY 2026-27 CSSS specifications and FAQ; the detailed FAQ reviewed is AY 2025-26 and the guideline PDF is updated February 2024.",
+    "Confirm whether fresh applications are open for AY 2026-27 and obtain the fresh deadline; do not infer it from the renewal listing.",
+    "Verify Board-wise 80th-percentile cut-offs, current merit allocation, course exclusions, income evidence, renewal conditions, scholarship rates and State/Board quota for the current academic year."
   ],
   "reviewers": [
     {

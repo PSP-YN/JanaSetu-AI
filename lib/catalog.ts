@@ -189,8 +189,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 30 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -217,8 +217,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 30 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -245,8 +245,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 30 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -273,8 +273,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 30 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — Jammu and Kashmir and Ladakh",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -301,8 +301,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 30 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -329,8 +329,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 30 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -357,8 +357,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 30 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -385,8 +385,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 30 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -413,8 +413,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 30 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -441,8 +441,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 30 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -469,8 +469,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 30 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — North Eastern Region",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -497,8 +497,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 31 October 2026 — fresh applications shown closed. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -525,8 +525,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 31 October 2026 — fresh applications shown closed. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -553,8 +553,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 15 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -581,8 +581,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 30 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -609,8 +609,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 30 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -637,8 +637,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 30 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -665,8 +665,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 30 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -693,8 +693,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 30 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -721,8 +721,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 30 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -749,8 +749,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 30 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -777,8 +777,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 30 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -805,8 +805,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 30 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -833,8 +833,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 31 October 2026 — fresh applications shown closed. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -861,8 +861,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 30 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -889,8 +889,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 30 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -917,8 +917,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 15 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -945,8 +945,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 30 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -973,8 +973,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 30 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — North Eastern Region",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
@@ -1001,8 +1001,8 @@ SCHEMES.push(...([
     "benefit": "Scholarship or education assistance under scheme-specific guidelines; amount, duration and award conditions vary.",
     "sourceUrl": "https://scholarships.gov.in/All-Scholarships",
     "sourceName": "National Scholarship Portal — AY 2026–27 listing",
-    "sourcePeriod": "AY 2026–27 listing checked 2 November 2026. Student application deadline shown: 30 November 2026. Recheck live portal before acting.",
-    "sourceChecked": "2026-11-02",
+    "sourcePeriod": "AY 2026–27 generic NSP catalogue landing page checked 4 November 2026; scheme-specific status and deadlines vary and require exact-entry verification. Do not infer a universal deadline.",
+    "sourceChecked": "2026-11-04",
     "geography": "Central scheme — India",
     "documents": [
       "Use the scheme-specific Specifications and FAQ linked on the National Scholarship Portal; document requirements vary."
