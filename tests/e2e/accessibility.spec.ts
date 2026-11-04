@@ -213,3 +213,15 @@ test("hero focus outline and primary button text remain high-contrast", async ({
   const primaryButton = page.locator(".button-primary").first();
   expect(await primaryButton.evaluate((element) => getComputedStyle(element).color)).toBe("rgb(255, 255, 255)");
 });
+
+test("uploaded profile avatar loads from the public asset and keeps a fallback", async ({ page }) => {
+  await page.goto("/");
+  const avatar = page.locator(".avatar-image");
+  await expect(avatar).toHaveAttribute("src", "/profile-avatar.png");
+  await expect.poll(() => avatar.evaluate((node) => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  await expect(avatar).toBeVisible();
+
+  await avatar.evaluate((node) => node.dispatchEvent(new Event("error")));
+  await expect(avatar).toBeHidden();
+  await expect(page.locator(".avatar-fallback")).toBeVisible();
+});
