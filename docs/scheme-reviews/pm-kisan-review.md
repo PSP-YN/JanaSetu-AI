@@ -9,7 +9,8 @@
 - [Revised PM-KISAN Operational Guidelines](https://pmkisan.gov.in/Documents/RevisedPM-KISANOperationalGuidelines%28English%29.pdf) — revised 29 March 2020.
 - [Live PM-KISAN portal](https://pmkisan.gov.in/) — checked 4 November 2026. It reports the 24th instalment released on 30 October 2026, states eKYC is mandatory, and flags suspected post-1 February 2019 land acquisitions / multiple family-member claims for temporary withholding pending physical verification.
 - [Official FAQ](https://pmkisan.gov.in/Documents/RevisedFAQ.pdf).
-- [Official PM-KISAN press-release index](https://pmkisan.gov.in/PressRelease.aspx) — lists Cabinet approval to continue the scheme from FY 2026–27 to FY 2030–31 with a ₹3.15 lakh crore outlay.
+- [PIB Cabinet continuation release, 31 July 2026](https://www.pib.gov.in/PressReleasePage.aspx?PRID=2292460&lang=1&reg=6) — PM-KISAN continuation from FY 2026–27 to FY 2030–31 with ₹3.15 lakh crore.
+- [PIB 24th instalment release, 30 October 2026](https://www.pib.gov.in/PressNoteDetails.aspx?ModuleId=3&NoteId=160645&lang=2&reg=48) — 9.34 crore farmers and over ₹18,690 crore.
 
 The guideline PDF is historical relative to the live portal. It is not proof that all later circulars and operational instructions have been reconciled.
 

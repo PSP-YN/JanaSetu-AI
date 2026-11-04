@@ -116,9 +116,12 @@ The four rule-screened catalogue records were rechecked against official sources
 - Parent housing-benefit prioritisation is a distinct clause and must not be collapsed into the 20-year disqualification. BLC, AHP, ARH and ISS need separate rule review.
 
 ### PMUY 2.0
-- The live eligibility page and FAQ checked 4 November 2026 describe an adult woman aged 18+, poor-household deprivation declaration, no existing OMC LPG connection among family members listed in the family-composition document, mandatory biometric Aadhaar authentication, and migrant document exceptions.
-- The FAQ lists the connection components and says PNG connection holders cannot receive a PMUY connection or non-PMUY subsidized LPG connection.
-- The complete current deprivation declaration checklist and OMC instructions require human review. JanaSetu must not collect Aadhaar or bank documents.
+- The 22 September 2025 PIB order approved 25 lakh additional deposit-free connections for FY 2025–26 and ₹2,050 per standard 14.2 kg connection (connection-cost support, not cash paid to the applicant); the 4 December 2025 PIB reply says eligibility was simplified to adult women from poor households based on a Deprivation Declaration.
+- The homepage reports 2,442,525 of the 25 lakh connections released as at 23 September 2026. It lists ₹2,050 for 14.2 kg and ₹1,300 for 5 kg; About/FAQ still show legacy ₹1,600/₹1,150. The 14.2 kg amount is supported by the PIB order; the 5 kg amount and current new-application window require OMC confirmation.
+- The PIB order also specifies ₹300 targeted subsidy for up to nine 14.2 kg refills in FY 2025–26. No FY 2026–27 extension was identified in this pass.
+- Current pages describe adult woman aged 18+, no existing LPG connection in the household, simplified KYC and a Deprivation Declaration. The About page still displays the older category list; its current effect must be confirmed.
+- The eKYC page describes face-based self-authentication with an OMC app and Aadhaar FaceRD. PIB says new consumers undergo biometric authentication before connection release; FAQ also describes distributor biometric authentication. Reconcile the exact sequence.
+- Official documents include Aadhaar of applicant/adult family members and bank details. JanaSetu must not collect Aadhaar or bank documents.
 
 ### PM-USP CSSS
 - The live NSP CSSS sources conflict: All-Scholarships lists renewal student applications through 30 September 2026, institute verification through 15 October and DNO/SNO/MNO through 30 October; the Students announcement lists student applications through 31 October, institute verification through 15 November and L2 through 30 November. The latter page still says “currently open” after the student deadline. No date is selected as authoritative.

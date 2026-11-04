@@ -8,7 +8,7 @@
 
 JanaSetu requests guidance on an authorized, machine-readable method for accessing the public scheme catalogue for non-authoritative discovery and linking users to the relevant official scheme pages.
 
-Please advise whether NeGD / Digital India Corporation can provide or approve:
+API Setu documentation lists myScheme among service-API partners and explains that API consumers subscribe to publisher APIs with publisher approval. A public row-level myScheme catalogue API was not confirmed in the directory search. Please advise whether NeGD / Digital India Corporation can provide or approve:
 
 1. An official API, API Setu service, bulk export, or documented data feed for Central and State/UT scheme metadata.
 2. The approved authentication method, access application process, technical documentation and test environment.

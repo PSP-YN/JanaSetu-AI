@@ -24,12 +24,13 @@ Official sources: https://pmay-urban.gov.in/guideline ; https://pmay-urban.gov.i
 
 ## PMUY 2.0
 
-- Official About page states 25 lakh additional connections approved and being released; homepage reports 2,442,525 of that allocation released as at 23 September 2026.
-- Eligibility includes adult woman aged 18+, no other LPG connection in household, and household category/deprivation criteria. The full prescribed deprivation declaration and family composition matter.
-- Current eKYC page describes face-based self-authentication using an OMC mobile app and Aadhaar FaceRD; FAQ also describes biometric authentication at the distributor. Reconcile sequence and necessity.
-- Official homepage lists ₹2,050/₹1,300 cash assistance for 14.2 kg/5 kg; About page lists ₹1,600/₹1,150. Do not encode a benefit amount until the governing order and OMC instructions are reconciled.
+- Government approved 25 lakh additional deposit-free connections for FY 2025–26; homepage reports 2,442,525 released under this allocation as at 23 September 2026.
+- PIB release of 4 December 2025 says eligibility for this allocation was simplified to adult women from poor households based on a Deprivation Declaration. The About page still shows the older category list; confirm how it applies.
+- PIB release of 22 September 2025 confirms ₹2,050 per standard 14.2 kg connection for the 25 lakh allocation (connection-cost support, not a cash transfer to the applicant). The homepage lists ₹2,050/₹1,300 for 14.2 kg/5 kg; About/FAQ show legacy ₹1,600/₹1,150. The 14.2 kg amount is reconciled for the allocation; the 5 kg amount still needs OMC confirmation.
+- The same PIB order approved ₹300 targeted subsidy for up to nine 14.2 kg refills during FY 2025–26; no FY 2026–27 continuation order was found in this pass.
+- Current eKYC page describes face-based self-authentication using an OMC app and Aadhaar FaceRD; PIB says all new PMUY consumers undergo biometric authentication before connection release; FAQ also describes biometric authentication at the distributor. Reconcile sequence.
 - Official documents include Aadhaar of applicant/adult family members and bank details; JanaSetu must not collect these.
-- Remaining: governing extension order, current deprivation form, benefit amount, PNG restriction and eKYC instructions.
+- Remaining: new-application status for the 25 lakh allocation, exact 5 kg assistance, FY 2026–27 refill subsidy, current deprivation form, PNG restriction and eKYC instructions.
 
 Official sources: https://www.pmuy.gov.in/about.html ; https://www.pmuy.gov.in/index.aspx ; https://www.pmuy.gov.in/faq.html ; https://www.pmuy.gov.in/e-kyc.html
 

@@ -61,7 +61,7 @@
       "status": "official_live_scheme_page",
       "facts": [
         "Government approved an additional 25 lakh LPG connections, taking the stated overall target to 10.6 crore; the page says these connections are being released.",
-        "The page lists eligible adult-woman household categories including SC, ST, PMAY-G, Most Backward Classes, AAY, tea/ex-tea garden tribes, forest dwellers, island/river-island residents, SECC AHL TIN and poor households under the 14-point declaration.",
+        "The About page retains an older category list (SC, ST, PMAY-G, MBC, AAY, tea tribes, forest dwellers, islands/river islands, SECC AHL TIN and poor households under a 14-point declaration). The 4 December 2025 PIB release says eligibility for the new 25 lakh allocation was simplified to adult women from poor households based on a Deprivation Declaration. Reviewers must establish whether the older category list is superseded for this allocation.",
         "Applicant must be at least 18 and there must be no other LPG connection in the household.",
         "The page lists KYC, ration card or family-composition evidence, Aadhaar of applicant and adult family members, address proof and bank account/IFSC."
       ]
@@ -86,9 +86,24 @@
       "checkedAt": "2026-11-04",
       "status": "official_live_portal_with_cross_page_amount_conflict",
       "facts": [
-        "Homepage reports 2,442,525 connections released under the latest 25 lakh extension as at 23 September 2026.",
-        "Homepage benefit section states cash assistance of ₹2,050 for a 14.2 kg connection and ₹1,300 for a 5 kg connection, plus free first refill and stove.",
-        "The official About page separately states ₹1,600 and ₹1,150 respectively; these official pages conflict. Do not encode a benefit amount until the current governing order/OMC instructions are reconciled."
+        "Homepage reports 2,442,525 connections released under the 25 lakh extension as at 23 September 2026.",
+        "Homepage calls the connection-cost support “cash assistance” and lists ₹2,050 for a 14.2 kg connection and ₹1,300 for a 5 kg connection; this is support for connection components, not a cash transfer paid to the applicant. The 22 September 2025 PIB release confirms ₹2,050 per standard connection for the 25 lakh allocation; it does not separately specify the 5 kg amount.",
+        "The About/FAQ pages still show older ₹1,600/₹1,150 amounts. The 14.2 kg figure is reconciled for the 25 lakh allocation by the PIB release; the 5 kg amount and the scope/date of the legacy page content still require confirmation against the current OMC instruction."
+      ]
+    },
+    {
+      "title": "PIB release — 25 lakh PMUY connections, simplified eligibility and connection assistance",
+      "url": "https://www.pib.gov.in/newsite/erelcontent.aspx?lang=2&reg=48&relid=276350",
+      "issuer": "Ministry of Petroleum & Natural Gas / Press Information Bureau",
+      "publishedOrRevised": "22 September 2025; 25 lakh connections for FY 2025–26",
+      "checkedAt": "2026-11-04",
+      "status": "official_governing_allocation_release",
+      "facts": [
+        "The Government approved 25 lakh additional deposit-free PMUY connections during FY 2025–26.",
+        "The release specifies ₹2,050 per standard 14.2 kg connection for the 25 lakh allocation, covering connection components rather than a cash transfer to the applicant; the first refill and stove are also provided free of cost.",
+        "The release states eligible adult women from poor households without an existing LPG connection in their family may apply through simplified KYC and a Deprivation Declaration; applications undergo system-driven de-duplication and physical verification by OMC officials.",
+        "The PIB release of 4 December 2025 says the eligibility process was simplified to adult women from poor households based on submission of a Deprivation Declaration. This must be reconciled with the older category list still shown on the About page.",
+        "The same 22 September 2025 release approved targeted subsidy of ₹300 per 14.2 kg cylinder for up to nine refills in FY 2025–26, pro-rated for 5 kg connections. Do not present this as a 2026–27 subsidy without a newer order."
       ]
     }
   ],
@@ -188,11 +203,12 @@
     }
   ],
   "unresolvedQuestions": [
-    "Obtain the Cabinet/Ministry order for the additional 25 lakh allocation and verify the current remaining allocation and application window.",
-    "Reconcile the ₹2,050/₹1,300 amounts on the live home page with ₹1,600/₹1,150 on the About page using the latest governing order and OMC instructions; do not display a single amount as authoritative until resolved.",
-    "Confirm the current deprivation declaration form version and every checklist item; do not infer poor-household status from income alone.",
-    "Reconcile FAQ biometric-at-distributor language with the face-based self-eKYC app process and any distributor KYC requirements.",
-    "Confirm the PNG connection restriction and household membership rules with current Ministry/OMC instructions.",
+    "Confirm the applicable 25 lakh allocation order and whether any new connection window remains after FY 2025–26; portal progress as at 23 September 2026 is not proof that applications remain open.",
+    "Reconcile the older category list on the About page with the 4 December 2025 PIB statement that eligibility was simplified to adult women from poor households based on a Deprivation Declaration.",
+    "The 22 September 2025 PIB release confirms ₹2,050 per standard 14.2 kg connection for the 25 lakh allocation; confirm the 5 kg amount (homepage ₹1,300, About/FAQ ₹1,150) with current OMC instructions.",
+    "Confirm whether the ₹300 targeted refill subsidy for up to nine refills was extended beyond FY 2025–26; do not show it as current in FY 2026–27 without a newer order.",
+    "Reconcile FAQ biometric-at-distributor language with face-based self-eKYC and the PIB statement that all new PMUY consumers undergo biometric authentication before connection release.",
+    "Confirm the current deprivation declaration form version, household membership and PNG connection restriction with current Ministry/OMC instructions.",
     "JanaSetu must not collect Aadhaar copies, Aadhaar numbers, OTPs, bank details, ration-card images or family Aadhaar data; route applicants to authorized OMC/CSC channels."
   ],
   "reviewers": [
