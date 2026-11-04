@@ -15,7 +15,10 @@ export async function GET(request: NextRequest) {
     catalogueTotal: SCHEMES.length,
     ruleScreenedTotal: SCHEMES.filter((scheme) => scheme.catalogueStatus === "rule-screened").length,
     catalogueOnlyTotal: SCHEMES.filter((scheme) => scheme.catalogueStatus === "catalogue-only").length,
-    catalogueScope: "142 source-linked records: 4 Central rule prototypes pending two independent human approvals, 42 catalogue-only official-source records, and 96 Karnataka FY 2026–27 budget-derived discovery leads. Not a complete India-wide Central + State/UT directory.",
+    schemeReferenceTotal: SCHEMES.filter((scheme) => scheme.recordKind !== "budget-line-item-lead").length,
+    budgetLineItemLeadTotal: SCHEMES.filter((scheme) => scheme.recordKind === "budget-line-item-lead").length,
+    officialSourceCatalogueOnlyTotal: SCHEMES.filter((scheme) => scheme.catalogueStatus === "catalogue-only" && scheme.recordKind !== "budget-line-item-lead").length,
+    catalogueScope: "142 built-in references: 4 Central deterministic rule prototypes pending two independent human approvals, 42 catalogue-only official-source scheme references, and 96 Karnataka FY 2026–27 budget line-item leads. Budget leads are not confirmed citizen-facing schemes. Not a complete India-wide Central + State/UT directory.",
     schemes: results
   }, { headers: { "Cache-Control": "no-store" } });
 }

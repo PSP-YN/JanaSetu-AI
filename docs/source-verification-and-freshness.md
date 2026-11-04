@@ -65,3 +65,28 @@ This refresh checked the four deterministic scheme records against live or curre
 - PM-USP CSSS FAQ AY 2025–26: https://scholarships.gov.in/public/schemeGuidelines/FAQ_DOHE_CSSS.pdf
 
 **Important:** The source checks above do not establish an exhaustive amendment history. Each packet records inspected sources, known rule/code gaps, proposed boundary fixtures and unresolved questions. All four rules remain pending two independent human approvals and must continue to fail closed. The 4,693-row SmartDuke third-party catalogue remains a 5 July 2026 snapshot, older than the 90-day freshness threshold as of this review. No newer verified upstream snapshot was established in this pass. The 142-record built-in catalogue is still 4 rule-screened records plus 138 catalogue-only records; the 96 Karnataka budget leads remain unverified discovery leads.
+
+
+## Official catalogue benchmark — 4 November 2026
+
+The public myScheme homepage advertises **5,150+ total schemes**, including **740+ Central** and **4,400+ State/UT** schemes. Its page footer reports a portal update date of **18 September 2026** and advertises support for **15 languages**. This is a public headline benchmark only; it is not a row-level downloadable export and must not be directly reconciled or subtracted from the SmartDuke dataset count.
+
+- Official portal: https://www.myscheme.gov.in/
+- Official FAQs: https://www.myscheme.gov.in/faqs
+- Terms of Use: https://www.myscheme.gov.in/terms-of-use
+- Official contact: support-myscheme@digitalindia.gov.in; +91 11 24303714 (09:00–17:30 IST).
+
+The Terms of Use explicitly prohibit software such as bots and scraper tools from automatically accessing, monitoring or copying platform pages unless myScheme expressly authorizes this in writing. Therefore JanaSetu does **not** scrape the site, reverse-engineer private endpoints, or automate account-based access. The required next step is a written request for an approved API/API Setu feed, permitted fields, refresh cadence, redistribution rights, attribution, rate limits and retention terms.
+
+The external SmartDuke mirror remains a 4,693-row snapshot collected 5 July 2026, with repository last modified 6 July 2026. Its publisher has not published a newer revision as of this check. The application now searches all 4,693 local rows (not just the displayed page), but the snapshot itself remains stale under the 90-day policy. The new scheduled workflow checks for publisher revisions daily and opens a draft review PR; it does not auto-merge or auto-approve data.
+
+### Third-party catalogue quality audit
+
+A reproducible field-completeness audit and human exception queue are generated from the exact compressed snapshot:
+
+- `docs/smartduke-catalogue-audit.json` — revision, collection date, unique identifiers, duplicate-title signals, missing-field counts and jurisdiction/category distribution.
+- `docs/smartduke-record-review-queue.csv` — records with one or more missing metadata fields or duplicate-title flags, with two blank reviewer slots and a pending decision.
+
+Audit result for the 5 July 2026 publisher snapshot (4,693 rows): all 4,693 slugs are unique; one normalized scheme-title duplicate group contains two rows; 4,306 rows have at least one quality flag. Missing fields include 4 categories, 4,012 ministry values, 293 department values, 9 application URLs, 4 descriptions, 4 benefit descriptions, 4 eligibility-text values, 4 application-process values and 17 document lists. Counts overlap across records. Missing ministry metadata is not proof that a record is invalid, but it makes the source inadequate for unsupervised authoritative use. Duplicate titles are flagged for manual reconciliation and never auto-deleted.
+
+The audit is data-quality triage, not verification of scheme existence, current status, legal eligibility or official application routes. Every third-party record remains catalogue-only.

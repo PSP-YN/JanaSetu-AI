@@ -14,7 +14,7 @@
 - Tightened assessment/draft safety so pending, missing or removed schemes cannot retain a positive/previously reviewed result.
 - Improved extension identity matching so a full name is not copied into first-name, last-name, username or relative-name fields. Imported occupation values now use the same canonical allowlist/alias normalization as the app. The extension remains HTTPS `.gov.in` / `.nic.in` only and manual click-to-fill. It does not intentionally submit forms or upload documents, but portal scripts may react to field-change events.
 - Changed CI installation to reproducible `npm ci` and made `npm run test:e2e` build the current source before starting Playwright, preventing stale `.next` output from being tested. CI uses the same command.
-- Added bounded Hugging Face Dataset Viewer `/search` fallback. If `/search` is unavailable, the API filters the current `/rows` page and clearly reports page-only search; pagination advances by source rows.
+- Added a bundled 4,693-row full-text index. When the publisher `/search` endpoint is unavailable, JanaSetu searches the complete local snapshot rather than the current page and displays the stale-snapshot warning.
 - Source health separately reports metadata and search availability, parsing the search JSON body before reporting availability. Degraded page-only search results use a 60-second shared-cache lifetime instead of the full-search one-hour cache.
 - Local catalogue search includes the current locale's translated scheme summaries, benefits and rule notes.
 - Local browser hydration preserves valid citizen review markers and approved-rule snapshots only for schemes currently approved; untrusted backup imports still reset those markers.
@@ -39,7 +39,7 @@ The integrated release was merged by [PR #6](https://github.com/PSP-YN/JanaSetu-
 ## Live Vercel observations — 3 November 2026
 
 - Production domain: [https://jana-setu-ai.vercel.app](https://jana-setu-ai.vercel.app). Production deployment `janasetu-82sqegccz-pspyn.vercel.app` is READY for main commit `493d0c2414cfd1028b8f9887644355f6deb03dcc` (deployment `dpl_3GR7ZgPtByT2QpSTVnyhWiiC9vdX`).
-- Production HTTP smoke: `/`, `/api/health`, `/api/schemes` (142 records), `/api/sources/health`, `/api/schemes/open-data?q=farmer` (3 page-filter results with warning), `/privacy` and `/terms` all returned HTTP 200. Required security headers were present.
+- Production HTTP smoke: `/`, `/api/health`, `/api/schemes` (142 records), `/api/sources/health`, `/api/schemes/open-data?q=farmer` (full local-index results with freshness warning), `/privacy` and `/terms` all returned HTTP 200. Required security headers were present.
 - Production source health correctly reports `attention_required`: the 5 July 2026 third-party snapshot is stale and upstream search is unavailable. The bounded current-page fallback returns results, but it is not a complete search across the full catalogue.
 - Production browser checks: all six locales across home, Privacy and Terms passed **18/18** checks; critical/serious axe violations: **0**; browser page errors: **0**.
 - The Preview for the exact release commit `afb09ff4ee5d578eec5418f4b8edcfec863c6009` was READY and passed the same 18/18 locale/accessibility checks before merge.

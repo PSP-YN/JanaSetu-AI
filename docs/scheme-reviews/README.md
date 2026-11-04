@@ -1,6 +1,6 @@
 # Independent scheme-review packets
 
-**Prepared:** 4 November 2026  
+**Prepared:** 4 November 2026
 **Status:** All four schemes remain pending human approval. The eligibility engine must continue to fail closed.
 
 This folder contains four structured evidence packets and reviewer sign-off records. The JSON files are the source of truth for reviewer decisions; the Markdown files below are readable briefing sheets. The preparation work is AI-assisted and is not an independent approval, legal opinion or official eligibility determination.
@@ -33,3 +33,13 @@ One person must not fill both roles. Each reviewer must provide name, organizati
 - Any material source amendment resets approval to pending.
 
 Do not use real citizen data during review. Use synthetic profiles. Do not set any packet to approved merely because the research or tests were prepared by an AI assistant.
+
+
+## Catalogue review artifacts — 4 November 2026
+
+- `../catalogue-review-register.csv` contains all 138 built-in catalogue-only records, each exactly once, with review status and a specific human action. It distinguishes 96 Karnataka budget line-item leads from 42 official-source scheme references.
+- `../smartduke-catalogue-audit.json` records a reproducible field-completeness audit for all 4,693 third-party rows.
+- `../smartduke-record-review-queue.csv` contains the 4,306 third-party rows with one or more metadata quality flags.
+- `../myscheme-data-access-request.md` is an unsent request template for an authorized official feed.
+
+None of these artifacts upgrades a catalogue-only entry to an approved scheme.

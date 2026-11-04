@@ -1,6 +1,6 @@
 # Scheme catalogue coverage and source policy
 
-**Catalogue review date:** 2 November 2026
+**Catalogue review date:** 4 November 2026
 
 ## Current integrated catalogue
 
@@ -92,6 +92,20 @@ Current catalogue breakdown after this import: **142 records = 4 rule-screened +
 
 JanaSetu Discover integrates paginated keyword search over the Hugging Face Dataset Viewer for [SmartDuke Technologies' Indian Government Schemes Dataset 2026](https://huggingface.co/datasets/smartduketech/indian-government-schemes-2025), license CC BY 4.0. The dataset card states 4,693 records and a July 2026 snapshot, with original source myScheme and structured parsing by SmartDuke Technologies. This source is third-party, machine-parsed and not independently verified by JanaSetu. Imported records remain catalogue-only. The parser's age, gender, caste, income, BPL, disability and state fields are intentionally not used by the eligibility evaluator. Each record links to the scheme URL supplied by the dataset; verify it before applying.
 
-The app proxies requests through `/api/schemes/open-data`, requests up to 50 rows at a time from the Hugging Face Dataset Viewer, caches responses for one hour, and allows keyword search and pagination. This is an external dependency, not a locally mirrored/offline catalogue. If it is unavailable, the local catalogue and official myScheme link remain accessible.
+The app bundles an attributed 4,693-row snapshot and performs keyword/category search over the complete local index through `/api/schemes/open-data`, with 50-record pagination. It monitors the publisher metadata, `/rows` and `/search` endpoints. The upstream `/search` endpoint is currently unavailable; full local-index search remains available, but the snapshot is stale and not a current official catalogue.
 
 **Attribution:** SmartDuke Technologies, *Indian Government Schemes Dataset 2026*, CC BY 4.0, Hugging Face. Source snapshot: 5 July 2026. https://huggingface.co/datasets/smartduketech/indian-government-schemes-2025
+
+
+## Reconciled catalogue inventory — 4 November 2026
+
+| Dataset / record class | Count | Current interpretation |
+|---|---:|---|
+| Built-in deterministic scheme prototypes | 4 | All pending two independent human approvals; eligibility engine fails closed. |
+| Built-in catalogue-only official-source references | 42 | Source-indexed references; no eligibility logic. |
+| Karnataka FY 2026–27 budget-derived leads | 96 | Budget line items, not confirmed citizen-facing schemes. |
+| Built-in total | 142 | 4 rule prototypes + 138 catalogue-only records. |
+| SmartDuke third-party snapshot | 4,693 | 5 July 2026 discovery snapshot; stale, machine-parsed, 4,693 unique slugs. |
+| Official myScheme public benchmark | 5,150+ | Homepage headline count; not a row-level feed and not directly comparable to the third-party snapshot. |
+
+The 138 built-in catalogue-only records are listed in `catalogue-review-register.csv`. The 96 budget leads have a dedicated record type and warning label. The 4,693-row SmartDuke snapshot has a field-quality audit and exception queue. Neither exercise is a substitute for independent source verification.

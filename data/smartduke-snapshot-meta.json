@@ -1,0 +1,13 @@
+{
+  "dataset": "smartduketech/indian-government-schemes-2025",
+  "publisher": "SmartDuke Technologies",
+  "license": "CC BY 4.0",
+  "collectionDate": "2026-07-05",
+  "repositoryLastModified": "2026-07-06T12:09:35.000Z",
+  "revision": "a1bbf7b20778f4e82ed35e09b187bf4fd86a1a29",
+  "rowsTotal": 4693,
+  "columnsTotal": 24,
+  "sha256UncompressedJson": "3be036c04ca5e78769dc68358638a0c2b7b3db7b6594aae1d17c3124bf4673e7",
+  "snapshotPurpose": "Full-text discovery index only; third-party machine-parsed records are not eligibility evidence.",
+  "retrievedAt": "2026-11-04T14:47:00.000Z"
+}

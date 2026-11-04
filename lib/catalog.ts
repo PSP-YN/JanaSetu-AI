@@ -40,6 +40,7 @@ export interface Scheme {
   ruleNotes: string[];
   tags: string[];
   catalogueStatus?: "rule-screened" | "catalogue-only";
+  recordKind?: "scheme-reference" | "budget-line-item-lead" | "external-dataset-record";
   /** Human approval gate. Missing status is treated as pending, never approved. */
   reviewStatus?: "pending" | "approved";
   jurisdiction?: "central" | "state" | "ut";

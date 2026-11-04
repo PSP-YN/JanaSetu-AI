@@ -1,83 +1,109 @@
 import { NextResponse } from "next/server";
+import snapshotMetadata from "@/data/smartduke-snapshot-meta.json";
 
-const DATASET = "smartduketech/indian-government-schemes-2025";
-const SNAPSHOT_DATE = "2026-07-05";
+const DATASET = snapshotMetadata.dataset;
 const MAX_AGE_DAYS = 90;
-
 export const revalidate = 900;
 
-export async function GET() {
-  const checkedAt = new Date();
-  const snapshotAt = new Date(SNAPSHOT_DATE + "T00:00:00.000Z");
-  const ageDays = Math.max(0, Math.floor((checkedAt.getTime() - snapshotAt.getTime()) / 86_400_000));
-  let upstream: "available" | "unavailable" = "unavailable";
-  let upstreamStatus: number | null = null;
-  let searchAvailability: "available" | "unavailable" = "unavailable";
-  let searchStatus: number | null = null;
-
+async function fetchJson(url: URL, timeoutMs: number): Promise<{ status: number; body: any | null }> {
   try {
-    const response = await fetch(
-      "https://huggingface.co/api/datasets/" + DATASET,
-      { method: "GET", signal: AbortSignal.timeout(5000), headers: { "User-Agent": "JanaSetu-AI-source-monitor/1.0" }, cache: "no-store" }
-    );
-    upstreamStatus = response.status;
-    upstream = response.ok ? "available" : "unavailable";
-  } catch {
-    upstream = "unavailable";
-  }
-
-  try {
-    const searchUrl = new URL("https://datasets-server.huggingface.co/search");
-    searchUrl.searchParams.set("dataset", DATASET);
-    searchUrl.searchParams.set("config", "default");
-    searchUrl.searchParams.set("split", "train");
-    searchUrl.searchParams.set("offset", "0");
-    searchUrl.searchParams.set("length", "1");
-    searchUrl.searchParams.set("query", "scheme");
-    const response = await fetch(searchUrl, {
+    const response = await fetch(url, {
       method: "GET",
-      signal: AbortSignal.timeout(3000),
+      signal: AbortSignal.timeout(timeoutMs),
       headers: { "User-Agent": "JanaSetu-AI-source-monitor/1.0" },
       cache: "no-store"
     });
-    searchStatus = response.status;
-    if (response.ok) {
-      const payload = await response.json() as { rows?: unknown };
-      searchAvailability = Array.isArray(payload?.rows) ? "available" : "unavailable";
-    } else {
-      searchAvailability = "unavailable";
-    }
+    if (!response.ok) return { status: response.status, body: null };
+    try { return { status: response.status, body: await response.json() }; }
+    catch { return { status: response.status, body: null }; }
   } catch {
-    searchAvailability = "unavailable";
+    return { status: 0, body: null };
   }
+}
 
-  const freshness = ageDays > MAX_AGE_DAYS ? "stale" : "within_policy";
+export async function GET() {
+  const checkedAt = new Date();
+  const collectionAt = new Date(snapshotMetadata.collectionDate + "T00:00:00.000Z");
+  const snapshotAgeDays = Math.max(0, Math.floor((checkedAt.getTime() - collectionAt.getTime()) / 86_400_000));
+  const metadataUrl = new URL("https://huggingface.co/api/datasets/" + DATASET);
+  const searchUrl = new URL("https://datasets-server.huggingface.co/search");
+  const rowsUrl = new URL("https://datasets-server.huggingface.co/rows");
+  for (const url of [searchUrl, rowsUrl]) {
+    url.searchParams.set("dataset", DATASET);
+    url.searchParams.set("config", "default");
+    url.searchParams.set("split", "train");
+    url.searchParams.set("offset", "0");
+    url.searchParams.set("length", "1");
+  }
+  searchUrl.searchParams.set("query", "scheme");
+  const [metadata, search, rows] = await Promise.all([
+    fetchJson(metadataUrl, 5000), fetchJson(searchUrl, 3000), fetchJson(rowsUrl, 5000)
+  ]);
+  const currentRevision = typeof metadata.body?.sha === "string" ? metadata.body.sha : null;
+  const latestModified = typeof metadata.body?.lastModified === "string" ? metadata.body.lastModified : null;
+  const updateAvailable = Boolean(currentRevision && currentRevision !== snapshotMetadata.revision);
+  const freshness = snapshotAgeDays > MAX_AGE_DAYS ? "stale" : "within_policy";
+  const rowsAvailability = Array.isArray(rows.body?.rows) ? "available" : "unavailable";
+  const searchAvailability = Array.isArray(search.body?.rows) ? "available" : "unavailable";
+  const localIndexAvailability = snapshotMetadata.rowsTotal > 0 ? "available" : "integrity_error";
+  const overall = metadata.body && rowsAvailability === "available" && freshness === "within_policy" && !updateAvailable
+    ? "healthy" : "attention_required";
+
   return NextResponse.json({
     checkedAt: checkedAt.toISOString(),
-    overall: upstream === "available" && searchAvailability === "available" && freshness === "within_policy" ? "healthy" : "attention_required",
+    overall,
     sources: [{
       id: "smartduke-scheme-catalogue",
       publisher: "SmartDuke Technologies",
       url: "https://huggingface.co/datasets/" + DATASET,
       license: "CC BY 4.0",
-      snapshotDate: SNAPSHOT_DATE,
-      snapshotAgeDays: ageDays,
+      snapshotDate: snapshotMetadata.collectionDate,
+      snapshotAgeDays,
       freshness,
       freshnessThresholdDays: MAX_AGE_DAYS,
-      availability: upstream,
-      upstreamStatus,
+      repositoryLastModified: snapshotMetadata.repositoryLastModified,
+      latestRepositoryLastModified: latestModified,
+      indexedRevision: snapshotMetadata.revision,
+      latestRevision: currentRevision,
+      updateAvailable,
+      availability: metadata.body ? "available" : "unavailable",
+      metadataStatus: metadata.status,
+      rowsAvailability,
+      rowsStatus: rows.status,
       searchAvailability,
-      searchStatus,
-      searchFallback: "page-filter",
+      searchStatus: search.status,
+      searchFallback: "bundled-full-index",
+      localIndexAvailability,
+      indexedRows: snapshotMetadata.rowsTotal,
       verification: "third_party_unverified",
-      usePolicy: "Discovery only. Imported eligibility fields must not drive eligibility decisions."
+      usePolicy: "Full-text discovery only. Publisher-parsed eligibility fields must not drive eligibility decisions. A new upstream revision must be reviewed before replacing this snapshot."
     }, {
       id: "official-myscheme",
       publisher: "National e-Governance Division / Government of India",
       url: "https://www.myscheme.gov.in/",
       verification: "manual_official_source_review_required",
       availability: "not_automatically_checked",
-      usePolicy: "Do not scrape or automate access without written authorization. Review official scheme pages manually or use an approved API."
+      authorizationRequired: true,
+      publicCatalogueBenchmark: {
+        observedAt: "2026-11-04",
+        portalLastUpdated: "2026-09-18",
+        totalAdvertised: "5150+",
+        centralAdvertised: "740+",
+        statesAndUTsAdvertised: "4400+",
+        languagesAdvertised: 15,
+        source: "https://www.myscheme.gov.in/",
+        note: "Public portal headline counts are approximate and are not an ingested row-level dataset; they must not be arithmetically reconciled with the SmartDuke snapshot."
+      },
+      usePolicy: "myScheme Terms of Use prohibit bots, scrapers and automatic copying unless expressly authorized in writing. Use an approved API/API Setu feed or manual source review."
+    }, {
+      id: "karnataka-ceg-find-your-scheme",
+      publisher: "Centre for e-Governance, Government of Karnataka",
+      url: "https://ceg.karnataka.gov.in/schemes/en",
+      verification: "official_portal_discovery_only",
+      lastChecked: "2026-11-04",
+      observedStatus: "page_available_no_scheme_rows_rendered_in_server_response",
+      authorizationRequiredForRepublishing: true,
+      usePolicy: "Portal copyright policy requires prior permission from CeG or the owning authority to republish site information. Link to the portal; do not bulk-copy its content without permission."
     }]
   }, { headers: { "Cache-Control": "public, s-maxage=900, stale-while-revalidate=3600" } });
 }

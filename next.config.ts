@@ -14,6 +14,9 @@ const securityHeaders = [
 
 const config: NextConfig = {
   poweredByHeader: false,
+  outputFileTracingIncludes: {
+    "/api/schemes/open-data": ["./data/smartduke-snapshot.json.gz"]
+  },
   experimental: {
     serverActions: { bodySizeLimit: "2mb" }
   },

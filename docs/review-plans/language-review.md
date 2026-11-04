@@ -56,3 +56,8 @@ Reviewers must ensure translations do not change legal or operational meaning:
 ## Release gate
 
 No locale is considered fluent-approved until a named reviewer has checked the full scope and recorded sign-off. Legal pages require qualified legal review in addition to translation review. Machine translation, automated tests and an AI-generated glossary are not substitutes for human approval.
+
+
+## Coverage gap against the official myScheme portal
+
+The myScheme portal advertises 15 supported languages (homepage/FAQ checked 4 November 2026). JanaSetu currently exposes six UI locales: English, Hindi, Kannada, Tamil, Telugu and Malayalam. This is a six-locale product scope, not parity with the official portal's language coverage. The remaining nine myScheme languages are not in this review round. Scheme source text may still be in its original language; translated UI copy must not be represented as a certified translation of official source material.
