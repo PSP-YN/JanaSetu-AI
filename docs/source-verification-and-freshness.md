@@ -69,7 +69,7 @@ This refresh checked the four deterministic scheme records against live or curre
 
 ## Official catalogue benchmark — 4 November 2026
 
-The public myScheme homepage advertises **5,150+ total schemes**, including **740+ Central** and **4,400+ State/UT** schemes. Its page footer reports a portal update date of **18 September 2026** and advertises support for **15 languages**. This is a public headline benchmark only; it is not a row-level downloadable export and must not be directly reconciled or subtracted from the SmartDuke dataset count.
+The public myScheme homepage advertises **5,150+ total schemes**, including **740+ Central** and **4,400+ State/UT** schemes. The myScheme FAQ states that the platform supports **15 languages**. The Terms & Conditions page is marked last updated **18 September 2026**. This is a public headline benchmark only; it is not a row-level downloadable export and must not be directly reconciled or subtracted from the SmartDuke dataset count.
 
 - Official portal: https://www.myscheme.gov.in/
 - Official FAQs: https://www.myscheme.gov.in/faqs

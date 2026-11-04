@@ -37,6 +37,7 @@ test("source monitor reports local full-index search while upstream search is un
     const official = report.sources.find((item: { id: string }) => item.id === "official-myscheme");
     assert.equal(official.publicCatalogueBenchmark.totalAdvertised, "5150+");
     assert.equal(official.publicCatalogueBenchmark.languagesAdvertised, 15);
+    assert.equal(official.publicCatalogueBenchmark.languageSource, "https://www.myscheme.gov.in/faqs");
     assert.equal(report.overall, "attention_required");
   } finally {
     globalThis.fetch = originalFetch;

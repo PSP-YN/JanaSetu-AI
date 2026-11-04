@@ -92,6 +92,7 @@ export async function GET() {
         statesAndUTsAdvertised: "4400+",
         languagesAdvertised: 15,
         source: "https://www.myscheme.gov.in/",
+        languageSource: "https://www.myscheme.gov.in/faqs",
         note: "Public portal headline counts are approximate and are not an ingested row-level dataset; they must not be arithmetically reconciled with the SmartDuke snapshot."
       },
       usePolicy: "myScheme Terms of Use prohibit bots, scrapers and automatic copying unless expressly authorized in writing. Use an approved API/API Setu feed or manual source review."
