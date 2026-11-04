@@ -30,7 +30,7 @@ csss_facts = " ".join(str(item) for evidence in packets["pm-usp-csss"].get("sour
 assert "30.09.2026" in csss_facts and "31.10.2026" in csss_facts, "CSSS official deadline conflict must remain documented"
 assert "30.11.2026" not in packets["pm-usp-csss"]["sourceEvidence"][0]["facts"][1], "Do not use 30 November as the CSSS student deadline"
 pmuy_facts = " ".join(str(item) for evidence in packets["pm-ujjwala"].get("sourceEvidence", []) for item in evidence.get("facts", []))
-assert "₹2,050" in pmuy_facts and "₹1,600" in pmuy_facts, "PMUY benefit amount conflict must remain documented"
+assert "₹2,050" in pmuy_facts and "₹1,600" in pmuy_facts and "5 kg amount" in pmuy_facts, "PMUY connection-assistance details must remain documented"
 pmay_facts = json.dumps(packets["pmay-u-2"].get("sourceEvidence", []), ensure_ascii=False)
 assert "39-page PDF" in pmay_facts and "Aadhaar OTP" in pmay_facts, "Full AHP SOP review findings must remain in the packet"
 pmk_facts = " ".join(str(item) for evidence in packets["pm-kisan"].get("sourceEvidence", []) for item in evidence.get("facts", []))

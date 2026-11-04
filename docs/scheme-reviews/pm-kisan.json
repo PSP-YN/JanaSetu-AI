@@ -50,28 +50,29 @@
     },
     {
       "title": "Cabinet approval — continuation of PM-KISAN 2026–27 to 2030–31",
-      "url": "https://pmkisan.gov.in/PressRelease.aspx",
+      "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2292460&lang=1&reg=6",
       "issuer": "Press Information Bureau / Cabinet / Department of Agriculture & Farmers Welfare",
-      "publishedOrRevised": "Cabinet approval listed on official PM-KISAN press-release index; individual release date must be confirmed from the release record",
+      "publishedOrRevised": "31 July 2026, PIB Delhi",
       "checkedAt": "2026-11-04",
-      "status": "official_continuation_announcement_index_not_full_amendment",
+      "status": "official_cabinet_continuation_release_not_replacement_guideline",
       "facts": [
-        "Official PM-KISAN press-release index lists Cabinet approval to continue PM-KISAN from FY 2026–27 through FY 2030–31 with a financial outlay of ₹3.15 lakh crore.",
-        "The continuation announcement does not itself supply a replacement operational guideline or establish that the 2020 eligibility clauses have been amended.",
-        "Reviewer must obtain the underlying Cabinet/PIB release and any subsequent revised operational guidelines or circulars before approving rule version."
+        "The Union Cabinet approved continuation of PM-KISAN from FY 2026–27 through FY 2030–31 with a ₹3.15 lakh crore outlay.",
+        "The release reiterates ₹6,000 per year in three equal instalments for eligible farmer families; it does not announce a replacement operational guideline or change the 2020 eligibility clauses.",
+        "The continuation announcement must be read with any subsequent operational guideline, amendment or State/UT implementation circular before approval."
       ]
     },
     {
       "title": "PM-KISAN current portal notice — 24th instalment and eKYC",
-      "url": "https://pmkisan.gov.in/",
+      "url": "https://www.pib.gov.in/PressNoteDetails.aspx?ModuleId=3&NoteId=160645&lang=2&reg=48",
       "issuer": "Department of Agriculture & Farmers Welfare / Government of India",
-      "publishedOrRevised": "24th instalment released 30 October 2026; live notice checked 4 November 2026",
+      "publishedOrRevised": "30 October 2026, PIB Press Note",
       "checkedAt": "2026-11-04",
-      "status": "official_live_operational_notice",
+      "status": "official_current_pib_operational_notice",
       "facts": [
-        "The portal states the 24th instalment was released on 30 October 2026.",
-        "eKYC is mandatory for registered PM-KISAN farmers; biometric eKYC is available through CSC VLE logins, the PM-KISAN mobile app and authorized State user logins.",
-        "The portal flags suspected post-01.02.2019 land acquisitions and multiple family-member claims for temporary withholding pending physical verification. These are operational flags, not a substitute for adjudicating the underlying guideline and exception facts."
+        "The 24th instalment was released on 30 October 2026: over ₹18,690 crore to 9.34 crore farmers.",
+        "The release reiterates ₹6,000 annually in three equal ₹2,000 instalments, subject to eligibility, land-record seeding, Aadhaar-linked bank account and eKYC.",
+        "The release describes OTP, biometric and face-authentication eKYC routes and the State-led beneficiary identification/verification process.",
+        "The PM-KISAN portal separately flags suspected post-01.02.2019 land acquisitions and multiple family-member claims for temporary withholding pending physical verification; treat this as a manual verification trigger, not automatic ineligibility."
       ]
     }
   ],
