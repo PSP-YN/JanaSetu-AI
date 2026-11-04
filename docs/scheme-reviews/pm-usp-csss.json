@@ -139,8 +139,8 @@
     },
     {
       "id": "CSSS-06",
-      "scenario": "NSP 30.11.2026 renewal deadline is displayed as a fresh-application deadline",
-      "expected": "Must fail validation; live entry explicitly scopes deadline to renewal.",
+      "scenario": "NSP 30.11.2026 L2 verification deadline is displayed as a student application deadline",
+      "expected": "Must fail validation; 30 November is an L2 verification deadline, not a student application deadline.",
       "reviewFixtureStatus": "proposed_not_executed",
       "executionEvidence": null
     }

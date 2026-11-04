@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import snapshotMetadata from "@/data/smartduke-snapshot-meta.json";
+import { loadSmartDukeRows } from "@/lib/smartduke-snapshot";
 
 const DATASET = snapshotMetadata.dataset;
 const MAX_AGE_DAYS = 90;
@@ -45,8 +46,14 @@ export async function GET() {
   const freshness = snapshotAgeDays > MAX_AGE_DAYS ? "stale" : "within_policy";
   const rowsAvailability = Array.isArray(rows.body?.rows) ? "available" : "unavailable";
   const searchAvailability = Array.isArray(search.body?.rows) ? "available" : "unavailable";
-  const localIndexAvailability = snapshotMetadata.rowsTotal > 0 ? "available" : "integrity_error";
-  const overall = metadata.body && rowsAvailability === "available" && freshness === "within_policy" && !updateAvailable
+  let localIndexAvailability: "available" | "integrity_error" = "available";
+  let indexedRows = 0;
+  try {
+    indexedRows = loadSmartDukeRows().length;
+  } catch {
+    localIndexAvailability = "integrity_error";
+  }
+  const overall = metadata.body && rowsAvailability === "available" && localIndexAvailability === "available" && freshness === "within_policy" && !updateAvailable
     ? "healthy" : "attention_required";
 
   return NextResponse.json({
@@ -74,7 +81,7 @@ export async function GET() {
       searchStatus: search.status,
       searchFallback: "bundled-full-index",
       localIndexAvailability,
-      indexedRows: snapshotMetadata.rowsTotal,
+      indexedRows,
       verification: "third_party_unverified",
       usePolicy: "Full-text discovery only. Publisher-parsed eligibility fields must not drive eligibility decisions. A new upstream revision must be reviewed before replacing this snapshot."
     }, {

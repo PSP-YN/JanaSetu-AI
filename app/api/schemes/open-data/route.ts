@@ -1,30 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
-import { gunzipSync } from "node:zlib";
 import snapshotMetadata from "@/data/smartduke-snapshot-meta.json";
+import { loadSmartDukeRows } from "@/lib/smartduke-snapshot";
 
 type DatasetRow = Record<string, unknown>;
-type Snapshot = { revision: string; rows: DatasetRow[]; rowsTotal: number };
-
 const DATASET = snapshotMetadata.dataset;
-const SNAPSHOT_FILE = join(process.cwd(), "data", "smartduke-snapshot.json.gz");
-let cachedRows: DatasetRow[] | null = null;
 
 // The bundled, attributed snapshot makes search complete across all 4,693 rows even
 // while the upstream Dataset Viewer /search endpoint is failing. It remains stale
 // until the publisher releases a new revision; the source monitor reports that state.
 export const revalidate = 0;
 
-function loadRows(): DatasetRow[] {
-  if (cachedRows) return cachedRows;
-  const snapshot = JSON.parse(gunzipSync(readFileSync(SNAPSHOT_FILE)).toString("utf8")) as Snapshot;
-  if (snapshot.revision !== snapshotMetadata.revision || snapshot.rowsTotal !== snapshotMetadata.rowsTotal || !Array.isArray(snapshot.rows)) {
-    throw new Error("Bundled scheme dataset does not match its verified metadata manifest.");
-  }
-  if (snapshot.rows.length !== snapshotMetadata.rowsTotal) throw new Error("Bundled scheme dataset row count is incomplete.");
-  cachedRows = snapshot.rows;
-  return cachedRows;
+let cachedHaystacks: string[] | null = null;
+
+function loadSearchHaystacks(rows: DatasetRow[]): string[] {
+  if (cachedHaystacks) return cachedHaystacks;
+  cachedHaystacks = rows.map((row) => searchText([
+    row.slug, row.name, row.description, row.ministry, row.department, row.state,
+    row.category, row.beneficiary_type, row.benefits, row.eligibility_text,
+    row.application_process, row.documents_required
+  ].join(" ")));
+  return cachedHaystacks;
 }
 
 function parseJsonList(value: unknown): string[] {
@@ -60,7 +55,7 @@ function safeUrl(value: unknown): string {
 }
 
 function searchText(value: unknown): string {
-  return String(value ?? "").normalize("NFKD").toLocaleLowerCase().replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9\u00c0-\u024f\u0900-\u097f\u0b80-\u0bff\u0c00-\u0c7f\u0c80-\u0cff\u0d00-\u0d7f]+/gi, " ").trim();
+  return String(value ?? "").normalize("NFKD").toLocaleLowerCase().replace(/[\u0300-\u036f]/g, "").replace(/[^\p{L}\p{N}\p{M}]+/gu, " ").trim();
 }
 
 function normalize(row: DatasetRow) {
@@ -112,20 +107,18 @@ export async function GET(request: NextRequest) {
     const limit = Math.max(1, Math.min(100, Number(params.get("limit") || 50) || 50));
     const terms = searchText(query).split(/\s+/).filter(Boolean);
     const normalizedCategory = searchText(category);
-    const rows = loadRows();
-    const matches = rows.filter((row) => {
+    const rows = loadSmartDukeRows();
+    const unsearchableQuery = Boolean(query) && terms.length === 0;
+    const unsearchableCategory = Boolean(category) && !normalizedCategory;
+    const haystacks = terms.length && !unsearchableQuery && !unsearchableCategory ? loadSearchHaystacks(rows) : [];
+    const matches = unsearchableQuery || unsearchableCategory ? [] : rows.filter((row, index) => {
       if (normalizedCategory) {
         const categories = String(row.category || "").split(",").map(searchText);
         const categoryMatches = categories.some((item) => item === normalizedCategory || item.split(/\s+/).includes(normalizedCategory));
         if (!categoryMatches) return false;
       }
       if (!terms.length) return true;
-      const haystack = searchText([
-        row.slug, row.name, row.description, row.ministry, row.department, row.state,
-        row.category, row.beneficiary_type, row.benefits, row.eligibility_text,
-        row.application_process, row.documents_required
-      ].join(" "));
-      return terms.every((term) => haystack.includes(term));
+      return terms.every((term) => haystacks[index].includes(term));
     });
     const page = matches.slice(offset, offset + limit);
     const records = page.map(normalize);
@@ -146,7 +139,7 @@ export async function GET(request: NextRequest) {
       limit,
       nextOffset: hasMore ? offset + records.length : null,
       records,
-      searchMode: terms.length ? "local-full-index" : "local-browse",
+      searchMode: query ? "local-full-index" : "local-browse",
       searchFallbackWarning: true,
       searchFallbackReason: "publisher_search_endpoint_unavailable",
       warning: "Full-text search covers the complete bundled dataset. The source snapshot is stale and third-party machine-parsed records are discovery-only; verify each record against its current official source."

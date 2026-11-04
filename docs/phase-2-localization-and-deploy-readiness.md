@@ -1,6 +1,6 @@
 # Phase 2 — Localization, accessibility and deployment assessment
 
-**Updated:** 3 November 2026
+**Updated:** 4 November 2026
 **Status:** Prototype deployed to Vercel production; not production-ready for real citizen data.
 
 ## Implemented
@@ -23,8 +23,8 @@
 
 Latest complete application verification:
 
-- Unit tests: **50 passed**.
-- Playwright: **35 passed** against the production-mode local server.
+- Unit tests: **59 passed**.
+- Playwright: **36 passed** against the production-mode local server.
 - TypeScript: passed.
 - Next.js production build: passed.
 - `npm audit --omit=dev --audit-level=high`: **0 vulnerabilities**.

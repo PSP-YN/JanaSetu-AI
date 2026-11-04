@@ -163,7 +163,7 @@ export const SCHEMES: Scheme[] = [
     benefit: "The Ministry FAQ located describes ₹12,000 per annum at graduation level for the first three years and ₹20,000 per annum at postgraduate level, with course-specific terms; confirm current-year rates and course treatment.",
     sourceUrl: "https://scholarships.gov.in/public/schemeGuidelines/CSSS_GUIDLINES_07022024_updated.pdf",
     sourceName: "National Scholarship Portal PM-USP CSSS specifications (updated 7 Feb 2024) and Ministry FAQ (AY 2025–26)",
-    sourcePeriod: "Live NSP CSSS entry checked 4 Nov 2026: renewal applications open 1 Jun–30 Nov 2026; defective/institute verification through 15 Dec 2026; DNO/SNO/MNO verification through 31 Dec 2026. The listing labels these dates for renewal. The detailed FAQ located is AY 2025–26; do not assume its fresh-application rules are confirmed for AY 2026–27.",
+    sourcePeriod: "Live NSP CSSS pages checked 4 Nov 2026 conflict on the renewal student deadline: All-Scholarships lists 30 Sep 2026, while the Students announcement lists 31 Oct 2026 and still says currently open. The 30 Nov 2026 date is an L2 verification deadline, not a student application deadline. The detailed FAQ located is AY 2025–26; do not infer an AY 2026–27 fresh-application window.",
     sourceChecked: "2026-11-04",
     geography: "Central scheme — India; applications through National Scholarship Portal when open",
     documents: ["Class XII marksheet and relevant Board percentile/list evidence", "Current admission/enrolment proof for a regular undergraduate course", "Family income certificate or accepted income evidence", "Scholarship/fee-reimbursement declaration"],
@@ -172,7 +172,7 @@ export const SCHEMES: Scheme[] = [
       "The cited FAQ requires a regular course, family income up to ₹4.5 lakh per annum, and no other scholarship or fee reimbursement; diploma and distance/correspondence courses are excluded.",
       "Fresh and renewal rules, application windows and available slots vary by academic year. This prototype intentionally marks this scheme for current-year verification.",
       "The AY 2025–26 FAQ also excludes students who took a drop after Class XII and describes renewal conditions of at least 50% marks and 75% attendance, with a maximum duration not exceeding five years; the current-year reviewer must verify whether these continue for AY 2026–27.",
-      "The live AY 2026–27 NSP entry observed on 4 Nov 2026 is explicitly a renewal listing. Do not display its 30 Nov 2026 deadline as a fresh-application deadline."
+      "The AY 2026–27 NSP pages are renewal listings with conflicting student deadlines (30 Sep vs 31 Oct 2026); 30 Nov 2026 is an L2 verification deadline, not a student application deadline. Do not show the application as open or infer a fresh-application window until clarified."
     ],
     tags: ["student", "college", "scholarship", "education"]
   }

@@ -58,3 +58,24 @@ test("open-data category aliases match broad built-in category labels", async ()
   assert.ok(body.total > 0);
   assert.ok(body.records.every((record: { tags: string[] }) => record.tags.some((tag) => tag.toLowerCase().includes("agriculture"))));
 });
+
+test("unsupported scripts and punctuation-only queries return no matches, not the full index", async () => {
+  for (const query of ["বাংলা", "ગુજરાતી", "ଓଡ଼ିଆ", "ਪੰਜਾਬੀ", "اردو", "!!!"]) {
+    const request = new NextRequest("http://localhost/api/schemes/open-data?q=" + encodeURIComponent(query));
+    const response = await GET(request);
+    const body = await response.json();
+    assert.equal(response.status, 200, query);
+    assert.equal(body.searchMode, "local-full-index", query);
+    assert.equal(body.total, 0, query);
+    assert.equal(body.records.length, 0, query);
+  }
+});
+
+test("a non-empty category that normalizes to no searchable terms returns no matches", async () => {
+  const request = new NextRequest("http://localhost/api/schemes/open-data?category=!!!");
+  const response = await GET(request);
+  const body = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(body.total, 0);
+  assert.equal(body.records.length, 0);
+});

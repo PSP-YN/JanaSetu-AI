@@ -92,6 +92,19 @@
       ]
     },
     {
+      "title": "PIB clarification — biometric Aadhaar authentication of LPG consumers",
+      "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2031879&lang=2&reg=48",
+      "issuer": "Ministry of Petroleum & Natural Gas / Press Information Bureau",
+      "publishedOrRevised": "9 July 2024",
+      "checkedAt": "2026-11-04",
+      "status": "official_operational_clarification",
+      "facts": [
+        "The Ministry states that the PMUY Standard Operating Procedure identifies biometric Aadhaar authentication as a prerequisite to apply for a new connection.",
+        "The release lists biometric authentication during cylinder delivery, at an OMC distributor showroom or through OMC mobile applications.",
+        "The release stated in July 2024 that no service or benefit had been stopped solely because authentication was incomplete; read that dated statement with later operational orders."
+      ]
+    },
+    {
       "title": "PIB release — 25 lakh PMUY connections, simplified eligibility and connection assistance",
       "url": "https://www.pib.gov.in/newsite/erelcontent.aspx?lang=2&reg=48&relid=276350",
       "issuer": "Ministry of Petroleum & Natural Gas / Press Information Bureau",
@@ -102,8 +115,33 @@
         "The Government approved 25 lakh additional deposit-free PMUY connections during FY 2025–26.",
         "The release specifies ₹2,050 per standard 14.2 kg connection for the 25 lakh allocation, covering connection components rather than a cash transfer to the applicant; the first refill and stove are also provided free of cost.",
         "The release states eligible adult women from poor households without an existing LPG connection in their family may apply through simplified KYC and a Deprivation Declaration; applications undergo system-driven de-duplication and physical verification by OMC officials.",
-        "The PIB release of 4 December 2025 says the eligibility process was simplified to adult women from poor households based on submission of a Deprivation Declaration. This must be reconciled with the older category list still shown on the About page.",
         "The same 22 September 2025 release approved targeted subsidy of ₹300 per 14.2 kg cylinder for up to nine refills in FY 2025–26, pro-rated for 5 kg connections. Do not present this as a 2026–27 subsidy without a newer order."
+      ]
+    },
+    {
+      "title": "PIB written reply — PMUY 25 lakh extension, simplified eligibility and FY 2025–26 refill subsidy",
+      "url": "https://www.pib.gov.in/PressReleseDetailm.aspx?PRID=2198768&lang=1&reg=3",
+      "issuer": "Ministry of Petroleum & Natural Gas / Press Information Bureau",
+      "publishedOrRevised": "4 December 2025",
+      "checkedAt": "2026-11-04",
+      "status": "official_written_reply",
+      "facts": [
+        "The Government approved 25 lakh additional PMUY LPG connections during FY 2025–26.",
+        "For this allocation, eligibility was simplified to adult women from poor households based on submission of a Deprivation Declaration.",
+        "The reply confirms a targeted subsidy of ₹300 per 14.2 kg cylinder for up to nine refills during FY 2025–26, proportionately pro-rated for 5 kg connections; it does not establish an FY 2026–27 extension."
+      ]
+    },
+    {
+      "title": "PIB release — biometric Aadhaar authentication for subsidised domestic LPG refills",
+      "url": "https://www.pib.gov.in/newsite/erelcontent.aspx?lang=2&reg=48&relid=294992",
+      "issuer": "Ministry of Petroleum & Natural Gas / Press Information Bureau",
+      "publishedOrRevised": "19 September 2026; requirement effective 1 October 2026",
+      "checkedAt": "2026-11-04",
+      "status": "official_current_refill_authentication_order",
+      "facts": [
+        "From 1 October 2026, domestic LPG consumers must complete biometric Aadhaar authentication to book refills at the regulated retail selling price with applicable subsidy.",
+        "Consumers who do not complete authentication may still receive LPG at market price without subsidy in 5 kg or 10 kg cylinders, subject to local OMC availability.",
+        "Authentication may be completed during delivery, at an OMC distributor showroom or through OMC mobile applications. This is a subsidised-refill condition, distinct from PMUY connection eligibility."
       ]
     }
   ],

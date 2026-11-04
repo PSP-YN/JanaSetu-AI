@@ -34,7 +34,7 @@ The prototype checks an occupation keyword, a self-declared cultivable-land bool
 
 ## Reviewer tasks
 
-1. Obtain the continuation Cabinet/PIB release and reconcile every post-29 March 2020 amendment, clarification, SOP and State/UT exception.
+1. Reconcile every post-29 March 2020 amendment, clarification, SOP and State/UT exception; the 31 July 2026 PIB continuation release is already recorded, but the official portal archive index is not a complete amendment register.
 2. Resolve whether and how the 1 February 2019 cut-off applies today, including succession, partition, sale, gift and multiple family-member cases.
 3. Validate every exclusion class and exception; define acceptable evidence and how unknown answers are handled.
 4. Confirm current eKYC and State/UT verification process.

@@ -20,7 +20,7 @@ This assessment is intentionally strict. A successful Next.js build and public d
 
 ## Verification evidence and remaining gaps
 
-Local verification on 4 November 2026 passed: 56 unit tests, 35 Playwright tests against a freshly built production-mode local server, TypeScript, extension syntax/Manifest V3 validation, locale key-parity checks, production dependency audit (0 vulnerabilities), Next.js production build and local production smoke tests. PR #6 was squash-merged to main as `493d0c2414cfd1028b8f9887644355f6deb03dcc`; GitHub Actions run `41691385168` passed. The Vercel production deployment is READY and passed live HTTP plus six-locale browser/accessibility checks.
+Local verification on 4 November 2026 passed: 59 unit tests, 36 Playwright tests against a freshly built production-mode local server, TypeScript, extension syntax/Manifest V3 validation, locale key-parity checks, production dependency audit (0 vulnerabilities), Next.js production build and local production smoke tests. PR #6 was squash-merged to main as `493d0c2414cfd1028b8f9887644355f6deb03dcc`; GitHub Actions run `41691385168` passed. The Vercel production deployment is READY and passed live HTTP plus six-locale browser/accessibility checks.
 
 Not yet demonstrated:
 - Fluent-speaker review of the implemented six-locale workspace, legal pages, convenience scheme translations and extension popup. Official source records remain source-authoritative and may remain in their original language.
