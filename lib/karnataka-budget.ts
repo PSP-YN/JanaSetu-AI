@@ -6,6 +6,7 @@ import type { Scheme } from "./catalog";
 export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   {
     "id": "ka-budget-2408-01-196-0-01",
+    "recordKind": "budget-line-item-lead",
     "name": "DBT Under Annabhagya Scheme",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -34,6 +35,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-02-101-0-43",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-State Share-Monthly Financial Assistance to the Physically Challenged and the Disabled Poor (NSAP)",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -63,6 +65,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2425-00-107-2-41",
+    "recordKind": "budget-line-item-lead",
     "name": "Interest Subsidy for Crop Loan, Pledge Loan, SHGs",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -91,6 +94,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2202-01-196-1-02",
+    "recordKind": "budget-line-item-lead",
     "name": "State Program for Ksheera Bhagya(MDM)",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -119,6 +123,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2408-01-102-0-01",
+    "recordKind": "budget-line-item-lead",
     "name": "Subsidy for Food Grains Distribution for AAY and PHH benficieries under Annabhagya Scheme",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -148,6 +153,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-03-196-1-03",
+    "recordKind": "budget-line-item-lead",
     "name": "Grants for Prize Money, Fees Concession and Stipends to OBCs",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -176,6 +182,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2236-02-197-1-02",
+    "recordKind": "budget-line-item-lead",
     "name": "Nutrition Program:Additional Grants from GoK(Ksheera Bhagya,Srusti ,Maatru Poorna)",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -204,6 +211,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-02-794-0-05",
+    "recordKind": "budget-line-item-lead",
     "name": "Various Development Schemes for Scheduled Tribes",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -233,6 +241,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2202-01-109-0-03",
+    "recordKind": "budget-line-item-lead",
     "name": "Vidya Vikasa Scheme- Incentive for Students",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -262,6 +271,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2216-03-104-0-01",
+    "recordKind": "budget-line-item-lead",
     "name": "Ashraya-Basava Vasathi",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -289,6 +299,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-60-102-1-01",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-Central Share-Old Age Pension (NSAP)",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -317,6 +328,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-01-197-6-09",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-State Share- Post-Matric Scholarships to SC Studentss",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -345,6 +357,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2501-06-198-6-01",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-Central Share-National Rural Livelihood Mission (NRLM)",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -372,6 +385,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2216-80-198-6-02",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-Central Share-Pradhan Mantri Awas Yojane Grameena",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -399,6 +413,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-60-102-2-01",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-Central Share-Destitute Widow Pension (NSAP)",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -427,6 +442,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-02-103-0-61",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-Central Share-Pradhana Mantri Maatru Vandana Yojane",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -456,6 +472,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-60-102-1-06",
+    "recordKind": "budget-line-item-lead",
     "name": "Manaswini",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -484,6 +501,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-02-197-6-03",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-Central Share-Post-Matric Scholarships to ST Students",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -512,6 +530,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-03-277-2-72",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-Central Share-Post-Matric Scholarships to OBC Students",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -540,6 +559,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2216-80-103-0-22",
+    "recordKind": "budget-line-item-lead",
     "name": "Assistance for Beneficiary Contribution",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -568,6 +588,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-01-196-1-03",
+    "recordKind": "budget-line-item-lead",
     "name": "Grants for providing Assistance and Concessions to Meritorious SC Students",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -596,6 +617,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-03-277-2-51",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-State Share-Post-Matric Scholarship to OBC Students",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -624,6 +646,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2851-00-103-0-03",
+    "recordKind": "budget-line-item-lead",
     "name": "Weavers Package-Power Subsidy",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -652,6 +675,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-01-197-6-07",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-Central Share- Pre-Matric Scholarship to SC Students",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -680,6 +704,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-60-102-1-08",
+    "recordKind": "budget-line-item-lead",
     "name": "Widow Pension for Farmers Suicide Cases",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -708,6 +733,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-01-197-1-04",
+    "recordKind": "budget-line-item-lead",
     "name": "Grants for Pre-Matric Scholarship and Incentives to Students",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -736,6 +762,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-02-101-0-53",
+    "recordKind": "budget-line-item-lead",
     "name": "NPRPD Programme for the Disabled",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -763,6 +790,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-01-197-6-08",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-State Share- Pre-Matric Scholarship to SC Students",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -791,6 +819,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-02-190-2-07",
+    "recordKind": "budget-line-item-lead",
     "name": "Micro Credit to S.Ts through Self Help Women Groups (SHG)",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -819,6 +848,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-00-101-0-70",
+    "recordKind": "budget-line-item-lead",
     "name": "Pre-Matric Scholarship to SC Students (1st to 8th STD-State Scheme)",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -846,6 +876,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2401-00-102-0-08",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-Central Share- National Food Security and Nutrition Mission (NFSNM)",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -874,6 +905,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-02-103-0-53",
+    "recordKind": "budget-line-item-lead",
     "name": "Pension to Devadasis",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -902,6 +934,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-03-277-2-52",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-Central Share-Pre-Matric Scholarship to Backward Classes Students Studying in 9th and 10th Standard",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -930,6 +963,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-04-277-0-11",
+    "recordKind": "budget-line-item-lead",
     "name": "Pre-Matric Scholarship to Minority Students Studying in 1st and 8th Standard",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -958,6 +992,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-02-196-1-03",
+    "recordKind": "budget-line-item-lead",
     "name": "Prize Money for Post Matric ST Students",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -986,6 +1021,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-04-102-0-05",
+    "recordKind": "budget-line-item-lead",
     "name": "Development of Jain, Buddist and Sikh Community",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1013,6 +1049,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2202-01-102-0-05",
+    "recordKind": "budget-line-item-lead",
     "name": "Reimbursement of fees to Private Schools under RTE",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1042,6 +1079,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2216-02-101-0-07",
+    "recordKind": "budget-line-item-lead",
     "name": "Vajpayee Urban Housing Scheme",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1069,6 +1107,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2216-02-106-0-03",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-Central Share-Affordable Housing in Partnership(AHP)- PMAY(U 2.0)",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1096,6 +1135,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2216-02-106-0-05",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-Central Share-Beneficiary Led Construction(BLC)- PMAY(U 2.0)",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1123,6 +1163,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2216-07-800-0-04",
+    "recordKind": "budget-line-item-lead",
     "name": "D.Devraj Urs Housing Scheme",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1150,6 +1191,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-01-796-0-01",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-Central Share-Compensation to SC",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1179,6 +1221,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-02-197-6-04",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-State Share-Post-Matric Scholarships to ST Students",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1207,6 +1250,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-04-277-0-05",
+    "recordKind": "budget-line-item-lead",
     "name": "Vidyasiri Scheme for Minority Students",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1235,6 +1279,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-02-101-0-99",
+    "recordKind": "budget-line-item-lead",
     "name": "Welfare of Physically & Mentally Challenged",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1264,6 +1309,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-60-103-0-01",
+    "recordKind": "budget-line-item-lead",
     "name": "New Pension System for Anganawadi Workers",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1291,6 +1337,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-03-277-2-37",
+    "recordKind": "budget-line-item-lead",
     "name": "Foreign Study Stipend, Coaching for Competitive Job Exams and PHD Fellowship to BC Students",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1319,6 +1366,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2202-02-196-1-05",
+    "recordKind": "budget-line-item-lead",
     "name": "Financial Assistance and Reimbursement of Fees to Students",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1347,6 +1395,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-03-277-2-83",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-State Share-Pre-Matric Scholarship to Backward Classes Students Studying in 9th and 10th Standard",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1375,6 +1424,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-60-107-0-01",
+    "recordKind": "budget-line-item-lead",
     "name": "State Freedom fighters Pensions",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1402,6 +1452,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2851-00-102-0-74",
+    "recordKind": "budget-line-item-lead",
     "name": "Assistance to Khadi Sector",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1429,6 +1480,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-3055-00-190-0-09",
+    "recordKind": "budget-line-item-lead",
     "name": "Concessional Bus Travel Facility to Senior Citizens",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1457,6 +1509,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-60-102-1-03",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-Central Share-National Family Benefit Scheme (NSAP)",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1485,6 +1538,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-60-102-1-11",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-State Share-National Family Benefit Scheme (NSAP)",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1513,6 +1567,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-03-102-0-12",
+    "recordKind": "budget-line-item-lead",
     "name": "Nomadic",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1541,6 +1596,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-60-102-1-05",
+    "recordKind": "budget-line-item-lead",
     "name": "Monthly Financial Assistance to Endosulphan Victims",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1569,6 +1625,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-00-102-0-68",
+    "recordKind": "budget-line-item-lead",
     "name": "Pre-Matric Scholarship for ST Students (1st to 8th STD)- State Scheme",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1596,6 +1653,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-02-197-1-01",
+    "recordKind": "budget-line-item-lead",
     "name": "Pre Matric Scholarship Grants",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1624,6 +1682,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-02-103-0-99",
+    "recordKind": "budget-line-item-lead",
     "name": "Welfare Programme for Women",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1652,6 +1711,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-60-200-8-01",
+    "recordKind": "budget-line-item-lead",
     "name": "Karnataka Victim Compensation Scheme, 2011",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1679,6 +1739,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-3055-00-190-0-07",
+    "recordKind": "budget-line-item-lead",
     "name": "Free Bus Travel Facility to the Handicapped",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1708,6 +1769,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-02-197-6-05",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-Central Share- Pre-Matric Scholarship to ST Students",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1736,6 +1798,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-3055-00-190-0-06",
+    "recordKind": "budget-line-item-lead",
     "name": "Free Bus Travel Facility to the Blind",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1765,6 +1828,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-02-103-0-52",
+    "recordKind": "budget-line-item-lead",
     "name": "Scheme for Protection of Women against Domestic Violence",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1792,6 +1856,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-02-101-0-20",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-Central Share-Monthly Financial Assistance to the Physically Challenged and the Disabled Poor (NSAP)",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1821,6 +1886,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-00-101-0-80",
+    "recordKind": "budget-line-item-lead",
     "name": "Incentive to SC Law Graduates",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1848,6 +1914,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-02-277-0-36",
+    "recordKind": "budget-line-item-lead",
     "name": "Upgradation of Merit of ST Students",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1877,6 +1944,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2501-06-198-6-09",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-Central Share-Deen Dayal Upadhaya Grameena Kaushalya Yojana -DDUGKY (NRLM)",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1904,6 +1972,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-02-103-0-46",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-Central Share-Scheme for Adolescent Girls (SAG)",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1932,6 +2001,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-02-103-0-69",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-State Share-Scheme for Adolescent Girls (SAG)",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1960,6 +2030,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-04-196-1-02",
+    "recordKind": "budget-line-item-lead",
     "name": "Incentive and Stipends to Minorities",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -1988,6 +2059,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2202-03-107-1-10",
+    "recordKind": "budget-line-item-lead",
     "name": "Scholarship and Exemption from payment of full fees to all girls students",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -2015,6 +2087,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2851-00-103-0-62",
+    "recordKind": "budget-line-item-lead",
     "name": "Weavers Package",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -2042,6 +2115,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-3055-00-190-0-13",
+    "recordKind": "budget-line-item-lead",
     "name": "Free Bus Travel Facility to Endosulphan affected Victims",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -2069,6 +2143,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-60-200-1-99",
+    "recordKind": "budget-line-item-lead",
     "name": "Sainik Welfare Programmes(Includes assistance to Para Plegic Rehabilitation centre and Ex-gratia to recipients of Gallantry Awards)",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -2097,6 +2172,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-02-197-6-06",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-State Share- Pre-Matric Scholarship to ST Students",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -2125,6 +2201,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-60-107-0-08",
+    "recordKind": "budget-line-item-lead",
     "name": "Goa Freedom Fighters Pension",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -2152,6 +2229,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-02-101-0-05",
+    "recordKind": "budget-line-item-lead",
     "name": "Scholarship to the Physically Handicapped",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -2181,6 +2259,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-01-202-3-01",
+    "recordKind": "budget-line-item-lead",
     "name": "Chetana and Rehabilitation of Devadasi Women",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -2209,6 +2288,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-02-104-2-04",
+    "recordKind": "budget-line-item-lead",
     "name": "Senior Citizen Policy",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -2237,6 +2317,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-02-104-2-07",
+    "recordKind": "budget-line-item-lead",
     "name": "Dhanashree",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -2264,6 +2345,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-02-103-0-05",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-Central Share-Sakhi Nivas Working Women Hostel (SAMARTHYA)",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -2291,6 +2373,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2405-00-120-0-09",
+    "recordKind": "budget-line-item-lead",
     "name": "Fishermen Welfare State Top-Up (Matsya Ashakirana)",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -2318,6 +2401,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-02-102-0-61",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-Central Share-(100% GoI) Scheme for Care and Support to Victim under Section 4 & 6 of the Protection of Children from Sexual Offences (POCSO) Act, 2012 100% 2012 4 6",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -2346,6 +2430,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2403-00-101-0-43",
+    "recordKind": "budget-line-item-lead",
     "name": "CSS-Central Share-ASCAD Payment of compensation",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -2374,6 +2459,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2851-00-106-0-12",
+    "recordKind": "budget-line-item-lead",
     "name": "Wage Incentive to Coir Sector",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -2401,6 +2487,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-60-102-1-09",
+    "recordKind": "budget-line-item-lead",
     "name": "Pension to Acid Attack Victims",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -2428,6 +2515,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2202-80-107-0-08",
+    "recordKind": "budget-line-item-lead",
     "name": "Vidyanidhi Scheme-Scholarship for Higher Education of Fishermen",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -2456,6 +2544,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-3055-00-190-0-08",
+    "recordKind": "budget-line-item-lead",
     "name": "Free Bus Pass To Widows Of Freedom Fighters",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -2483,6 +2572,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2408-01-102-0-07",
+    "recordKind": "budget-line-item-lead",
     "name": "Subsidy for Rice Distribution for NPHH benficieries under Annabhagya Scheme",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -2511,6 +2601,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-04-277-0-03",
+    "recordKind": "budget-line-item-lead",
     "name": "Incentive for Minority Students",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -2539,6 +2630,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2225-04-277-0-04",
+    "recordKind": "budget-line-item-lead",
     "name": "Scholarship for Minorities and Fee Reimbursement",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -2567,6 +2659,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-02-001-0-10",
+    "recordKind": "budget-line-item-lead",
     "name": "Interest Subsidy for Women through KSFC",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -2594,6 +2687,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-02-101-0-50",
+    "recordKind": "budget-line-item-lead",
     "name": "Hostels for Disabled Women",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -2621,6 +2715,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2235-02-101-0-52",
+    "recordKind": "budget-line-item-lead",
     "name": "Aids and Appliances for the Disabled",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",
@@ -2649,6 +2744,7 @@ export const KARNATAKA_BUDGET_LEADS: Scheme[] = [
   },
   {
     "id": "ka-budget-2408-01-102-0-09",
+    "recordKind": "budget-line-item-lead",
     "name": "DBT under Annabhagya Scheme",
     "category": "Karnataka budget reference",
     "ministry": "Government of Karnataka — department not confirmed in this extract",

@@ -2,7 +2,7 @@
 
 **Status: DRAFT FOR QUALIFIED REVIEW. Not a legal opinion, DPIA approval or compliance certification.**  
 **Scope:** JanaSetu web prototype, browser storage, JSON backup/restore, callable API routes, browser speech recognition, open-data proxy and optional browser extension.  
-**Implementation review date:** 2 November 2026. Re-check against the exact deployed commit before relying on this inventory.
+**Implementation review date:** 4 November 2026. Re-check against the exact deployed commit before relying on this inventory.
 
 ## 1. Product purpose and boundaries
 
@@ -19,8 +19,8 @@ Important distinction: the current main web interface performs benefit screening
 | Draft application fields | Profile-derived | Main UI: `createDraftRecord` runs in browser and draft is kept in local state/localStorage. Separate `/api/applications/draft` route accepts a profile if called. | Main UI: no draft/profile request sent to JanaSetu API route. API callers: application host receives submitted profile. | Never submit to government portals automatically; clear drafts on user request. |
 | Document metadata/reference | User-entered filename/type/size/date | Browser localStorage | None intended | Do not upload document bytes; warn against sensitive filenames. |
 | JSON backup | User export/import | User-controlled local file; extension local storage after explicit import | None intended by the export/import flow | Warn that backups are not encrypted by JanaSetu; user controls file storage/deletion. |
-| Scheme search query | Search input | Browser calls JanaSetu open-data route; server forwards the query to Hugging Face Dataset Viewer. | Hugging Face receives the search query; JanaSetu host receives the request. | Limit query to 120 characters; tell users not to enter personal data in search. |
-| Source health metadata | Health-route request | Server-side health route | Hugging Face dataset metadata endpoint | No citizen profile should be included. |
+| Scheme search query | Search input | Browser calls JanaSetu open-data route; server searches the bundled SmartDuke snapshot locally. | JanaSetu host receives the search query; the current search implementation does not forward query text to Hugging Face. The source-health monitor separately checks publisher metadata and endpoint availability. | Limit query to 120 characters; tell users not to enter personal data in search. |
+| Source health metadata | Health-route request | Server-side health route | Hugging Face dataset metadata and datasets-server search/rows health endpoints | Fixed generic health-check query and dataset identifier only; no citizen profile or user search term. |
 | Browser extension profile | User-selected backup | Extension stores imported profile in `chrome.storage.local`; selected values are sent to the active tab after explicit Fill action. | Active website receives selected mapped values and dispatched input/change events; the extension does not intentionally submit forms, but portal scripts may react to field changes. | Restrict supported origins; never fill credentials, identity numbers, OTP/CAPTCHA, bank details or files; review every field. |
 | Website request metadata | Browser page/API requests | Hosting/CDN/network infrastructure | Hosting and infrastructure providers | Actual provider logs, retention, region and access must be reviewed; this repository cannot prove provider-side deletion. |
 
@@ -40,7 +40,7 @@ Potential harms include exposure on shared devices, browser-profile compromise, 
 - Browser storage inventory and clear/export behaviour.
 - Network capture for every user journey to prove exactly which fields leave the browser; verify the main UI does not send profile/text bodies to screening, intake or draft routes.
 - Test callable API routes separately; confirm request bodies are not logged and provider retention is documented.
-- Hosting, CDN and observability log configuration; ensure request bodies and query strings do not contain citizen data except the intentionally forwarded non-personal scheme search term.
+- Hosting, CDN and observability log configuration; ensure request bodies and query strings do not contain citizen data. Verify that user search terms are processed against the bundled snapshot and are not forwarded to Hugging Face; the source-health route sends only its fixed health-check query and dataset identifier.
 - TLS, security headers, body limits, schema validation, rate controls and dependency/secret scanning.
 - Explicit user disclosure before any speech provider processes audio.
 - Extension allowlist, field exclusions, explicit user click and field-by-field review. The extension has no direct form-submission API calls, but dispatched input/change events may trigger portal-side reactions.
@@ -73,3 +73,10 @@ The current app's localStorage data persists until the user deletes it or clears
 - Next review date:
 
 No approval is implied until this section is completed by the qualified reviewer and the actual production deployment is checked against the assessment.
+
+
+## DPDP legal review preparation — 4 November 2026
+
+The official MeitY source page now lists the Digital Personal Data Protection Rules, 2025, a corrigendum dated 16 December 2025 and the official enforcement timeline. The Act and Rules have phased commencement dates; the legal-review plan records the extracted dates and primary Gazette links. Counsel must verify the exact current Gazette/corrigendum position and later notifications before giving advice.
+
+This PIA remains a draft. It is not a DPIA approval, legal opinion or compliance certification. See docs/review-plans/legal-review.md for the required counsel deliverables and docs/review-plans/language-review.md for the six-locale human review plan.

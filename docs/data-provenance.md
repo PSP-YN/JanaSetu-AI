@@ -1,12 +1,12 @@
 # Scheme catalogue: data provenance and rule notes
 
-**Access/review date:** 1 November 2026  
-**Scope:** Four selected Central Government scheme references.  
-**Coverage statement:** This is not a complete India-wide scheme catalogue. State and Union Territory profile selection is implemented; state-specific schemes are not yet loaded.
+**Access/review date:** 4 November 2026
+**Scope:** 142 built-in records across four deterministic prototypes, 42 official-source scheme references and 96 Karnataka budget-derived leads, plus a 4,693-row third-party discovery snapshot.
+**Coverage statement:** This is not a complete India-wide scheme catalogue. State and Union Territory profile selection is implemented; Karnataka has six state scheme references and 96 budget-derived leads, but comprehensive State/UT coverage is not loaded.
 
 ## 1. PM-KISAN Samman Nidhi
 
-Official source: https://pmkisan.gov.in/  
+Official source: https://pmkisan.gov.in/
 Operational guidelines: https://pmkisan.gov.in/Documents/RevisedPM-KISANOperationalGuidelines%28English%29.pdf
 
 Rules represented:
@@ -19,7 +19,7 @@ Prototype status: **screening lead only**. State land records, complete exclusio
 
 ## 2. PMAY-U 2.0
 
-Official scheme guidelines (September 2024): https://pmay-urban.gov.in/uploads/guidelines/Operational-Guidelines-of-PMAY-U-2.pdf  
+Official scheme guidelines (September 2024): https://pmay-urban.gov.in/uploads/guidelines/Operational-Guidelines-of-PMAY-U-2.pdf
 Official portal: https://pmay-urban.gov.in/
 
 Rules represented:
@@ -32,7 +32,7 @@ Prototype status: **screening lead only**. The code screens only the urban route
 
 ## 3. Pradhan Mantri Ujjwala Yojana 2.0
 
-Official scheme page: https://pmuy.gov.in/ujjwala2.html  
+Official scheme page: https://pmuy.gov.in/ujjwala2.html
 Official FAQ: https://www.pmuy.gov.in/faq.html
 
 Rules represented:
@@ -45,7 +45,7 @@ Prototype status: **screening lead only**. The prototype does not collect Aadhaa
 
 ## 4. PM-USP Central Sector Scholarship for College and University Students (CSSS)
 
-Official Ministry FAQ for AY 2025–26: https://www.education.gov.in/sites/upload_files/mhrd/files/upload_document/FAQs_PM_USP_CSSS_scheme_AY_2025_26.pdf  
+Official Ministry FAQ for AY 2025–26: https://www.education.gov.in/sites/upload_files/mhrd/files/upload_document/FAQs_PM_USP_CSSS_scheme_AY_2025_26.pdf
 National Scholarship Portal: https://scholarships.gov.in/
 
 Rules represented from the cited 2025–26 FAQ:
@@ -80,7 +80,7 @@ Prototype status: **academic-year verification required**. This code is not a cl
 
 The catalogue was expanded using the public National Scholarship Portal AY 2026–27 listing, Ministry/department pages, Government district portals and public government-hosted programme documents.
 
-The expanded catalogue contains 46 records: four Central records with deterministic prototype rules (all pending two independent human approvals) and 42 additional source-indexed records. The 42 new records are catalogue-only: they do not run eligibility logic. NSP deadlines were recorded as they appeared on 2 November 2026 and must be rechecked before application.
+The built-in catalogue now contains 142 records: four Central records with deterministic prototype rules (all pending two independent human approvals), 42 official-source scheme references (catalogue-only), and 96 Karnataka FY 2026–27 budget-derived line-item leads (not confirmed citizen-facing schemes). The 138 catalogue-only records comprise the 42 scheme references plus 96 budget leads. The NSP landing-page records no longer carry a universal deadline; the current PM-USP CSSS sources conflict and require scheme-specific verification.
 
 Specific caveats:
 - PM-JAY eligibility is not checked against a beneficiary database.
@@ -98,3 +98,34 @@ Specific caveats:
 - Access path: Hugging Face Dataset Viewer API (public, paginated): https://datasets-server.huggingface.co
 - Data fields are not official JanaSetu eligibility rules; no automatic screening is run on them.
 - Dataset card warns users to verify scheme information at the official portal. Currentness, source URL accuracy and completeness are not guaranteed by JanaSetu.
+
+
+## Official source refresh — 4 November 2026
+
+The four rule-screened catalogue records were rechecked against official sources. Their sourceChecked metadata was updated to 2026-11-04. Their reviewStatus values remain pending; the eligibility engine continues to return needs_verification before evaluating any rule.
+
+### PM-KISAN
+- Operational Guidelines currently linked by the official portal are revised 29 March 2020. They contain the family definition, exclusion classes and land cut-off / succession provisions.
+- The live portal snapshot checked 4 November 2026 reports the 24th instalment released on 30 October 2026, mandatory eKYC for registered farmers, and temporary withholding of suspected post-01.02.2019 land-acquisition / multiple-family-member cases pending physical verification.
+- The official press-release index lists Cabinet approval to continue PM-KISAN from FY 2026–27 through FY 2030–31 with a ₹3.15 lakh crore outlay; no replacement eligibility guideline was identified in this pass.
+- The 2020 guideline is not a complete current amendment register. A reviewer must reconcile later circulars and current portal instructions before any rule approval.
+
+### PMAY-U 2.0
+- The official guideline index checked 4 November 2026 lists the English/Hindi September 2024 PMAY-U 2.0 guidelines and the April 2026 AHP SOP.
+- The guideline defines beneficiary family as husband, wife and unmarried sons/daughters; states central EWS/LIG/MIG annual household-income bands of up to ₹3 lakh, ₹3–6 lakh and ₹6–9 lakh; includes a State/UT EWS redefinition mechanism with Ministry concurrence; and states a 20-year prior government-housing allotment restriction.
+- Parent housing-benefit prioritisation is a distinct clause and must not be collapsed into the 20-year disqualification. BLC, AHP, ARH and ISS need separate rule review.
+
+### PMUY 2.0
+- The 22 September 2025 PIB order approved 25 lakh additional deposit-free connections for FY 2025–26 and ₹2,050 per standard 14.2 kg connection (connection-cost support, not cash paid to the applicant); the 4 December 2025 PIB reply says eligibility was simplified to adult women from poor households based on a Deprivation Declaration.
+- The homepage reports 2,442,525 of the 25 lakh connections released as at 23 September 2026. It lists ₹2,050 for 14.2 kg and ₹1,300 for 5 kg; About/FAQ still show legacy ₹1,600/₹1,150. The 14.2 kg amount is supported by the PIB order; the 5 kg amount and current new-application window require OMC confirmation.
+- The PIB order also specifies ₹300 targeted subsidy for up to nine 14.2 kg refills in FY 2025–26. No FY 2026–27 extension was identified in this pass.
+- Current pages describe adult woman aged 18+, no existing LPG connection in the household, simplified KYC and a Deprivation Declaration. The About page still displays the older category list; its current effect must be confirmed.
+- The eKYC page describes face-based self-authentication with an OMC app and Aadhaar FaceRD. PIB says new consumers undergo biometric authentication before connection release; FAQ also describes distributor biometric authentication. Reconcile the exact sequence.
+- Official documents include Aadhaar of applicant/adult family members and bank details. JanaSetu must not collect Aadhaar or bank documents.
+
+### PM-USP CSSS
+- The live NSP CSSS sources conflict: All-Scholarships lists renewal student applications through 30 September 2026, institute verification through 15 October and DNO/SNO/MNO through 30 October; the Students announcement lists student applications through 31 October, institute verification through 15 November and L2 through 30 November. The latter page still says “currently open” after the student deadline. No date is selected as authoritative.
+- The linked specifications PDF is updated 7 February 2024. The detailed FAQ located is for AY 2025–26 and is not sufficient by itself to prove that fresh-application or renewal rules remain unchanged for AY 2026–27.
+- Neither portal deadline must be presented as a fresh-application deadline. Fresh AY 2026–27 status is unresolved; obtain NSP/Ministry clarification.
+
+The full source evidence, current code mapping, gaps, proposed boundary fixtures and unresolved questions are in the four JSON review packets under docs/scheme-reviews/. See [the 4 November source reconciliation](scheme-reviews/source-reconciliation-2026-11-04.md). These are prepared review materials, not signed human approvals.

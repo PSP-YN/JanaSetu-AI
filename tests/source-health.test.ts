@@ -1,47 +1,59 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { GET } from "../app/api/sources/health/route";
+import snapshotMetadata from "../data/smartduke-snapshot-meta.json";
 
-test("source monitor reports Hugging Face search outage and fallback status", async () => {
-  const originalFetch = globalThis.fetch;
-  globalThis.fetch = async (input) => {
+function mockFetch(searchStatus = 500, metadataSha = snapshotMetadata.revision) {
+  return async (input: RequestInfo | URL) => {
     const url = new URL(typeof input === "string" ? input : input instanceof URL ? input.href : input.url);
-    if (url.hostname === "huggingface.co") return new Response("{}", { status: 200 });
+    if (url.hostname === "huggingface.co") {
+      return new Response(JSON.stringify({ sha: metadataSha, lastModified: "2026-07-06T12:09:35.000Z" }), { status: 200, headers: { "content-type": "application/json" } });
+    }
     if (url.hostname === "datasets-server.huggingface.co" && url.pathname.endsWith("/search")) {
-      return new Response(JSON.stringify({ error: "Hub auth timeout" }), { status: 500 });
+      return new Response(JSON.stringify({ error: "Hub auth timeout" }), { status: searchStatus, headers: { "content-type": "application/json" } });
+    }
+    if (url.hostname === "datasets-server.huggingface.co" && url.pathname.endsWith("/rows")) {
+      return new Response(JSON.stringify({ rows: [{ row: { slug: "test" } }] }), { status: 200, headers: { "content-type": "application/json" } });
     }
     return new Response("not found", { status: 404 });
   };
+}
+
+test("source monitor reports local full-index search while upstream search is unavailable and snapshot is stale", async () => {
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = mockFetch(500);
   try {
     const response = await GET();
     const report = await response.json();
     const source = report.sources.find((item: { id: string }) => item.id === "smartduke-scheme-catalogue");
-    assert.equal(source.availability, "available", "dataset metadata endpoint can still be reachable");
-    assert.equal(source.searchAvailability, "unavailable", "search API outage should be visible independently");
-    assert.equal(source.searchFallback, "page-filter");
+    assert.equal(source.availability, "available");
+    assert.equal(source.searchAvailability, "unavailable");
+    assert.equal(source.rowsAvailability, "available");
+    assert.equal(source.searchFallback, "bundled-full-index");
+    assert.equal(source.localIndexAvailability, "available");
+    assert.equal(source.indexedRows, 4693);
+    assert.equal(source.freshness, "stale");
+    assert.equal(source.updateAvailable, false);
+    const official = report.sources.find((item: { id: string }) => item.id === "official-myscheme");
+    assert.equal(official.publicCatalogueBenchmark.totalAdvertised, "5150+");
+    assert.equal(official.publicCatalogueBenchmark.languagesAdvertised, 15);
+    assert.equal(official.publicCatalogueBenchmark.languageSource, "https://www.myscheme.gov.in/faqs");
     assert.equal(report.overall, "attention_required");
   } finally {
     globalThis.fetch = originalFetch;
   }
 });
 
-
-test("source monitor treats HTTP 200 with an invalid search JSON body as unavailable", async () => {
+test("source monitor detects a newer publisher revision without silently replacing the local index", async () => {
   const originalFetch = globalThis.fetch;
-  globalThis.fetch = async (input) => {
-    const url = new URL(typeof input === "string" ? input : input instanceof URL ? input.href : input.url);
-    if (url.hostname === "huggingface.co") return new Response("{}", { status: 200 });
-    if (url.hostname === "datasets-server.huggingface.co" && url.pathname.endsWith("/search")) {
-      return new Response("not-json", { status: 200, headers: { "content-type": "application/json" } });
-    }
-    return new Response("not found", { status: 404 });
-  };
+  globalThis.fetch = mockFetch(500, "new-publisher-revision");
   try {
     const response = await GET();
     const report = await response.json();
     const source = report.sources.find((item: { id: string }) => item.id === "smartduke-scheme-catalogue");
-    assert.equal(source.searchStatus, 200);
-    assert.equal(source.searchAvailability, "unavailable", "a successful HTTP status is not enough when the body cannot be parsed");
+    assert.equal(source.updateAvailable, true);
+    assert.equal(source.indexedRevision, snapshotMetadata.revision);
+    assert.equal(source.latestRevision, "new-publisher-revision");
     assert.equal(report.overall, "attention_required");
   } finally {
     globalThis.fetch = originalFetch;

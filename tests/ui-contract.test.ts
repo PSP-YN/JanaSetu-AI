@@ -38,7 +38,7 @@ test("six locales define the primary workspace shell translations", () => {
 
 test("main UI extension guidance discloses portal-side field-change reactions in all six locales", () => {
   const uiCopy = page.slice(page.indexOf("const UI_COPY:"), page.indexOf("\nfunction formatMoney"));
-  const localeBlocks = Array.from(uiCopy.matchAll(/^  (en|hi|kn|ta|te|ml): \{([\s\S]*?)^  \},?$/gm));
+  const localeBlocks = Array.from(uiCopy.matchAll(/^  (en|hi|kn|ta|te|ml): \{([^\n]*)\},?$/gm));
   const caveats: Record<string, string> = {
     en: "Portal scripts may react to field changes", hi: "पोर्टल की स्क्रिप्ट", kn: "ಪೋರ್ಟಲ್ ಸ್ಕ್ರಿಪ್ಟ್‌ಗಳು",
     ta: "போர்டல் ஸ்கிரிப்டுகள்", te: "పోర్టల్ స్క్రిప్ట్‌లు", ml: "പോർട്ടൽ സ്ക്രിപ്റ്റുകൾ"
@@ -87,5 +87,22 @@ test("every rendered translation key has an English fallback and every locale ha
     for (const key of Array.from(extra.get("en")!)) {
       assert.ok(extra.get(locale)!.has(key) || base.get(locale)!.has(key), `${locale} has no translated value for ${key}`);
     }
+  }
+});
+
+
+test("full-index fallback warning is localized across all six locales", () => {
+  const uiCopy = page.slice(page.indexOf("const UI_COPY:"), page.indexOf("\nfunction formatMoney"));
+  const localeBlocks = Array.from(uiCopy.matchAll(/^  (en|hi|kn|ta|te|ml): \{([^\n]*)\},?$/gm));
+  const expected: Record<string, string> = {
+    en: "The publisher search service is unavailable", hi: "प्रकाशक की खोज सेवा उपलब्ध नहीं है",
+    kn: "ಪ್ರಕಾಶಕರ ಹುಡುಕಾಟ ಸೇವೆ ಲಭ್ಯವಿಲ್ಲ", ta: "வெளியீட்டாளரின் தேடல் சேவை கிடைக்கவில்லை",
+    te: "ప్రచురణకర్త శోధన సేవ అందుబాటులో లేదు", ml: "പ്രസാധകന്റെ തിരച്ചിൽ സേവനം ലഭ്യമല്ല"
+  };
+  assert.equal(localeBlocks.length, 6);
+  for (const [, locale, block] of localeBlocks) {
+    const helper = block.match(/searchFallback:"([^\"]*)"/)?.[1] || "";
+    assert.ok(helper.includes(expected[locale]), `${locale} fallback warning is not localized`);
+    assert.match(helper, /stale|पुराना|ಹಳೆಯ|பழைய|పాత|പഴയ/i);
   }
 });

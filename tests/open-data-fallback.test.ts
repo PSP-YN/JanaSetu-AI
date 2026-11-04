@@ -3,38 +3,79 @@ import { test } from "node:test";
 import { NextRequest } from "next/server";
 import { GET } from "../app/api/schemes/open-data/route";
 
-test("open-data catalogue falls back to page filtering when HF search is unavailable", async () => {
+test("open-data search covers the complete bundled index, not only the first page", async () => {
   const originalFetch = globalThis.fetch;
-  const calls: string[] = [];
-  globalThis.fetch = async (input) => {
-    const url = new URL(typeof input === "string" ? input : input instanceof URL ? input.href : input.url);
-    calls.push(url.pathname);
-    if (url.pathname.endsWith("/search")) {
-      return new Response(JSON.stringify({ error: "HF Hub authentication timed out" }), { status: 500 });
-    }
-    assert.ok(url.pathname.endsWith("/rows"), "fallback should request paginated rows");
-    return new Response(JSON.stringify({
-      num_rows_total: 4693,
-      rows: [
-        { row: { slug: "education-aid", name: "Education Support Scheme", description: "College fee support", state: "India" } },
-        { row: { slug: "maternity-aid", name: "Maternity Assistance", description: "Health support", state: "India" } }
-      ]
-    }), { status: 200, headers: { "content-type": "application/json" } });
-  };
-
+  let upstreamCalls = 0;
+  globalThis.fetch = async () => { upstreamCalls += 1; throw new Error("Upstream search is unavailable"); };
   try {
-    const request = new NextRequest("http://localhost/api/schemes/open-data?q=education&offset=0&limit=2");
+    const request = new NextRequest("http://localhost/api/schemes/open-data?q=zupda%20vijlikaran&offset=0&limit=50");
     const response = await GET(request);
     const body = await response.json();
     assert.equal(response.status, 200);
-    assert.equal(body.searchMode, "page-filter");
-    assert.equal(response.headers.get("Cache-Control"), "public, s-maxage=60, stale-while-revalidate=300", "degraded page-only results should have a short shared-cache lifetime");
+    assert.equal(body.searchMode, "local-full-index");
+    assert.equal(body.searchFallbackWarning, true);
+    assert.equal(body.searchFallbackReason, "publisher_search_endpoint_unavailable");
+    assert.equal(body.catalogueTotal, 4693);
+    assert.equal(body.total, 1);
     assert.equal(body.records.length, 1);
-    assert.equal(body.records[0].id, "open-education-aid");
-    assert.equal(body.nextOffset, 2, "pagination must advance based on fetched rows, not filtered matches");
-    assert.match(body.searchFallbackWarning, /page only/i);
-    assert.deepEqual(calls, ["/search", "/rows"]);
+    assert.equal(body.records[0].id, "open-zvy");
+    assert.equal(body.records[0].catalogueStatus, "catalogue-only");
+    assert.equal(body.nextOffset, null);
+    assert.equal(body.freshness, "stale");
+    assert.equal(upstreamCalls, 0, "search must not depend on the broken upstream /search endpoint");
   } finally {
     globalThis.fetch = originalFetch;
   }
+});
+
+test("open-data browse paginates the full local index", async () => {
+  const request = new NextRequest("http://localhost/api/schemes/open-data?offset=100&limit=50");
+  const response = await GET(request);
+  const body = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(body.searchMode, "local-browse");
+  assert.equal(body.total, 4693);
+  assert.equal(body.records.length, 50);
+  assert.equal(body.nextOffset, 150);
+  assert.equal(body.offset, 100);
+});
+
+test("open-data category filter is applied across the full index", async () => {
+  const request = new NextRequest("http://localhost/api/schemes/open-data?category=Utility%20%26%20Sanitation&offset=0&limit=100");
+  const response = await GET(request);
+  const body = await response.json();
+  assert.equal(response.status, 200);
+  assert.ok(body.total > 0);
+  assert.ok(body.records.every((record: { tags: string[] }) => record.tags.includes("Utility & Sanitation")));
+});
+
+
+test("open-data category aliases match broad built-in category labels", async () => {
+  const request = new NextRequest("http://localhost/api/schemes/open-data?category=Agriculture&offset=0&limit=100");
+  const response = await GET(request);
+  const body = await response.json();
+  assert.equal(response.status, 200);
+  assert.ok(body.total > 0);
+  assert.ok(body.records.every((record: { tags: string[] }) => record.tags.some((tag) => tag.toLowerCase().includes("agriculture"))));
+});
+
+test("unsupported scripts and punctuation-only queries return no matches, not the full index", async () => {
+  for (const query of ["বাংলা", "ગુજરાતી", "ଓଡ଼ିଆ", "ਪੰਜਾਬੀ", "اردو", "!!!"]) {
+    const request = new NextRequest("http://localhost/api/schemes/open-data?q=" + encodeURIComponent(query));
+    const response = await GET(request);
+    const body = await response.json();
+    assert.equal(response.status, 200, query);
+    assert.equal(body.searchMode, "local-full-index", query);
+    assert.equal(body.total, 0, query);
+    assert.equal(body.records.length, 0, query);
+  }
+});
+
+test("a non-empty category that normalizes to no searchable terms returns no matches", async () => {
+  const request = new NextRequest("http://localhost/api/schemes/open-data?category=!!!");
+  const response = await GET(request);
+  const body = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(body.total, 0);
+  assert.equal(body.records.length, 0);
 });

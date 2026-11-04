@@ -1,11 +1,179 @@
 {
+  "schemaVersion": 2,
+  "packetGeneratedAt": "2026-11-04",
   "schemeId": "pm-kisan",
   "canonicalName": "PM-KISAN Samman Nidhi",
   "primaryOfficialSource": "https://pmkisan.gov.in/",
   "reviewStatus": "pending",
-  "ruleVersion": null,
-  "sourceVersion": null,
-  "sourceCheckedAt": null,
+  "sourceReviewStatus": "partial_current_source_review_not_approval",
+  "ruleVersion": "lib/agent.ts at main commit f6034c1f1671dfe5b2eab9cf8ac940e76c1176a4 (rule logic unchanged in this refresh); lib/catalog.ts source metadata refreshed in this branch.",
+  "sourceVersion": "PM-KISAN operational guidelines revised 29.03.2020; live portal state observed 2026-11-04; no complete consolidated amendment register located.",
+  "sourceCheckedAt": "2026-11-04",
+  "sourceEvidence": [
+    {
+      "title": "PM-KISAN Operational Guidelines (revised 29.03.2020)",
+      "url": "https://pmkisan.gov.in/Documents/RevisedPM-KISANOperationalGuidelines%28English%29.pdf",
+      "issuer": "Department of Agriculture & Farmers Welfare, Government of India",
+      "publishedOrRevised": "29 March 2020",
+      "checkedAt": "2026-11-04",
+      "status": "official_primary_guideline_but_historical",
+      "facts": [
+        "Landholder farmer family is husband, wife and minor children owning cultivable land as per State/UT land records.",
+        "Benefit stated as ₹6,000 per year in three equal instalments, subject to exclusions.",
+        "Exclusions include institutional landholders; specified constitutional/public representatives; serving or retired government employees subject to stated MTS/Class IV/Group D exceptions; pensioners with monthly pension ₹10,000 or more subject to stated exceptions; income-tax payers in the last assessment year; specified registered practising professionals; and NRIs for new beneficiaries.",
+        "Guideline contains a 01.02.2019 eligibility cut-off with inheritance-on-death and other land-transfer provisions."
+      ]
+    },
+    {
+      "title": "PM-KISAN live official portal",
+      "url": "https://pmkisan.gov.in/",
+      "issuer": "Department of Agriculture & Farmers Welfare / NIC",
+      "publishedOrRevised": "Live portal snapshot; 24th instalment event dated 30 October 2026",
+      "checkedAt": "2026-11-04",
+      "status": "official_live_portal_snapshot",
+      "facts": [
+        "Portal states the 24th instalment was released on 30 October 2026.",
+        "Portal states eKYC is mandatory for registered PM-KISAN farmers.",
+        "Portal flags suspected post-01.02.2019 land acquisitions and multiple family-member claims for temporary withholding pending physical verification."
+      ]
+    },
+    {
+      "title": "PM-KISAN official FAQ",
+      "url": "https://pmkisan.gov.in/Documents/RevisedFAQ.pdf",
+      "issuer": "Department of Agriculture & Farmers Welfare",
+      "publishedOrRevised": "PDF date not established in this check",
+      "checkedAt": "2026-11-04",
+      "status": "official_supporting_source",
+      "facts": [
+        "FAQ inspected; targeted extraction did not establish eKYC wording. Use the live portal for the current eKYC notice."
+      ]
+    },
+    {
+      "title": "Cabinet approval — continuation of PM-KISAN 2026–27 to 2030–31",
+      "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2292460&lang=1&reg=6",
+      "issuer": "Press Information Bureau / Cabinet / Department of Agriculture & Farmers Welfare",
+      "publishedOrRevised": "31 July 2026, PIB Delhi",
+      "checkedAt": "2026-11-04",
+      "status": "official_cabinet_continuation_release_not_replacement_guideline",
+      "facts": [
+        "The Union Cabinet approved continuation of PM-KISAN from FY 2026–27 through FY 2030–31 with a ₹3.15 lakh crore outlay.",
+        "The release reiterates ₹6,000 per year in three equal instalments for eligible farmer families; it does not announce a replacement operational guideline or change the 2020 eligibility clauses.",
+        "The continuation announcement must be read with any subsequent operational guideline, amendment or State/UT implementation circular before approval."
+      ]
+    },
+    {
+      "title": "PM-KISAN current portal notice — 24th instalment and eKYC",
+      "url": "https://www.pib.gov.in/PressNoteDetails.aspx?ModuleId=3&NoteId=160645&lang=2&reg=48",
+      "issuer": "Department of Agriculture & Farmers Welfare / Government of India",
+      "publishedOrRevised": "30 October 2026, PIB Press Note",
+      "checkedAt": "2026-11-04",
+      "status": "official_current_pib_operational_notice",
+      "facts": [
+        "The 24th instalment was released on 30 October 2026: over ₹18,690 crore to 9.34 crore farmers.",
+        "The release reiterates ₹6,000 annually in three equal ₹2,000 instalments, subject to eligibility, land-record seeding, Aadhaar-linked bank account and eKYC.",
+        "The release describes OTP, biometric and face-authentication eKYC routes and the State-led beneficiary identification/verification process.",
+        "The PM-KISAN portal separately flags suspected post-01.02.2019 land acquisitions and multiple family-member claims for temporary withholding pending physical verification; treat this as a manual verification trigger, not automatic ineligibility."
+      ]
+    }
+  ],
+  "eligibilityMatrix": [
+    {
+      "condition": "Eligible landholding farmer family with cultivable land in State/UT records",
+      "source": "Guidelines §§1, 3, 5.1",
+      "implementation": "Occupation keyword plus user-declared cultivable-land boolean",
+      "gap": "Occupation is not a statutory eligibility condition by itself; family composition, land record ownership and State/UT validation are not captured.",
+      "reviewerAction": "Decide whether the occupation field must be removed from eligibility logic and define the evidence/authority needed for land records."
+    },
+    {
+      "condition": "Family definition: husband, wife and minor children",
+      "source": "Guidelines §3",
+      "implementation": "No family-composition fields",
+      "gap": "Cannot establish whether landholding and exclusion rules apply at family level.",
+      "reviewerAction": "Specify family aggregation, separated-family and adult-child edge cases from current circulars."
+    },
+    {
+      "condition": "Complete exclusion list",
+      "source": "Guidelines §4.1(a)-(c)",
+      "implementation": "One high-level yes/no/unknown exclusion declaration",
+      "gap": "The rule does not enumerate or validate any exclusion class, threshold, exception or NRI condition.",
+      "reviewerAction": "Build a clause-by-clause exclusion matrix with exact exceptions and evidence sources."
+    },
+    {
+      "condition": "Landholding cut-off and inheritance/transfer treatment",
+      "source": "Guidelines §§5.2–5.3.4; live portal notice",
+      "implementation": "No acquisition date, succession or transfer fields",
+      "gap": "Current portal explicitly flags certain post-cut-off land acquisition cases for physical verification.",
+      "reviewerAction": "Reconcile all amendments and current portal instructions; define whether these cases always return needs_verification."
+    },
+    {
+      "condition": "State/UT identification, eKYC and beneficiary status",
+      "source": "Guidelines §6 and live portal notice",
+      "implementation": "No authoritative integration; eKYC only a next-action message",
+      "gap": "Cannot confirm State/UT approval, eKYC, bank validation or current beneficiary status.",
+      "reviewerAction": "Keep official verification mandatory and avoid collecting Aadhaar/bank details in JanaSetu."
+    }
+  ],
+  "boundaryTests": [
+    {
+      "id": "PMK-01",
+      "scenario": "Occupation says farmer but no cultivable land in official records",
+      "expected": "Must not be treated as a match; current prototype cannot verify records.",
+      "reviewFixtureStatus": "proposed_not_executed",
+      "executionEvidence": null
+    },
+    {
+      "id": "PMK-02",
+      "scenario": "Land acquired after 01.02.2019 by purchase/gift/partition",
+      "expected": "needs_verification pending current circular reconciliation; test succession separately.",
+      "reviewFixtureStatus": "proposed_not_executed",
+      "executionEvidence": null
+    },
+    {
+      "id": "PMK-03",
+      "scenario": "Land transferred after cut-off due to death/inheritance",
+      "expected": "needs_verification until succession exception and successor family eligibility are verified.",
+      "reviewFixtureStatus": "proposed_not_executed",
+      "executionEvidence": null
+    },
+    {
+      "id": "PMK-04",
+      "scenario": "One family member is a current/retired public employee, pensioner, income-tax payer or practising professional",
+      "expected": "Check each statutory category and exact exception; no single self-declaration may substitute for the matrix.",
+      "reviewFixtureStatus": "proposed_not_executed",
+      "executionEvidence": null
+    },
+    {
+      "id": "PMK-05",
+      "scenario": "More than one family member appears to receive benefits",
+      "expected": "needs_verification and official physical verification/status check.",
+      "reviewFixtureStatus": "proposed_not_executed",
+      "executionEvidence": null
+    },
+    {
+      "id": "PMK-06",
+      "scenario": "Unknown exclusion status or eKYC state",
+      "expected": "needs_verification; never infer eligible.",
+      "reviewFixtureStatus": "proposed_not_executed",
+      "executionEvidence": null
+    }
+  ],
+  "amendmentsReviewed": [
+    {
+      "item": "29.03.2020 revised operational guideline inspected (not exhaustive).",
+      "status": "inspected_not_exhaustive"
+    },
+    {
+      "item": "Live portal snapshot checked 04.11.2026; 24th instalment notice dated 30.10.2026 and mandatory eKYC / physical-verification warnings observed.",
+      "status": "inspected_not_exhaustive"
+    }
+  ],
+  "unresolvedQuestions": [
+    "Obtain all post-29.03.2020 central amendments, clarifications, State/UT exceptions and current operational circulars; the 31 July 2026 PIB continuation release is already recorded, and the official portal archive index alone is not a complete amendment register.",
+    "Confirm whether the 2026–27 to 2030–31 continuation has been accompanied by a revised operational guideline or only continuation of the existing scheme.",
+    "Verify the exact current eKYC methods, biometric exception paths, land-record cut-off implementation, succession/transfer cases, duplicate-family policy and State/UT exceptions.",
+    "Treat the portal’s suspected-case temporary withholding notice as a manual verification trigger, not an automatic ineligibility rule.",
+    "Do not encode ₹6,000 or any instalment state as guaranteed entitlement or payment; verify current operational release and beneficiary status."
+  ],
   "reviewers": [
     {
       "role": "independent_source_reviewer",
@@ -24,8 +192,5 @@
       "evidence": []
     }
   ],
-  "eligibilityMatrix": [],
-  "boundaryTests": [],
-  "amendmentsReviewed": [],
-  "approvalNote": "Do not set reviewStatus to approved until both independent reviewers sign off and the evidence is merged in a reviewed pull request."
+  "approvalNote": "Do not set reviewStatus to approved until two independent human reviewers have separately completed and signed the source and rule reviews, all material questions are resolved, boundary fixtures are executed, and the reviewed evidence is merged. AI-assisted source preparation is not approval."
 }

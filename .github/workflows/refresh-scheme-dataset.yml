@@ -1,0 +1,63 @@
+name: Check upstream scheme dataset revision
+
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
+
+concurrency:
+  group: janasetu-scheme-dataset-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Set up Python
+        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38
+        with:
+          python-version: "3.12"
+
+      - name: Fetch and validate the publisher revision
+        run: |
+          python scripts/refresh_smartduke_snapshot.py
+          python scripts/audit_smartduke_snapshot.py
+
+      - name: Create a review pull request when the publisher has changed the dataset
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- data/smartduke-snapshot.json.gz data/smartduke-snapshot-meta.json; then
+            echo "No new upstream dataset revision."
+            exit 0
+          fi
+          revision=$(python -c 'import json; print(json.load(open("data/smartduke-snapshot-meta.json"))["revision"][:12])')
+          branch="data-refresh/smartduke-${revision}"
+          if gh pr list --state open --head "$branch" --json number --jq 'length > 0'; then
+            echo "A review PR for this publisher revision is already open."
+            exit 0
+          fi
+          if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+            echo "A branch for this publisher revision already exists; manual review is required."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add data/smartduke-snapshot.json.gz data/smartduke-snapshot-meta.json docs/smartduke-catalogue-audit.json docs/smartduke-record-review-queue.csv
+          git commit -m "Refresh SmartDuke catalogue snapshot ${revision}"
+          git push --set-upstream origin "$branch"
+          gh pr create --draft --base main --head "$branch" \
+            --title "Review updated SmartDuke scheme catalogue snapshot ${revision}" \
+            --body "A new publisher revision was detected and validated. This PR updates the local full-text discovery index only. It does not approve scheme eligibility rules or establish official source accuracy. Review the source diff, collection date, data quality and attribution before merging. All imported records remain catalogue-only."
+          gh workflow run ci.yml --ref "$branch"

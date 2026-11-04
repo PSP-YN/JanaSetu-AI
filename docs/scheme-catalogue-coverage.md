@@ -1,20 +1,20 @@
 # Scheme catalogue coverage and source policy
 
-**Catalogue review date:** 2 November 2026
+**Catalogue review date:** 4 November 2026
 
 ## Current integrated catalogue
 
-JanaSetu contains **46 source-linked scheme records**:
+JanaSetu contains **46 source-linked scheme references** plus 96 Karnataka budget-derived line-item leads (142 built-in records total):
 - **4 rule-screened Central records** with deterministic prototype checks: PM-KISAN, PMAY-U 2.0, PMUY 2.0 and PM-USP CSSS.
-- **30 additional National Scholarship Portal records** from the AY 2026–27 public listing, including visible application-window dates as checked on 2 November 2026.
+- **30 additional National Scholarship Portal records** from the AY 2026–27 public listing. Scheme-specific status and deadlines require exact-entry verification; no universal deadline is assumed.
 - **6 additional Central references**: AB-PMJAY, PMMVY 2.0, PMSBY, PMJJBY, PMFBY and MGNREGA.
 - **6 Karnataka State references**: Shakti, Anna Bhagya, Gruha Lakshmi, Gruha Jyothi, Yuva Nidhi and CMKKY.
 
-The breakdown is **4 rule-screened + 42 catalogue-only = 46**. Here, `rule-screened` means a deterministic prototype rule exists; it does not mean the rule is approved. All four currently remain pending two independent human source/rule approvals and fail closed until both approvals are recorded. The added 42 records are source-indexed; JanaSetu does not automatically decide eligibility for them. The catalogue is a starter set, not a complete India-wide directory. State-specific coverage outside Karnataka remains incomplete.
+The built-in catalogue contains **142 records**: 4 deterministic rule prototypes, 42 official-source scheme references and 96 Karnataka FY 2026–27 budget-derived line-item leads. The 138 catalogue-only records are the 42 scheme references plus 96 budget leads. `rule-screened` means a deterministic prototype rule exists; it does not mean approved. All four rule prototypes remain pending two independent human approvals and fail closed. Budget line items are not confirmed citizen-facing schemes. This is a starter catalogue, not a complete India-wide directory; State/UT coverage remains incomplete.
 
 ## NSP application-window snapshot
 
-The National Scholarship Portal AY 2026–27 listing was accessed on 2 November 2026. Many student application entries showed a **30 November 2026** deadline; selected entries showed **15 November 2026**; some fresh applications were already shown closed on **31 October 2026**. PM-USP CSSS was shown as renewal-only in the live listing. These are point-in-time portal observations, not guarantees that an application window remains open. Recheck NSP and the scheme-specific Specifications/FAQ before advising a student.
+The National Scholarship Portal AY 2026–27 listing was rechecked on 4 November 2026. Scheme-specific windows vary; PM-USP CSSS itself has conflicting official renewal dates between the All-Scholarships and Students pages. The catalogue register therefore does not apply a universal 30 November deadline. Every NSP record requires its exact scheme Specifications/FAQ and current portal status before advising a student.
 
 ## Official sources used
 
@@ -55,7 +55,7 @@ rule-screened means deterministic eligibility checks exist in the app and are li
 
 ## Source-specific limitations
 
-- NSP deadlines are a snapshot checked 2 November 2026; dates can change and some listed fresh applications were already closed.
+- NSP listings were rechecked 4 November 2026. Scheme-specific deadlines vary; PM-USP CSSS has conflicting official renewal dates between NSP pages. No universal deadline is assumed.
 - PM-USP CSSS current AY 2026–27 fresh/renewal rules must be confirmed; the existing rule summary references the AY 2025–26 FAQ.
 - Yuva Nidhi source is explicitly a 2024 draft. Its older batch dates must not be treated as current eligibility rules.
 - Gruha Jyothi source is a Government-hosted policy study, not a current ESCOM billing circular. Confirm current household entitlement with the electricity provider.
@@ -90,8 +90,22 @@ Current catalogue breakdown after this import: **142 records = 4 rule-screened +
 
 ## CC BY 4.0 external catalogue source
 
-JanaSetu Discover integrates paginated keyword search over the Hugging Face Dataset Viewer for [SmartDuke Technologies' Indian Government Schemes Dataset 2026](https://huggingface.co/datasets/smartduketech/indian-government-schemes-2025), license CC BY 4.0. The dataset card states 4,693 records and a July 2026 snapshot, with original source myScheme and structured parsing by SmartDuke Technologies. This source is third-party, machine-parsed and not independently verified by JanaSetu. Imported records remain catalogue-only. The parser's age, gender, caste, income, BPL, disability and state fields are intentionally not used by the eligibility evaluator. Each record links to the scheme URL supplied by the dataset; verify it before applying.
+JanaSetu uses the Hugging Face dataset card and repository metadata for attribution and provenance of [SmartDuke Technologies' Indian Government Schemes Dataset 2026](https://huggingface.co/datasets/smartduketech/indian-government-schemes-2025), licensed CC BY 4.0. The dataset card states 4,693 records and a July 2026 snapshot, with original source myScheme and structured parsing by SmartDuke Technologies. The snapshot is bundled locally; user keyword/category searches run against the complete local index and do not use the publisher's Dataset Viewer `/search` endpoint. This source is third-party, machine-parsed and not independently verified by JanaSetu. Imported records remain catalogue-only. The parser's age, gender, caste, income, BPL, disability and state fields are intentionally not used by the eligibility evaluator. Each record links to the scheme URL supplied by the dataset; verify it before applying.
 
-The app proxies requests through `/api/schemes/open-data`, requests up to 50 rows at a time from the Hugging Face Dataset Viewer, caches responses for one hour, and allows keyword search and pagination. This is an external dependency, not a locally mirrored/offline catalogue. If it is unavailable, the local catalogue and official myScheme link remain accessible.
+The app bundles an attributed 4,693-row snapshot and performs keyword/category search over the complete local index through `/api/schemes/open-data`, with 50-record pagination. It monitors the publisher metadata, `/rows` and `/search` endpoints. The upstream `/search` endpoint is currently unavailable; full local-index search remains available, but the snapshot is stale and not a current official catalogue.
 
 **Attribution:** SmartDuke Technologies, *Indian Government Schemes Dataset 2026*, CC BY 4.0, Hugging Face. Source snapshot: 5 July 2026. https://huggingface.co/datasets/smartduketech/indian-government-schemes-2025
+
+
+## Reconciled catalogue inventory — 4 November 2026
+
+| Dataset / record class | Count | Current interpretation |
+|---|---:|---|
+| Built-in deterministic scheme prototypes | 4 | All pending two independent human approvals; eligibility engine fails closed. |
+| Built-in catalogue-only official-source references | 42 | Source-indexed references; no eligibility logic. |
+| Karnataka FY 2026–27 budget-derived leads | 96 | Budget line items, not confirmed citizen-facing schemes. |
+| Built-in total | 142 | 4 rule prototypes + 138 catalogue-only records. |
+| SmartDuke third-party snapshot | 4,693 | 5 July 2026 discovery snapshot; stale, machine-parsed, 4,693 unique slugs. |
+| Official myScheme public benchmark | 5,150+ | Homepage headline count; not a row-level feed and not directly comparable to the third-party snapshot. |
+
+The 138 built-in catalogue-only records are listed in `catalogue-review-register.csv`. The 96 budget leads have a dedicated record type and warning label. The 4,693-row SmartDuke snapshot has a field-quality audit and exception queue. Neither exercise is a substitute for independent source verification.
