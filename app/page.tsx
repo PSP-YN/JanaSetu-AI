@@ -1172,7 +1172,7 @@ export default function Home() {
                 {LANGUAGE_OPTIONS.map((item) => <option key={item.code} value={item.code}>{item.label}</option>)}
               </select><ChevronDown size={13}/>
             </label>
-            <button className="avatar-button" onClick={() => setTab("profile")} aria-label={t("openProfile")}>{profile.fullName ? profile.fullName[0].toUpperCase() : <UserRound size={17}/>}</button>
+            <button className="avatar-button" onClick={() => setTab("profile")} aria-label={t("openProfile")}><span className="avatar-fallback" aria-hidden="true">{profile.fullName ? profile.fullName[0].toUpperCase() : <UserRound size={17}/>}</span><img src="/profile-avatar.png" alt="" className="avatar-image" onError={(event) => { event.currentTarget.style.display = "none"; }}/></button>
           </div>
         </header>
 
