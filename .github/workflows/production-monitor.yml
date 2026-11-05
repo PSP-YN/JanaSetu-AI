@@ -74,7 +74,7 @@ jobs:
         run: |
           set -euo pipefail
           gh label create "ops:production-monitor" --repo "$GITHUB_REPOSITORY" --color "D73A4A" --description "Automated production availability alerts" --force
-          issue="$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --label "ops:production-monitor" --json number --jq '.[0].number // empty')"
+          issue="$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --label "ops:production-monitor" --json number,title,author --jq '[.[] | select(.title == "[JanaSetu production monitor] Automated checks failed" and .author.login == "github-actions[bot]")][0].number // empty')"
           if [[ -z "$issue" ]]; then
             gh issue create --repo "$GITHUB_REPOSITORY" --title "[JanaSetu production monitor] Automated checks failed" --label "ops:production-monitor" --body "The hourly production monitor failed against https://jana-setu-ai.vercel.app. Inspect the failed run, Vercel deployment and route logs before changing production. This alert is deduplicated: only one open monitor issue is maintained.\n\nRun: https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
           else
@@ -88,7 +88,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          issue="$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --label "ops:production-monitor" --json number --jq '.[0].number // empty')"
+          issue="$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --label "ops:production-monitor" --json number,title,author --jq '[.[] | select(.title == "[JanaSetu production monitor] Automated checks failed" and .author.login == "github-actions[bot]")][0].number // empty')"
           if [[ -n "$issue" ]]; then
             gh issue comment "$issue" --repo "$GITHUB_REPOSITORY" --body "The hourly production monitor has passed again for the canonical deployment. Closing this automated availability alert. Run: https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
             gh issue close "$issue" --repo "$GITHUB_REPOSITORY"
