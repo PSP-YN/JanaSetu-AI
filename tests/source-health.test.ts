@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { GET } from "../app/api/sources/health/route";
 import snapshotMetadata from "../data/smartduke-snapshot-meta.json";
+import { loadSmartDukeRows } from "../lib/smartduke-snapshot";
 
 function mockFetch(searchStatus = 500, metadataSha = snapshotMetadata.revision) {
   return async (input: RequestInfo | URL) => {
@@ -58,4 +59,11 @@ test("source monitor detects a newer publisher revision without silently replaci
   } finally {
     globalThis.fetch = originalFetch;
   }
+});
+
+
+test("bundled discovery snapshot passes its SHA-256 manifest, revision, row-count and unique-ID checks", () => {
+  const rows = loadSmartDukeRows();
+  assert.equal(rows.length, snapshotMetadata.rowsTotal);
+  assert.equal(new Set(rows.map((row) => row.slug)).size, snapshotMetadata.rowsTotal);
 });

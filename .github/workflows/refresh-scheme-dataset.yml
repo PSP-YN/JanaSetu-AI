@@ -10,7 +10,6 @@ permissions:
   pull-requests: write
   actions: write
 
-
 concurrency:
   group: janasetu-scheme-dataset-refresh
   cancel-in-progress: false
@@ -22,6 +21,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38
@@ -33,31 +34,69 @@ jobs:
           python scripts/refresh_smartduke_snapshot.py
           python scripts/audit_smartduke_snapshot.py
 
-      - name: Create a review pull request when the publisher has changed the dataset
+      - name: Create or recover the human-review pull request
         env:
           GH_TOKEN: ${{ github.token }}
+        shell: bash
         run: |
-          if git diff --quiet -- data/smartduke-snapshot.json.gz data/smartduke-snapshot-meta.json; then
-            echo "No new upstream dataset revision."
+          set -euo pipefail
+          generated_files=(
+            data/smartduke-snapshot.json.gz
+            data/smartduke-snapshot-meta.json
+            docs/smartduke-catalogue-audit.json
+            docs/smartduke-record-review-queue.csv
+          )
+          if git diff --quiet -- "${generated_files[@]}"; then
+            echo "No new publisher revision; the known-good snapshot remains unchanged."
             exit 0
           fi
-          revision=$(python -c 'import json; print(json.load(open("data/smartduke-snapshot-meta.json"))["revision"][:12])')
+
+          revision="$(python -c 'import json; print(json.load(open("data/smartduke-snapshot-meta.json"))["revision"][:12])')"
           branch="data-refresh/smartduke-${revision}"
-          if gh pr list --state open --head "$branch" --json number --jq 'length > 0'; then
-            echo "A review PR for this publisher revision is already open."
+          existing_pr_count="$(gh pr list --repo "$GITHUB_REPOSITORY" --state open --base main --head "$branch" --json number --jq 'length')"
+          if [[ "$existing_pr_count" -gt 0 ]]; then
+            ci_runs="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow ci.yml --branch "$branch" --json databaseId --jq 'length')"
+            if [[ "$ci_runs" -eq 0 ]]; then
+              gh workflow run ci.yml --repo "$GITHUB_REPOSITORY" --ref "$branch"
+              echo "Dispatched CI for the existing review PR."
+            else
+              echo "A review PR and CI run already exist for publisher revision ${revision}."
+            fi
             exit 0
           fi
+
           if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
-            echo "A branch for this publisher revision already exists; manual review is required."
-            exit 0
+            echo "Recovering the existing validated branch without overwriting its snapshot."
+            git restore --source=HEAD --staged --worktree -- "${generated_files[@]}"
+            git fetch origin "$branch"
+            git switch --track -c "$branch" "origin/$branch"
+            branch_revision="$(python -c 'import json; print(json.load(open("data/smartduke-snapshot-meta.json"))["revision"][:12])')"
+            if [[ "$branch_revision" != "$revision" ]]; then
+              echo "Existing branch revision ${branch_revision} does not match fetched revision ${revision}; refusing to create a misleading PR."
+              exit 1
+            fi
+            python scripts/audit_smartduke_snapshot.py
+            git add docs/smartduke-catalogue-audit.json docs/smartduke-record-review-queue.csv
+            if ! git diff --cached --quiet; then
+              git config user.name "github-actions[bot]"
+              git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+              git commit -m "Refresh review audit for SmartDuke revision ${revision}"
+              git push
+            fi
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git switch -c "$branch"
+            git add "${generated_files[@]}"
+            if git diff --cached --quiet; then
+              echo "No validated dataset changes to publish."
+              exit 0
+            fi
+            git commit -m "Refresh SmartDuke catalogue snapshot ${revision}"
+            git push --set-upstream origin "$branch"
           fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git switch -c "$branch"
-          git add data/smartduke-snapshot.json.gz data/smartduke-snapshot-meta.json docs/smartduke-catalogue-audit.json docs/smartduke-record-review-queue.csv
-          git commit -m "Refresh SmartDuke catalogue snapshot ${revision}"
-          git push --set-upstream origin "$branch"
-          gh pr create --draft --base main --head "$branch" \
+
+          gh pr create --repo "$GITHUB_REPOSITORY" --draft --base main --head "$branch" \
             --title "Review updated SmartDuke scheme catalogue snapshot ${revision}" \
-            --body "A new publisher revision was detected and validated. This PR updates the local full-text discovery index only. It does not approve scheme eligibility rules or establish official source accuracy. Review the source diff, collection date, data quality and attribution before merging. All imported records remain catalogue-only."
-          gh workflow run ci.yml --ref "$branch"
+            --body "A new publisher revision was detected and validated. This PR updates the local full-text discovery index only. It does not approve scheme eligibility rules or establish official source accuracy. Review the source diff, collection date, data quality and attribution before merging. All imported records remain catalogue-only. Because this PR is created using GITHUB_TOKEN, CI is explicitly dispatched with workflow_dispatch after PR creation; the dataset is never auto-merged."
+          gh workflow run ci.yml --repo "$GITHUB_REPOSITORY" --ref "$branch"

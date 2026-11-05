@@ -1,6 +1,6 @@
 # Production readiness assessment
 
-**Status: deployed prototype — not production-ready for real citizen records. Updated 4 November 2026.**
+**Status: deployed prototype — not production-ready for real citizen records. Updated 5 November 2026.**
 
 This assessment is intentionally strict. A successful Next.js build and public deployment do not establish operational, security, privacy or legal readiness.
 
@@ -49,6 +49,19 @@ Not yet demonstrated:
 - Production browser checks passed for English, Hindi, Kannada, Tamil, Telugu and Malayalam across home, Privacy and Terms: **18/18**; critical/serious axe violations: **0**; browser page errors: **0**.
 - The production deployment was automatically created by merging [PR #6](https://github.com/PSP-YN/JanaSetu-AI/pull/6). PRs #4 and #5 were closed as superseded; their stale branches were deleted.
 - `main` requires the CI workflow, Vercel and Vercel Preview Comments checks; it requires conversation resolution and blocks force-pushes and deletion.
+
+## Automated operations and canonical deployment — 5 November 2026
+
+- Canonical public production domain: [https://jana-setu-ai.vercel.app](https://jana-setu-ai.vercel.app). The Vercel project is Git-linked to this repository; merges to `main` produce the production deployment. Pull requests retain preview deployments for review.
+- Production deployment on `main` commit `131d628d2cc534c34e5b5e2b58b8693906015dde` is READY. Live checks returned HTTP 200 for the home page, avatar PNG, health, scheme catalogue, source-health, Privacy and Terms routes.
+- CI passed on the operations-hardening preview: 60 unit tests, 36 Playwright tests, type-check, production build, extension checks and production dependency audit. The avatar has a dedicated browser test and will also be covered by the production smoke test.
+- A daily GitHub Actions workflow checks the upstream SmartDuke revision. A changed snapshot is validated, audited and submitted as a draft PR; CI must pass and a human must review it before merging.
+- An hourly production monitor checks the canonical site, API health, catalogue counts, local snapshot integrity/row count and avatar asset. It opens one tracked GitHub issue on a sustained failure and closes that alert after recovery.
+- Dependabot checks npm and GitHub Actions dependencies weekly. Updates still pass repository CI and Vercel preview checks before merging.
+- The bundled SmartDuke snapshot remains 123 days old as of 5 November 2026. Metadata and rows endpoints are available, but publisher search is unavailable and no newer revision exists. This is a data freshness warning, not a service outage.
+- The Vercel project currently has no project-specific environment variables configured. The prototype has no authenticated citizen accounts, persistent server database or authorized government API integration.
+
+Operational details and recovery instructions: [Production operations runbook](operations-runbook.md).
 
 ## Blocking requirements before real citizen use
 

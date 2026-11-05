@@ -88,6 +88,14 @@ jobs:
             if (health.ok !== true) throw new Error("Health endpoint did not return ok=true");
           '
 
+          curl --fail --silent http://127.0.0.1:3000/profile-avatar.png > /tmp/janasetu-avatar.png
+          node -e '
+            const fs = require("node:fs");
+            const avatar = fs.readFileSync("/tmp/janasetu-avatar.png");
+            const signature = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
+            if (avatar.length < 100 || !avatar.subarray(0, 8).equals(signature)) throw new Error("Public profile avatar is missing or is not a valid PNG");
+          '
+
           curl --fail --silent http://127.0.0.1:3000/api/schemes > /tmp/janasetu-schemes.json
           node -e '
             const fs = require("node:fs");
