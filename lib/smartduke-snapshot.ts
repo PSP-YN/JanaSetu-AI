@@ -10,6 +10,11 @@ type Snapshot = { dataset: string; revision: string; rows: DatasetRow[]; rowsTot
 const SNAPSHOT_FILE = join(process.cwd(), "data", "smartduke-snapshot.json.gz");
 let cachedRows: DatasetRow[] | null = null;
 
+/**
+ * Loads the bundled third-party discovery index after verifying its manifest and record identifiers.
+ * @returns The validated rows, cached for the lifetime of this server runtime.
+ * @throws If the compressed snapshot, checksum, revision, row count, or identifiers are invalid.
+ */
 export function loadSmartDukeRows(): DatasetRow[] {
   if (cachedRows) return cachedRows;
 
