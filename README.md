@@ -18,7 +18,7 @@ JanaSetu is an independent benefits-readiness prototype. It is designed to compl
 
 ## Run locally
 
-Requirements: Node.js 20 or later.
+Requirements: Node.js 22 or later (matches CI and Vercel).
 
 ```bash
 npm install
@@ -76,7 +76,7 @@ This project is licensed under the MIT License; see [LICENSE](LICENSE). No gover
 
 ## Open-data scheme catalogue
 
-JanaSetu's Discover view now includes paginated, keyword-searchable records from the public Hugging Face Dataset Viewer for [SmartDuke Technologies — Indian Government Schemes Dataset 2026](https://huggingface.co/datasets/smartduketech/indian-government-schemes-2025), published under **CC BY 4.0**. Dataset snapshot: 5 July 2026. Attribution: SmartDuke Technologies, SchemeFit dataset, CC BY 4.0. The dataset card says its source is myScheme and that the publisher's parser produced the structured eligibility fields. These are **third-party machine-parsed data**, not official JanaSetu rules. JanaSetu does not use imported eligibility fields to decide whether a person qualifies. Users must verify current rules, benefits, application dates and destination URLs against the linked government department/myScheme page. Dataset viewer availability is an external dependency; JanaSetu shows an error and preserves the official myScheme link if it is unavailable.
+JanaSetu's Discover view includes paginated keyword/category search over a bundled 4,693-row snapshot of [SmartDuke Technologies — Indian Government Schemes Dataset 2026](https://huggingface.co/datasets/smartduketech/indian-government-schemes-2025), published under **CC BY 4.0**. Snapshot collection date: 5 July 2026; last publisher revision observed: 6 July 2026. The dataset card identifies myScheme as the source and SmartDuke's parser as the source of structured fields. These are **third-party machine-parsed discovery records**, not official JanaSetu rules. JanaSetu does not use imported eligibility fields to decide whether a person qualifies. The complete local index is searched without depending on the publisher's unavailable `/search` endpoint. The snapshot is stale under the 90-day policy; a daily workflow checks for publisher revisions and opens a draft review PR when a new validated revision appears. No dataset update is auto-merged or auto-approved. Users must verify current rules, benefits, application dates and destination URLs against the linked government department/myScheme page.
 
 This open-data integration does not claim all 4,693 rows are current active schemes or officially verified. The row count reflects the dataset snapshot and can change.
 

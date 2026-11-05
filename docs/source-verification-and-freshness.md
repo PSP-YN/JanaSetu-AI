@@ -2,7 +2,7 @@
 
 **Operational status: attention required — not approved for real-citizen eligibility decisions.**
 
-Last reviewed in repository: 4 November 2026.
+Last reviewed in repository: 5 November 2026.
 
 ## Source register
 
@@ -78,7 +78,7 @@ The public myScheme homepage advertises **5,150+ total schemes**, including **74
 
 The Terms of Use explicitly prohibit software such as bots and scraper tools from automatically accessing, monitoring or copying platform pages unless myScheme expressly authorizes this in writing. Therefore JanaSetu does **not** scrape the site, reverse-engineer private endpoints, or automate account-based access. The required next step is a written request for an approved API/API Setu feed, permitted fields, refresh cadence, redistribution rights, attribution, rate limits and retention terms.
 
-The external SmartDuke mirror remains a 4,693-row snapshot collected 5 July 2026, with repository last modified 6 July 2026. Its publisher has not published a newer revision as of this check. The application now searches all 4,693 local rows (not just the displayed page), but the snapshot itself remains stale under the 90-day policy. The new scheduled workflow checks for publisher revisions daily and opens a draft review PR; it does not auto-merge or auto-approve data.
+The external SmartDuke mirror remains a 4,693-row snapshot collected 5 July 2026, with repository last modified 6 July 2026. The live source monitor checked on 5 November 2026 reports metadata and row endpoints available, the indexed revision equal to the latest publisher revision, no update available, and the upstream `/search` endpoint unavailable. The snapshot is 123 days old and stale under the 90-day policy. A daily workflow checks for publisher revisions and opens a draft review PR only when a new validated revision appears; it never auto-merges or auto-approves data. The workflow's duplicate-PR check and recovery path are covered in the operations runbook.
 
 ### Third-party catalogue quality audit
 

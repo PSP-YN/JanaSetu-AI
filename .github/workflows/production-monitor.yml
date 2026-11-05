@@ -1,0 +1,94 @@
+name: JanaSetu production monitor
+
+on:
+  schedule:
+    - cron: "23 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: janasetu-production-monitor
+  cancel-in-progress: true
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check canonical production deployment
+        env:
+          PRODUCTION_URL: https://jana-setu-ai.vercel.app
+        shell: bash
+        run: |
+          set -euo pipefail
+          tmp="$(mktemp -d)"
+          trap 'rm -rf "$tmp"' EXIT
+
+          curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/" -o "$tmp/home.html"
+          grep -q 'profile-avatar.png' "$tmp/home.html"
+
+          curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/api/health" -o "$tmp/health.json"
+          curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/api/schemes" -o "$tmp/schemes.json"
+          curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/api/sources/health" -o "$tmp/sources.json"
+          curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/api/schemes/open-data?q=zupda%20vijlikaran&limit=5" -o "$tmp/search.json"
+          curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/profile-avatar.png" -o "$tmp/avatar.png"
+          curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/privacy" -o "$tmp/privacy.html"
+          curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/terms" -o "$tmp/terms.html"
+
+          node - "$tmp" <<'NODE'
+          const fs = require("node:fs");
+          const path = require("node:path");
+          const dir = process.argv[2];
+          const read = (name) => fs.readFileSync(path.join(dir, name), "utf8");
+          const health = JSON.parse(read("health.json"));
+          const schemes = JSON.parse(read("schemes.json"));
+          const sources = JSON.parse(read("sources.json"));
+          const search = JSON.parse(read("search.json"));
+          const source = sources.sources?.find((item) => item.id === "smartduke-scheme-catalogue");
+          if (health.ok !== true) throw new Error("Production health endpoint did not return ok=true");
+          if (schemes.catalogueTotal !== 142 || schemes.budgetLineItemLeadTotal !== 96 || schemes.officialSourceCatalogueOnlyTotal !== 42) throw new Error("Built-in catalogue provenance counts changed unexpectedly");
+          if (!source || source.localIndexAvailability !== "available" || source.indexedRows !== 4693) throw new Error("Bundled third-party snapshot is unavailable or incomplete");
+          if (search.searchMode !== "local-full-index" || search.total !== 1 || search.records?.[0]?.id !== "open-zvy") throw new Error("Local full-index search smoke test failed");
+          const avatar = fs.readFileSync(path.join(dir, "avatar.png"));
+          const png = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
+          if (avatar.length < 100 || !avatar.subarray(0, 8).equals(png)) throw new Error("Profile avatar is missing or invalid");
+          for (const name of ["privacy.html", "terms.html"]) {
+            const html = read(name);
+            if (!html.includes("JanaSetu") || html.length < 500) throw new Error("Policy route failed: " + name);
+          }
+          if (source.freshness === "stale") console.warn("::warning::The third-party discovery snapshot is stale; eligibility rules remain independent of this catalogue.");
+          if (source.searchAvailability === "unavailable") console.warn("::warning::The publisher search endpoint is unavailable; the bundled local index is being used.");
+          if (source.updateAvailable) console.warn("::warning::A new upstream dataset revision is available; the daily refresh workflow should prepare a review PR.");
+          console.log("Production smoke checks passed: home, health, catalogue, local search, snapshot integrity, avatar, privacy and terms.");
+          NODE
+
+      - name: Open one tracked incident if production checks fail
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh label create "ops:production-monitor" --repo "$GITHUB_REPOSITORY" --color "D73A4A" --description "Automated production availability alerts" --force
+          issue="$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --label "ops:production-monitor" --json number --jq '.[0].number // empty')"
+          if [[ -z "$issue" ]]; then
+            gh issue create --repo "$GITHUB_REPOSITORY" --title "[JanaSetu production monitor] Automated checks failed" --label "ops:production-monitor" --body "The hourly production monitor failed against https://jana-setu-ai.vercel.app. Inspect the failed run, Vercel deployment and route logs before changing production. This alert is deduplicated: only one open monitor issue is maintained.\n\nRun: https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          else
+            echo "An open production monitor issue already exists: #$issue"
+          fi
+
+      - name: Close the tracked incident after a successful recovery check
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          issue="$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --label "ops:production-monitor" --json number --jq '.[0].number // empty')"
+          if [[ -n "$issue" ]]; then
+            gh issue comment "$issue" --repo "$GITHUB_REPOSITORY" --body "The hourly production monitor has passed again for the canonical deployment. Closing this automated availability alert. Run: https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            gh issue close "$issue" --repo "$GITHUB_REPOSITORY"
+          fi
