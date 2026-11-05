@@ -20,7 +20,7 @@ Only the canonical domain above should be shared as the public website. Vercel p
 | JanaSetu CI | Every push to `main`, every PR to `main`, manual | Catalogue audit, review-packet guard, unit tests, TypeScript, production build, Playwright/accessibility, extension validation, production dependency audit and HTTP smoke tests |
 | Upstream dataset refresh | Daily at 03:17 UTC | Fetches the publisher's revision, validates all rows, regenerates the audit and opens a draft PR only when the dataset changes |
 | Production monitor | Hourly at minute 23 UTC | Checks home page, health, catalogue counts, full-index search, bundled index integrity, avatar PNG, Privacy and Terms |
-| Dependabot | Weekly on Monday | Proposes npm and GitHub Actions dependency updates |
+| Dependabot | Weekly on Monday | Proposes grouped npm and GitHub Actions dependency updates; TypeScript and Node type-definition major upgrades are held until an explicit runtime/toolchain migration |
 
 ### Data-refresh safety
 
