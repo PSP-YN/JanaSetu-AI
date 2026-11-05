@@ -43,8 +43,10 @@ npm run build
 - Explicit planner, scheme retrieval, deterministic rule evaluation, evidence-link construction and next-action generation.
 - Application draft endpoint and a local application tracker.
 - Document checklist and local metadata-only document register.
-- Multilingual deterministic text intake for English, Hindi, Kannada, Tamil, Telugu and Malayalam; optional browser speech recognition where supported. Extracted facts require review.\n- Field-by-field application preparation sheet with missing-value markers and a citizen-review record.
-- Official ecosystem links to myScheme, UMANG, DigiLocker and Common Service Centres; JanaSetu does not claim to replace or be integrated with them.\n- Browser persistence for the demo profile, assessments, document metadata and draft records, plus versioned JSON backup/restore for cross-device transfer. Screening, text extraction and draft creation run in the browser in the current local-first version. Browser speech recognition may use the browser vendor's service; data entered into an external government portal is governed by that portal.
+- Multilingual deterministic text intake for English, Hindi, Kannada, Tamil, Telugu and Malayalam; optional browser speech recognition where supported. Extracted facts require review.
+- Field-by-field application preparation sheet with missing-value markers and a citizen-review record.
+- Official ecosystem links to myScheme, UMANG, DigiLocker and Common Service Centres; JanaSetu does not claim to replace or be integrated with them.
+- Browser persistence for the demo profile, assessments, document metadata and draft records, plus versioned JSON backup/restore for cross-device transfer. Screening, text extraction and draft creation run in the browser in the current local-first version. Browser speech recognition may use the browser vendor's service; data entered into an external government portal is governed by that portal.
 
 ## Architecture and governance
 
@@ -53,6 +55,7 @@ See:
 - [Data provenance and rule notes](docs/data-provenance.md)
 - [Source verification and freshness register](docs/source-verification-and-freshness.md)
 - [Production readiness and release gates](docs/production-readiness.md)
+- [Production operations runbook](docs/operations-runbook.md)
 - [Privacy notice](app/privacy/page.tsx) · [Terms and limitations](app/terms/page.tsx)
 - [Competitor landscape](docs/competitor-analysis.md)
 - [Idea submission and six-slide narrative](docs/idea-submission.md)
