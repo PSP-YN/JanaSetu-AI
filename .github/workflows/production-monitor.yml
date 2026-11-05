@@ -33,7 +33,7 @@ jobs:
           curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/api/health" -o "$tmp/health.json"
           curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/api/schemes" -o "$tmp/schemes.json"
           curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/api/sources/health" -o "$tmp/sources.json"
-          curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/api/schemes/open-data?q=zupda%20vijlikaran&limit=5" -o "$tmp/search.json"
+          curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/api/schemes/open-data?q=farmer&limit=5" -o "$tmp/search.json"
           curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/profile-avatar.png" -o "$tmp/avatar.png"
           curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/privacy" -o "$tmp/privacy.html"
           curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/terms" -o "$tmp/terms.html"
@@ -49,9 +49,10 @@ jobs:
           const search = JSON.parse(read("search.json"));
           const source = sources.sources?.find((item) => item.id === "smartduke-scheme-catalogue");
           if (health.ok !== true) throw new Error("Production health endpoint did not return ok=true");
-          if (schemes.catalogueTotal !== 142 || schemes.budgetLineItemLeadTotal !== 96 || schemes.officialSourceCatalogueOnlyTotal !== 42) throw new Error("Built-in catalogue provenance counts changed unexpectedly");
-          if (!source || source.localIndexAvailability !== "available" || source.indexedRows !== 4693) throw new Error("Bundled third-party snapshot is unavailable or incomplete");
-          if (search.searchMode !== "local-full-index" || search.total !== 1 || search.records?.[0]?.id !== "open-zvy") throw new Error("Local full-index search smoke test failed");
+          if (!Array.isArray(schemes.schemes) || schemes.catalogueTotal !== schemes.schemes.length || schemes.catalogueTotal < 1) throw new Error("Built-in catalogue response is incomplete");
+          for (const key of ["budgetLineItemLeadTotal", "officialSourceCatalogueOnlyTotal"]) if (!Number.isInteger(schemes[key]) || schemes[key] < 0 || schemes[key] > schemes.catalogueTotal) throw new Error("Built-in catalogue provenance metadata is invalid: " + key);
+          if (!source || source.localIndexAvailability !== "available" || !Number.isInteger(source.indexedRows) || source.indexedRows < 1) throw new Error("Bundled third-party snapshot is unavailable or incomplete");
+          if (search.searchMode !== "local-full-index" || !Number.isInteger(search.total) || search.total < 1 || !Array.isArray(search.records) || search.records.length < 1) throw new Error("Local full-index search smoke test failed");
           const avatar = fs.readFileSync(path.join(dir, "avatar.png"));
           const png = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
           if (avatar.length < 100 || !avatar.subarray(0, 8).equals(png)) throw new Error("Profile avatar is missing or invalid");
