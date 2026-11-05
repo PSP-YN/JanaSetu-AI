@@ -53,8 +53,8 @@ Not yet demonstrated:
 ## Automated operations and canonical deployment — 5 November 2026
 
 - Canonical public production domain: [https://jana-setu-ai.vercel.app](https://jana-setu-ai.vercel.app). The Vercel project is Git-linked to this repository; merges to `main` produce the production deployment. Pull requests retain preview deployments for review.
-- Production deployment on `main` commit `131d628d2cc534c34e5b5e2b58b8693906015dde` is READY. Live checks returned HTTP 200 for the home page, avatar PNG, health, scheme catalogue, source-health, Privacy and Terms routes.
-- CI passed on the operations-hardening preview: 60 unit tests, 36 Playwright tests, type-check, production build, extension checks and production dependency audit. The avatar has a dedicated browser test and will also be covered by the production smoke test.
+- Production deployment on `main` commit `ef2e079bfeb08605c60fca6f7e9f6e15a6186d99` is READY. Live checks returned HTTP 200 for the home page, avatar PNG, health, scheme catalogue, source-health, Privacy and Terms routes.
+- CI passed on the production commit: 60 unit tests, 36 Playwright tests, type-check, production build, extension checks and production dependency audit (0 vulnerabilities). The avatar has a dedicated browser test and will also be covered by the production smoke test.
 - A daily GitHub Actions workflow checks the upstream SmartDuke revision. A changed snapshot is validated, audited and submitted as a draft PR; CI must pass and a human must review it before merging.
 - An hourly production monitor checks the canonical site, API health, catalogue counts, local snapshot integrity/row count and avatar asset. It opens one tracked GitHub issue on a sustained failure and closes that alert after recovery.
 - Dependabot checks npm and GitHub Actions dependencies weekly. Updates still pass repository CI and Vercel preview checks before merging.
