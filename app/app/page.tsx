@@ -810,6 +810,10 @@ export default function Home() {
   const [expandedApplication, setExpandedApplication] = useState("");
   const [notice, setNotice] = useState("");
   const [hydrated, setHydrated] = useState(false);
+  const [cloudUserId, setCloudUserId] = useState("");
+  const [cloudReady, setCloudReady] = useState(false);
+  const [cloudSavedAt, setCloudSavedAt] = useState("");
+  const [cloudError, setCloudError] = useState("");
   const [showMobileNav, setShowMobileNav] = useState(false);
   const [expandedScheme, setExpandedScheme] = useState("");
   const [backupBusy, setBackupBusy] = useState(false);
@@ -885,23 +889,52 @@ export default function Home() {
   }, [tab, query, category, openDataOffset]);
 
   useEffect(() => {
-    try {
-      const read = (key: string, fallback: any) => {
-        const value = localStorage.getItem(key);
-        return value ? JSON.parse(value) : fallback;
-      };
-      const storedProfile = parseBackupProfile(read(STORAGE.profile, EMPTY_PROFILE));
-      setProfile(storedProfile || EMPTY_PROFILE);
-      setLanguage(parseBackupLanguage(read(STORAGE.language, "en")));
-      setApplications(invalidateUnapprovedApplications(parseBackupApplications(read(STORAGE.applications, []), { trustLocalStorage: true })));
-      setDocuments(parseBackupDocuments(read(STORAGE.documents, [])));
-      setTasks(parseBackupTasks(read(STORAGE.tasks, [])));
-      setAssessments(invalidateUnapprovedAssessments(parseBackupAssessments(read(STORAGE.assessments, []), { trustLocalStorage: true })));
-      if (!storedProfile) setNotice(t("noticeStorageRecovered"));
-    } catch {
-      setNotice(t("noticeStorageRecovered"));
-    }
+    const read = (key: string, fallback: any) => {
+      try { const value = localStorage.getItem(key); return value ? JSON.parse(value) : fallback; }
+      catch { return fallback; }
+    };
+    const localProfile = parseBackupProfile(read(STORAGE.profile, EMPTY_PROFILE));
+    const localLanguage = parseBackupLanguage(read(STORAGE.language, "en"));
+    const localApplications = invalidateUnapprovedApplications(parseBackupApplications(read(STORAGE.applications, []), { trustLocalStorage: true }));
+    const localDocuments = parseBackupDocuments(read(STORAGE.documents, []));
+    const localTasks = parseBackupTasks(read(STORAGE.tasks, []));
+    const localAssessments = invalidateUnapprovedAssessments(parseBackupAssessments(read(STORAGE.assessments, []), { trustLocalStorage: true }));
+    setProfile(localProfile || EMPTY_PROFILE);
+    setLanguage(localLanguage);
+    setApplications(localApplications);
+    setDocuments(localDocuments);
+    setTasks(localTasks);
+    setAssessments(localAssessments);
+    if (!localProfile) setNotice(t("noticeStorageRecovered"));
     setHydrated(true);
+
+    let active = true;
+    (async () => {
+      try {
+        const authResponse = await fetch("/api/auth", { cache: "no-store" });
+        const auth = authResponse.ok ? await authResponse.json() : null;
+        if (!active) return;
+        if (!auth?.user?.id) { setCloudReady(true); return; }
+        setCloudUserId(String(auth.user.id));
+        const response = await fetch("/api/workspace", { cache: "no-store" });
+        if (!response.ok) throw new Error("Cloud workspace could not be loaded.");
+        const result = await response.json();
+        const remote = result.workspace;
+        if (remote) {
+          const remoteProfile = parseBackupProfile(remote.profile_data);
+          setProfile(remoteProfile || EMPTY_PROFILE);
+          setLanguage(parseBackupLanguage(remote.preferred_language || "en"));
+          setApplications(invalidateUnapprovedApplications(parseBackupApplications(remote.application_drafts, { trustLocalStorage: true })));
+          setDocuments(parseBackupDocuments(remote.document_refs));
+          setTasks(parseBackupTasks(remote.reminders));
+          setAssessments(invalidateUnapprovedAssessments(parseBackupAssessments(remote.assessments, { trustLocalStorage: true })));
+        }
+        if (active) setCloudReady(true);
+      } catch {
+        if (active) { setCloudError("Cloud sync could not be loaded. Local changes are still available on this device."); setCloudReady(true); }
+      }
+    })();
+    return () => { active = false; };
   }, []);
 
   useEffect(() => {
@@ -913,6 +946,25 @@ export default function Home() {
     localStorage.setItem(STORAGE.tasks, JSON.stringify(tasks));
     localStorage.setItem(STORAGE.assessments, JSON.stringify(assessments));
   }, [hydrated, profile, language, applications, documents, tasks, assessments]);
+
+  useEffect(() => {
+    if (!hydrated || !cloudReady || !cloudUserId) return;
+    const timer = window.setTimeout(async () => {
+      try {
+        const response = await fetch("/api/workspace", {
+          method: "PUT", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ profile_data: profile, preferred_language: language, application_drafts: applications, document_refs: documents, reminders: tasks, assessments })
+        });
+        if (!response.ok) throw new Error("Cloud save failed.");
+        const result = await response.json();
+        setCloudSavedAt(result.updated_at || new Date().toISOString());
+        setCloudError("");
+      } catch {
+        setCloudError("Cloud sync failed. Your latest changes remain in this browser; export a backup before switching devices.");
+      }
+    }, 800);
+    return () => window.clearTimeout(timer);
+  }, [hydrated, cloudReady, cloudUserId, profile, language, applications, documents, tasks, assessments]);
 
   useEffect(() => {
     if (!notice) return;
@@ -1163,6 +1215,10 @@ export default function Home() {
               <div className="date-chip"><CalendarClock size={15}/> {new Date().toLocaleDateString(({ en: "en-IN", hi: "hi-IN", kn: "kn-IN", ta: "ta-IN", te: "te-IN", ml: "ml-IN" } as const)[language], { weekday: "short", day: "numeric", month: "short" })}</div>
             </div>
 
+            <section className="cloud-status" aria-live="polite">
+              <span className={cloudUserId && cloudSavedAt && !cloudError ? "cloud-status-dot synced" : "cloud-status-dot"} />
+              <span>{cloudError || (cloudUserId ? (cloudSavedAt ? "Cloud workspace connected · latest save " + new Date(cloudSavedAt).toLocaleTimeString() : "Connecting your secure cloud workspace…") : "Local workspace · sign in above to enable cross-device sync")}</span>
+            </section>
             <section className="hero-panel">
               <div className="hero-content">
                 <div className="hero-label"><span/> {t("clearerWay")}</div>
