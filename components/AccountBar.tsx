@@ -21,5 +21,5 @@ export default function AccountBar() {
     finally { setBusy(false); }
   }
   if (!ready) return <div className="account-bar" aria-live="polite">Checking account…</div>;
-  return <div className="account-bar">{user ? <><span className="account-email">{user.email || "Citizen account"}</span><span className="account-sync">Cloud account</span><button onClick={signOut} disabled={busy}>{busy?"Signing out…":"Sign out"}</button></> : <><span className="account-sync">Local workspace · sign in to sync across devices</span><Link href="/auth">Sign in / Create account</Link></>}</div>;
+  return <div className="account-bar">{user ? <><Link href="/app/automation">Applications &amp; automation</Link><span className="account-email">{user.email || "Citizen account"}</span><span className="account-sync">Cloud account</span><button onClick={signOut} disabled={busy}>{busy?"Signing out…":"Sign out"}</button></> : <><span className="account-sync">Local workspace · sign in to sync across devices</span><Link href="/app/automation">Applications &amp; automation</Link><Link href="/auth">Sign in / Create account</Link></>}</div>;
 }
