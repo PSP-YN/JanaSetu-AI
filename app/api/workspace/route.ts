@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getVerifiedSupabaseSession } from "@/lib/supabase/rest";
+import { parseBackupProfile, parseBackupApplications, parseBackupDocuments, parseBackupTasks, parseBackupAssessments } from "@/lib/backup-validation";
+import { invalidateUnapprovedAssessments, invalidateUnapprovedApplications } from "@/lib/assessment-safety";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -34,8 +36,15 @@ export async function PUT(request: NextRequest) {
     const objectField = (value: unknown) => value !== null && typeof value === "object" && !Array.isArray(value);
     const arrayField = (value: unknown) => Array.isArray(value);
     if (!objectField(input.profile_data) || !arrayField(input.application_drafts) || !arrayField(input.document_refs) || !arrayField(input.reminders) || !arrayField(input.assessments)) return json({ error: "Workspace fields have invalid types." }, 400);
+    if (![input.application_drafts,input.document_refs,input.reminders,input.assessments].every(value => (value as unknown[]).length <= 100)) return json({ error: "Each workspace collection is limited to 100 records." }, 400);
     if (!["en","hi","kn","ta","te","ml"].includes(String(input.preferred_language))) return json({ error: "Unsupported language." }, 400);
-    const payload = { user_id: session.user.id, profile_data: input.profile_data, preferred_language: input.preferred_language, application_drafts: input.application_drafts, document_refs: input.document_refs, reminders: input.reminders, assessments: input.assessments, updated_at: new Date().toISOString() };
+    const profile = parseBackupProfile(input.profile_data);
+    if (!profile) return json({ error: "Citizen profile contains unsupported or invalid fields." }, 400);
+    const applications = invalidateUnapprovedApplications(parseBackupApplications(input.application_drafts, { trustLocalStorage: true }));
+    const documents = parseBackupDocuments(input.document_refs);
+    const reminders = parseBackupTasks(input.reminders);
+    const assessments = invalidateUnapprovedAssessments(parseBackupAssessments(input.assessments, { trustLocalStorage: true }));
+    const payload = { user_id: session.user.id, profile_data: profile, preferred_language: input.preferred_language, application_drafts: applications, document_refs: documents, reminders, assessments, updated_at: new Date().toISOString() };
     const response = await fetch(session.url + "/rest/v1/citizen_workspaces?on_conflict=user_id", {
       method: "POST", headers: { apikey: session.key, Authorization: "Bearer " + session.accessToken, "Content-Type": "application/json", Prefer: "resolution=merge-duplicates,return=representation" },
       body: JSON.stringify(payload), cache: "no-store"
