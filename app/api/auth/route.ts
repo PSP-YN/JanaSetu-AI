@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
       const url = process.env.NEXT_PUBLIC_SUPABASE_URL; const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
       if (!url || !key) return json({ error: "Authentication service is not configured." }, 503);
       const redirect = request.nextUrl.origin + "/auth/callback?next=/auth/update-password";
-      const upstream = await fetch(url.replace(/\\/$/, "") + "/auth/v1/recover?redirect_to=" + encodeURIComponent(redirect), { method: "POST", headers: { apikey: key, "Content-Type": "application/json" }, body: JSON.stringify({ email }), cache: "no-store" });
+      const upstream = await fetch((url.endsWith("/") ? url.slice(0, -1) : url) + "/auth/v1/recover?redirect_to=" + encodeURIComponent(redirect), { method: "POST", headers: { apikey: key, "Content-Type": "application/json" }, body: JSON.stringify({ email }), cache: "no-store" });
       if (!upstream.ok) return json({ error: "Password reset could not be requested. Try again later." }, 502);
       return json({ requested: true, message: "If this address is registered, a password reset link will be sent." });
     }
