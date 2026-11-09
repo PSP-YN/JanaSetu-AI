@@ -115,3 +115,13 @@ test("cloud synchronization uses its own consent purpose", () => {
   assert.match(sql, /cloud_workspace_sync/);
   assert.match(sql, /has_active_citizen_consent\(v_user,'cloud_workspace_sync',null\)/);
 });
+
+test("consent capture validates exact purpose scope and legal approval", () => {
+  const sql = read("supabase/migrations/20261109135846_restore_guarded_consent_capture.sql");
+  assert.match(sql, /cloud_workspace_sync/);
+  assert.match(sql, /consent_policy_not_approved/);
+  assert.match(sql, /consent_scope_mismatch/);
+  assert.match(sql, /update public\.citizen_consents set revoked_at = now\(\)/);
+  assert.match(sql, /create_application_case/);
+  assert.match(sql, /workspace_sync/);
+});
