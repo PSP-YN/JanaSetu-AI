@@ -25,6 +25,25 @@ export async function POST(request: NextRequest) {
       await clearSupabaseSession();
       return json({ signedOut: true });
     }
+    if (action === "recover") {
+      const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
+      if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email) || email.length > 254) return json({ error: "Enter a valid email address." }, 400);
+      const url = process.env.NEXT_PUBLIC_SUPABASE_URL; const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      if (!url || !key) return json({ error: "Authentication service is not configured." }, 503);
+      const redirect = request.nextUrl.origin + "/auth/callback?next=/auth/update-password";
+      const upstream = await fetch(url.replace(/\\/$/, "") + "/auth/v1/recover?redirect_to=" + encodeURIComponent(redirect), { method: "POST", headers: { apikey: key, "Content-Type": "application/json" }, body: JSON.stringify({ email }), cache: "no-store" });
+      if (!upstream.ok) return json({ error: "Password reset could not be requested. Try again later." }, 502);
+      return json({ requested: true, message: "If this address is registered, a password reset link will be sent." });
+    }
+    if (action === "updatePassword") {
+      const password = typeof body.password === "string" ? body.password : "";
+      if (password.length < 12 || password.length > 128) return json({ error: "Use a password between 12 and 128 characters." }, 400);
+      const session = await getVerifiedSupabaseSession();
+      if (!session) return json({ error: "Your password reset session has expired. Request a new link." }, 401);
+      const upstream = await fetch(session.url + "/auth/v1/user", { method: "PUT", headers: { apikey: session.key, Authorization: "Bearer " + session.accessToken, "Content-Type": "application/json" }, body: JSON.stringify({ password }), cache: "no-store" });
+      if (!upstream.ok) return json({ error: "Password could not be updated. Request a new reset link." }, 400);
+      return json({ updated: true });
+    }
     if (action === "establish") {
       const access_token = typeof body.access_token === "string" ? body.access_token : "";
       const refresh_token = typeof body.refresh_token === "string" ? body.refresh_token : "";
@@ -46,7 +65,7 @@ export async function POST(request: NextRequest) {
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
     if (!url || !key) return json({ error: "JanaSetu cloud accounts are not configured on this deployment yet." }, 503);
-    const endpoint = action === "signup" ? "/auth/v1/signup?redirect_to=" + encodeURIComponent(request.nextUrl.origin + "/auth/callback") : "/auth/v1/token?grant_type=password";
+    const endpoint = action === "signup" ? "/auth/v1/signup?redirect_to=" + encodeURIComponent(request.nextUrl.origin + "/auth/callback?next=/app") : "/auth/v1/token?grant_type=password";
     const upstream = await fetch(url.replace(/\/$/, "") + endpoint, {
       method: "POST", headers: { apikey: key, "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }), cache: "no-store"
