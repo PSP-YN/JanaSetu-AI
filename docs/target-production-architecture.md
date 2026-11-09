@@ -71,3 +71,8 @@ Use free plans for development and a controlled pilot only. Do not promise a fre
 7. Add independently reviewed scheme publication and freshness workflows.
 8. Add only permitted portal integrations, with confirmation gates and receipt verification.
 9. Run security, privacy, accessibility, disaster-recovery and load tests before expanding public access.
+
+
+## Government integration authorization boundary
+
+The government integration plan is documented in `docs/government-integration-access-plan.md`. Do not scrape or automate myScheme without express written authorization; its published Terms of Use prohibit bots/scrapers absent written permission. API Setu consumer access, individual API subscriptions, publisher approvals and DigiLocker requester onboarding are separate requirements. Each department/scheme needs a reviewed adapter manifest and explicit production approval. No portal submission adapter is currently approved.
