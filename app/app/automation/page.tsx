@@ -6,6 +6,7 @@ import Link from "next/link";
 type Scheme={id:string;slug:string;name:string;category:string;current_version_id:string|null};
 type Case={id:string;scheme_version_id:string;status:string;created_at:string;external_reference:string|null};
 type Run={id:string;case_id:string;action_type:string;status:string;requires_human_confirmation:boolean;created_at:string;expires_at:string;result_summary:Record<string,unknown>};
+type Reminder={id:string;case_id:string|null;title:string;due_at:string;channel:string;status:string};
 type User={id:string;email:string|null};
 
 export default function AutomationCenterPage(){
@@ -13,6 +14,7 @@ export default function AutomationCenterPage(){
   const [schemes,setSchemes]=useState<Scheme[]>([]);
   const [cases,setCases]=useState<Case[]>([]);
   const [runs,setRuns]=useState<Run[]>([]);
+  const [reminders,setReminders]=useState<Reminder[]>([]);
   const [busy,setBusy]=useState(true);
   const [error,setError]=useState("");
   const [refreshedAt,setRefreshedAt]=useState("");
@@ -25,11 +27,11 @@ export default function AutomationCenterPage(){
       const schemeData=await schemeRes.json();
       setUser(auth.user||null);setSchemes(schemeData.schemes||[]);
       if(auth.user){
-        const [caseRes,runRes]=await Promise.all([fetch("/api/applications",{cache:"no-store"}),fetch("/api/automation/runs",{cache:"no-store"})]);
-        if(!caseRes.ok||!runRes.ok)throw new Error("Your application history could not be loaded.");
-        const [caseData,runData]=await Promise.all([caseRes.json(),runRes.json()]);
-        setCases(caseData.applications||[]);setRuns(runData.runs||[]);
-      }else{setCases([]);setRuns([]);}
+        const [caseRes,runRes,reminderRes]=await Promise.all([fetch("/api/applications",{cache:"no-store"}),fetch("/api/automation/runs",{cache:"no-store"}),fetch("/api/reminders",{cache:"no-store"})]);
+        if(!caseRes.ok||!runRes.ok||!reminderRes.ok)throw new Error("Your application and reminder history could not be loaded.");
+        const [caseData,runData,reminderData]=await Promise.all([caseRes.json(),runRes.json(),reminderRes.json()]);
+        setCases(caseData.applications||[]);setRuns(runData.runs||[]);setReminders(reminderData.reminders||[]);
+      }else{setCases([]);setRuns([]);setReminders([]);}
       setRefreshedAt(new Date().toLocaleTimeString());
     }catch(e){setError(e instanceof Error?e.message:"Could not refresh automation status.");}
     finally{setBusy(false);}
@@ -44,9 +46,10 @@ export default function AutomationCenterPage(){
       <article><span>Published schemes</span><strong>{schemes.length}</strong><small>Eligible for application creation</small></article>
       <article><span>Your applications</span><strong>{cases.length}</strong><small>Persisted application cases</small></article>
       <article><span>Automation runs</span><strong>{runs.length}</strong><small>Consent and confirmation tracked</small></article>
+      <article><span>In-app reminders</span><strong>{reminders.length}</strong><small>Scheduled by confirmed workflows</small></article>
     </section>
     {schemes.length===0&&<section className="automation-panel automation-hold"><span className="automation-tag">Application creation locked</span><h2>No independently approved schemes are published yet</h2><p>The current database has no published scheme versions. This is an intentional safety gate: discovery records cannot become application cases until source accuracy and eligibility rules have been independently reviewed and approved.</p><p>Once a scheme is approved and published, it will appear here. JanaSetu will then prepare checklists and permitted application steps; it will never claim an application was submitted without a verified government acknowledgement.</p><Link href="/app" className="automation-text-link">Return to scheme discovery →</Link></section>}
-    {user&&<div className="automation-columns"><section className="automation-panel"><h2>Your application cases</h2>{cases.length===0?<p className="automation-empty">No application cases have been created for this account.</p>:<ul>{cases.map(c=><li key={c.id}><strong>{statusLabel(c.status)}</strong><small>Case {c.id.slice(0,8)} · {new Date(c.created_at).toLocaleDateString()}</small>{c.external_reference&&<small>Official reference: {c.external_reference}</small>}</li>)}</ul>}</section><section className="automation-panel"><h2>Automation history</h2>{runs.length===0?<p className="automation-empty">No automation runs. Requests require purpose-specific consent and a separate confirmation.</p>:<ul>{runs.map(run=><li key={run.id}><strong>{statusLabel(run.action_type)} · {statusLabel(run.status)}</strong><small>{new Date(run.created_at).toLocaleString()}</small><small>{run.requires_human_confirmation?"Citizen confirmation required":"No confirmation flag"}</small></li>)}</ul>}</section></div>}
+    {user&&<div className="automation-columns"><section className="automation-panel"><h2>Your application cases</h2>{cases.length===0?<p className="automation-empty">No application cases have been created for this account.</p>:<ul>{cases.map(c=><li key={c.id}><strong>{statusLabel(c.status)}</strong><small>Case {c.id.slice(0,8)} · {new Date(c.created_at).toLocaleDateString()}</small>{c.external_reference&&<small>Official reference: {c.external_reference}</small>}</li>)}</ul>}</section><section className="automation-panel"><h2>Automation history</h2>{runs.length===0?<p className="automation-empty">No automation runs. Requests require purpose-specific consent and a separate confirmation.</p>:<ul>{runs.map(run=><li key={run.id}><strong>{statusLabel(run.action_type)} · {statusLabel(run.status)}</strong><small>{new Date(run.created_at).toLocaleString()}</small><small>{run.requires_human_confirmation?"Citizen confirmation required":"No confirmation flag"}</small></li>)}</ul>}</section><section className="automation-panel"><h2>In-app reminders</h2>{reminders.length===0?<p className="automation-empty">No reminders have been scheduled for this account.</p>:<ul>{reminders.map(reminder=><li key={reminder.id}><strong>{reminder.title}</strong><small>{new Date(reminder.due_at).toLocaleString()} · {statusLabel(reminder.status)}</small><small>Delivery: {reminder.channel.replaceAll("_"," ")}</small></li>)}</ul>}</section></div>}
     <section className="automation-panel"><h2>What JanaSetu can automate</h2><div className="automation-capabilities"><div><strong>Internal preparation</strong><p>Generate document checklists from independently approved scheme rules and schedule in-app reminders after consent and confirmation.</p></div><div><strong>Government portal actions</strong><p>Remain blocked until the department grants API/partner access, a scheme-specific adapter passes acceptance tests, and the citizen confirms the exact destination and action.</p></div><div><strong>Submission proof</strong><p>A case is marked submitted only after a verified official acknowledgement or receipt is recorded.</p></div></div></section>
     {refreshedAt&&<p className="automation-refresh-note">Last checked {refreshedAt}. {busy?"":"Data is refreshed on request."}</p>}
   </main>;
