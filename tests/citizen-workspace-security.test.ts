@@ -74,7 +74,7 @@ test("citizen application APIs use the signed-in caller token", () => {
 });
 
 test("revoked consent cannot authorize a later automation run", () => {
-  const consent = read("supabase/migrations/20261109134827_enforce_consent_revocation_and_scope.sql");
+  const consent = read("supabase/migrations/20261109135846_restore_guarded_consent_capture.sql");
   const confirm = read("supabase/migrations/20261109134847_restore_expiry_and_scope_check.sql");
   assert.match(consent, /update public\.citizen_consents set revoked_at = now\(\)/);
   assert.match(consent, /consent_scope_mismatch/);
