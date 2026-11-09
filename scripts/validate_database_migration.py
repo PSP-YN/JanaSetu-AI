@@ -22,7 +22,7 @@ required = {
     "profiles", "scheme_sources", "schemes", "scheme_versions",
     "scheme_approvals", "application_cases", "application_events",
     "application_documents", "citizen_consents", "citizen_reminders",
-    "automation_runs", "audit_events",
+    "automation_runs", "audit_events", "citizen_workspaces",
 }
 if tables != required:
     raise SystemExit(f"Unexpected schema inventory. expected={sorted(required)} actual={sorted(tables)}")
