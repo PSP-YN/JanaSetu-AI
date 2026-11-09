@@ -18,12 +18,13 @@ This document is a working specification for the citizen-facing notice and conse
 
 JanaSetu may process citizen information only for the specific purpose selected and accepted by the citizen:
 
-1. Account and profile storage, if cloud-storage consent is separately granted.
-2. Scheme discovery and preliminary eligibility screening.
-3. Application preparation and document checklist generation.
-4. In-app reminder scheduling.
-5. Assisted navigation or form preparation for an identified official destination, only where permitted.
-6. Submission to a government authority only through an approved integration, with separate purpose-specific consent and point-of-action confirmation.
+1. Account and profile storage for an application case, if profile-storage consent is separately granted.
+2. Cloud workspace synchronization across devices, only after separate cloud-workspace-sync consent.
+3. Scheme discovery and preliminary eligibility screening.
+4. Application preparation and document checklist generation.
+5. In-app reminder scheduling.
+6. Assisted navigation or form preparation for an identified official destination, only where permitted.
+7. Submission to a government authority only through an approved integration, with separate purpose-specific consent and point-of-action confirmation.
 
 A sign-in or account creation is not consent to every purpose above.
 
