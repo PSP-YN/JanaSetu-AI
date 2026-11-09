@@ -17,7 +17,7 @@ export async function GET() {
     });
     if (!response.ok) {
       const failure = await response.json().catch(() => ({}));
-      if (String(failure.message || "").includes("profile_storage_consent_required")) return json({ error: "Cloud storage is disabled until the profile-storage privacy policy is legally approved and you explicitly accept it. Your data remains on this device." }, 403);
+      if (String(failure.message || "").includes("profile_storage_consent_required")) return json({ error: "Cloud synchronization is disabled until the separate cloud-workspace privacy policy is legally approved and you explicitly accept it. Your data remains on this device." }, 403);
       return json({ error: "Cloud workspace is unavailable." }, 503);
     }
     return json({ user: session.user, workspace: await response.json() });
