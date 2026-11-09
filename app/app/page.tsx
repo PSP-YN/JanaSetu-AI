@@ -931,7 +931,7 @@ export default function Home() {
         }
         if (active) setCloudReady(true);
       } catch {
-        if (active) { setCloudError("Cloud sync could not be loaded. Local changes are still available on this device."); setCloudReady(true); }
+        if (active) { setCloudError("Cloud sync could not be loaded. Local changes are still available on this device; no cloud overwrite was attempted."); setCloudReady(false); }
       }
     })();
     return () => { active = false; };
