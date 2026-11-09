@@ -20,7 +20,7 @@ export default function AuthCallbackPage() {
         const response=await fetch("/api/auth",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"establish",access_token,refresh_token})});
         const result=await response.json();
         if(!response.ok || !result.authenticated) throw new Error(result.error || "Could not verify the confirmation link.");
-        if(active){setMessage("Email confirmed. Opening your citizen workspace…");window.history.replaceState(null,"",window.location.pathname);router.replace("/app");router.refresh();}
+        if(active){setMessage("Email confirmed. Opening your citizen workspace…");const next = new URLSearchParams(window.location.search).get("next");const safeNext = next && next.startsWith("/") && !next.startsWith("//") ? next : "/app";window.history.replaceState(null,"",window.location.pathname);router.replace(safeNext);router.refresh();}
       }catch(cause){if(active)setError(cause instanceof Error?cause.message:"Confirmation failed.");}
     })();
     return ()=>{active=false;};
