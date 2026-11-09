@@ -18,7 +18,7 @@ This document is a working specification for the citizen-facing notice and conse
 
 JanaSetu may process citizen information only for the specific purpose selected and accepted by the citizen:
 
-1. Account and profile storage for an application case, if profile-storage consent is separately granted.
+1. Profile snapshot storage inside a specific application case, only after profile-storage consent bound to that scheme version and action.
 2. Cloud workspace synchronization across devices, only after separate cloud-workspace-sync consent.
 3. Scheme discovery and preliminary eligibility screening.
 4. Application preparation and document checklist generation.
