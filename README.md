@@ -41,7 +41,7 @@ Production deployments are triggered by the protected main-branch release flow. 
 - [Citizen data and automation policy](docs/citizen-data-and-automation-policy.md)
 - [Production readiness](docs/production-readiness.md)
 
-The Supabase citizen-data migration is a prepared foundation only. It has not been applied to a dedicated JanaSetu project. The current workspace still uses browser-local storage.
+A dedicated JanaSetu Supabase project now exists in Mumbai. The citizen-data foundation and least-privilege grants are applied; all 12 public tables have RLS enabled. The current workspace still uses browser-local storage until authenticated frontend integration and cross-user tests are complete.
 
 ## Previous detailed project documentation
 
