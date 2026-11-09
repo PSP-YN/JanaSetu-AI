@@ -23,21 +23,22 @@ export async function POST(request: NextRequest) {
     const raw = await request.text();
     if (new TextEncoder().encode(raw).byteLength > 48 * 1024) return json({ error: "Application profile is too large." }, 413);
     const input = JSON.parse(raw) as Record<string, unknown>;
-    if (Object.keys(input).some(k => !["scheme_slug","profile_snapshot","idempotency_key"].includes(k))) return json({ error: "Unsupported application field." }, 400);
+    if (Object.keys(input).some(k => !["scheme_slug","profile_snapshot","idempotency_key","consent_id"].includes(k))) return json({ error: "Unsupported application field." }, 400);
     const scheme_slug = typeof input.scheme_slug === "string" ? input.scheme_slug : "";
     const idempotency_key = typeof input.idempotency_key === "string" ? input.idempotency_key : "";
+    const consent_id = typeof input.consent_id === "string" ? input.consent_id : "";
     const profile = parseBackupProfile(input.profile_snapshot);
-    if (!/^[a-z0-9-]{2,120}$/.test(scheme_slug) || !profile || idempotency_key.length < 8 || idempotency_key.length > 120) return json({ error: "Invalid application draft." }, 400);
+    if (!/^[a-z0-9-]{2,120}$/.test(scheme_slug) || !profile || !/^[0-9a-f-]{36}$/i.test(consent_id) || idempotency_key.length < 8 || idempotency_key.length > 120) return json({ error: "Invalid application draft." }, 400);
     const session = await getVerifiedSupabaseSession();
     if (!session) return json({ error: "Sign in required." }, 401);
     const response = await fetch(session.url + "/rest/v1/rpc/create_application_case", {
       method: "POST", headers: { apikey: session.key, Authorization: "Bearer " + session.accessToken, "Content-Type": "application/json" },
-      body: JSON.stringify({ p_scheme_slug: scheme_slug, p_profile_snapshot: profile, p_idempotency_key: idempotency_key }), cache: "no-store"
+      body: JSON.stringify({ p_scheme_slug: scheme_slug, p_profile_snapshot: profile, p_idempotency_key: idempotency_key, p_consent_id: consent_id }), cache: "no-store"
     });
     if (!response.ok) {
       const failure = await response.json().catch(() => ({}));
       const message = String(failure.message || "");
-      return json({ error: message.includes("scheme_not_published_or_approved") ? "This scheme has not completed independent verification and publication. No application was created." : "Application draft could not be created." }, response.status === 401 ? 401 : 409);
+      return json({ error: message.includes("scheme_not_published_or_approved") ? "This scheme has not completed independent verification and publication. No application was created." : message.includes("consent_policy_not_approved") || message.includes("profile_storage_consent_required") ? "An approved profile-storage consent is required before an application draft can store your information." : "Application draft could not be created." }, response.status === 401 ? 401 : 409);
     }
     return json({ case_id: await response.json(), status: "preparing" }, 201);
   } catch { return json({ error: "Application draft could not be created." }, 503); }
