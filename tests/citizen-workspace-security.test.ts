@@ -66,7 +66,8 @@ test("citizen application APIs use the signed-in caller token", () => {
   const consents = read("app/api/consents/route.ts");
   const runs = read("app/api/automation/runs/route.ts");
   const confirm = read("app/api/automation/confirm/route.ts");
-  for (const route of [apps,consents,runs,confirm]) {
+  const reminders = read("app/api/reminders/route.ts");
+  for (const route of [apps,consents,runs,confirm,reminders]) {
     assert.match(route, /getVerifiedSupabaseSession\(\)/);
     assert.match(route, /Cross-origin request blocked/);
     assert.doesNotMatch(route, /SUPABASE_SERVICE_ROLE_KEY/);
