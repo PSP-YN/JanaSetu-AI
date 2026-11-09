@@ -48,7 +48,7 @@ export async function getVerifiedSupabaseSession() {
     access = session.access_token;
     response = await verify(access);
   }
-  if (!response?.ok || !access) { await clearSupabaseSession(); return null; }
+  if (!response?.ok || typeof access !== "string") { await clearSupabaseSession(); return null; }
   const user = await response.json();
   if (!user?.id) { await clearSupabaseSession(); return null; }
   return { user: { id: String(user.id), email: typeof user.email === "string" ? user.email : null }, accessToken: access, url, key };
