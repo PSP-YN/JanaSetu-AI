@@ -1,0 +1,2 @@
+-- No-op placeholder for the failed first application attempt recorded at 20261109135616.
+-- The corrected, complete and successfully applied migration is 20261109135647_separate_cloud_and_case_consent.sql.
