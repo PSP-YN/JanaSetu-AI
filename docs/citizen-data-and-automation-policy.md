@@ -19,3 +19,8 @@ A click on an "Approve" control must not silently submit a government applicatio
 
 ## Current state
 The existing workspace still stores profiles, assessments, drafts, reminder records and document metadata in browser localStorage. It does not upload document bytes. This is not cross-device persistence, a secure document vault or an account-backed workflow. The citizen-data foundation and hardened Data API grants have been applied to the dedicated JanaSetu Supabase project in Mumbai. The frontend is not yet integrated with this backend; until integration and cross-user security tests pass, the workspace must still be treated as browser-local prototype data.
+
+
+## Cloud workspace boundary
+
+Authenticated citizens can synchronize their profile and preparation metadata to a dedicated JanaSetu Supabase project. Session tokens are held in HttpOnly cookies and every workspace request derives the citizen ID from a verified Supabase Auth session. The cloud workspace stores document references only; it does not store document bytes. Cloud synchronization is not yet a substitute for the encrypted document-storage, malware-scanning, retention and deletion controls described in the production architecture. If cloud synchronization cannot load the remote workspace, the client must not overwrite it with local data.
