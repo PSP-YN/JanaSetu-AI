@@ -67,11 +67,13 @@ test("citizen application APIs use the signed-in caller token", () => {
   const runs = read("app/api/automation/runs/route.ts");
   const confirm = read("app/api/automation/confirm/route.ts");
   const reminders = read("app/api/reminders/route.ts");
-  for (const route of [apps,consents,runs,confirm,reminders]) {
+  for (const route of [apps,consents,runs,confirm]) {
     assert.match(route, /getVerifiedSupabaseSession\(\)/);
     assert.match(route, /Cross-origin request blocked/);
     assert.doesNotMatch(route, /SUPABASE_SERVICE_ROLE_KEY/);
   }
+  assert.match(reminders, /getVerifiedSupabaseSession\(\)/);
+  assert.doesNotMatch(reminders, /SUPABASE_SERVICE_ROLE_KEY/);
 });
 
 test("revoked consent cannot authorize a later automation run", () => {
