@@ -101,3 +101,11 @@ No permission, partner approval, production API credentials or portal sandbox cr
 - Remote probes confirm citizens cannot directly SELECT/INSERT the workspace table, can call only the consent-checked RPC wrappers, and cannot call the private consent-probe function.
 - No active approved consent policies exist. Therefore cloud profile storage and cross-device synchronization are intentionally disabled. The account sign-in surface can be tested, but user data remains in browser-local storage until the privacy policy is approved and the citizen explicitly accepts it.
 - Remote `citizen_workspaces` row count remains zero. No citizen account or personal data was created during implementation.
+
+
+## Consent purpose separation
+
+- `profile_storage` consent is required to create a normalized application case containing a profile snapshot. It is bound to the exact scheme version and `create_application_case` action.
+- `cloud_workspace_sync` is a separate consent purpose for cross-device profile/draft synchronization. The workspace RPCs check only this purpose, not general profile-storage consent.
+- `citizen_consents` no longer permits direct authenticated INSERT. Consent grants/revocations must pass through the guarded RPC; direct writes to profiles and reminders are also revoked.
+- The private consent-policy registry has no active versions for either purpose. Both application-case persistence and cloud sync remain blocked until legal review and explicit consent.
