@@ -21,6 +21,10 @@ export async function POST(request: NextRequest) {
       const message = String(failure.message || "");
       return json({ error: message.includes("government_adapter_execution_not_enabled") ? "External government portal automation is not enabled. This action remains assisted until an approved adapter is deployed." : "Automation could not be confirmed. Check consent and expiry." }, 409);
     }
-    return json({ run_id: await response.json(), status: "queued" });
+    const runId = await response.json();
+    const params = new URLSearchParams({ select: "status", id: "eq." + input.run_id, user_id: "eq." + session.user.id, limit: "1" });
+    const statusResponse = await fetch(session.url + "/rest/v1/automation_runs?" + params, { headers: { apikey: session.key, Authorization: "Bearer " + session.accessToken }, cache: "no-store" });
+    const rows = statusResponse.ok ? await statusResponse.json() : [];
+    return json({ run_id: runId, status: rows?.[0]?.status || "unknown" });
   } catch { return json({ error: "Automation confirmation is unavailable." }, 503); }
 }
