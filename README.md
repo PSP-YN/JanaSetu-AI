@@ -1,5 +1,44 @@
 # JanaSetu AI
 
+JanaSetu is an independent, source-aware public-benefits navigation and application-preparation project. It helps people explore scheme information, understand preliminary screening criteria and organise next steps while keeping official departments authoritative for eligibility and decisions.
+
+- Public landing page: `/`
+- Citizen workspace: `/app`
+- Privacy: `/privacy`
+- Terms and limitations: `/terms`
+
+**Important:** the current citizen workspace is a browser-local prototype, not a complete government application submission service. It does not provide a JanaSetu citizen account database, secure server-side document storage, universal official portal integration or guaranteed benefit eligibility. Never treat a prepared draft as a submitted application.
+
+## Development
+
+- Node.js 22
+- Install: `npm ci`
+- Type-check: `npm run typecheck`
+- Unit tests: `npm test`
+- Browser and accessibility tests: `npm run test:e2e`
+- Production build: `npm run build`
+
+## Data integrity
+
+The built-in catalogue, Karnataka budget-derived discovery leads and third-party machine-parsed dataset are distinct source classes. A catalogue record or budget lead is not necessarily a verified, active citizen scheme. Review `docs/source-verification-and-freshness.md`, `docs/scheme-review-workflow.md` and `docs/operations-runbook.md` before changing source records.
+
+## Operations and release
+
+See:
+- `docs/production-readiness.md`
+- `docs/landing-page-release.md`
+- `docs/operations-runbook.md`
+- `docs/security-threat-model.md`
+- `docs/source-verification-and-freshness.md`
+
+Production deployments are triggered by the protected main-branch release flow. Do not merge until CI and release review pass.
+
+---
+
+## Previous detailed project documentation
+
+# JanaSetu AI
+
 **Understand what you may qualify for. Prepare what comes next.**
 
 Live prototype: https://jana-setu-ai.vercel.app

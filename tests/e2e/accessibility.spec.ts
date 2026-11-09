@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
-for (const route of ["/", "/privacy", "/terms"]) {
+for (const route of ["/", "/app", "/privacy", "/terms"]) {
   test(`axe WCAG 2.1 AA critical/serious scan: ${route}`, async ({ page }) => {
     await page.goto(route);
     await expect(page.locator("body")).toBeVisible();
@@ -14,7 +14,7 @@ for (const route of ["/", "/privacy", "/terms"]) {
 }
 
 test("all six language options update document language and selected locale", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/app");
   const selector = page.locator(".language-control select");
   await expect(selector).toBeVisible();
   for (const [code, tag] of [["en","en-IN"],["hi","hi-IN"],["kn","kn-IN"],["ta","ta-IN"],["te","te-IN"],["ml","ml-IN"]]) {
@@ -26,7 +26,7 @@ test("all six language options update document language and selected locale", as
 
 test("main workspace labels and mobile navigation are translated for all six locales", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/");
+  await page.goto("/app");
   const selector = page.locator(".language-control select");
   const labels = [
     ["en", "A CLEARER WAY FORWARD", "Open navigation"],
@@ -44,7 +44,7 @@ test("main workspace labels and mobile navigation are translated for all six loc
 });
 
 test("localized scheme search includes translated summary and benefit text", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/app");
   await page.locator(".language-control select").selectOption("hi");
   await page.locator(".nav-item").nth(1).click();
   await page.locator(".search-box input").fill("किसान परिवारों");
@@ -66,7 +66,7 @@ test("security headers are served by the active Next.js configuration", async ({
 });
 
 test("skip navigation is keyboard reachable and moves to main content", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/app");
   await page.keyboard.press("Tab");
   const skip = page.locator("a.skip-link");
   await expect(skip).toBeFocused();
@@ -106,7 +106,7 @@ test("extension synthetic form fills unique safe fields and skips sensitive or a
 
 test("mobile navigation opens, changes sections and closes", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/");
+  await page.goto("/app");
   await page.getByRole("button", { name: "Open navigation" }).click();
   await expect(page.locator(".sidebar")).toHaveClass(/sidebar-open/);
   await page.getByRole("button", { name: "Find benefits" }).click();
@@ -132,7 +132,7 @@ test("extension synthetic select mapping only chooses an exact matching option",
 
 test("mobile viewport homepage has no serious or critical axe violations", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/");
+  await page.goto("/app");
   const result = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
     .analyze();
@@ -142,7 +142,7 @@ test("mobile viewport homepage has no serious or critical axe violations", async
 
 test("primary navigation, profile labels and occupation values stay localized/canonical across language changes", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto("/");
+  await page.goto("/app");
   const selector = page.locator(".language-control select");
   const expected = [
     { code: "en", nav: ["Overview", "Find benefits", "My profile", "Documents", "My applications", "How it works"], name: "Full name", occupation: "Occupation" },
@@ -201,7 +201,7 @@ test("localized privacy and terms pages have no serious or critical axe violatio
 
 
 test("hero focus outline and primary button text remain high-contrast", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/app");
   const heroButton = page.locator(".hero-panel button").first();
   await expect(heroButton).toBeVisible();
   await heroButton.focus();
@@ -214,14 +214,10 @@ test("hero focus outline and primary button text remain high-contrast", async ({
   expect(await primaryButton.evaluate((element) => getComputedStyle(element).color)).toBe("rgb(255, 255, 255)");
 });
 
-test("uploaded profile avatar loads from the public asset and keeps a fallback", async ({ page }) => {
-  await page.goto("/");
-  const avatar = page.locator(".avatar-image");
-  await expect(avatar).toHaveAttribute("src", "/profile-avatar.png");
-  await expect.poll(() => avatar.evaluate((node) => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
-  await expect(avatar).toBeVisible();
-
-  await avatar.evaluate((node) => node.dispatchEvent(new Event("error")));
-  await expect(avatar).toBeHidden();
+test("uploaded JanaSetu brand mark loads and citizen avatar uses a safe initials fallback", async ({ page }) => {
+  await page.goto("/app");
+  const mark = page.locator(".brand-mark img");
+  await expect(mark).toHaveAttribute("src", "/janasetu-logo.png");
+  await expect.poll(() => mark.evaluate((node) => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
   await expect(page.locator(".avatar-fallback")).toBeVisible();
 });

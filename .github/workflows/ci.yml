@@ -88,13 +88,24 @@ jobs:
             if (health.ok !== true) throw new Error("Health endpoint did not return ok=true");
           '
 
-          curl --fail --silent http://127.0.0.1:3000/profile-avatar.png > /tmp/janasetu-avatar.png
+          curl --fail --silent http://127.0.0.1:3000/ > /tmp/janasetu-home.html
+          grep -q 'JanaSetu AI' /tmp/janasetu-home.html
+          grep -q 'href="/app"' /tmp/janasetu-home.html
+          curl --fail --silent http://127.0.0.1:3000/app > /tmp/janasetu-app.html
+          grep -q 'GOVERNMENT BENEFITS WORKSPACE' /tmp/janasetu-app.html
+
+          curl --fail --silent http://127.0.0.1:3000/janasetu-logo.png > /tmp/janasetu-logo.png
           node -e '
             const fs = require("node:fs");
-            const avatar = fs.readFileSync("/tmp/janasetu-avatar.png");
+            const logo = fs.readFileSync("/tmp/janasetu-logo.png");
             const signature = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
-            if (avatar.length < 100 || !avatar.subarray(0, 8).equals(signature)) throw new Error("Public profile avatar is missing or is not a valid PNG");
+            if (logo.length < 100 || !logo.subarray(0, 8).equals(signature)) throw new Error("Uploaded JanaSetu logo is missing or is not a valid PNG");
           '
+          curl --fail --silent http://127.0.0.1:3000/hero-citizen.svg | grep -q '<svg'
+          curl --fail --silent http://127.0.0.1:3000/robots.txt | grep -q 'Sitemap:'
+          curl --fail --silent http://127.0.0.1:3000/sitemap.xml | grep -q 'jana-setu-ai.vercel.app'
+          curl --fail --silent http://127.0.0.1:3000/opengraph-image > /tmp/janasetu-og.png
+          node -e 'const fs=require("node:fs");const b=fs.readFileSync("/tmp/janasetu-og.png");if(b.length<100||!b.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])))throw new Error("Open Graph image is not a valid PNG")'
 
           curl --fail --silent http://127.0.0.1:3000/api/schemes > /tmp/janasetu-schemes.json
           node -e '
