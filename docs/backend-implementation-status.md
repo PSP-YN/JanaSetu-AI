@@ -97,7 +97,7 @@ No permission, partner approval, production API credentials or portal sandbox cr
 - Purpose-specific consent cannot be granted against an unapproved policy version.
 - Revoking a purpose marks all earlier active grants for that user/case/purpose as revoked.
 - Automation requests and point-of-action confirmation re-check that the exact purpose policy remains active and that scope matches the action and scheme version.
-- Direct authenticated Data API access to `citizen_workspaces` has been revoked. Workspace reads/writes now go through private SECURITY DEFINER functions exposed only through public SECURITY INVOKER wrappers that enforce `profile_storage` consent.
+- Direct authenticated Data API access to `citizen_workspaces` has been revoked. Workspace reads/writes now go through private SECURITY DEFINER functions exposed only through public SECURITY INVOKER wrappers that enforce the separate `cloud_workspace_sync` consent.
 - Remote probes confirm citizens cannot directly SELECT/INSERT the workspace table, can call only the consent-checked RPC wrappers, and cannot call the private consent-probe function.
 - No active approved consent policies exist. Therefore cloud profile storage and cross-device synchronization are intentionally disabled. The account sign-in surface can be tested, but user data remains in browser-local storage until the privacy policy is approved and the citizen explicitly accepts it.
 - Remote `citizen_workspaces` row count remains zero. No citizen account or personal data was created during implementation.
@@ -109,3 +109,15 @@ No permission, partner approval, production API credentials or portal sandbox cr
 - `cloud_workspace_sync` is a separate consent purpose for cross-device profile/draft synchronization. The workspace RPCs check only this purpose, not general profile-storage consent.
 - `citizen_consents` no longer permits direct authenticated INSERT. Consent grants/revocations must pass through the guarded RPC; direct writes to profiles and reminders are also revoked.
 - The private consent-policy registry has no active versions for either purpose. Both application-case persistence and cloud sync remain blocked until legal review and explicit consent.
+
+
+## Latest remote verification — 9 November 2026
+
+- Remote migration history includes the consent split and final guarded consent-capture migrations (`20261109135647`, `20261109135846`).
+- 14/14 public tables have RLS enabled.
+- Authenticated users have no direct SELECT on `citizen_workspaces`, no direct INSERT on `citizen_consents`, and no direct INSERT on `citizen_reminders`.
+- Application-case RPC requires a separate `profile_storage` consent ID scoped to the exact scheme version and `create_application_case` action.
+- Workspace RPCs require `cloud_workspace_sync` consent scoped to `workspace_sync`.
+- The private consent-policy registry has zero active policies; workspace rows = 0; published schemes = 0; independently approved scheme versions = 0.
+- The one-minute cron job has 18 successful executions. Empty queue processing is verified; no citizen-confirmed automation jobs exist.
+- Security advisor has one INFO finding: `scheme_approvals` has RLS and intentionally no client policy. Performance advisor reports 19 unused indexes on the empty/new database; re-evaluate after representative traffic rather than removing useful FK indexes prematurely.
