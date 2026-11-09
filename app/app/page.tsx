@@ -895,7 +895,7 @@ export default function Home() {
     };
     const localProfile = parseBackupProfile(read(STORAGE.profile, EMPTY_PROFILE));
     const localLanguage = parseBackupLanguage(read(STORAGE.language, "en"));
-    const localApplications = invalidateUnapprovedApplications(parseBackupApplications(read(STORAGE.applications, []), { trustLocalStorage: true }));
+    const localApplications: LocalApplication[] = invalidateUnapprovedApplications<LocalApplication>(parseBackupApplications(read(STORAGE.applications, []), { trustLocalStorage: true }));
     const localDocuments = parseBackupDocuments(read(STORAGE.documents, []));
     const localTasks = parseBackupTasks(read(STORAGE.tasks, []));
     const localAssessments = invalidateUnapprovedAssessments(parseBackupAssessments(read(STORAGE.assessments, []), { trustLocalStorage: true }));
@@ -924,7 +924,7 @@ export default function Home() {
           const remoteProfile = parseBackupProfile(remote.profile_data);
           setProfile(remoteProfile || EMPTY_PROFILE);
           setLanguage(parseBackupLanguage(remote.preferred_language || "en"));
-          setApplications(invalidateUnapprovedApplications(parseBackupApplications(remote.application_drafts, { trustLocalStorage: true })));
+          setApplications(invalidateUnapprovedApplications<LocalApplication>(parseBackupApplications(remote.application_drafts, { trustLocalStorage: true })) as LocalApplication[]);
           setDocuments(parseBackupDocuments(remote.document_refs));
           setTasks(parseBackupTasks(remote.reminders));
           setAssessments(invalidateUnapprovedAssessments(parseBackupAssessments(remote.assessments, { trustLocalStorage: true })));
