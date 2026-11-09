@@ -239,5 +239,5 @@ grant execute on function public.record_citizen_consent(uuid,text,text,boolean,j
 grant execute on function public.request_automation_run(uuid,text,uuid,text,jsonb) to authenticated;
 grant execute on function public.confirm_automation_run(uuid) to authenticated;
 
-create policy scheme_integrations_service_role_only on public.scheme_integrations
-  for all to service_role using (true) with check (true);
+create policy scheme_integrations_service_role_read on public.scheme_integrations
+  for select to service_role using (true);
