@@ -10,7 +10,7 @@ if not files:
     raise SystemExit("No Supabase migrations found")
 
 sql = "\n".join(p.read_text() for p in files)
-tables = set(re.findall(r"create table public\.([a-z_]+)", sql, re.I))
+tables = set(re.findall(r"create table(?: if not exists)? public\.([a-z_]+)", sql, re.I))
 rls = set(re.findall(r"alter table public\.([a-z_]+) enable row level security", sql, re.I))
 missing = sorted(tables - rls)
 if missing:
@@ -22,7 +22,7 @@ required = {
     "profiles", "scheme_sources", "schemes", "scheme_versions",
     "scheme_approvals", "application_cases", "application_events",
     "application_documents", "citizen_consents", "citizen_reminders",
-    "automation_runs", "audit_events", "citizen_workspaces",
+    "automation_runs", "audit_events", "citizen_workspaces", "scheme_integrations",
 }
 if tables != required:
     raise SystemExit(f"Unexpected schema inventory. expected={sorted(required)} actual={sorted(tables)}")
