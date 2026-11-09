@@ -144,10 +144,11 @@ export const SCHEMES: Scheme[] = [
     documents: ["KYC application form and accepted identity proof", "Ration card or State/UT family-composition document (or permitted migrant self-declaration)", "Address proof if required by the official process", "Bank account details", "Prescribed deprivation declaration"],
     ruleNotes: [
       "The applicant must be a woman who has attained 18 years of age.",
-      "There must be no other LPG connection from an Oil Marketing Company within the same household.",
-      "The adult woman must belong to a poor household based on submission of the prescribed deprivation declaration.",
-      "The official portal lists the complete document and application requirements; do not upload Aadhaar or bank details to this prototype.",
-      "The FAQ states biometric Aadhaar authentication is mandatory, permits prescribed migrant self-declarations for address/family composition, and states PNG connection holders cannot receive a PMUY connection or a non-PMUY subsidized LPG connection. Verify the live FAQ and applicable OMC instructions."
+      "No LPG connection from an Oil Marketing Company may already be registered to any family member listed in the household's ration card or other accepted family-composition document.",
+      "The official FAQ identifies eligible poor-household categories including SC, ST, PMAY-G, Most Backward Classes, Antyodaya Anna Yojana, tea/ex-tea garden tribes, forest dwellers, island/river-island residents, SECC households and households meeting the prescribed 14-point deprivation declaration. The exact current category and evidence must be checked by the distributor/OMC.",
+      "Biometric Aadhaar authentication is mandatory at the OMC distributor. JanaSetu must not collect Aadhaar copies/numbers or bank account details; citizens must complete those steps through the official OMC/distributor process.",
+      "The FAQ permits prescribed migrant self-declarations for proof of address and family composition. A government-issued family-composition document is required where the ration card does not show all household members.",
+      "PNG connection holders cannot receive a PMUY connection or a subsidized non-PMUY LPG connection. The official FAQ describes a deposit-free connection with first refill and stove benefits; confirm current OMC implementation terms."
     ],
     tags: ["women", "household", "lpg", "energy"]
   },
