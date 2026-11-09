@@ -34,3 +34,12 @@
 
 ## Release status
 This document is a checklist, not a claim that unchecked gates have passed. The landing page may be released independently, but the overall citizen application must not be marketed as fully production-ready until the outstanding controls are implemented and verified.
+
+
+## Government portal automation
+- [ ] myScheme written permission / approved API feed obtained before automated access.
+- [ ] API Setu consumer and provider subscriptions approved for each required API.
+- [ ] DigiLocker requester/partner approval, OAuth credentials and audit completed if document retrieval is required.
+- [ ] UMANG/department service owner has approved each application/status API.
+- [ ] Per-scheme adapter passes official sandbox and production acceptance tests.
+- [ ] Submission acknowledgement and status reconciliation are proven before any adapter is labeled automated.
