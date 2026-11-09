@@ -121,3 +121,14 @@ No permission, partner approval, production API credentials or portal sandbox cr
 - The private consent-policy registry has zero active policies; workspace rows = 0; published schemes = 0; independently approved scheme versions = 0.
 - The one-minute cron job has 18 successful executions. Empty queue processing is verified; no citizen-confirmed automation jobs exist.
 - Security advisor has one INFO finding: `scheme_approvals` has RLS and intentionally no client policy. Performance advisor reports 19 unused indexes on the empty/new database; re-evaluate after representative traffic rather than removing useful FK indexes prematurely.
+
+
+## Citizen workflow surfaces
+
+- `/app/automation` now shows published scheme count, the citizen's application cases, automation history and in-app reminders.
+- `GET /api/schemes/approved` returns only published schemes.
+- `/api/applications` lists cases and creates a case only through the independent-approval and profile-consent RPC.
+- `/api/consents` records/revokes purpose-specific consent through the guarded database function.
+- `/api/automation/runs` requests and lists idempotent automation runs; `/api/automation/confirm` records point-of-action confirmation.
+- `/api/reminders` exposes citizen-owned in-app reminders read-only. Reminder rows are created by the scheduled worker, not direct browser writes.
+- Current state remains intentionally empty: 0 published schemes, 0 application cases, 0 automation runs and 0 active consent policies.
