@@ -43,3 +43,13 @@ This document is a checklist, not a claim that unchecked gates have passed. The 
 - [ ] UMANG/department service owner has approved each application/status API.
 - [ ] Per-scheme adapter passes official sandbox and production acceptance tests.
 - [ ] Submission acknowledgement and status reconciliation are proven before any adapter is labeled automated.
+
+
+## Consent-gated automation
+- [ ] Two-person source-accuracy and eligibility-rule approvals completed for each scheme version.
+- [ ] Scheme version published only after source, rule and legal review.
+- [ ] Consent scope and policy version reviewed by privacy/legal owners.
+- [ ] Application case creation and idempotency tested with two unrelated users.
+- [ ] Confirmed automation runs tested end-to-end through pgmq and pg_cron.
+- [ ] In-app reminder scheduling tested; email/SMS/push delivery remains disabled until providers and consent are configured.
+- [ ] External portal actions remain blocked until each adapter is production-approved and has passed official sandbox and acceptance tests.
