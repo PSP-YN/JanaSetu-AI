@@ -8,16 +8,17 @@ test("citizen workspace is tenant-isolated by auth.uid()", () => {
   const sql = read("supabase/migrations/20261109131533_add_authenticated_citizen_workspace.sql");
   assert.match(sql, /enable row level security/i);
   assert.ok(sql.includes("auth.uid()) = user_id"));
-  assert.match(sql, /grant select, insert, update on public\.citizen_workspaces to authenticated/i);
-  assert.match(sql, /revoke all on public\.citizen_workspaces from anon, public/i);
+  const privacy = read("supabase/migrations/20261109135140_gate_cloud_storage_on_approved_consent.sql");
+  assert.match(privacy, /revoke all on public\.citizen_workspaces from public,anon,authenticated/i);
 });
 
 test("workspace API derives identity from verified HttpOnly session", () => {
   const route = read("app/api/workspace/route.ts");
   const session = read("lib/supabase/rest.ts");
   assert.match(route, /getVerifiedSupabaseSession\(\)/);
-  assert.match(route, /user_id: session\.user\.id/);
-  assert.doesNotMatch(route, /input\.user_id/);
+  assert.match(route, /rpc\/get_citizen_workspace/);
+  assert.match(route, /rpc\/save_citizen_workspace/);
+  assert.doesNotMatch(route, /citizen_workspaces\?on_conflict/);
   assert.match(route, /Cross-origin request blocked/);
   assert.match(session, /httpOnly:\s*true/);
   assert.match(session, /secure:\s*process\.env\.NODE_ENV\s*===\s*"production"/);
@@ -79,4 +80,14 @@ test("revoked consent cannot authorize a later automation run", () => {
   assert.match(consent, /consent_scope_mismatch/);
   assert.match(confirm, /consent_scope_mismatch/);
   assert.match(confirm, /return p_run_id/);
+});
+
+test("cloud storage remains disabled until a legal-approved consent policy is active", () => {
+  const sql = read("supabase/migrations/20261109135140_gate_cloud_storage_on_approved_consent.sql");
+  const route = read("app/api/workspace/route.ts");
+  assert.match(sql, /private\.consent_policy_versions/);
+  assert.match(sql, /legal_review_reference is not null/);
+  assert.match(sql, /profile_storage_consent_required/);
+  assert.match(sql, /revoke all on public\.citizen_workspaces from public,anon,authenticated/);
+  assert.match(route, /Cloud storage is disabled until the profile-storage privacy policy is legally approved/);
 });
