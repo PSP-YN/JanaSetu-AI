@@ -21,7 +21,8 @@ export default function AutomationCenterPage(){
     try{
       const [authRes,schemeRes]=await Promise.all([fetch("/api/auth",{cache:"no-store"}),fetch("/api/schemes/approved",{cache:"no-store"})]);
       const auth=authRes.ok?await authRes.json():{user:null};
-      const schemeData=schemeRes.ok?await schemeRes.json():{schemes:[]};
+      if(!schemeRes.ok)throw new Error("Published scheme catalogue could not be loaded.");
+      const schemeData=await schemeRes.json();
       setUser(auth.user||null);setSchemes(schemeData.schemes||[]);
       if(auth.user){
         const [caseRes,runRes]=await Promise.all([fetch("/api/applications",{cache:"no-store"}),fetch("/api/automation/runs",{cache:"no-store"})]);
