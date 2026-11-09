@@ -11,13 +11,16 @@ export async function GET() {
   try {
     const session = await getVerifiedSupabaseSession();
     if (!session) return json({ error: "Sign in required." }, 401);
-    const params = new URLSearchParams({ select: "profile_data,preferred_language,application_drafts,document_refs,reminders,assessments,updated_at", user_id: "eq." + session.user.id, limit: "1" });
-    const response = await fetch(session.url + "/rest/v1/citizen_workspaces?" + params.toString(), {
-      headers: { apikey: session.key, Authorization: "Bearer " + session.accessToken }, cache: "no-store"
+    const response = await fetch(session.url + "/rest/v1/rpc/get_citizen_workspace", {
+      method: "POST", headers: { apikey: session.key, Authorization: "Bearer " + session.accessToken, "Content-Type": "application/json" },
+      body: "{}", cache: "no-store"
     });
-    if (!response.ok) throw new Error("Workspace read failed");
-    const rows = await response.json();
-    return json({ user: session.user, workspace: Array.isArray(rows) ? rows[0] ?? null : null });
+    if (!response.ok) {
+      const failure = await response.json().catch(() => ({}));
+      if (String(failure.message || "").includes("profile_storage_consent_required")) return json({ error: "Cloud storage is disabled until the profile-storage privacy policy is legally approved and you explicitly accept it. Your data remains on this device." }, 403);
+      return json({ error: "Cloud workspace is unavailable." }, 503);
+    }
+    return json({ user: session.user, workspace: await response.json() });
   } catch { return json({ error: "Cloud workspace is unavailable. Check deployment configuration and try again." }, 503); }
 }
 
@@ -44,13 +47,16 @@ export async function PUT(request: NextRequest) {
     const documents = parseBackupDocuments(input.document_refs);
     const reminders = parseBackupTasks(input.reminders);
     const assessments = invalidateUnapprovedAssessments(parseBackupAssessments(input.assessments, { trustLocalStorage: true }));
-    const payload = { user_id: session.user.id, profile_data: profile, preferred_language: input.preferred_language, application_drafts: applications, document_refs: documents, reminders, assessments, updated_at: new Date().toISOString() };
-    const response = await fetch(session.url + "/rest/v1/citizen_workspaces?on_conflict=user_id", {
-      method: "POST", headers: { apikey: session.key, Authorization: "Bearer " + session.accessToken, "Content-Type": "application/json", Prefer: "resolution=merge-duplicates,return=representation" },
-      body: JSON.stringify(payload), cache: "no-store"
+    const payload = { profile_data: profile, preferred_language: input.preferred_language, application_drafts: applications, document_refs: documents, reminders, assessments };
+    const response = await fetch(session.url + "/rest/v1/rpc/save_citizen_workspace", {
+      method: "POST", headers: { apikey: session.key, Authorization: "Bearer " + session.accessToken, "Content-Type": "application/json" },
+      body: JSON.stringify({ p_workspace: payload }), cache: "no-store"
     });
-    if (!response.ok) throw new Error("Workspace write failed");
-    const rows = await response.json();
-    return json({ saved: true, updated_at: rows?.[0]?.updated_at ?? payload.updated_at });
+    if (!response.ok) {
+      const failure = await response.json().catch(() => ({}));
+      if (String(failure.message || "").includes("profile_storage_consent_required")) return json({ error: "Cloud storage is disabled until the profile-storage privacy policy is legally approved and you explicitly accept it. Your data remains on this device." }, 403);
+      throw new Error("Workspace write failed");
+    }
+    return json({ saved: true, updated_at: await response.json() });
   } catch { return json({ error: "Workspace could not be saved. No data was confirmed as synchronized." }, 503); }
 }
