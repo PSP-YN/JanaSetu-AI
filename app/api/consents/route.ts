@@ -24,7 +24,12 @@ export async function POST(request: NextRequest) {
       method: "POST", headers: { apikey: session.key, Authorization: "Bearer " + session.accessToken, "Content-Type": "application/json" },
       body: JSON.stringify({ p_case_id: caseId, p_purpose: input.purpose, p_policy_version: input.policy_version, p_granted: input.granted, p_scope: scope }), cache: "no-store"
     });
-    if (!response.ok) return json({ error: "Consent could not be recorded for this application." }, 409);
+    if (!response.ok) {
+      const failure = await response.json().catch(() => ({}));
+      const message = String(failure.message || "");
+      if (message.includes("consent_policy_not_approved")) return json({ error: "This consent policy has not completed legal/privacy approval. Cloud storage and automation consent remain disabled." }, 409);
+      return json({ error: "Consent could not be recorded for this application." }, 409);
+    }
     return json({ consent_id: await response.json(), granted: input.granted }, 201);
   } catch { return json({ error: "Consent service is unavailable." }, 503); }
 }
