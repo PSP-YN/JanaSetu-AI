@@ -287,7 +287,7 @@ as $$
 declare v_user uuid := auth.uid(); v_workspace jsonb;
 begin
   if v_user is null then raise exception 'authentication_required' using errcode='42501'; end if;
-  if not private.has_active_citizen_consent(v_user,'cloud_workspace_sync,null) then raise exception 'profile_storage_consent_required' using errcode='42501'; end if;
+  if not private.has_active_citizen_consent(v_user,'cloud_workspace_sync',null) then raise exception 'profile_storage_consent_required' using errcode='42501'; end if;
   select jsonb_build_object(
     'profile_data',profile_data,'preferred_language',preferred_language,
     'application_drafts',application_drafts,'document_refs',document_refs,
@@ -303,7 +303,7 @@ as $$
 declare v_user uuid := auth.uid(); v_updated timestamptz;
 begin
   if v_user is null then raise exception 'authentication_required' using errcode='42501'; end if;
-  if not private.has_active_citizen_consent(v_user,'cloud_workspace_sync,null) then raise exception 'profile_storage_consent_required' using errcode='42501'; end if;
+  if not private.has_active_citizen_consent(v_user,'cloud_workspace_sync',null) then raise exception 'profile_storage_consent_required' using errcode='42501'; end if;
   if p_workspace is null or jsonb_typeof(p_workspace)<>'object' or octet_length(p_workspace::text)>262144 then raise exception 'invalid_workspace_payload'; end if;
   if exists (select 1 from jsonb_object_keys(p_workspace) as key(name) where key.name not in ('profile_data','preferred_language','application_drafts','document_refs','reminders','assessments')) then raise exception 'unsupported_workspace_field'; end if;
   if jsonb_typeof(p_workspace->'profile_data')<>'object'
@@ -331,7 +331,7 @@ as $$
 declare v_user uuid := auth.uid(); v_updated timestamptz;
 begin
   if v_user is null then raise exception 'authentication_required' using errcode='42501'; end if;
-  if not private.has_active_citizen_consent(v_user,'cloud_workspace_sync,null) then raise exception 'profile_storage_consent_required' using errcode='42501'; end if;
+  if not private.has_active_citizen_consent(v_user,'cloud_workspace_sync',null) then raise exception 'profile_storage_consent_required' using errcode='42501'; end if;
   if p_workspace is null or jsonb_typeof(p_workspace)<>'object' or octet_length(p_workspace::text)>262144 then raise exception 'invalid_workspace_payload'; end if;
   if exists (select 1 from jsonb_object_keys(p_workspace) as key(name) where key.name not in ('profile_data','preferred_language','application_drafts','document_refs','reminders','assessments')) then raise exception 'unsupported_workspace_field'; end if;
   if jsonb_typeof(p_workspace->'profile_data')<>'object'
