@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     }
     if (action === "recover") {
       const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
-      if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email) || email.length > 254) return json({ error: "Enter a valid email address." }, 400);
+      if (email.length > 254 || !email.includes("@") || !email.split("@")[1]?.includes(".")) return json({ error: "Enter a valid email address." }, 400);
       const url = process.env.NEXT_PUBLIC_SUPABASE_URL; const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
       if (!url || !key) return json({ error: "Authentication service is not configured." }, 503);
       const redirect = request.nextUrl.origin + "/auth/callback?next=/auth/update-password";
