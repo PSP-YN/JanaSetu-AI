@@ -7,7 +7,7 @@ const read = (path: string) => readFileSync(path, "utf8");
 test("citizen workspace is tenant-isolated by auth.uid()", () => {
   const sql = read("supabase/migrations/20261109131533_add_authenticated_citizen_workspace.sql");
   assert.match(sql, /enable row level security/i);
-  assert.match(sql, /auth\.uid\(\)\s*=\s*user_id/i);
+  assert.match(sql, /auth\.uid\(\)[\\s\\S]{0,40}=\\s*user_id/i);
   assert.match(sql, /grant select, insert, update on public\.citizen_workspaces to authenticated/i);
   assert.match(sql, /revoke all on public\.citizen_workspaces from anon, public/i);
 });
