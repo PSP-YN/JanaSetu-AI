@@ -21,11 +21,12 @@ export async function GET() {
 
 export async function PUT(request: NextRequest) {
   try {
-    const length = Number(request.headers.get("content-length") || 0);
-    if (length > 256 * 1024) return json({ error: "Workspace payload exceeds 256 KB." }, 413);
+    if (request.headers.get("origin") !== request.nextUrl.origin) return json({ error: "Cross-origin request blocked." }, 403);
+    const raw = await request.text();
+    if (new TextEncoder().encode(raw).byteLength > 256 * 1024) return json({ error: "Workspace payload exceeds 256 KB." }, 413);
     const session = await getVerifiedSupabaseSession();
     if (!session) return json({ error: "Sign in required." }, 401);
-    const body: unknown = await request.json();
+    const body: unknown = JSON.parse(raw);
     if (!body || typeof body !== "object" || Array.isArray(body)) return json({ error: "Invalid workspace payload." }, 400);
     const input = body as Record<string, unknown>;
     const allowed = ["profile_data","preferred_language","application_drafts","document_refs","reminders","assessments"];
