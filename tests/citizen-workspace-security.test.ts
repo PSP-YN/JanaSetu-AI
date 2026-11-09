@@ -39,3 +39,35 @@ test("cloud workspace rejects unknown top-level fields and oversized payloads", 
   assert.match(route, /Unsupported language/);
   assert.match(route, /preferred_language/);
 });
+
+test("automation requests require independent scheme approval and purpose consent", () => {
+  const sql = read("supabase/migrations/20261109134258_add_consent_gated_automation_queue.sql");
+  assert.match(sql, /independently_approved/);
+  assert.match(sql, /source_accuracy/);
+  assert.match(sql, /eligibility_rule_accuracy/);
+  assert.match(sql, /valid_purpose_specific_consent_required/);
+  assert.match(sql, /requires_human_confirmation/);
+  assert.match(sql, /government_adapter_not_authorized/);
+});
+
+test("background worker only executes internal preparation and reminders", () => {
+  const sql = read("supabase/migrations/20261109134258_add_consent_gated_automation_queue.sql");
+  assert.match(sql, /pgmq\.create\('janasetu_automation'\)/);
+  assert.match(sql, /cron\.schedule\('janasetu-automation-worker'/);
+  assert.match(sql, /v_run\.action_type = 'prepare_documents'/);
+  assert.match(sql, /v_run\.action_type = 'schedule_reminder'/);
+  assert.match(sql, /government_adapter_execution_not_enabled/);
+  assert.match(sql, /revoke all on function public\.process_automation_queue\(integer\) from public, anon, authenticated, service_role/i);
+});
+
+test("citizen application APIs use the signed-in caller token", () => {
+  const apps = read("app/api/applications/route.ts");
+  const consents = read("app/api/consents/route.ts");
+  const runs = read("app/api/automation/runs/route.ts");
+  const confirm = read("app/api/automation/confirm/route.ts");
+  for (const route of [apps,consents,runs,confirm]) {
+    assert.match(route, /getVerifiedSupabaseSession\(\)/);
+    assert.match(route, /Cross-origin request blocked/);
+    assert.doesNotMatch(route, /SUPABASE_SERVICE_ROLE_KEY/);
+  }
+});
