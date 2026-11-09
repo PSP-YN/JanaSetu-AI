@@ -89,8 +89,8 @@ export const SCHEMES: Scheme[] = [
     benefit: "₹6,000 per year in three equal instalments, transferred through DBT (subject to eligibility and scheme rules).",
     sourceUrl: "https://pmkisan.gov.in/Documents/RevisedPM-KISANOperationalGuidelines%28English%29.pdf",
     sourceName: "PM-KISAN operational guidelines (revised 29 March 2020) and live official portal",
-    sourcePeriod: "Guidelines revised 29 March 2020. Live portal checked 4 Nov 2026: reports the 24th instalment released 30 Oct 2026, states eKYC is mandatory, and flags suspected post-01.02.2019 land acquisitions / multiple family-member claims for physical verification. Later circular reconciliation remains open.",
-    sourceChecked: "2026-11-04",
+    sourcePeriod: "Guidelines revised 29 March 2020. Live official portal rechecked 9 Nov 2026: 24th instalment released 30 Oct 2026; eKYC is mandatory and biometric eKYC is available through CSC VLE, the PM-KISAN mobile application and authorized state users. The portal temporarily withholds benefits in suspected post-01.02.2019 land-acquisition and multiple-family-member cases pending physical verification. Later circular reconciliation and the complete exclusion list remain open.",
+    sourceChecked: "2026-11-09",
     geography: "Central scheme — India",
     documents: ["State/UT land record or cultivable-land evidence", "Bank account details for the official application channel", "Identity and eKYC requirements as specified by the portal"],
     ruleNotes: [
@@ -113,8 +113,8 @@ export const SCHEMES: Scheme[] = [
     benefit: "Assistance is delivered under the applicable PMAY-U 2.0 vertical; the amount and route depend on the component and eligibility.",
     sourceUrl: "https://pmay-urban.gov.in/uploads/guidelines/Operational-Guidelines-of-PMAY-U-2.pdf",
     sourceName: "PMAY-U 2.0 Scheme Guidelines (September 2024), official guideline index and AHP SOP (April 2026)",
-    sourcePeriod: "Official guideline index checked 4 Nov 2026 lists English/Hindi PMAY-U 2.0 guidelines dated September 2024 and an Affordable Housing in Partnership SOP dated April 2026. This is not a complete amendment/vertical review; State/UT implementation and all current vertical requirements remain subject to human verification.",
-    sourceChecked: "2026-11-04",
+    sourcePeriod: "Official guideline index rechecked 9 Nov 2026 lists PMAY-U 2.0 guidelines dated September 2024, an Affordable Housing in Partnership SOP dated April 2026 and an Angikaar 2026 Guidelines document. The 2026 documents and all amendments/vertical rules have not been fully reconciled; State/UT implementation and current vertical requirements remain subject to independent human verification.",
+    sourceChecked: "2026-11-09",
     geography: "Urban areas — India",
     documents: ["Household and family details", "Income certificate or other accepted income evidence", "Declaration/evidence regarding pucca house ownership across India", "Prior housing-assistance declaration"],
     ruleNotes: [
@@ -138,8 +138,8 @@ export const SCHEMES: Scheme[] = [
     benefit: "Deposit-free LPG connection subject to the scheme's published benefits and current implementation terms.",
     sourceUrl: "https://pmuy.gov.in/ujjwala2.html",
     sourceName: "PMUY 2.0 official eligibility page and FAQ",
-    sourcePeriod: "Official eligibility page and FAQ checked 4 Nov 2026. FAQ confirms adult-woman applicant, deprivation declaration, family-composition-based no-existing-LPG check, mandatory biometric Aadhaar authentication at distributor, and listed connection benefits/documents. Page publication/revision date is not stated; current operational circulars still require reviewer reconciliation.",
-    sourceChecked: "2026-11-04",
+    sourcePeriod: "Official PMUY 2.0 eligibility page rechecked 9 Nov 2026: adult woman (18+), no other OMC LPG connection in the household, and poor-household deprivation declaration. The page lists Aadhaar for the applicant and adult family members, ration/family-composition proof, bank details and KYC forms; applications may be made through a distributor or the linked OMC portals. Do not collect Aadhaar or bank data in the JanaSetu prototype. Current operational circulars and FAQ changes still require independent reviewer reconciliation.",
+    sourceChecked: "2026-11-09",
     geography: "Central scheme — India",
     documents: ["KYC application form and accepted identity proof", "Ration card or State/UT family-composition document (or permitted migrant self-declaration)", "Address proof if required by the official process", "Bank account details", "Prescribed deprivation declaration"],
     ruleNotes: [
@@ -163,8 +163,8 @@ export const SCHEMES: Scheme[] = [
     benefit: "The Ministry FAQ located describes ₹12,000 per annum at graduation level for the first three years and ₹20,000 per annum at postgraduate level, with course-specific terms; confirm current-year rates and course treatment.",
     sourceUrl: "https://scholarships.gov.in/public/schemeGuidelines/CSSS_GUIDLINES_07022024_updated.pdf",
     sourceName: "National Scholarship Portal PM-USP CSSS specifications (updated 7 Feb 2024) and Ministry FAQ (AY 2025–26)",
-    sourcePeriod: "Live NSP CSSS pages checked 4 Nov 2026 conflict on the renewal student deadline: All-Scholarships lists 30 Sep 2026, while the Students announcement lists 31 Oct 2026 and still says currently open. The 30 Nov 2026 date is an L2 verification deadline, not a student application deadline. The detailed FAQ located is AY 2025–26; do not infer an AY 2026–27 fresh-application window.",
-    sourceChecked: "2026-11-04",
+    sourcePeriod: "Official NSP AY 2026–27 pages rechecked 9 Nov 2026 remain inconsistent: the Students announcement says renewal student applications close 31 Oct 2026, while the All-Scholarships listing says 30 Sep 2026 for CSSS renewal. A search-indexed listing has also surfaced 30 Nov 2026, but that is not corroborated by the opened page. Treat the renewal window as unconfirmed/closed pending official clarification; 30 Nov is not a verified student deadline. The located detailed FAQ is AY 2025–26; do not infer an AY 2026–27 fresh-application window.",
+    sourceChecked: "2026-11-09",
     geography: "Central scheme — India; applications through National Scholarship Portal when open",
     documents: ["Class XII marksheet and relevant Board percentile/list evidence", "Current admission/enrolment proof for a regular undergraduate course", "Family income certificate or accepted income evidence", "Scholarship/fee-reimbursement declaration"],
     ruleNotes: [
