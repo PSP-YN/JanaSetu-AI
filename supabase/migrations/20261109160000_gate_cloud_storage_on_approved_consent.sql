@@ -27,7 +27,7 @@ as $$
   )
 $$;
 revoke all on function private.has_active_citizen_consent(uuid,text,uuid) from public,anon,service_role;
-grant execute on function private.has_active_citizen_consent(uuid,text,uuid) to authenticated;
+revoke all on function private.has_active_citizen_consent(uuid,text,uuid) from public,anon,authenticated,service_role;
 
 create or replace function private.record_citizen_consent(
   p_case_id uuid,
@@ -114,6 +114,10 @@ begin
     and captured_at > now() - interval '365 days';
   if not found then raise exception 'valid_purpose_specific_consent_required'; end if;
   if not exists (select 1 from private.consent_policy_versions where purpose = v_consent.purpose and version = v_consent.policy_version and active = true and approved_at is not null and legal_review_reference is not null) then raise exception 'consent_policy_not_approved'; end if;
+  if v_consent.scope->>'action_type' is distinct from p_action_type
+     or v_consent.scope->>'scheme_version_id' is distinct from v_case.scheme_version_id::text then
+    raise exception 'consent_scope_mismatch';
+  end if;
 
   if p_action_type in ('open_official_portal','assist_form_filling','submit_application','check_application_status') then
     select * into v_integration from public.scheme_integrations
