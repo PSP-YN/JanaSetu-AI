@@ -14,13 +14,28 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json() as Record<string, unknown>;
+    if (request.headers.get("origin") !== request.nextUrl.origin) return json({ error: "Cross-origin request blocked." }, 403);
+    const raw = await request.text();
+    if (new TextEncoder().encode(raw).byteLength > 8192) return json({ error: "Authentication request is too large." }, 413);
+    const body = JSON.parse(raw) as Record<string, unknown>;
     const action = body.action;
     if (action === "signout") {
       const session = await getVerifiedSupabaseSession();
       if (session) await fetch(session.url + "/auth/v1/logout", { method: "POST", headers: { apikey: session.key, Authorization: "Bearer " + session.accessToken }, cache: "no-store" });
       await clearSupabaseSession();
       return json({ signedOut: true });
+    }
+    if (action === "establish") {
+      const access_token = typeof body.access_token === "string" ? body.access_token : "";
+      const refresh_token = typeof body.refresh_token === "string" ? body.refresh_token : "";
+      if (!access_token || !refresh_token || access_token.length > 8192 || refresh_token.length > 8192) return json({ error: "Invalid authentication callback." }, 400);
+      const url = process.env.NEXT_PUBLIC_SUPABASE_URL; const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      if (!url || !key) return json({ error: "Authentication service is not configured." }, 503);
+      const verified = await fetch(url.replace(/\\/$/, "") + "/auth/v1/user", { headers: { apikey: key, Authorization: "Bearer " + access_token }, cache: "no-store" });
+      if (!verified.ok) return json({ error: "The email confirmation link is invalid or expired." }, 401);
+      const user = await verified.json();
+      await setSupabaseSession({ access_token, refresh_token, expires_in: 3600 });
+      return json({ user: { id: user.id, email: user.email }, authenticated: true });
     }
     if (action !== "signin" && action !== "signup") return json({ error: "Unsupported authentication action." }, 400);
     const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
@@ -31,7 +46,7 @@ export async function POST(request: NextRequest) {
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
     if (!url || !key) return json({ error: "JanaSetu cloud accounts are not configured on this deployment yet." }, 503);
-    const endpoint = action === "signup" ? "/auth/v1/signup" : "/auth/v1/token?grant_type=password";
+    const endpoint = action === "signup" ? "/auth/v1/signup?redirect_to=" + encodeURIComponent(request.nextUrl.origin + "/auth/callback") : "/auth/v1/token?grant_type=password";
     const upstream = await fetch(url.replace(/\/$/, "") + endpoint, {
       method: "POST", headers: { apikey: key, "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }), cache: "no-store"
