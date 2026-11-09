@@ -12,6 +12,7 @@ export async function GET(){
       if(String(failure.message||"").includes("reviewer_access_required"))return NextResponse.json({error:"This account has no active scheme-review role. Ask the JanaSetu administrator to assign an approved reviewer role."},{status:403});
       return NextResponse.json({error:"Review queue is unavailable."},{status:503});
     }
-    return NextResponse.json({items:await response.json()},{headers:{"Cache-Control":"no-store"}});
+    const result=await response.json();
+    return NextResponse.json({items:result.items||[],roles:result.roles||[]},{headers:{"Cache-Control":"no-store"}});
   }catch{return NextResponse.json({error:"Review queue is unavailable."},{status:503});}
 }
