@@ -2,11 +2,10 @@
 
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function AuthPage() {
   const router = useRouter();
-  const search = useSearchParams();
   const [mode, setMode] = useState<"signin" | "signup" | "reset">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,7 +19,7 @@ export default function AuthPage() {
       const response = await fetch("/api/auth", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: mode === "reset" ? "recover" : mode, email, password }) });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Authentication failed.");
-      if (result.authenticated) { router.replace(search.get("next") || "/app"); router.refresh(); }
+      if (result.authenticated) { const next = new URLSearchParams(window.location.search).get("next"); const safeNext = next && next.startsWith("/") && !next.startsWith("//") ? next : "/app"; router.replace(safeNext); router.refresh(); }
       else setMessage(result.message || "Check your email for next steps.");
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Authentication failed. Please try again."); }
     finally { setBusy(false); }
