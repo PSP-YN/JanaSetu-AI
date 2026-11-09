@@ -128,3 +128,14 @@ test("consent capture validates exact purpose scope and legal approval", () => {
   assert.match(sql, /create_application_case/);
   assert.match(sql, /workspace_sync/);
 });
+
+test("source refresh seeds schemes as pending and never self-approves them", () => {
+  const sql = read("supabase/migrations/20261109140729_seed_four_source_checked_schemes.sql");
+  assert.match(sql, /publication_status='review_pending'/);
+  assert.match(sql, /'source_checked'/);
+  assert.match(sql, /pm-kisan/);
+  assert.match(sql, /pmay-u-2/);
+  assert.match(sql, /pm-ujjwala/);
+  assert.match(sql, /pm-usp-csss/);
+  assert.doesNotMatch(sql, /insert into public\.scheme_approvals/i);
+});
