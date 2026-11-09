@@ -29,7 +29,7 @@ export default function AuthPage() {
     <Link className="auth-brand" href="/">JanaSetu AI</Link>
     <p className="auth-eyebrow">CITIZEN ACCOUNT</p>
     <h1>{mode === "signup" ? "Create your account" : mode === "reset" ? "Reset your password" : "Sign in to JanaSetu"}</h1>
-    <p className="auth-copy">Save your profile, preparation drafts and reminders across devices. You control your account and every consequential action.</p>
+    <p className="auth-copy">Create a citizen account. Cloud storage and cross-device sync remain disabled until the purpose-specific privacy policy is legally approved and you explicitly consent. Local workspace use remains available.</p>
     <form onSubmit={submit}>
       <label htmlFor="account-email">Email address</label>
       <input id="account-email" type="email" autoComplete="email" required maxLength={254} value={email} onChange={e=>setEmail(e.target.value)} />
