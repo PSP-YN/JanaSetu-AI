@@ -43,6 +43,9 @@ jobs:
       - name: Verify independent scheme-review packets remain unapproved
         run: python scripts/validate_scheme_review_packets.py
 
+      - name: Validate database RLS and citizen automation guardrails
+        run: python scripts/validate_database_migration.py
+
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
 

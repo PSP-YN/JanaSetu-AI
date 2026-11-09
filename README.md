@@ -35,6 +35,14 @@ Production deployments are triggered by the protected main-branch release flow. 
 
 ---
 
+## Production architecture and backend status
+
+- [Target production architecture](docs/target-production-architecture.md)
+- [Citizen data and automation policy](docs/citizen-data-and-automation-policy.md)
+- [Production readiness](docs/production-readiness.md)
+
+The Supabase citizen-data migration is a prepared foundation only. It has not been applied to a dedicated JanaSetu project. The current workspace still uses browser-local storage.
+
 ## Previous detailed project documentation
 
 # JanaSetu AI
