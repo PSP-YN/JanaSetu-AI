@@ -1,14 +1,16 @@
 {
-  "name": "janSetu-ai",
-  "version": "0.1.0",
+  "name": "janasetu-ai",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "tsx --test tests/*.test.ts",
+    "test": "npm run test:unit",
     "typecheck": "tsc --noEmit",
-    "test:e2e": "npm run build && playwright test"
+    "test:e2e": "npm run build && playwright test",
+    "test:unit": "tsx --test tests/*.test.ts",
+    "check": "npm run typecheck && npm run test:unit"
   },
   "dependencies": {
     "lucide-react": "^0.468.0",

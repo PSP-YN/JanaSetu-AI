@@ -28,13 +28,20 @@ jobs:
           trap 'rm -rf "$tmp"' EXIT
 
           curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/" -o "$tmp/home.html"
-          grep -q 'profile-avatar.png' "$tmp/home.html"
+          grep -q 'JanaSetu AI' "$tmp/home.html"
+          grep -q 'href="/app"' "$tmp/home.html"
+          curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/app" -o "$tmp/app.html"
+          grep -q 'GOVERNMENT BENEFITS WORKSPACE' "$tmp/app.html"
 
           curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/api/health" -o "$tmp/health.json"
           curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/api/schemes" -o "$tmp/schemes.json"
           curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/api/sources/health" -o "$tmp/sources.json"
           curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/api/schemes/open-data?q=farmer&limit=5" -o "$tmp/search.json"
-          curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/profile-avatar.png" -o "$tmp/avatar.png"
+          curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/janasetu-logo.png" -o "$tmp/logo.png"
+          curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/hero-citizen.svg" -o "$tmp/hero.svg"
+          curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/robots.txt" -o "$tmp/robots.txt"
+          curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/sitemap.xml" -o "$tmp/sitemap.xml"
+          curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/opengraph-image" -o "$tmp/og.png"
           curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/privacy" -o "$tmp/privacy.html"
           curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/terms" -o "$tmp/terms.html"
 
@@ -53,9 +60,13 @@ jobs:
           for (const key of ["budgetLineItemLeadTotal", "officialSourceCatalogueOnlyTotal"]) if (!Number.isInteger(schemes[key]) || schemes[key] < 0 || schemes[key] > schemes.catalogueTotal) throw new Error("Built-in catalogue provenance metadata is invalid: " + key);
           if (!source || source.localIndexAvailability !== "available" || !Number.isInteger(source.indexedRows) || source.indexedRows < 1) throw new Error("Bundled third-party snapshot is unavailable or incomplete");
           if (search.searchMode !== "local-full-index" || !Number.isInteger(search.total) || search.total < 1 || !Array.isArray(search.records) || search.records.length < 1) throw new Error("Local full-index search smoke test failed");
-          const avatar = fs.readFileSync(path.join(dir, "avatar.png"));
+          const logo = fs.readFileSync(path.join(dir, "logo.png"));
           const png = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
-          if (avatar.length < 100 || !avatar.subarray(0, 8).equals(png)) throw new Error("Profile avatar is missing or invalid");
+          if (logo.length < 100 || !logo.subarray(0, 8).equals(png)) throw new Error("Uploaded JanaSetu logo is missing or invalid");
+          if (!read("hero.svg").includes("<svg")) throw new Error("Landing-page hero illustration is missing");
+          if (!read("robots.txt").includes("Sitemap:") || !read("sitemap.xml").includes("jana-setu-ai.vercel.app")) throw new Error("SEO discovery endpoints are missing");
+          const og = fs.readFileSync(path.join(dir, "og.png"));
+          if (og.length < 100 || !og.subarray(0, 8).equals(png)) throw new Error("Open Graph preview is not a valid PNG");
           for (const name of ["privacy.html", "terms.html"]) {
             const html = read(name);
             if (!html.includes("JanaSetu") || html.length < 500) throw new Error("Policy route failed: " + name);
@@ -63,7 +74,7 @@ jobs:
           if (source.freshness === "stale") console.warn("::warning::The third-party discovery snapshot is stale; eligibility rules remain independent of this catalogue.");
           if (source.searchAvailability === "unavailable") console.warn("::warning::The publisher search endpoint is unavailable; the bundled local index is being used.");
           if (source.updateAvailable) console.warn("::warning::A new upstream dataset revision is available; the daily refresh workflow should prepare a review PR.");
-          console.log("Production smoke checks passed: home, health, catalogue, local search, snapshot integrity, avatar, privacy and terms.");
+          console.log("Production smoke checks passed: landing page, citizen workspace, health, catalogue, local search, snapshot integrity, branding, SEO, privacy and terms.");
           NODE
 
       - name: Open one tracked incident if production checks fail

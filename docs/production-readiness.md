@@ -1,3 +1,41 @@
+# Production readiness — current release assessment
+
+## Current public-site release scope (9 November 2026)
+The public root route is now a standalone landing page. The prior citizen workspace is retained at `/app` and marked `noindex`. Privacy and terms remain at their existing same-origin routes. This is a landing-page and information-architecture release, not a certification that the citizen application is production-ready.
+
+### Implemented in this release candidate
+- Responsive public landing page with a custom vector hero illustration and JanaSetu brand asset.
+- Clear independent-service disclosure and no unsupported government affiliation, eligibility, coverage, or application-submission claims.
+- Same-origin route to the existing workspace at `/app`.
+- Canonical metadata, Open Graph/Twitter metadata, generated PNG Open Graph image, robots.txt, sitemap.xml and semantic FAQ content.
+- CI smoke tests for the landing page, workspace, branding assets, SEO endpoints, existing API contracts and legal pages.
+- Production monitor updated to check the new public route structure.
+- Removed the sample household fixture and sample-profile action from the workspace.
+- Citizen avatar now uses citizen initials or a generic icon; the uploaded image is used as the JanaSetu brand asset.
+
+### Local verification evidence
+- `npm run check`: passed (TypeScript plus 60 unit tests).
+- `npm run build`: passed.
+- `npm run test:e2e`: passed (40 Playwright tests; includes axe scans for landing, workspace, privacy and terms).
+- Local production smoke test: passed for `/`, `/app`, logo, hero illustration, robots, sitemap, generated PNG Open Graph image, health API, privacy and terms.
+- `npm audit --omit=dev --audit-level=high`: 0 production dependency vulnerabilities.
+- `git diff --check`: passed.
+
+## Still not production-ready for citizen application operations
+- No JanaSetu-owned citizen authentication, database, or cross-device persistence.
+- Citizen profile, assessments, drafts, documents metadata and reminders remain browser-local.
+- Document file bytes are not securely uploaded, malware scanned, OCR processed or stored.
+- The current catalogue remains partial and includes distinct catalogue-only and budget-lead classes. External machine-parsed discovery snapshot freshness is independently monitored but does not establish eligibility.
+- No universal government portal submission integration or official status synchronization.
+- No independently completed legal review, privacy impact assessment sign-off, penetration test, disaster-recovery drill or load test demonstrating high-concurrency capacity.
+
+## Release gate
+A landing-page release may be deployed independently after pull-request CI, preview review and production smoke checks pass. The full citizen application must not be represented as an end-to-end government application service until the outstanding backend, data verification, security, legal and authorized integration gates are implemented and independently verified.
+
+---
+
+## Previous detailed production assessment
+
 # Production readiness assessment
 
 **Status: deployed prototype — not production-ready for real citizen records. Updated 5 November 2026.**
