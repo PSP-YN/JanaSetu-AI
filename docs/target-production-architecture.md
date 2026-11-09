@@ -76,3 +76,19 @@ Use free plans for development and a controlled pilot only. Do not promise a fre
 ## Government integration authorization boundary
 
 The government integration plan is documented in `docs/government-integration-access-plan.md`. Do not scrape or automate myScheme without express written authorization; its published Terms of Use prohibit bots/scrapers absent written permission. API Setu consumer access, individual API subscriptions, publisher approvals and DigiLocker requester onboarding are separate requirements. Each department/scheme needs a reviewed adapter manifest and explicit production approval. No portal submission adapter is currently approved.
+
+## Consent-gated automation execution
+
+The dedicated backend now uses Supabase Queues (`pgmq`) and Cron (`pg_cron`). The `janasetu_automation` queue is durable; a database cron job invokes the queue processor once per minute. The worker is database-only and does not require an external service-role key in the web application.
+
+The citizen lifecycle is:
+1. A citizen requests an application case. The database RPC accepts only a published, independently approved scheme version with at least two distinct source-accuracy and two distinct eligibility-rule approvals.
+2. The citizen records purpose-specific consent with a policy version and scope.
+3. The citizen requests a specific automation action. The request is idempotent and remains `awaiting_confirmation`.
+4. The citizen explicitly confirms the exact run. Only then is a queue message created.
+5. The worker currently processes internal document-checklist preparation and in-app reminder scheduling.
+6. External portal actions are rejected until a production-approved adapter exists and is implemented. The consent scope must match the exact destination URL and scheme version; a separate confirmation is still required.
+
+The worker is not a general-purpose browser bot. It cannot bypass OTP/CAPTCHA or government access controls. See `docs/government-integration-access-plan.md`.
+
+Current remote state: 14 public tables, all with RLS; 0 published schemes and 0 independently approved versions. The queue and scheduler are operational but have no eligible production scheme work to process yet.
