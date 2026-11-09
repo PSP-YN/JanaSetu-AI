@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     if (new TextEncoder().encode(raw).byteLength > 8192) return json({ error: "Consent request is too large." }, 413);
     const input = JSON.parse(raw) as Record<string, unknown>;
     if (Object.keys(input).some(k => !["case_id","purpose","policy_version","granted","scope"].includes(k))) return json({ error: "Unsupported consent field." }, 400);
-    const purposes = ["profile_storage","document_storage","reminder_notifications","assisted_form_filling","external_portal_navigation","automated_submission"];
+    const purposes = ["profile_storage","cloud_workspace_sync","document_storage","reminder_notifications","assisted_form_filling","external_portal_navigation","automated_submission"];
     if (typeof input.purpose !== "string" || !purposes.includes(input.purpose) || typeof input.policy_version !== "string" || input.policy_version.length < 1 || input.policy_version.length > 80 || typeof input.granted !== "boolean") return json({ error: "Invalid consent details." }, 400);
     const caseId = input.case_id === null || input.case_id === undefined ? null : String(input.case_id);
     if (caseId && !/^[0-9a-f-]{36}$/i.test(caseId)) return json({ error: "Invalid application reference." }, 400);
