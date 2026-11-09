@@ -76,3 +76,16 @@ The branch deploys only to Vercel preview URLs. The production target/domain has
 Official-source review confirmed that myScheme prohibits unauthorized bot/scraper access unless expressly authorized in writing; API Setu uses consumer registration, API subscriptions and publisher approval; DigiLocker requester access requires partner registration, credentials, testing/audit and go-live approval; UMANG service integrations are individual department APIs. The detailed access plan and per-adapter approval contract are in `docs/government-integration-access-plan.md`.
 
 No permission, partner approval, production API credentials or portal sandbox credentials have been obtained for JanaSetu. Consequently, no automatic government submission is enabled or claimed. This is an external authorization gate, not a coding task that can be bypassed.
+
+## Consent-gated automation engine — 9 November 2026
+
+- Enabled Supabase `pgmq` durable queue and `pg_cron` scheduler.
+- Created `janasetu_automation` queue and active one-minute cron job `janasetu-automation-worker`.
+- Cron execution history confirms successful runs; an explicit empty-queue worker invocation returned 0 processed jobs.
+- Citizen application creation is exposed only through an RPC that requires a published scheme version marked `independently_approved`, at least two distinct source-accuracy approvals and two distinct eligibility-rule approvals, with no rejected/changes-requested review.
+- Purpose-specific consent is captured with a policy version and scope. Automation requests are idempotent and remain `awaiting_confirmation` until the citizen confirms the exact run.
+- Only internal actions `prepare_documents` and `schedule_reminder` can currently enter the queue. The worker prepares a checklist from the approved scheme version or creates an in-app reminder.
+- External portal actions require a production-approved scheme adapter, a valid authorization reference, an exact destination match in consent scope and a separate human confirmation. The current worker intentionally rejects external execution even if a registry entry is created; a real adapter implementation and acceptance tests are required first.
+- Privileged database functions were moved to the non-exposed `private` schema; public RPC wrappers are invoker-security. The queue processor is executable by the database scheduler only.
+- Supabase security advisor now reports only the intentional `scheme_approvals` table with RLS and no client policy. The `scheme_integrations` table has a service-role read policy and no citizen access.
+- Remote inventory: 14 public tables, 14 with RLS enabled. Published schemes: 0. Independently approved scheme versions: 0. No real application case or automation job can currently be created until human scheme review and publication are complete.
