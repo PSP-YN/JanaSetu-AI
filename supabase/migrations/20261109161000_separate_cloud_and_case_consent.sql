@@ -279,3 +279,78 @@ end;
 $$;;
 
 
+
+
+create or replace function private.get_citizen_workspace()
+returns jsonb language plpgsql security definer set search_path=public,private,pg_temp
+as $$
+declare v_user uuid := auth.uid(); v_workspace jsonb;
+begin
+  if v_user is null then raise exception 'authentication_required' using errcode='42501'; end if;
+  if not private.has_active_citizen_consent(v_user,'cloud_workspace_sync,null) then raise exception 'profile_storage_consent_required' using errcode='42501'; end if;
+  select jsonb_build_object(
+    'profile_data',profile_data,'preferred_language',preferred_language,
+    'application_drafts',application_drafts,'document_refs',document_refs,
+    'reminders',reminders,'assessments',assessments,'updated_at',updated_at
+  ) into v_workspace from public.citizen_workspaces where user_id=v_user;
+  return v_workspace;
+end;
+$$;
+
+create or replace function private.save_citizen_workspace(p_workspace jsonb)
+returns timestamptz language plpgsql security definer set search_path=public,private,pg_temp
+as $$
+declare v_user uuid := auth.uid(); v_updated timestamptz;
+begin
+  if v_user is null then raise exception 'authentication_required' using errcode='42501'; end if;
+  if not private.has_active_citizen_consent(v_user,'cloud_workspace_sync,null) then raise exception 'profile_storage_consent_required' using errcode='42501'; end if;
+  if p_workspace is null or jsonb_typeof(p_workspace)<>'object' or octet_length(p_workspace::text)>262144 then raise exception 'invalid_workspace_payload'; end if;
+  if exists (select 1 from jsonb_object_keys(p_workspace) as key(name) where key.name not in ('profile_data','preferred_language','application_drafts','document_refs','reminders','assessments')) then raise exception 'unsupported_workspace_field'; end if;
+  if jsonb_typeof(p_workspace->'profile_data')<>'object'
+     or jsonb_typeof(p_workspace->'application_drafts')<>'array'
+     or jsonb_typeof(p_workspace->'document_refs')<>'array'
+     or jsonb_typeof(p_workspace->'reminders')<>'array'
+     or jsonb_typeof(p_workspace->'assessments')<>'array'
+     or p_workspace->>'preferred_language' not in ('en','hi','kn','ta','te','ml') then
+    raise exception 'invalid_workspace_fields';
+  end if;
+  insert into public.citizen_workspaces(user_id,profile_data,preferred_language,application_drafts,document_refs,reminders,assessments,updated_at)
+  values (v_user,p_workspace->'profile_data',p_workspace->>'preferred_language',p_workspace->'application_drafts',p_workspace->'document_refs',p_workspace->'reminders',p_workspace->'assessments',now())
+  on conflict (user_id) do update set
+    profile_data=excluded.profile_data,preferred_language=excluded.preferred_language,
+    application_drafts=excluded.application_drafts,document_refs=excluded.document_refs,
+    reminders=excluded.reminders,assessments=excluded.assessments,updated_at=now()
+  returning updated_at into v_updated;
+  return v_updated;
+end;
+$$;;
+
+create or replace function private.save_citizen_workspace(p_workspace jsonb)
+returns timestamptz language plpgsql security definer set search_path=public,private,pg_temp
+as $$
+declare v_user uuid := auth.uid(); v_updated timestamptz;
+begin
+  if v_user is null then raise exception 'authentication_required' using errcode='42501'; end if;
+  if not private.has_active_citizen_consent(v_user,'cloud_workspace_sync,null) then raise exception 'profile_storage_consent_required' using errcode='42501'; end if;
+  if p_workspace is null or jsonb_typeof(p_workspace)<>'object' or octet_length(p_workspace::text)>262144 then raise exception 'invalid_workspace_payload'; end if;
+  if exists (select 1 from jsonb_object_keys(p_workspace) as key(name) where key.name not in ('profile_data','preferred_language','application_drafts','document_refs','reminders','assessments')) then raise exception 'unsupported_workspace_field'; end if;
+  if jsonb_typeof(p_workspace->'profile_data')<>'object'
+     or jsonb_typeof(p_workspace->'application_drafts')<>'array'
+     or jsonb_typeof(p_workspace->'document_refs')<>'array'
+     or jsonb_typeof(p_workspace->'reminders')<>'array'
+     or jsonb_typeof(p_workspace->'assessments')<>'array'
+     or p_workspace->>'preferred_language' not in ('en','hi','kn','ta','te','ml') then
+    raise exception 'invalid_workspace_fields';
+  end if;
+  insert into public.citizen_workspaces(user_id,profile_data,preferred_language,application_drafts,document_refs,reminders,assessments,updated_at)
+  values (v_user,p_workspace->'profile_data',p_workspace->>'preferred_language',p_workspace->'application_drafts',p_workspace->'document_refs',p_workspace->'reminders',p_workspace->'assessments',now())
+  on conflict (user_id) do update set
+    profile_data=excluded.profile_data,preferred_language=excluded.preferred_language,
+    application_drafts=excluded.application_drafts,document_refs=excluded.document_refs,
+    reminders=excluded.reminders,assessments=excluded.assessments,updated_at=now()
+  returning updated_at into v_updated;
+  return v_updated;
+end;
+$$;
+
+revoke all on function private.get_citizen_workspace() from public,anon,service_role;;
