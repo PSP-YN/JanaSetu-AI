@@ -24,3 +24,8 @@ The existing workspace still stores profiles, assessments, drafts, reminder reco
 ## Cloud workspace boundary
 
 Authenticated citizens can synchronize their profile and preparation metadata to a dedicated JanaSetu Supabase project. Session tokens are held in HttpOnly cookies and every workspace request derives the citizen ID from a verified Supabase Auth session. The cloud workspace stores document references only; it does not store document bytes. Cloud synchronization is not yet a substitute for the encrypted document-storage, malware-scanning, retention and deletion controls described in the production architecture. If cloud synchronization cannot load the remote workspace, the client must not overwrite it with local data.
+
+
+## Cloud storage activation status
+
+The cloud workspace API is technically implemented but is not enabled for citizen data yet. Direct table access is revoked and all workspace reads/writes pass through a consent-checking database function. The private consent-policy registry currently has no active approved policy versions. Until a named privacy/legal reviewer approves the exact policy text and its hash is recorded, the API rejects cloud storage and the application stays in local-only mode. Sign-in does not imply consent to store profile or application data.
