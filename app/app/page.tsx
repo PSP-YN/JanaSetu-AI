@@ -931,7 +931,7 @@ export default function Home() {
         }
         if (active) setCloudReady(true);
       } catch {
-        if (active) { setCloudError("Cloud sync could not be loaded. Local changes are still available on this device; no cloud overwrite was attempted."); setCloudReady(false); }
+        if (active) { setCloudError("Cloud storage is disabled until privacy review and explicit consent are complete. Your data remains on this device; no cloud overwrite was attempted."); setCloudReady(false); }
       }
     })();
     return () => { active = false; };
@@ -1217,7 +1217,7 @@ export default function Home() {
 
             <section className="cloud-status" aria-live="polite">
               <span className={cloudUserId && cloudSavedAt && !cloudError ? "cloud-status-dot synced" : "cloud-status-dot"} />
-              <span>{cloudError || (cloudUserId ? (cloudSavedAt ? "Cloud workspace connected · latest save " + new Date(cloudSavedAt).toLocaleTimeString() : "Connecting your secure cloud workspace…") : "Local workspace · sign in above to enable cross-device sync")}</span>
+              <span>{cloudError || (cloudUserId ? (cloudSavedAt ? "Cloud workspace connected · latest save " + new Date(cloudSavedAt).toLocaleTimeString() : "Connecting your secure cloud workspace…") : "Local workspace · cloud sync awaits privacy approval and explicit consent")}</span>
             </section>
             <section className="hero-panel">
               <div className="hero-content">
