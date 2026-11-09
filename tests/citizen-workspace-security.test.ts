@@ -100,7 +100,7 @@ test("consent and reminder writes cannot bypass guarded RPCs", () => {
 });
 
 test("application case persistence requires separate scheme-scoped profile consent", () => {
-  const sql = read("supabase/migrations/20261109161000_separate_cloud_and_case_consent.sql");
+  const sql = read("supabase/migrations/20261109135647_separate_cloud_and_case_consent.sql");
   const route = read("app/api/applications/route.ts");
   assert.match(sql, /p_consent_id uuid/);
   assert.match(sql, /purpose = 'profile_storage'/);
@@ -111,7 +111,7 @@ test("application case persistence requires separate scheme-scoped profile conse
 });
 
 test("cloud synchronization uses its own consent purpose", () => {
-  const sql = read("supabase/migrations/20261109161000_separate_cloud_and_case_consent.sql");
+  const sql = read("supabase/migrations/20261109135647_separate_cloud_and_case_consent.sql");
   assert.match(sql, /cloud_workspace_sync/);
   assert.match(sql, /has_active_citizen_consent\(v_user,'cloud_workspace_sync',null\)/);
 });
