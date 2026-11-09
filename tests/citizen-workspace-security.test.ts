@@ -139,3 +139,28 @@ test("source refresh seeds schemes as pending and never self-approves them", () 
   assert.match(sql, /pm-usp-csss/);
   assert.doesNotMatch(sql, /insert into public\.scheme_approvals/i);
 });
+
+test("scheme publication requires independent source, rule, legal and publisher roles", () => {
+  const sql = read("supabase/migrations/20261109140923_add_independent_scheme_review_workflow.sql");
+  const separation = read("supabase/migrations/20261109141005_enforce_reviewer_independence.sql");
+  assert.match(sql, /source_reviewer/);
+  assert.match(sql, /rules_reviewer/);
+  assert.match(sql, /legal_reviewer/);
+  assert.match(sql, /scheme_publisher/);
+  assert.match(sql, /approval_type = 'legal_review'/);
+  assert.match(sql, /independently_approved/);
+  assert.match(separation, /reviewer_role_separation_violation/);
+  assert.match(separation, /publisher_must_be_independent/);
+});
+
+test("review endpoints use verified caller sessions and no service-role secret", () => {
+  const queue = read("app/api/review/queue/route.ts");
+  const decision = read("app/api/review/decision/route.ts");
+  const publish = read("app/api/review/publish/route.ts");
+  assert.match(queue, /getVerifiedSupabaseSession/);
+  for (const route of [decision,publish]) {
+    assert.match(route, /getVerifiedSupabaseSession/);
+    assert.match(route, /Cross-origin request blocked/);
+  }
+  for (const route of [queue,decision,publish]) assert.doesNotMatch(route,/SUPABASE_SERVICE_ROLE_KEY/);
+});
