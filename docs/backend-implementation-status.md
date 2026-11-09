@@ -132,3 +132,11 @@ No permission, partner approval, production API credentials or portal sandbox cr
 - `/api/automation/runs` requests and lists idempotent automation runs; `/api/automation/confirm` records point-of-action confirmation.
 - `/api/reminders` exposes citizen-owned in-app reminders read-only. Reminder rows are created by the scheduled worker, not direct browser writes.
 - Current state remains intentionally empty: 0 published schemes, 0 application cases, 0 automation runs and 0 active consent policies.
+
+
+## Scheme source refresh — 9 November 2026
+
+- Four records are now stored in the dedicated database with immutable content hashes and linked official source records: PM-KISAN, PMAY-U 2.0, PMUY 2.0 and PM-USP CSSS.
+- All four are `source_checked` / `review_pending`; zero `scheme_approvals` records were inserted. No scheme was independently approved or published.
+- The PMAY 2026 guideline index requires reconciliation; the CSSS NSP deadline conflict remains unresolved; PM-KISAN exclusion circulars require review; PMUY household category/biometric requirements need independent confirmation.
+- Full reviewer evidence and unresolved questions: `docs/scheme-review-packets/2026-11-09-official-source-refresh.md`.
