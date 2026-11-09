@@ -89,3 +89,15 @@ No permission, partner approval, production API credentials or portal sandbox cr
 - Privileged database functions were moved to the non-exposed `private` schema; public RPC wrappers are invoker-security. The queue processor is executable by the database scheduler only.
 - Supabase security advisor now reports only the intentional `scheme_approvals` table with RLS and no client policy. The `scheme_integrations` table has a service-role read policy and no citizen access.
 - Remote inventory: 14 public tables, 14 with RLS enabled. Published schemes: 0. Independently approved scheme versions: 0. No real application case or automation job can currently be created until human scheme review and publication are complete.
+
+
+## Privacy consent gate — 9 November 2026
+
+- Added a private consent-policy registry. It contains zero active policies until the actual policy text has passed legal/privacy review and an approval reference/hash is recorded.
+- Purpose-specific consent cannot be granted against an unapproved policy version.
+- Revoking a purpose marks all earlier active grants for that user/case/purpose as revoked.
+- Automation requests and point-of-action confirmation re-check that the exact purpose policy remains active and that scope matches the action and scheme version.
+- Direct authenticated Data API access to `citizen_workspaces` has been revoked. Workspace reads/writes now go through private SECURITY DEFINER functions exposed only through public SECURITY INVOKER wrappers that enforce `profile_storage` consent.
+- Remote probes confirm citizens cannot directly SELECT/INSERT the workspace table, can call only the consent-checked RPC wrappers, and cannot call the private consent-probe function.
+- No active approved consent policies exist. Therefore cloud profile storage and cross-device synchronization are intentionally disabled. The account sign-in surface can be tested, but user data remains in browser-local storage until the privacy policy is approved and the citizen explicitly accepts it.
+- Remote `citizen_workspaces` row count remains zero. No citizen account or personal data was created during implementation.
