@@ -91,3 +91,10 @@ test("cloud storage remains disabled until a legal-approved consent policy is ac
   assert.match(sql, /revoke all on public\.citizen_workspaces from public,anon,authenticated/);
   assert.match(route, /Cloud storage is disabled until the profile-storage privacy policy is legally approved/);
 });
+
+test("consent and reminder writes cannot bypass guarded RPCs", () => {
+  const sql = read("supabase/migrations/20261109135345_restrict_direct_citizen_mutations.sql");
+  assert.match(sql, /revoke insert, update, delete, truncate on public\.citizen_consents/);
+  assert.match(sql, /revoke insert, update, delete, truncate on public\.profiles/);
+  assert.match(sql, /revoke insert, update, delete, truncate on public\.citizen_reminders/);
+});
