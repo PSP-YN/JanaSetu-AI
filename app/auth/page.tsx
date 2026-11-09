@@ -37,7 +37,7 @@ export default function AuthPage() {
       {mode !== "reset" && <><label htmlFor="account-password">Password</label><input id="account-password" type="password" autoComplete={mode === "signup" ? "new-password" : "current-password"} required minLength={mode === "signup" ? 12 : 1} value={password} onChange={e=>setPassword(e.target.value)} />{mode === "signup" && <small>Use at least 12 characters.</small>}</>}
       {error && <p className="auth-error" role="alert">{error}</p>}
       {message && <p className="auth-message" role="status">{message}</p>}
-      <button className="button-primary auth-submit" disabled={busy}>{busy ? "Please wait…" : mode === "signup" ? "Create account" : "Sign in"}</button>
+      <button className="button-primary auth-submit" disabled={busy}>{busy ? "Please wait…" : mode === "signup" ? "Create account"  : mode === "reset" ? "Send reset link" : "Sign in"}</button>
     </form>
     <div className="auth-switches">{mode === "signin" && <button onClick={()=>{setMode("reset");setError("");setMessage("");}}>Forgot password?</button>}<button onClick={()=>{setMode(mode === "signup" ? "signin" : "signup");setError("");setMessage("");}}>{mode === "signup" ? "Already have an account? Sign in" : "Create an account"}</button>{mode === "reset" && <button onClick={()=>{setMode("signin");setError("");setMessage("");}}>Back to sign in</button>}</div>
     <Link className="auth-back" href="/app">Continue to workspace</Link>
