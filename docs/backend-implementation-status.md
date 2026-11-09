@@ -140,3 +140,15 @@ No permission, partner approval, production API credentials or portal sandbox cr
 - All four are `source_checked` / `review_pending`; zero `scheme_approvals` records were inserted. No scheme was independently approved or published.
 - The PMAY 2026 guideline index requires reconciliation; the CSSS NSP deadline conflict remains unresolved; PM-KISAN exclusion circulars require review; PMUY household category/biometric requirements need independent confirmation.
 - Full reviewer evidence and unresolved questions: `docs/scheme-review-packets/2026-11-09-official-source-refresh.md`.
+
+
+## Independent review and publication workflow
+
+- Private reviewer-role registry and public invoker RPCs are installed.
+- Review roles: source reviewer, eligibility-rule reviewer, legal reviewer, translation reviewer and scheme publisher.
+- Review decisions are tied to the authenticated user; notes require evidence-based rationale.
+- One reviewer cannot submit multiple review categories for the same scheme version. The publisher cannot be one of that version's reviewers.
+- Publication requires two distinct source approvals, two distinct eligibility-rule approvals and one legal approval, followed by a separate publisher action.
+- Application-case creation rechecks the same approval requirements and a scheme-scoped profile-storage consent.
+- Reviewer queue and decision/publish APIs plus `/app/review` UI are implemented.
+- No reviewer roles are assigned, no approval records exist, and no scheme is published. Role assignment instructions: `docs/scheme-reviewer-onboarding.md`.
