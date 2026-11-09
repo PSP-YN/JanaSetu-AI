@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
       if (!access_token || !refresh_token || access_token.length > 8192 || refresh_token.length > 8192) return json({ error: "Invalid authentication callback." }, 400);
       const url = process.env.NEXT_PUBLIC_SUPABASE_URL; const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
       if (!url || !key) return json({ error: "Authentication service is not configured." }, 503);
-      const verified = await fetch(url.replace(/\\/$/, "") + "/auth/v1/user", { headers: { apikey: key, Authorization: "Bearer " + access_token }, cache: "no-store" });
+      const verified = await fetch((url.endsWith("/") ? url.slice(0, -1) : url) + "/auth/v1/user", { headers: { apikey: key, Authorization: "Bearer " + access_token }, cache: "no-store" });
       if (!verified.ok) return json({ error: "The email confirmation link is invalid or expired." }, 401);
       const user = await verified.json();
       await setSupabaseSession({ access_token, refresh_token, expires_in: 3600 });
