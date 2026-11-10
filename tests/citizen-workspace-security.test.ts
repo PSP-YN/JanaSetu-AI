@@ -181,3 +181,21 @@ test("citizen document upload is purpose-consent gated and quarantined until sca
   assert.match(route, /Maximum document size is 12 MB/);
   assert.doesNotMatch(route, /SUPABASE_SERVICE_ROLE_KEY/);
 });
+
+
+test("document scanner claims are leased and quarantine reads are restricted", () => {
+  const sql = read("supabase/migrations/20261110185200_add_leased_clamav_document_scanner.sql");
+  const worker = read("services/document-scanner/worker.py");
+  const compose = read("services/document-scanner/docker-compose.yml");
+  assert.match(sql, /for update skip locked/i);
+  assert.match(sql, /scanner_lease_until/);
+  assert.match(sql, /scan_attempts < 5/);
+  assert.match(sql, /scanner_role_required/);
+  assert.match(sql, /document_scan_lease_invalid/);
+  assert.match(sql, /private\.can_read_citizen_document/);
+  assert.match(worker, /storage\/v1\/object\/authenticated/);
+  assert.match(worker, /zINSTREAM/);
+  assert.match(worker, /48 \* 60 \* 60/);
+  assert.doesNotMatch(worker, /SUPABASE_SERVICE_ROLE_KEY|VirusTotal/);
+  assert.doesNotMatch(compose, /ports:/);
+});
