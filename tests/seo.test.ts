@@ -32,7 +32,7 @@ test("localized pages and answer-engine references are discoverable without expo
  for(const code of ["hi","kn","te","ta","ml"])assert.ok(sitemap.includes('"/'+code+'"'));
  assert.match(short,/not a government website/i);
  assert.match(short,/A preliminary match is not an official eligibility decision/i);
- assert.match(full,/sourceCheckedAt/);
+ assert.match(full,/source-check date/);
  assert.match(full,/citizen approval/);
  assert.match(full,/official government source/i);
 });
