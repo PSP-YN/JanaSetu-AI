@@ -15,7 +15,7 @@ Updated: 11 November 2026
 
 - `20261109130314_create_citizen_data_foundation.sql`
 - `20261109130423_harden_api_grants_and_index_foreign_keys.sql`
-- 12 public tables created; RLS enabled on all 12.
+- 14 public tables are present after subsequent automation/review migrations; RLS is enabled on all 14. Private scanner and application-preparation tables are not exposed through the Data API.
 - Explicit least-privilege Data API grants; future default privileges revoked for anon/authenticated/PUBLIC.
 - Private `citizen-documents` bucket configured. Upload API is consent-gated and fails closed until a legally approved policy and scanner acceptance are in place.
 - Foreign-key indexes added after Supabase advisor review.
@@ -30,11 +30,11 @@ Updated: 11 November 2026
 
 ## Not yet implemented or independently verified
 
-- Supabase Auth integration in the Next.js workspace; current profile, drafts, assessments, reminders and document metadata still persist in browser localStorage.
+- Supabase Auth routes, HttpOnly session cookies, refresh and verified-session API helpers are implemented. A controlled test-account lifecycle (confirmation, recovery, sign-out and SMTP delivery) is still outstanding. Profile/draft/assessment/reminder data remains local-first until an approved cloud-sync consent policy is activated.
 - Two-independent-user RLS tests and end-to-end account lifecycle.
-- Server-side application-case APIs, automation outbox/worker, idempotent transitions and reminder scheduler.
+- Server-side application-case APIs, consent-gated durable automation queue, idempotent transitions and in-app reminder worker are implemented; no approved scheme or citizen-confirmed production run exists yet. External email/SMS/push delivery is not configured.
 - Scanner service deployment, scanner identity provisioning, end-to-end malware scan acceptance, retention/deletion and clean-only document retrieval (download API now implemented; scanner deployment remains outstanding).
-- Verified full scheme catalogue, two-person scheme reviews and freshness automation across all records.
+- Full verified scheme catalogue, actual human reviewer assignments/approvals and freshness automation across all records. The deterministic eligibility engine and application preparation workflow are implemented, but no seeded scheme has an approved structured rule set.
 - Authorised government portal adapters and official acknowledgement/receipt verification.
 - Independent privacy/legal/security review, disaster recovery and load testing.
 
@@ -178,3 +178,15 @@ No permission, partner approval, production API credentials or portal sandbox cr
 - **Not yet live:** no scanner Auth identity has been provisioned or assigned, no scanner host/container is deployed, no ClamAV/EICAR acceptance test has run against Supabase Storage, and the legal consent policy remains inactive. Therefore no citizen upload can yet become downloadable. Keep the upload gate closed.
 
 - Clean-document retrieval migration `20261110185906_secure_clean_document_retrieval` is applied and tracked; citizens cannot retrieve quarantined documents through the new API.
+
+
+## Deterministic eligibility and application preparation — 11 November 2026
+
+- Added `lib/eligibility-engine.ts`: strict version-1 rule-set validation, allowlisted profile fields/operators, official HTTPS evidence metadata, SHA-256 provenance, 90-day source freshness, missing-value handling and deterministic rule evaluation.
+- Assessment states are deliberately limited to `potential_match`, `not_matched` and `needs_verification`. A potential match is not a government decision or guarantee.
+- Added authenticated `POST /api/eligibility/assess`; it reads only the signed-in caller's published scheme and current version. It does not persist the submitted profile.
+- Added `POST/GET /api/applications/prepare` and `POST /api/applications/prepare/confirm`. The preparation API requires an independently approved published scheme, a potential-match assessment, a complete reviewed field mapping and active scheme-scoped profile-storage consent.
+- Added private `application_preparations` persistence with caller ownership, consent rechecks, field allowlist/size validation, citizen-review state and a separate citizen confirmation. Confirmation records only that the citizen approved the prepared fields; `submission_status` remains `not_submitted`.
+- Added migrations `20261110190604_persist_citizen_application_preparations.sql` and `20261110190708_harden_application_preparation_consent_and_payload.sql`.
+- Rule schema and reviewer contract: `docs/eligibility-rule-set-contract.md`.
+- **Current gate:** the four seeded scheme versions still have draft rule notes and remain `review_pending`; zero schemes are published, zero are independently approved, zero citizen cases exist, and no active profile-storage consent policy exists. The engine correctly refuses to produce an automated potential match or save an application today. No automatic applicability claim is made.
