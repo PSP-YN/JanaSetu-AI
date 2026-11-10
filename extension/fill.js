@@ -46,6 +46,22 @@ function fillProfileInPage(profile,approvedFields){
     return value===null||value===undefined?"":String(value);
   };
   const visible=(element)=>!element.hidden&&!element.disabled&&!element.readOnly&&!element.closest('[aria-hidden="true"],[inert]')&&getComputedStyle(element).display!=="none"&&getComputedStyle(element).visibility!=="hidden"&&element.getClientRects().length>0;
+  const validateControl=(element,value)=>{
+    if(element.maxLength>0&&value.length>element.maxLength)return {valid:false,reason:"Value exceeds the portal field length limit."};
+    if(element.type==="number"){
+      const number=Number(value);
+      if(!Number.isFinite(number))return {valid:false,reason:"Value is not a valid number."};
+      if(element.min!==""&&element.min!==undefined&&number<Number(element.min))return {valid:false,reason:"Value is below the portal minimum."};
+      if(element.max!==""&&element.max!==undefined&&number>Number(element.max))return {valid:false,reason:"Value exceeds the portal maximum."};
+      const step=element.getAttribute("step");
+      if(step&&step!=="any"&&Number(step)>0){
+        const base=element.min!==""&&element.min!==undefined?Number(element.min):0;
+        if(Math.abs((number-base)/Number(step)-Math.round((number-base)/Number(step)))>1e-8)return {valid:false,reason:"Value does not match the portal step constraint."};
+      }
+    }
+    if(element.getAttribute("pattern"))return {valid:false,reason:"The portal has a custom format rule that needs manual validation."};
+    return {valid:true,reason:""};
+  };
   const controls=[...document.querySelectorAll('input:not([type]),input[type="text"],input[type="number"],input[type="radio"],select,textarea')].filter(visible);
   const candidates=[];const handledRadio=new Set();
   for(const element of controls){
@@ -67,7 +83,7 @@ function fillProfileInPage(profile,approvedFields){
       const target=targets[0];
       const label=legend||(target.labels?[...target.labels].map(item=>item.innerText).join(" "):element.name);
       const fingerprint=JSON.stringify({kind:"radio",name:element.name,legend:norm(legend),id:target.id,targetValue:target.value});
-      candidates.push({index:candidates.length,key,label,value,fingerprint,kind:"radio",element:target});
+      candidates.push({index:candidates.length,key,label,value,fingerprint,kind:"radio",element:target,valid:true,reason:""});
       continue;
     }
     if(element.type==="checkbox"||element.type==="file"||element.type==="password")continue;
@@ -91,16 +107,17 @@ function fillProfileInPage(profile,approvedFields){
     }else if(String(element.value||"").trim()!=="")continue;
     const label=element.labels?[...element.labels].map(item=>item.innerText).join(" "):element.getAttribute("aria-label")||element.name||element.id||key;
     const fingerprint=JSON.stringify({kind:element.tagName.toLowerCase(),type:element.type||"",name:element.name||"",id:element.id||"",label:norm(label),placeholder:norm(element.getAttribute("placeholder"))});
-    candidates.push({index:candidates.length,key,label,value,fingerprint,kind:element.tagName==="SELECT"?"select":"text",element});
+    const validation=element.tagName==="SELECT"?{valid:true,reason:""}:validateControl(element,value);
+    candidates.push({index:candidates.length,key,label,value,fingerprint,kind:element.tagName==="SELECT"?"select":"text",element,valid:validation.valid,reason:validation.reason});
   }
   if(!Array.isArray(approvedFields)){
-    return {preview:candidates.map(({index,key,label,value,fingerprint})=>({index,key,label,value,fingerprint}))};
+    return {preview:candidates.map(({index,key,label,value,fingerprint,valid,reason})=>({index,key,label,value,fingerprint,valid,reason}))};
   }
   const approved=new Map(approvedFields.filter(item=>item&&Number.isInteger(item.index)&&typeof item.fingerprint==="string").map(item=>[item.index,item.fingerprint]));
   let filled=0,stale=0;
   for(const candidate of candidates){
     if(!approved.has(candidate.index))continue;
-    if(approved.get(candidate.index)!==candidate.fingerprint){stale++;continue;}
+    if(approved.get(candidate.index)!==candidate.fingerprint||!candidate.valid){stale++;continue;}
     const element=candidate.element;
     if(candidate.kind==="radio"){
       if(controls.some(item=>item.type==="radio"&&item.name===element.name&&item.checked)){stale++;continue;}
