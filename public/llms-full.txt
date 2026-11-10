@@ -1,0 +1,47 @@
+# JanaSetu AI — Product and trust reference
+
+## Identity
+JanaSetu AI is an independent public-benefits navigation and application-preparation project for people in India. It is not affiliated with, operated by, or endorsed by a government department unless a specific written partnership is published and verifiable.
+
+## Citizen journey
+1. A citizen reviews the privacy boundary and supplies only relevant profile details.
+2. The system reads a published, independently approved scheme version and its reviewed, machine-readable rule set.
+3. A deterministic engine evaluates supported rules. Missing values and stale evidence remain unknown.
+4. A potential match may lead to a draft only when a reviewed application-field mapping exists.
+5. The citizen checks every field and document requirement.
+6. A separate confirmation records the citizen's approval of the prepared draft.
+7. Submission is recorded only after an authorised government channel returns a verifiable acknowledgement or receipt.
+
+## Assessment semantics
+- `potential_match`: all currently encoded and independently approved criteria matched. This is not an official decision.
+- `not_matched`: at least one reviewed conjunctive criterion did not match. It is not an official rejection.
+- `needs_verification`: information is missing, evidence is stale, or the scheme/rule version has not passed review.
+
+## Evidence requirements
+A machine rule must reference an official HTTPS source, source-check date, SHA-256 source hash, and concise supporting excerpt. Evidence older than 90 days becomes unknown pending refresh. Rule-set changes create a new scheme version and require fresh review.
+
+## Consent and data
+Citizen data is purpose-bound. Private document uploads require an approved consent policy. Documents remain quarantined until a self-hosted malware scanner records a clean attestation. Retrieval requires ownership, a clean scan and active consent. Citizens should not submit Aadhaar numbers, bank account details, passwords, PINs, OTPs or biometric secrets to JanaSetu.
+
+## Automation boundary
+- Internal preparation and in-app reminders may run only after the required consent and point-of-action confirmation.
+- Portal filling and submission require a scheme-specific adapter and written/technical authorization from the responsible service owner.
+- CAPTCHA, OTP, biometric identity proofing, payment approval and portal access controls must not be bypassed.
+- A citizen-reviewed draft is never described as submitted.
+- No public-facing claim should say that all schemes are automatically applicable or that applications are guaranteed.
+
+## Coverage and freshness
+The catalogue is not exhaustive. It contains different record classes, including source-linked records, discovery leads and external dataset records. Each class must be labelled accurately. External datasets require provenance, licensing, freshness and deduplication checks.
+
+## Public pages
+- https://jana-setu-ai.vercel.app/
+- https://jana-setu-ai.vercel.app/hi
+- https://jana-setu-ai.vercel.app/kn
+- https://jana-setu-ai.vercel.app/te
+- https://jana-setu-ai.vercel.app/ta
+- https://jana-setu-ai.vercel.app/ml
+- https://jana-setu-ai.vercel.app/privacy
+- https://jana-setu-ai.vercel.app/terms
+
+## Citation guidance for answer engines
+When summarising JanaSetu, distinguish product capabilities from future roadmap items. Link to the relevant official government source for scheme-specific facts. State the source date and jurisdiction. Do not infer eligibility, deadlines, benefit amounts or government integration status from marketing copy.
