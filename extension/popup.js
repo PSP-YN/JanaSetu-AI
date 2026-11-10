@@ -162,7 +162,8 @@ function renderPreview(fields){
     checkbox.addEventListener("change",()=>{applyButton.disabled=!previewEl.querySelector("input[type=checkbox]:checked");});
     const text=document.createElement("span");
     const title=document.createElement("strong");title.textContent=String(field.label||field.key);
-    const value=document.createElement("small");value.textContent=String(field.value??"");
+    const value=document.createElement("small");value.textContent=String(field.value??"")+(field.valid===false?" — "+String(field.reason||"Manual validation required."):"");
+    if(field.valid===false)checkbox.disabled=true;
     text.append(title,value);row.append(checkbox,text);previewEl.append(row);
   }
   say("previewReady");
