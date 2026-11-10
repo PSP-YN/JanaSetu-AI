@@ -216,3 +216,39 @@ test("clean document retrieval is owner- and consent-checked before streaming", 
   assert.match(route, /bytes\.byteLength!==size/);
   assert.doesNotMatch(route, /SUPABASE_SERVICE_ROLE_KEY/);
 });
+
+
+test("eligibility assessment reads only the published scheme version and requires verified rules", () => {
+  const route = read("app/api/eligibility/assess/route.ts");
+  const engine = read("lib/eligibility-engine.ts");
+  assert.match(route, /getVerifiedSupabaseSession/);
+  assert.match(route, /publication_status.*eq\.published/);
+  assert.match(route, /scheme_versions/);
+  assert.match(route, /assessApprovedScheme/);
+  assert.doesNotMatch(route, /SUPABASE_SERVICE_ROLE_KEY/);
+  assert.match(engine, /independently_approved/);
+  assert.match(engine, /sourceCheckedAt/);
+  assert.match(engine, /90 \* 86400000/);
+  assert.match(engine, /requiresCitizenConfirmation/);
+  assert.match(engine, /not_submitted/);
+});
+
+test("application preparation is persisted only after consent and remains unsubmitted", () => {
+  const sql = read("supabase/migrations/20261110190604_persist_citizen_application_preparations.sql");
+  const hardening = read("supabase/migrations/20261110190708_harden_application_preparation_consent_and_payload.sql");
+  const route = read("app/api/applications/prepare/route.ts");
+  const confirm = read("app/api/applications/prepare/confirm/route.ts");
+  assert.match(sql, /profile_storage/);
+  assert.match(sql, /awaiting_citizen_review/);
+  assert.match(sql, /citizen_approved/);
+  assert.match(hardening, /requiresCitizenConfirmation/);
+  assert.match(hardening, /profile_storage_consent_required/);
+  assert.match(hardening, /scheme_not_published_or_approved/);
+  assert.match(route, /create_application_case/);
+  assert.match(route, /save_application_preparation/);
+  assert.match(route, /potential_match/);
+  assert.match(route, /not_submitted/);
+  assert.match(confirm, /confirm_application_preparation/);
+  assert.match(confirm, /not a government submission/);
+  assert.doesNotMatch(route + confirm, /SUPABASE_SERVICE_ROLE_KEY/);
+});
