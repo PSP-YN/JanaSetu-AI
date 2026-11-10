@@ -65,3 +65,25 @@ test("extension avoids ambiguous duplicate applicant fields",()=>{
  const result=runFill([first,second],profile);
  assert.equal(result.preview.length,0);
 });
+
+
+test("portal field length and numeric bounds are validated before fill",()=>{
+ const name=input({name:"applicant_name",id:"applicant-name",label:"Applicant name"});
+ name.maxLength=5;
+ const preview=runFill([name],profile).preview;
+ assert.equal(preview[0].valid,false);
+ assert.match(preview[0].reason,/length limit/i);
+ const age=input({type:"number",name:"age",id:"age",label:"Age"});
+ age.min="30";
+ const invalidAge=runFill([age],profile).preview;
+ assert.equal(invalidAge[0].valid,false);
+ assert.match(invalidAge[0].reason,/minimum/i);
+});
+
+test("custom portal patterns require manual entry",()=>{
+ const name=input({name:"applicant_name",id:"applicant-name",label:"Applicant name"});
+ name.getAttribute=(key)=>key==="pattern"?"[A-Z]+":"";
+ const preview=runFill([name],profile).preview;
+ assert.equal(preview[0].valid,false);
+ assert.match(preview[0].reason,/manual validation/i);
+});
