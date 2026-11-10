@@ -49,6 +49,16 @@ export default function AutomationCenterPage(){
   },[]);
   useEffect(()=>{void refresh();},[refresh]);
   const statusLabel=(s:string)=>s.replaceAll("_"," ").replace(/\b\w/g,m=>m.toUpperCase());
+  const confirmPreparation=async(caseId:string)=>{
+    setConfirming(caseId);setError("");
+    try{
+      const response=await fetch("/api/applications/prepare/confirm",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({case_id:caseId})});
+      const data=await response.json().catch(()=>({}));
+      if(!response.ok)throw new Error(data.error||"Could not confirm the prepared fields.");
+      await refresh();
+    }catch(e){setError(e instanceof Error?e.message:"Could not confirm the prepared fields.");}
+    finally{setConfirming("");}
+  };
   return <main className="automation-center">
     <header className="automation-heading"><div><p className="automation-eyebrow">JANASETU AI · APPLICATION AUTOMATION</p><h1>Applications & automation</h1><p>Prepare an application, authorize each action, and track what actually happened.</p></div><button className="button-primary" onClick={()=>void refresh()} disabled={busy}>{busy?"Refreshing…":"Refresh status"}</button></header>
     {error&&<p className="auth-error" role="alert">{error}</p>}
