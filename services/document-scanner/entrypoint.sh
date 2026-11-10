@@ -9,7 +9,8 @@ freshclam --daemon --checks=12 --datadir=/var/lib/clamav
 
 clamd --foreground --config-file=/etc/clamav/clamd.conf &
 CLAMD_PID=$!
-trap 'kill "$CLAMD_PID" 2>/dev/null || true' EXIT INT TERM
+WORKER_PID=""
+trap 'if [ -n "$WORKER_PID" ]; then kill "$WORKER_PID" 2>/dev/null || true; fi; kill "$CLAMD_PID" 2>/dev/null || true' EXIT INT TERM
 
 attempt=0
 until python -c "import socket; s=socket.create_connection(('127.0.0.1',3310),2); s.close()" 2>/dev/null; do
