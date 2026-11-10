@@ -65,7 +65,7 @@ function fillProfileInPage(profile,approvedFields){
       const targets=group.filter(item=>norm(item.value)===norm(value)||(item.labels&&hasAlias([...item.labels].map(label=>label.innerText).join(" "),value)));
       if(targets.length!==1)continue;
       const target=targets[0];
-      const label=legend||[...target.labels||[]].map(item=>item.innerText).join(" ")||element.name;
+      const label=legend||(target.labels?[...target.labels].map(item=>item.innerText).join(" "):element.name);
       const fingerprint=JSON.stringify({kind:"radio",name:element.name,legend:norm(legend),id:target.id,targetValue:target.value});
       candidates.push({index:candidates.length,key,label,value,fingerprint,kind:"radio",element:target});
       continue;
