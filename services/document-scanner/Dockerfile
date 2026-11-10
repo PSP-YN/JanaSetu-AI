@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends clamav clamav-d
     && rm -rf /var/lib/apt/lists/* \
     && sed -i 's/^Example/#Example/' /etc/clamav/clamd.conf \
     && sed -i '/^LocalSocket /d; /^LogFile /d; /^PidFile /d' /etc/clamav/clamd.conf \
-    && printf '\\nTCPSocket 3310\\nTCPAddr 127.0.0.1\\nForeground yes\\nLogFile /tmp/clamd.log\\n' >> /etc/clamav/clamd.conf \
+    && printf '\nTCPSocket 3310\nTCPAddr 127.0.0.1\nForeground yes\nLogFile /tmp/clamd.log\n' >> /etc/clamav/clamd.conf \
     && sed -i 's/^Example/#Example/; s#^UpdateLogFile .*#UpdateLogFile /tmp/freshclam.log#' /etc/clamav/freshclam.conf
 
 WORKDIR /opt/janasetu-scanner
