@@ -252,3 +252,20 @@ test("application preparation is persisted only after consent and remains unsubm
   assert.match(confirm, /not a government submission/);
   assert.doesNotMatch(route + confirm, /SUPABASE_SERVICE_ROLE_KEY/);
 });
+
+
+test("consent revocation invalidates prior grants for the same user and purpose", () => {
+  const sql = read("supabase/migrations/20261110193050_make_consent_revocation_invalidate_prior_grants.sql");
+  assert.match(sql, /if not p_granted then[\s\S]*update public\.citizen_consents/);
+  assert.match(sql, /revoked_at=coalesce\(revoked_at,now\(\)\)/);
+  assert.match(sql, /r\.granted=false and r\.captured_at>c\.captured_at/);
+  assert.match(sql, /grant execute on function public\.record_citizen_consent/);
+});
+
+test("government portal integration records default to no authorised API actions", () => {
+  const sql = read("supabase/migrations/20261110193008_seed_portal_only_integration_registry.sql");
+  assert.match(sql, /'not_requested'/);
+  assert.match(sql, /array\[\]::text\[\]/);
+  assert.match(sql, /authorization_reference/);
+  assert.match(sql, /approved_at/);
+});
