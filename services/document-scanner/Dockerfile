@@ -9,8 +9,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends clamav clamav-d
     && sed -i 's/^Example/#Example/' /etc/clamav/clamd.conf \
     && sed -i '/^LocalSocket /d; /^LogFile /d; /^PidFile /d' /etc/clamav/clamd.conf \
     && printf '\nTCPSocket 3310\nTCPAddr 127.0.0.1\nForeground yes\nLogFile /tmp/clamd.log\n' >> /etc/clamav/clamd.conf \
-    && sed -i 's/^Example/#Example/; /^PidFile /d; /^UpdateLogFile /d' /etc/clamav/freshclam.conf \\
-    && printf '\\nPidFile /tmp/freshclam.pid\\nUpdateLogFile /tmp/freshclam.log\\nDatabaseOwner clamav\\n' >> /etc/clamav/freshclam.conf
+    && sed -i 's/^Example/#Example/; /^PidFile /d; /^UpdateLogFile /d' /etc/clamav/freshclam.conf \
+    && printf '\nPidFile /tmp/freshclam.pid\nUpdateLogFile /tmp/freshclam.log\nDatabaseOwner clamav\n' >> /etc/clamav/freshclam.conf
 
 WORKDIR /opt/janasetu-scanner
 COPY worker.py /opt/janasetu-scanner/worker.py
