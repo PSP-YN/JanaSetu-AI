@@ -60,21 +60,10 @@ def clamav_database_is_fresh() -> bool:
     return time.time() - newest <= 48 * 60 * 60
 
 
-def clamd_command(command: bytes) -> bytes:
-    with socket.create_connection((CLAMD_HOST, CLAMD_PORT), timeout=20) as client:
-        client.sendall(command)
-        client.shutdown(socket.SHUT_WR)
-        chunks = []
-        while True:
-            part = client.recv(4096)
-            if not part:
-                break
-            chunks.append(part)
-        return b"".join(chunks)
-
-
 def clamd_version() -> str:
-    response = clamd_command(b"zVERSION\\0").decode("utf-8", "replace").strip("\\0 ")
+    with socket.create_connection((CLAMD_HOST, CLAMD_PORT), timeout=20) as client:
+        client.sendall(b"zVERSION\\0")
+        response = client.recv(512).decode("utf-8", "replace").strip("\\0 ")
     if not response.startswith("ClamAV "):
         raise RuntimeError("ClamAV daemon did not return a valid version.")
     return response[:120]
@@ -107,8 +96,8 @@ def validate_file(mime_type: str, content: bytes, expected_size: int) -> bool:
         return False
     signatures = {
         "application/pdf": content.startswith(b"%PDF-"),
-        "image/jpeg": content.startswith(b"\\xff\\xd8\\xff"),
-        "image/png": content.startswith(b"\\x89PNG\\r\\n\\x1a\\n"),
+        "image/jpeg": content.startswith(bytes((0xFF, 0xD8, 0xFF))),
+        "image/png": content.startswith(bytes((0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A))),
     }
     return signatures.get(mime_type, False)
 
@@ -163,8 +152,7 @@ def main() -> None:
                     process_one(item, token, engine)
                     print("Document scan completed: " + item["document_id"], flush=True)
                 except Exception as error:
-                    # Do not fabricate a clean/rejected attestation when bytes could not be verified.
-                    # The 10-minute database lease expires and a later poll retries the item.
+                    # No clean attestation on a network or scanner failure; the lease expires and is retried.
                     print("Document scan deferred: " + item.get("document_id", "unknown") + " (" + type(error).__name__ + ")", flush=True)
             if not batch:
                 time.sleep(POLL_SECONDS)
