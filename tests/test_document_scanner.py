@@ -7,9 +7,9 @@ os.environ.setdefault("SUPABASE_URL", "https://example.supabase.co")
 os.environ.setdefault("SUPABASE_ANON_KEY", "test-publishable-key")
 os.environ.setdefault("SCANNER_EMAIL", "scanner@example.invalid")
 os.environ.setdefault("SCANNER_PASSWORD", "test-only-password")
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "services")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "services", "document-scanner")))
 
-from document_scanner import worker
+import worker
 
 
 class FakeSocket:
