@@ -1,0 +1,36 @@
+# JanaSetu AI
+
+> Independent public-benefits discovery, preliminary eligibility guidance and application-preparation support for people in India.
+
+JanaSetu AI is not a government website, department, scheme authority or application portal. The relevant government department remains authoritative for current scheme rules, eligibility, deadlines, application submission and final decisions.
+
+## Public pages
+- https://jana-setu-ai.vercel.app/ — English overview
+- https://jana-setu-ai.vercel.app/hi — Hindi overview
+- https://jana-setu-ai.vercel.app/kn — Kannada overview
+- https://jana-setu-ai.vercel.app/te — Telugu overview
+- https://jana-setu-ai.vercel.app/ta — Tamil overview
+- https://jana-setu-ai.vercel.app/ml — Malayalam overview
+- https://jana-setu-ai.vercel.app/privacy — Privacy information
+- https://jana-setu-ai.vercel.app/terms — Terms and limitations
+- https://jana-setu-ai.vercel.app/sitemap.xml — Public sitemap
+
+## What the product does
+- Organises public scheme information and official source links.
+- Supports preliminary rule-based screening only when the relevant scheme version and machine-readable rules have passed independent review.
+- Identifies missing information and evidence that needs checking.
+- Can prepare a draft and checklist when a published scheme has a reviewed field mapping and the citizen grants the required consent.
+- Requires citizen review before consequential actions.
+
+## Important limitations
+- A preliminary match is not an official eligibility decision or a guarantee of benefit.
+- A saved or citizen-reviewed draft is not a submitted application.
+- Government portal automation is not enabled unless the specific integration is authorised, implemented, tested and bound to the exact scheme, destination and citizen approval.
+- Scheme coverage is partial; discovery records are not automatically verified.
+- Never send passwords, PINs, OTPs or biometric secrets to JanaSetu. Use official government identity and payment channels directly.
+
+## Languages
+English, Hindi, Kannada, Telugu, Tamil and Malayalam public landing pages are available. The workspace also provides language selection; check each translated field and official source before acting.
+
+## Official sources
+Use the official ministry, department or scheme portal linked from each scheme record. Government departments and their authorised portals remain the source of truth.
