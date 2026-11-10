@@ -152,3 +152,13 @@ No permission, partner approval, production API credentials or portal sandbox cr
 - Application-case creation rechecks the same approval requirements and a scheme-scoped profile-storage consent.
 - Reviewer queue and decision/publish APIs plus `/app/review` UI are implemented.
 - No reviewer roles are assigned, no approval records exist, and no scheme is published. Role assignment instructions: `docs/scheme-reviewer-onboarding.md`.
+
+
+## Document upload quarantine — 10 November 2026
+
+- Added a private `citizen-documents` upload API limited to PDF, JPEG and PNG up to 12 MB.
+- Upload initialization requires a citizen-owned application case, exact `document_storage` consent, exact scheme-version scope, `upload_document` action scope and an active legally approved consent-policy version.
+- Uploads enter `quarantined`; the Storage SELECT policy exposes only documents with a `clean` scan attestation. Citizens can delete their own quarantined files.
+- Scanner attestation is role-gated. No scanner role is assigned and no ClamAV/scanning service is deployed; therefore no upload can become downloadable yet. This is deliberate fail-closed behavior.
+- Legal consent policy remains inactive, so live uploads are blocked. End-to-end upload and scanner acceptance tests remain outstanding pending legal approval and scanner deployment.
+- Storage bucket is private, 12 MB limit, MIME allowlist PDF/JPEG/PNG. No Aadhaar or bank documents should be collected unless a separately approved purpose and retention policy explicitly require them.
