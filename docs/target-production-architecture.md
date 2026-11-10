@@ -26,7 +26,7 @@ flowchart TD
 - Browser: ephemeral UI state only. The current application still persists profiles, drafts, reminders and document metadata in localStorage; this is a known pre-backend limitation, not durable or cross-device storage.
 - Auth: Supabase Auth; user IDs are the ownership key. Authorization must be checked server-side on every record and action.
 - Database: Postgres with RLS on every exposed table. Citizens may read only their own records and published scheme versions. Sensitive writes and workflow transitions are server-mediated.
-- Files: private object bucket, random object keys, 12 MiB hard limit and MIME allowlist. Uploads remain disabled until a malware/content scanning pipeline and retention/deletion controls are operational. Never request Aadhaar, bank credentials, OTPs or passwords.
+- Files: private object bucket, random object keys, 12 MiB hard limit and MIME allowlist. The upload API and ClamAV worker are implemented, but the worker is not deployed, no scanner identity is assigned, and retention/deletion controls are not yet accepted; live uploads remain blocked. Never request Aadhaar, bank credentials, OTPs or passwords.
 - Scheme catalogue: immutable versions, source provenance, freshness, content checksum and independent source/rule approvals. Budget allocations and third-party machine-parsed discovery records cannot be promoted to eligibility rules without evidence and review.
 - Automation: transactional intent/outbox, idempotency keys, explicit purpose consent, per-action confirmation, short-lived authorization and a human-readable result. Never claim a portal submission succeeded without a verified receipt from that portal.
 - Audit: record action type, actor, request ID, timestamp and non-sensitive metadata. Do not log profile values, document contents, access tokens, OTPs or full request bodies.
@@ -67,7 +67,7 @@ Use free plans for development and a controlled pilot only. Do not promise a fre
 2. Add Supabase SSR Auth, email verification, recovery, session rotation and account deletion.
 4. Replace localStorage as source of truth with authenticated server persistence; retain explicit encrypted export/import for user portability.
 5. Add consent ledger, append-only case events, idempotent automation outbox and reminder scheduler.
-6. Add safe private file upload, scanning/quarantine, retention and deletion workflow.
+6. Deploy and provision the private ClamAV scanner, prove quarantine/clean/reject flows, then complete retention and deletion controls.
 7. Add independently reviewed scheme publication and freshness workflows.
 8. Add only permitted portal integrations, with confirmation gates and receipt verification.
 9. Run security, privacy, accessibility, disaster-recovery and load tests before expanding public access.
