@@ -135,6 +135,7 @@ document.getElementById("save").addEventListener("click", async () => {
     const language = Object.prototype.hasOwnProperty.call(COPY, data.language) ? data.language : "en";
     const profile = { ...data.profile, occupation: normalizeOccupation(data.profile.occupation) };
     await chrome.storage.local.set({ profile, language, importedAt: new Date().toISOString() });
+    clearPreview();
     setLanguage(language);
     say("imported");
   } catch (error) { say("importFailed"); }
@@ -151,7 +152,7 @@ function clearPreview(){
   previewEl.replaceChildren();applyButton.disabled=true;
 }
 function renderPreview(fields){
-  clearPreview();
+  previewEl.replaceChildren();applyButton.disabled=true;
   if(!Array.isArray(fields)||fields.length===0){say("noFields");return;}
   pendingPreview=fields;
   const note=document.createElement("p");note.className="preview-note";note.textContent=getCopy("previewReady");previewEl.append(note);
