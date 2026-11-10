@@ -13,7 +13,7 @@ from document_scanner import worker
 
 
 class FakeSocket:
-    def __init__(self, response=b"stream: OK\\0"):
+    def __init__(self, response=b"stream: OK\0"):
         self.response = response
         self.sent = bytearray()
 
@@ -49,17 +49,17 @@ class ScannerTests(unittest.TestCase):
         fake = FakeSocket()
         with patch.object(worker.socket, "create_connection", return_value=fake):
             self.assertEqual(worker.scan_bytes(b"abcdef"), "clean")
-        self.assertTrue(fake.sent.startswith(b"zINSTREAM\\0"))
-        self.assertIn(b"\\x00\\x00\\x00\\x06abcdef", fake.sent)
-        self.assertTrue(fake.sent.endswith(b"\\x00\\x00\\x00\\x00"))
+        self.assertTrue(fake.sent.startswith(b"zINSTREAM\0"))
+        self.assertIn(b"\x00\x00\x00\x06abcdef", fake.sent)
+        self.assertTrue(fake.sent.endswith(b"\x00\x00\x00\x00"))
 
     def test_clamd_infected_result_is_rejected(self):
-        fake = FakeSocket(b"stream: Eicar-Test-Signature FOUND\\0")
+        fake = FakeSocket(b"stream: Eicar-Test-Signature FOUND\0")
         with patch.object(worker.socket, "create_connection", return_value=fake):
             self.assertEqual(worker.scan_bytes(b"test"), "rejected")
 
     def test_indeterminate_clamd_result_fails_closed(self):
-        fake = FakeSocket(b"stream: ERROR\\0")
+        fake = FakeSocket(b"stream: ERROR\0")
         with patch.object(worker.socket, "create_connection", return_value=fake):
             with self.assertRaises(RuntimeError):
                 worker.scan_bytes(b"test")
