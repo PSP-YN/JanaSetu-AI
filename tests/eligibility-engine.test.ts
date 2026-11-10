@@ -21,7 +21,7 @@ const ruleSet={
     {key:"annual_income",label:"Annual household income",profileField:"annualIncome",required:true,type:"number",min:0,max:1000000}
   ],documents:["Income certificate"]}
 };
-const scheme={publicationStatus:"published" as const,verificationStatus:"independently_approved" as const,ruleSet,effectiveFrom:"2026-01-01",effectiveTo:"2027-12-31"};
+const scheme={schemeId:"test-scheme",publicationStatus:"published" as const,verificationStatus:"independently_approved" as const,ruleSet,effectiveFrom:"2026-01-01",effectiveTo:"2027-12-31"};
 const now=new Date("2026-11-11T12:00:00.000Z");
 
 test("unapproved scheme versions never produce an eligibility result",()=>{
