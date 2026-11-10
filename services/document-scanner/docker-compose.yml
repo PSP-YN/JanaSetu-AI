@@ -1,0 +1,33 @@
+services:
+  janasetu-document-scanner:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    init: true
+    env_file:
+      - .env
+    environment:
+      CLAMD_HOST: 127.0.0.1
+      CLAMD_PORT: 3310
+      CLAMAV_DATABASE_DIR: /var/lib/clamav
+      POLL_SECONDS: 10
+    volumes:
+      - clamav-signatures:/var/lib/clamav
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    # ClamAV is reachable only over loopback inside this container; never publish port 3310.
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; s=socket.create_connection(('127.0.0.1',3310),3); s.close()"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 180s
+
+volumes:
+  clamav-signatures:
