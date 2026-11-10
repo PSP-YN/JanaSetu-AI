@@ -9,6 +9,7 @@ type EligibilityRule = {
   expected?: Scalar | Scalar[]; evidence: Evidence; reviewStatus: "approved";
 };
 export type ApprovedSchemeVersion = {
+  schemeId: string;
   publicationStatus: "published";
   verificationStatus: "independently_approved";
   effectiveFrom?: string | null;
@@ -50,6 +51,7 @@ const isHash = (value: unknown): value is string => typeof value === "string" &&
 function parseRuleSet(value: unknown): ApprovedRuleSet | null {
   if (!isRecord(value) || value.schemaVersion !== 1 || value.state !== "approved" || !Array.isArray(value.rules) || value.rules.length === 0 || value.rules.length > 100) return null;
   const rules: EligibilityRule[] = [];
+  const ruleKeys = new Set<string>();
   for (const item of value.rules) {
     if (!isRecord(item) || typeof item.key !== "string" || !/^[a-z][a-z0-9_]{1,79}$/.test(item.key) ||
       typeof item.label !== "string" || !item.label.trim() || item.label.length > 180 ||
@@ -57,6 +59,8 @@ function parseRuleSet(value: unknown): ApprovedRuleSet | null {
       typeof item.operator !== "string" || !OPERATORS.has(item.operator as Operator) ||
       item.reviewStatus !== "approved" || !isRecord(item.evidence)) return null;
     if (FORBIDDEN.test(item.key) || FORBIDDEN.test(item.profileField)) return null;
+    if (ruleKeys.has(item.key)) return null;
+    ruleKeys.add(item.key);
     const evidence = item.evidence;
     if (typeof evidence.sourceUrl !== "string" || !evidence.sourceUrl.startsWith("https://") ||
       !isIsoDate(evidence.sourceCheckedAt) || !isHash(evidence.sourceHash) ||
@@ -71,12 +75,14 @@ function parseRuleSet(value: unknown): ApprovedRuleSet | null {
     if (!isRecord(value.application) || !Array.isArray(value.application.fields) || value.application.fields.length > 0 && value.application.fields.length > 100) return null;
     if (!Array.isArray(value.application.documents) || value.application.documents.length > 100 || !value.application.documents.every((d) => typeof d === "string" && d.length <= 240)) return null;
     const fields: ApplicationFieldMapping[] = [];
+    const fieldKeys = new Set<string>();
     for (const item of value.application.fields) {
       if (!isRecord(item) || typeof item.key !== "string" || !/^[a-z][a-z0-9_]{1,79}$/.test(item.key) ||
         typeof item.label !== "string" || !item.label.trim() || item.label.length > 180 ||
         typeof item.profileField !== "string" || !PROFILE_FIELDS.has(item.profileField as ProfileField) ||
         typeof item.required !== "boolean" || !["text","number","boolean"].includes(String(item.type))) return null;
-      if (FORBIDDEN.test(item.key) || FORBIDDEN.test(item.profileField)) return null;
+      if (FORBIDDEN.test(item.key) || FORBIDDEN.test(item.profileField) || fieldKeys.has(item.key)) return null;
+      fieldKeys.add(item.key);
       if (item.maxLength !== undefined && (!Number.isInteger(item.maxLength) || Number(item.maxLength) < 1 || Number(item.maxLength) > 500)) return null;
       if (item.min !== undefined && (typeof item.min !== "number" || !Number.isFinite(item.min))) return null;
       if (item.max !== undefined && (typeof item.max !== "number" || !Number.isFinite(item.max))) return null;
@@ -111,9 +117,12 @@ function evaluateRule(rule: EligibilityRule, profile: CitizenProfile): RuleCheck
 }
 
 export function assessApprovedScheme(profile: CitizenProfile, scheme: ApprovedSchemeVersion, now = new Date()): Assessment {
-  const base = { schemeId:"", checks:[] as RuleCheck[], nextActions:[] as string[] };
+  const base = { schemeId:scheme.schemeId, checks:[] as RuleCheck[], nextActions:[] as string[] };
   if (scheme.publicationStatus !== "published" || scheme.verificationStatus !== "independently_approved") {
     return { ...base,state:"needs_verification",headline:"Scheme verification is incomplete",explanation:"This scheme version is not independently approved and published. No eligibility result can be issued.",nextActions:["Wait for independent source, eligibility-rule and legal review."] };
+  }
+  if (scheme.effectiveFrom && !isIsoDate(scheme.effectiveFrom) || scheme.effectiveTo && !isIsoDate(scheme.effectiveTo)) {
+    return { ...base,state:"needs_verification",headline:"Scheme effective dates are invalid",explanation:"The effective period cannot be trusted; no eligibility assessment was made.",nextActions:["Verify the current official scheme notification."] };
   }
   const rules = parseRuleSet(scheme.ruleSet);
   if (!rules) return { ...base,state:"needs_verification",headline:"Eligibility rules are not machine-verifiable",explanation:"The published scheme does not contain a complete, approved, supported rule-set version. No automated assessment was made.",nextActions:["Complete the structured eligibility rules and independent review."] };
@@ -133,7 +142,7 @@ export function assessApprovedScheme(profile: CitizenProfile, scheme: ApprovedSc
   if (state === "potential_match") nextActions.push("Review the official source and all declarations before preparing an application.");
   if (state === "not_matched") nextActions.push("This profile does not match at least one independently reviewed rule; confirm the latest official rules before deciding not to apply.");
   return {
-    schemeId:"",schemeReviewStatusAtAssessment:"approved",state,
+    schemeId:scheme.schemeId,schemeReviewStatusAtAssessment:"approved",state,
     headline:state === "potential_match" ? "Potential match — official verification still required" : state === "not_matched" ? "Does not match one or more reviewed rules" : "More information or fresh evidence is required",
     explanation:"This is a deterministic screen against the currently approved scheme version. It is not a government decision, benefit guarantee or substitute for department verification.",
     checks,nextActions
