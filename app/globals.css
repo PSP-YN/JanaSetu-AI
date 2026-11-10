@@ -885,3 +885,5 @@ input, select, textarea { min-height: 44px; }
 
 .language-nav{display:flex;align-items:center;gap:9px;margin:0 10px}.language-nav a{font-size:10px;font-weight:700;color:#60758b;text-decoration:none}.language-nav a:hover{color:#9b5c24;text-decoration:underline}
 @media(max-width:1050px){.language-nav{display:none}}
+
+.footer-languages{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:12px}.footer-languages a{font-size:10px;color:#64798e;text-decoration:none}.footer-languages a:hover{text-decoration:underline}
