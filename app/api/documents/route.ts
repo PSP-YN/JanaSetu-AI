@@ -12,9 +12,33 @@ async function rpc(session:NonNullable<Awaited<ReturnType<typeof getVerifiedSupa
 }
 export async function GET(request:NextRequest){
  try{
+  const session=await getVerifiedSupabaseSession();if(!session)return json({error:"Sign in required."},401);
+  const documentId=request.nextUrl.searchParams.get("document_id");
+  if(documentId){
+   if(!uuid(documentId))return json({error:"A valid document is required."},400);
+   const document=await rpc(session,"get_citizen_document_download",{p_document_id:documentId});
+   const path=String(document?.object_name||"");
+   const mime=String(document?.mime_type||"");
+   const size=Number(document?.size||0);
+   if(!path.startsWith(session.user.id+"/")||!["application/pdf","image/jpeg","image/png"].includes(mime)||!Number.isSafeInteger(size)||size<1||size>12*1024*1024)return json({error:"Document is not available."},404);
+   const segments=path.split("/").map(encodeURIComponent).join("/");
+   const object=await fetch(session.url+"/storage/v1/object/authenticated/citizen-documents/"+segments,{headers:{apikey:session.key,Authorization:"Bearer "+session.accessToken},cache:"no-store"});
+   if(!object.ok)return json({error:"Document is not available."},object.status===404?404:503);
+   const bytes=await object.arrayBuffer();
+   if(bytes.byteLength!==size)return json({error:"Stored document failed its integrity check."},503);
+   const filename=String(document?.filename||"document").replace(/[\\r\\n"\\\\]/g,"_").slice(0,120)||"document";
+   return new NextResponse(bytes,{headers:{
+    "Content-Type":mime,
+    "Content-Length":String(size),
+    "Content-Disposition":"attachment; filename*=UTF-8''"+encodeURIComponent(filename),
+    "Cache-Control":"private, no-store, max-age=0",
+    "X-Content-Type-Options":"nosniff",
+    "Referrer-Policy":"no-referrer",
+    "Content-Security-Policy":"default-src 'none'; sandbox"
+   }});
+  }
   const caseId=request.nextUrl.searchParams.get("case_id");
   if(!uuid(caseId))return json({error:"A valid application case is required."},400);
-  const session=await getVerifiedSupabaseSession();if(!session)return json({error:"Sign in required."},401);
   const documents=await rpc(session,"list_citizen_documents",{p_case_id:caseId});
   return json({documents});
  }catch{return json({error:"Document list is unavailable."},503);}
