@@ -1,6 +1,6 @@
 # JanaSetu backend implementation status
 
-Updated: 9 November 2026
+Updated: 11 November 2026
 
 ## Dedicated infrastructure
 
@@ -17,7 +17,7 @@ Updated: 9 November 2026
 - `20261109130423_harden_api_grants_and_index_foreign_keys.sql`
 - 12 public tables created; RLS enabled on all 12.
 - Explicit least-privilege Data API grants; future default privileges revoked for anon/authenticated/PUBLIC.
-- Private `citizen-documents` bucket configured. Browser upload is not enabled.
+- Private `citizen-documents` bucket configured. Upload API is consent-gated and fails closed until a legally approved policy and scanner acceptance are in place.
 - Foreign-key indexes added after Supabase advisor review.
 
 ## Initial verification
@@ -33,7 +33,7 @@ Updated: 9 November 2026
 - Supabase Auth integration in the Next.js workspace; current profile, drafts, assessments, reminders and document metadata still persist in browser localStorage.
 - Two-independent-user RLS tests and end-to-end account lifecycle.
 - Server-side application-case APIs, automation outbox/worker, idempotent transitions and reminder scheduler.
-- Document byte upload, malware scanning/quarantine, retention/deletion and signed download flow.
+- Scanner service deployment, scanner identity provisioning, end-to-end malware scan acceptance, retention/deletion and clean-only document retrieval.
 - Verified full scheme catalogue, two-person scheme reviews and freshness automation across all records.
 - Authorised government portal adapters and official acknowledgement/receipt verification.
 - Independent privacy/legal/security review, disaster recovery and load testing.
@@ -162,3 +162,16 @@ No permission, partner approval, production API credentials or portal sandbox cr
 - Scanner attestation is role-gated. No scanner role is assigned and no ClamAV/scanning service is deployed; therefore no upload can become downloadable yet. This is deliberate fail-closed behavior.
 - Legal consent policy remains inactive, so live uploads are blocked. End-to-end upload and scanner acceptance tests remain outstanding pending legal approval and scanner deployment.
 - Storage bucket is private, 12 MB limit, MIME allowlist PDF/JPEG/PNG. No Aadhaar or bank documents should be collected unless a separately approved purpose and retention policy explicitly require them.
+
+
+## Leased ClamAV scanner implementation — 11 November 2026
+
+- Applied and tracked migration `20261110185200_add_leased_clamav_document_scanner.sql` on the dedicated JanaSetu Supabase project.
+- Added a private scanner worker built around ClamAV INSTREAM; it authenticates as a dedicated scanner Auth user and does not require the Supabase service-role key.
+- Added database claims with `FOR UPDATE SKIP LOCKED`, bounded batches, 10-minute leases, five-attempt ceiling and authenticated scanner-role checks.
+- Storage read policy now allows only the document owner after a clean attestation, or an explicitly active scanner identity while quarantined. Scanner access is not granted to ordinary citizens.
+- Worker validates file signatures, size and MIME, computes SHA-256, scans locally, and only attests clean when ClamAV returns `OK`. Infected/invalid files are rejected; network, scanner and indeterminate failures leave files quarantined for lease-based retry.
+- ClamAV daily signatures must be present and no older than 48 hours; otherwise the worker fails closed. No file bytes are sent to third-party scanning services.
+- Added a hardened Docker Compose deployment, scanner provisioning/runbook and Python protocol/MIME tests; CI now runs the Python scanner test suite.
+- Remote probes confirm both scanner RPCs exist, authenticated can execute them, anon cannot, and there are currently zero active scanner roles and zero citizen documents.
+- **Not yet live:** no scanner Auth identity has been provisioned or assigned, no scanner host/container is deployed, no ClamAV/EICAR acceptance test has run against Supabase Storage, and the legal consent policy remains inactive. Therefore no citizen upload can yet become downloadable. Keep the upload gate closed.
