@@ -41,7 +41,12 @@ export async function GET(request:NextRequest){
   if(!uuid(caseId))return json({error:"A valid application case is required."},400);
   const documents=await rpc(session,"list_citizen_documents",{p_case_id:caseId});
   return json({documents});
- }catch{return json({error:"Document list is unavailable."},503);}
+ }catch(error){
+  const message=error instanceof Error?error.message:"";
+  if(message.includes("document_not_available"))return json({error:"Document is not available. It may still be quarantined or may have been deleted."},404);
+  if(message.includes("document_consent_required"))return json({error:"Document access is disabled because the required consent is not active."},403);
+  return json({error:"Document service is unavailable."},503);
+ }
 }
 export async function POST(request:NextRequest){
  let session:Awaited<ReturnType<typeof getVerifiedSupabaseSession>>=null;
