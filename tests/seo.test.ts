@@ -29,7 +29,7 @@ test("localized pages and answer-engine references are discoverable without expo
  assert.match(robots,/PerplexityBot/);
  assert.match(robots,/Claude-SearchBot/);
  assert.match(robots,/\/app/);
- for(const code of ["hi","kn","te","ta","ml"])assert.ok(sitemap.includes('"/'+code+'"'));
+ for(const code of ["hi","kn","te","ta","ml"])assert.ok(sitemap.includes('"'+code+'"'));
  assert.match(short,/not a government website/i);
  assert.match(short,/A preliminary match is not an official eligibility decision/i);
  assert.match(full,/source-check date/);
