@@ -36,12 +36,7 @@ export default function AutomationCenterPage(){
         const [caseData,runData,reminderData]=await Promise.all([caseRes.json(),runRes.json(),reminderRes.json()]);
         const applicationCases=caseData.applications||[];
         setCases(applicationCases);setRuns(runData.runs||[]);setReminders(reminderData.reminders||[]);
-        const prepared=await Promise.all(applicationCases.map(async (item:Case)=>{
-          const response=await fetch("/api/applications/prepare?case_id="+encodeURIComponent(item.id),{cache:"no-store"});
-          if(!response.ok)return null;
-          const data=await response.json();return data.preparation as Preparation;
-        }));
-        setPreparations(prepared.filter((item):item is Preparation=>item!==null));
+        const preparationResponse=await fetch("/api/applications/prepare",{cache:"no-store"});\n        if(preparationResponse.ok){const preparationData=await preparationResponse.json();setPreparations(preparationData.preparations||[]);}else{setPreparations([]);}\n
       }else{setCases([]);setRuns([]);setReminders([]);setPreparations([]);}
       setRefreshedAt(new Date().toLocaleTimeString());
     }catch(e){setError(e instanceof Error?e.message:"Could not refresh automation status.");}
