@@ -37,9 +37,13 @@ export async function GET(request:NextRequest){
  try{
   const session=await getVerifiedSupabaseSession();if(!session)return json({error:"Sign in required."},401);
   const caseId=request.nextUrl.searchParams.get("case_id");
-  if(!uuid(caseId))return json({error:"A valid application case is required."},400);
-  const preparation=await rpc(session,"get_application_preparation",{p_case_id:caseId});
-  return json({preparation});
+  if(caseId){
+   if(!uuid(caseId))return json({error:"A valid application case is required."},400);
+   const preparation=await rpc(session,"get_application_preparation",{p_case_id:caseId});
+   return json({preparation});
+  }
+  const preparations=await rpc(session,"list_application_preparations",{});
+  return json({preparations});
  }catch(error){
   const message=error instanceof Error?error.message:"";
   if(message.includes("preparation_not_found"))return json({error:"Application preparation was not found."},404);
