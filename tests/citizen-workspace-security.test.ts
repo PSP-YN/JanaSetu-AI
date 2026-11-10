@@ -166,8 +166,8 @@ test("review endpoints use verified caller sessions and no service-role secret",
 });
 
 test("citizen document upload is purpose-consent gated and quarantined until scan attestation", () => {
-  const upload = read("supabase/migrations/20261110100000_add_consent_gated_document_quarantine.sql");
-  const policies = read("supabase/migrations/20261110100500_fix_document_storage_policy_permissions.sql");
+  const upload = read("supabase/migrations/20261110180702_add_consent_gated_document_quarantine.sql");
+  const policies = read("supabase/migrations/20261110180724_fix_document_storage_policy_permissions.sql");
   const route = read("app/api/documents/route.ts");
   assert.match(upload, /purpose='document_storage'/);
   assert.match(upload, /consent_policy_not_approved/);
