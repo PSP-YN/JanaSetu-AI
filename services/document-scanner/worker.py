@@ -62,8 +62,8 @@ def clamav_database_is_fresh() -> bool:
 
 def clamd_version() -> str:
     with socket.create_connection((CLAMD_HOST, CLAMD_PORT), timeout=20) as client:
-        client.sendall(b"zVERSION\\0")
-        response = client.recv(512).decode("utf-8", "replace").strip("\\0 ")
+        client.sendall(b"zVERSION\0")
+        response = client.recv(512).decode("utf-8", "replace").strip("\0 ")
     if not response.startswith("ClamAV "):
         raise RuntimeError("ClamAV daemon did not return a valid version.")
     return response[:120]
@@ -71,7 +71,7 @@ def clamd_version() -> str:
 
 def scan_bytes(content: bytes) -> str:
     with socket.create_connection((CLAMD_HOST, CLAMD_PORT), timeout=30) as client:
-        client.sendall(b"zINSTREAM\\0")
+        client.sendall(b"zINSTREAM\0")
         for offset in range(0, len(content), 64 * 1024):
             chunk = content[offset:offset + 64 * 1024]
             client.sendall(struct.pack("!I", len(chunk)) + chunk)
@@ -83,7 +83,7 @@ def scan_bytes(content: bytes) -> str:
             if not part:
                 break
             response += part
-    result = response.decode("utf-8", "replace").strip("\\0 ")
+    result = response.decode("utf-8", "replace").strip("\0 ")
     if result.endswith(" OK"):
         return "clean"
     if result.endswith(" FOUND"):
