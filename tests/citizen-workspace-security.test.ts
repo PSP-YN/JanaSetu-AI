@@ -199,3 +199,20 @@ test("document scanner claims are leased and quarantine reads are restricted", (
   assert.doesNotMatch(worker, /SUPABASE_SERVICE_ROLE_KEY|VirusTotal/);
   assert.doesNotMatch(compose, /ports:/);
 });
+
+
+test("clean document retrieval is owner- and consent-checked before streaming", () => {
+  const sql = read("supabase/migrations/20261110185906_secure_clean_document_retrieval.sql");
+  const route = read("app/api/documents/route.ts");
+  assert.match(sql, /scan_status='clean'/);
+  assert.match(sql, /document_storage/);
+  assert.match(sql, /revoked_at is null/);
+  assert.match(sql, /legal_review_reference is not null/);
+  assert.match(route, /get_citizen_document_download/);
+  assert.match(route, /storage\/v1\/object\/authenticated/);
+  assert.match(route, /Content-Disposition/);
+  assert.match(route, /Cache-Control.*no-store/);
+  assert.match(route, /X-Content-Type-Options/);
+  assert.match(route, /bytes\.byteLength!==size/);
+  assert.doesNotMatch(route, /SUPABASE_SERVICE_ROLE_KEY/);
+});
