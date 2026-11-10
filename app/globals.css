@@ -861,3 +861,24 @@ input, select, textarea { min-height: 44px; }
 .automation-preparation li span{overflow-wrap:anywhere;font-size:12px;color:#294862}
 .automation-preparation>button{margin-top:10px}
 @media(max-width:600px){.automation-preparation ul{grid-template-columns:1fr}.automation-preparation-heading{align-items:flex-start;flex-direction:column}}
+
+/* Localized, indexable public landing pages */
+.localized-landing{min-height:100vh;background:#f7f9fc;color:#183650}
+.localized-header{max-width:1240px;margin:auto;padding:18px 28px;display:flex;align-items:center;justify-content:space-between;gap:22px;border-bottom:1px solid #e4ebf2}
+.localized-header nav{display:flex;flex-wrap:wrap;justify-content:center;gap:9px 15px}.localized-header nav a{font-size:11px;color:#526b82;text-decoration:none}
+.localized-header nav a:hover,.localized-footer a:hover{text-decoration:underline}.localized-header>.button-primary{display:inline-flex;align-items:center;gap:8px;text-decoration:none;white-space:nowrap}
+.localized-hero{max-width:1100px;margin:0 auto;padding:94px 28px 76px}.localized-hero h1{max-width:900px;margin:22px 0 18px;font-size:clamp(36px,6vw,68px);line-height:1.12;letter-spacing:-1.8px;color:#173552}
+.localized-hero>p{max-width:760px;margin:0;color:#5b7086;font-size:18px;line-height:1.8}.localized-actions{display:flex;flex-wrap:wrap;align-items:center;gap:13px;margin-top:28px}
+.localized-assurance{display:flex;align-items:center;gap:10px;margin-top:27px;color:#526e84;font-size:12px}
+.localized-trust{max-width:1160px;margin:0 auto 58px;padding:22px 28px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;border:1px solid #e2e9f0;border-radius:13px;background:#fff}
+.localized-trust div{display:flex;align-items:center;gap:10px;color:#33516c}.localized-trust svg{width:20px;height:20px;flex:0 0 20px;color:#a7652a}.localized-trust strong{font-size:11px;line-height:1.5}
+.localized-how,.localized-faq{max-width:1160px;margin:0 auto;padding:52px 28px;display:grid;grid-template-columns:.9fr 1.1fr;gap:56px}
+.localized-how h2,.localized-faq h2{font-size:30px;line-height:1.3;letter-spacing:-.8px;color:#183650}.localized-how>div>p,.localized-faq>div>p{color:#64788d;font-size:13px;line-height:1.8}
+.localized-steps article{display:grid;grid-template-columns:44px 1fr;gap:15px;padding:18px 0;border-bottom:1px solid #e3eaf0}.localized-steps article>span{color:#a7652a;font-size:13px;font-weight:800}
+.localized-steps h3{margin:0 0 6px;font-size:16px}.localized-steps p{margin:0;color:#64788d;font-size:12px;line-height:1.8}
+.localized-faq{border-top:1px solid #e2e9f0}.localized-faq details{padding:17px 0;border-bottom:1px solid #e2e9f0}.localized-faq summary{cursor:pointer;color:#213e59;font-size:13px;font-weight:700}.localized-faq details p{color:#64788d;font-size:12px;line-height:1.8}
+.localized-disclaimer{max-width:1160px;margin:0 auto 32px;padding:18px 24px;display:flex;align-items:center;gap:14px;border:1px solid #e3eaf0;border-radius:10px;background:#fff}
+.localized-disclaimer svg{color:#a7652a;flex:0 0 20px}.localized-disclaimer p{flex:1;color:#5f7489;font-size:11px;line-height:1.7}.localized-disclaimer a{color:#8a511f;font-size:11px;font-weight:700}
+.localized-footer{max-width:1160px;margin:0 auto;padding:22px 28px 38px;display:flex;justify-content:space-between;gap:20px;color:#6c7e91;font-size:11px}.localized-footer a{color:#8a511f;font-weight:700}
+@media(max-width:850px){.localized-header{flex-wrap:wrap}.localized-header nav{order:3;width:100%;justify-content:flex-start}.localized-trust{grid-template-columns:repeat(2,minmax(0,1fr));margin:0 16px 35px}.localized-how,.localized-faq{grid-template-columns:1fr;gap:20px}}
+@media(max-width:600px){.localized-header{padding:14px}.localized-header>.button-primary{font-size:10px;padding:9px 11px}.localized-hero{padding:62px 18px 50px}.localized-hero>p{font-size:15px}.localized-trust{padding:16px;margin-left:12px;margin-right:12px}.localized-how,.localized-faq{padding:36px 18px}.localized-how h2,.localized-faq h2{font-size:25px}.localized-disclaimer{margin:0 12px 22px;align-items:flex-start;flex-wrap:wrap}.localized-footer{padding:18px;flex-direction:column}}
