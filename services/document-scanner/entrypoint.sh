@@ -21,4 +21,6 @@ until python -c "import socket; s=socket.create_connection(('127.0.0.1',3310),2)
   sleep 2
 done
 
-exec python /opt/janasetu-scanner/worker.py
+python /opt/janasetu-scanner/worker.py &
+WORKER_PID=$!
+wait "$WORKER_PID"
