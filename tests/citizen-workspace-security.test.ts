@@ -164,3 +164,20 @@ test("review endpoints use verified caller sessions and no service-role secret",
   }
   for (const route of [queue,decision,publish]) assert.doesNotMatch(route,/SUPABASE_SERVICE_ROLE_KEY/);
 });
+
+test("citizen document upload is purpose-consent gated and quarantined until scan attestation", () => {
+  const upload = read("supabase/migrations/20261110100000_add_consent_gated_document_quarantine.sql");
+  const policies = read("supabase/migrations/20261110100500_fix_document_storage_policy_permissions.sql");
+  const route = read("app/api/documents/route.ts");
+  assert.match(upload, /purpose='document_storage'/);
+  assert.match(upload, /consent_policy_not_approved/);
+  assert.match(upload, /scan_status='quarantined'/);
+  assert.match(upload, /scan_status='clean'/);
+  assert.match(upload, /document_scanner_roles/);
+  assert.match(policies, /can_upload_citizen_document/);
+  assert.match(policies, /can_read_citizen_document/);
+  assert.match(route, /getVerifiedSupabaseSession/);
+  assert.match(route, /downloadable:false/);
+  assert.match(route, /Maximum document size is 12 MB/);
+  assert.doesNotMatch(route, /SUPABASE_SERVICE_ROLE_KEY/);
+});
