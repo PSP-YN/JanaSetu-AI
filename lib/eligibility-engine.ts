@@ -10,8 +10,8 @@ type EligibilityRule = {
 };
 export type ApprovedSchemeVersion = {
   schemeId: string;
-  publicationStatus: "published";
-  verificationStatus: "independently_approved";
+  publicationStatus: string;
+  verificationStatus: string;
   effectiveFrom?: string | null;
   effectiveTo?: string | null;
   ruleSet: unknown;
@@ -151,7 +151,7 @@ export function assessApprovedScheme(profile: CitizenProfile, scheme: ApprovedSc
 
 export function prepareApplicationDraft(profile: CitizenProfile, scheme: ApprovedSchemeVersion, assessment: Assessment): PreparedApplication {
   const base: PreparedApplication = { status:"blocked",fields:[],documents:[],missingFields:[],validationErrors:[],requiresCitizenApproval:true,submissionStatus:"not_submitted" };
-  if (assessment.state !== "potential_match" || scheme.publicationStatus !== "published" || scheme.verificationStatus !== "independently_approved") {
+  if (assessment.state !== "potential_match" || assessment.schemeId !== scheme.schemeId || assessment.schemeReviewStatusAtAssessment !== "approved" || scheme.publicationStatus !== "published" || scheme.verificationStatus !== "independently_approved") {
     return { ...base,validationErrors:["A potential-match assessment against an independently approved, published scheme is required before preparing fields."] };
   }
   const rules = parseRuleSet(scheme.ruleSet);
