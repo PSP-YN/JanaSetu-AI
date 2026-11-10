@@ -33,7 +33,7 @@ Updated: 11 November 2026
 - Supabase Auth integration in the Next.js workspace; current profile, drafts, assessments, reminders and document metadata still persist in browser localStorage.
 - Two-independent-user RLS tests and end-to-end account lifecycle.
 - Server-side application-case APIs, automation outbox/worker, idempotent transitions and reminder scheduler.
-- Scanner service deployment, scanner identity provisioning, end-to-end malware scan acceptance, retention/deletion and clean-only document retrieval.
+- Scanner service deployment, scanner identity provisioning, end-to-end malware scan acceptance, retention/deletion and clean-only document retrieval (download API now implemented; scanner deployment remains outstanding).
 - Verified full scheme catalogue, two-person scheme reviews and freshness automation across all records.
 - Authorised government portal adapters and official acknowledgement/receipt verification.
 - Independent privacy/legal/security review, disaster recovery and load testing.
@@ -161,6 +161,7 @@ No permission, partner approval, production API credentials or portal sandbox cr
 - Uploads enter `quarantined`; the Storage SELECT policy exposes only documents with a `clean` scan attestation. Citizens can delete their own quarantined files.
 - Scanner attestation is role-gated. No scanner role is assigned and no ClamAV/scanning service is deployed; therefore no upload can become downloadable yet. This is deliberate fail-closed behavior.
 - Legal consent policy remains inactive, so live uploads are blocked. End-to-end upload and scanner acceptance tests remain outstanding pending legal approval and scanner deployment.
+- Added a clean-only download API: the database rechecks owner, scan status and active document-storage consent, and the server streams bytes from private storage with no-store, attachment, nosniff and size-integrity headers. No signed public URL is issued.
 - Storage bucket is private, 12 MB limit, MIME allowlist PDF/JPEG/PNG. No Aadhaar or bank documents should be collected unless a separately approved purpose and retention policy explicitly require them.
 
 
@@ -175,3 +176,5 @@ No permission, partner approval, production API credentials or portal sandbox cr
 - Added a hardened Docker Compose deployment, scanner provisioning/runbook and Python protocol/MIME tests; CI now runs the Python scanner test suite.
 - Remote probes confirm both scanner RPCs exist, authenticated can execute them, anon cannot, and there are currently zero active scanner roles and zero citizen documents.
 - **Not yet live:** no scanner Auth identity has been provisioned or assigned, no scanner host/container is deployed, no ClamAV/EICAR acceptance test has run against Supabase Storage, and the legal consent policy remains inactive. Therefore no citizen upload can yet become downloadable. Keep the upload gate closed.
+
+- Clean-document retrieval migration `20261110185906_secure_clean_document_retrieval` is applied and tracked; citizens cannot retrieve quarantined documents through the new API.
