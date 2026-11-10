@@ -110,6 +110,13 @@ jobs:
           curl --fail --silent http://127.0.0.1:3000/hero-citizen.svg | grep -q '<svg'
           curl --fail --silent http://127.0.0.1:3000/robots.txt | grep -q 'Sitemap:'
           curl --fail --silent http://127.0.0.1:3000/sitemap.xml | grep -q 'jana-setu-ai.vercel.app'
+          for locale in hi kn te ta ml; do
+            curl --fail --silent "http://127.0.0.1:3000/$locale" > "/tmp/janasetu-$locale.html"
+            grep -q 'FAQPage' "/tmp/janasetu-$locale.html"
+          done
+          curl --fail --silent http://127.0.0.1:3000/llms.txt | grep -qi 'not a government website'
+          curl --fail --silent http://127.0.0.1:3000/llms-full.txt | grep -qi 'official government source'
+          curl --fail --silent http://127.0.0.1:3000/sitemap.xml | grep -q '/hi'
           curl --fail --silent http://127.0.0.1:3000/opengraph-image > /tmp/janasetu-og.png
           node -e 'const fs=require("node:fs");const b=fs.readFileSync("/tmp/janasetu-og.png");if(b.length<100||!b.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])))throw new Error("Open Graph image is not a valid PNG")'
 
