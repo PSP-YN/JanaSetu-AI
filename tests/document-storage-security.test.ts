@@ -23,6 +23,31 @@ test("scanner storage reads are limited to the active lease and SHA-256 attestat
  assert.ok(migration.includes("p_signature !~ '^[a-f0-9]{64}$'"));
 });
 
+test("consent revocation prevents further scans and queues private object deletion",()=>{
+ const migration=read("supabase/migrations/20261111133755_consent_aware_scanner_cleanup_and_citizen_document_deletion.sql");
+ const completion=read("supabase/migrations/20261111133809_complete_revoked_document_storage_cleanup.sql");
+ const worker=read("services/document-scanner/worker.py");
+ assert.match(migration,/consent_revoked/);
+ assert.match(migration,/cleanup_only/);
+ assert.match(migration,/has_active_document_storage_consent/);
+ assert.match(migration,/can_delete_revoked_citizen_document/);
+ assert.match(migration,/scanner_lease_until/);
+ assert.match(completion,/complete_revoked_document_cleanup/);
+ assert.match(worker,/cleanup_only/);
+ assert.match(worker,/delete_storage_object/);
+ assert.match(worker,/complete_revoked_cleanup/);
+});
+
+test("citizens can delete their own documents after storage removal and same-origin verification",()=>{
+ const route=read("app/api/documents/[documentId]/route.ts");
+ assert.match(route,/export async function DELETE/);
+ assert.match(route,/get_citizen_document_delete_target/);
+ assert.match(route,/method:"DELETE"/);
+ assert.match(route,/complete_citizen_document_delete/);
+ assert.match(route,/Cross-origin document deletion is not allowed/);
+ assert.match(route,/storageResponse\.status!==404/);
+});
+
 test("document download API uses guarded metadata and authenticated private object endpoint",()=>{
  const route=read("app/api/documents/[documentId]/route.ts");
  assert.match(route,/get_clean_citizen_document/);
