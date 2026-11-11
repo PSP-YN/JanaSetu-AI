@@ -1,0 +1,24 @@
+services:
+  - type: worker
+    name: janasetu-document-scanner
+    runtime: docker
+    region: singapore
+    plan: 1c-2g
+    dockerfilePath: ./services/document-scanner/Dockerfile
+    dockerContext: ./services/document-scanner
+    autoDeployTrigger: off
+    disk:
+      name: clamav-signatures
+      mountPath: /var/lib/clamav
+      sizeGB: 1
+    envVars:
+      - key: SUPABASE_URL
+        value: https://qjiuclkhvxbnojdysmmp.supabase.co
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SCANNER_EMAIL
+        sync: false
+      - key: SCANNER_PASSWORD
+        sync: false
+      - key: POLL_SECONDS
+        value: "10"
