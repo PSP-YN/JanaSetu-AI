@@ -208,7 +208,8 @@ applyButton.addEventListener("click",async()=>{
     if(tab.id!==pendingTabId||tab.url!==pendingUrl){clearPreview();say("stalePreview");return;}
     const result=await chrome.scripting.executeScript({target:{tabId:tab.id},func:fillProfileInPage,args:[pendingProfile,selected]});
     const filled=result?.[0]?.result?.filled??0;
+    const stale=result?.[0]?.result?.stale??0;
     clearPreview();
-    if(filled)say("fillOk",{count:filled});else say("noFields");
+    if(filled)say("fillOk",{count:filled});else if(stale)say("stalePreview");else say("noFields");
   }catch(error){clearPreview();say("fillFail");}
 });
