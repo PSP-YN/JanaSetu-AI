@@ -48,3 +48,18 @@ These cannot be truthfully completed by code changes or synthetic records:
 **Not production-ready for real citizen data or government submissions.**
 
 The database migration history and several backend security controls are reconciled and applied. The remaining blockers require real external people, authorization, credentials, a persistent worker host and a successful current-commit CI/preview verification. The existing public production site remains untouched.
+
+
+## Hackathon local-first vault update — 11 November 2026
+
+- Added a browser-local document store backed by IndexedDB. Newly added PDF, JPEG and PNG binaries remain on the device; the workspace sync path receives document metadata only, not the binary.
+- Added a portable `.janasetu` export/import format using AES-256-GCM with a per-export random salt and nonce and PBKDF2-HMAC-SHA-256 (600,000 iterations). Passwords are prompted locally and are not sent to the application server. Incorrect passwords and ciphertext tampering fail authentication.
+- Added bounds: 12 MB per document, 25 MB aggregate document payload, 40 MB encrypted vault import, and a 12-character minimum password.
+- Added unit coverage for round-trip decryption, plaintext non-disclosure, incorrect-password rejection and minimum password length.
+- Added a local ClamAV CLI helper. Malware scanning remains distinct from encryption; an unavailable or failed scan is not a clean verdict. No paid hosted worker or scanner Auth identity is required for this local demo path.
+- Local verification on the connected Fedora workstation: `npm run check` passed (TypeScript plus 127/127 unit tests); `npm run build` passed.
+- GitHub Actions run [#603](https://github.com/PSP-YN/JanaSetu-AI/actions/runs/43069185681) completed successfully, including scanner image build, tests, type-check, browser accessibility tests, extension validation, dependency audit and production smoke test.
+- Local production server started at `http://127.0.0.1:3100/app` for the hackathon walkthrough.
+- Vercel preview deployment remains blocked by the account's daily deployment rate limit. No merge to `main`, production deployment, paid Render worker, legal consent approval, independent scheme approvals or government API authorization has been performed.
+
+The local-first vault is a hackathon demo capability, not a completed independent security audit or a declaration of production readiness. Older document checklist entries created before this feature may contain metadata only; newly added documents are stored as local binary files and included in encrypted exports.
