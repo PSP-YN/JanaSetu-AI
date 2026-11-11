@@ -3,7 +3,7 @@ services:
     name: janasetu-document-scanner
     runtime: docker
     region: singapore
-    plan: 1c-2g
+    plan: 2c-4g
     dockerfilePath: ./services/document-scanner/Dockerfile
     dockerContext: ./services/document-scanner
     autoDeployTrigger: off

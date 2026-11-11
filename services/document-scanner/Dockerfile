@@ -1,5 +1,6 @@
-FROM python:3.12-slim
-RUN apt-get update && apt-get install -y --no-install-recommends clamav clamav-daemon clamav-freshclam gosu ca-certificates \
+FROM clamav/clamav:1.4.6_base-debian13-slim@sha256:b3d417fcc0de969b2aef169ac391326f2cdf27cc42991e9100fe477838b466ce
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends python3 gosu ca-certificates \
  && rm -rf /var/lib/apt/lists/* \
  && useradd --system --uid 10001 --home /nonexistent --shell /usr/sbin/nologin scanner \
  && mkdir -p /run/clamav /var/lib/clamav /opt/janasetu-scanner \

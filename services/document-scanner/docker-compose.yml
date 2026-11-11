@@ -29,7 +29,7 @@ services:
       - SETGID
     # ClamAV is reachable only over loopback inside this container; never publish port 3310.
     healthcheck:
-      test: ["CMD", "python", "-c", "import socket; s=socket.create_connection(('127.0.0.1',3310),3); s.close()"]
+      test: ["CMD", "python3", "-c", "import socket; s=socket.create_connection(('127.0.0.1',3310),3); s.close()"]
       interval: 30s
       timeout: 5s
       retries: 3

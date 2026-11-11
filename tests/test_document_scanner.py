@@ -58,6 +58,41 @@ class ScannerTests(unittest.TestCase):
         with patch.object(worker.socket, "create_connection", return_value=fake):
             self.assertEqual(worker.scan_bytes(b"test"), "rejected")
 
+    def test_clamd_connection_timeout_fails_closed(self):
+        with patch.object(worker.socket, "create_connection", side_effect=TimeoutError("timed out")):
+            with self.assertRaises(TimeoutError):
+                worker.scan_bytes(b"synthetic document")
+
+    def test_clamd_timeout_never_attests_document_as_clean(self):
+        item = {
+            "id": "11111111-1111-4111-8111-111111111111",
+            "storage_object_name": "22222222-2222-4222-8222-222222222222/33333333-3333-4333-8333-333333333333/44444444-4444-4444-8444-444444444444/55555555-5555-4555-8555-555555555555.pdf",
+            "mime_type": "application/pdf",
+            "expected_size": 13,
+        }
+        with (
+            patch.object(worker, "download_document", return_value=b"%PDF-1.7 test"),
+            patch.object(worker, "scan_bytes", side_effect=TimeoutError("timed out")),
+            patch.object(worker, "attest") as attest,
+        ):
+            with self.assertRaises(TimeoutError):
+                worker.process_one(item, "scanner-jwt", "ClamAV test")
+        attest.assert_not_called()
+
+    def test_missing_or_stale_signatures_fail_closed(self):
+        from tempfile import TemporaryDirectory
+        from pathlib import Path
+        with TemporaryDirectory() as directory:
+            with patch.object(worker, "DATABASE_DIR", Path(directory)):
+                self.assertFalse(worker.clamav_database_is_fresh())
+                signature = Path(directory) / "daily.cvd"
+                signature.write_bytes(b"test signature marker")
+                self.assertTrue(worker.clamav_database_is_fresh())
+                import os, time
+                old = time.time() - (49 * 60 * 60)
+                os.utime(signature, (old, old))
+                self.assertFalse(worker.clamav_database_is_fresh())
+
     def test_indeterminate_clamd_result_fails_closed(self):
         fake = FakeSocket(b"stream: ERROR\0")
         with patch.object(worker.socket, "create_connection", return_value=fake):
