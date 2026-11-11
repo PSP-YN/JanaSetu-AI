@@ -16,8 +16,9 @@ export default function AuthCallbackPage() {
         const description = hash.get("error_description") || new URLSearchParams(window.location.search).get("error_description");
         if(description) throw new Error(description.replace(/\+/g," "));
         const access_token=hash.get("access_token"), refresh_token=hash.get("refresh_token");
+        const state=new URLSearchParams(window.location.search).get("state")||"";
         if(!access_token || !refresh_token) throw new Error("The confirmation link is missing its session details or has expired. Request a new link and try again.");
-        const response=await fetch("/api/auth",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"establish",access_token,refresh_token})});
+        const response=await fetch("/api/auth",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"establish",access_token,refresh_token,state})});
         const result=await response.json();
         if(!response.ok || !result.authenticated) throw new Error(result.error || "Could not verify the confirmation link.");
         if(active){setMessage("Email confirmed. Opening your citizen workspace…");const next = new URLSearchParams(window.location.search).get("next");const safeNext = next && next.startsWith("/") && !next.startsWith("//") ? next : "/app";window.history.replaceState(null,"",window.location.pathname);router.replace(safeNext);router.refresh();}
