@@ -4,6 +4,26 @@ export const runtime="nodejs";
 export const dynamic="force-dynamic";
 const json=(body:unknown,status=200)=>NextResponse.json(body,{status,headers:{"Cache-Control":"no-store"}});
 const uuid=(value:unknown)=>typeof value==="string"&&/^[0-9a-f-]{36}$/i.test(value);
+async function readLimitedForm(request:NextRequest,maxBytes:number):Promise<FormData>{
+ const reader=request.body?.getReader();if(!reader)throw new Error("document_body_required");
+ const chunks:Uint8Array[]=[];let total=0;
+ try{
+  for(;;){const {done,value}=await reader.read();if(done)break;total+=value.byteLength;
+   if(total>maxBytes){await reader.cancel();throw new Error("request_body_too_large");}
+   chunks.push(value);
+  }
+ }finally{reader.releaseLock();}
+ const body=new Uint8Array(total);let offset=0;for(const chunk of chunks){body.set(chunk,offset);offset+=chunk.byteLength;}
+ const contentType=request.headers.get("content-type");if(!contentType||!contentType.toLowerCase().startsWith("multipart/form-data;"))throw new Error("multipart_form_required");
+ return new Response(body,{headers:{"Content-Type":contentType}}).formData();
+}
+async function hasValidSignature(file:File):Promise<boolean>{
+ const bytes=new Uint8Array(await file.slice(0,8).arrayBuffer());
+ if(file.type==="application/pdf")return String.fromCharCode(...bytes.slice(0,5))==="%PDF-";
+ if(file.type==="image/jpeg")return bytes[0]===0xff&&bytes[1]===0xd8&&bytes[2]===0xff;
+ if(file.type==="image/png")return [0x89,0x50,0x4e,0x47,0x0d,0x0a,0x1a,0x0a].every((value,index)=>bytes[index]===value);
+ return false;
+}
 async function rpc(session:NonNullable<Awaited<ReturnType<typeof getVerifiedSupabaseSession>>>,name:string,args:Record<string,unknown>){
  const r=await fetch(session.url+"/rest/v1/rpc/"+name,{method:"POST",headers:{apikey:session.key,Authorization:"Bearer "+session.accessToken,"Content-Type":"application/json"},body:JSON.stringify(args),cache:"no-store"});
  const data=await r.json().catch(()=>null);
@@ -53,15 +73,13 @@ export async function POST(request:NextRequest){
  let uploadedPath="";
  try{
   if(request.headers.get("origin")!==request.nextUrl.origin)return json({error:"Cross-origin request blocked."},403);
-  const declared=Number(request.headers.get("content-length")||0);
-  if(declared>13*1024*1024)return json({error:"Maximum document size is 12 MB."},413);
   session=await getVerifiedSupabaseSession();if(!session)return json({error:"Sign in required."},401);
-  const form=await request.formData();
+  const form=await readLimitedForm(request,13*1024*1024);
   if([...form.keys()].some(k=>!["case_id","consent_id","file"].includes(k)))return json({error:"Unsupported upload field."},400);
   const caseId=form.get("case_id"),consentId=form.get("consent_id"),file=form.get("file");
   if(!uuid(caseId)||!uuid(consentId)||!(file instanceof File))return json({error:"A case, document-storage consent and file are required."},400);
   if(file.size<1||file.size>12*1024*1024)return json({error:"Maximum document size is 12 MB."},413);
-  if(!["application/pdf","image/jpeg","image/png"].includes(file.type))return json({error:"Only PDF, JPEG and PNG files are accepted."},415);
+  if(!["application/pdf","image/jpeg","image/png"].includes(file.type)||!(await hasValidSignature(file)))return json({error:"The file content does not match an accepted PDF, JPEG or PNG format."},415);
   const init=await rpc(session,"init_document_upload",{p_case_id:caseId,p_consent_id:consentId,p_filename:file.name,p_mime_type:file.type,p_size:file.size});
   const path=String(init?.object_name||"");const id=String(init?.document_id||"");
   if(!uuid(id)||!path.startsWith(session.user.id+"/"+caseId+"/"+consentId+"/"))throw new Error("Invalid upload session.");
@@ -80,6 +98,11 @@ export async function POST(request:NextRequest){
   if(message.includes("consent_policy_not_approved")||message.includes("document_storage_consent_required"))return json({error:"Document upload is disabled until the document-storage policy receives legal approval and you grant the matching consent."},409);
   if(message.includes("consent_scope_mismatch"))return json({error:"The document consent does not cover this application and upload action."},409);
   if(message.includes("case_not_found"))return json({error:"Application case not found."},404);
+  if(message.includes("invalid_filename"))return json({error:"The file name is not valid."},400);
+  if(message.includes("unsupported_document_type_or_size"))return json({error:"The file type or size is not supported."},415);
+  if(message.includes("authentication_required"))return json({error:"Sign in required."},401);
+  if(message.includes("request_body_too_large"))return json({error:"Maximum upload request size is 13 MB, including multipart overhead."},413);
+  if(message.includes("document_body_required")||message.includes("multipart_form_required"))return json({error:"A multipart document upload is required."},400);
   return json({error:"Document upload failed. No document was made available."},503);
  }
 }
