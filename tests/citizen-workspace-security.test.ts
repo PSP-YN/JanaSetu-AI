@@ -284,15 +284,16 @@ test("document scanning uses atomic claims, scanner-only object reads and bounde
 });
 
 test("document scanner worker never uses service-role credentials and checks file integrity", () => {
-  const worker = read("services/document-scanner/worker.mjs");
+  const worker = read("services/document-scanner/worker.py");
   const docker = read("services/document-scanner/Dockerfile");
   assert.match(worker, /SCANNER_EMAIL/);
   assert.match(worker, /SCANNER_PASSWORD/);
   assert.match(worker, /claim_next_document_scan/);
-  assert.match(worker, /clamscan/);
-  assert.match(worker, /validMagic/);
+  assert.match(worker, /clamd_version/);
+  assert.match(worker, /scan_bytes/);
+  assert.match(worker, /validate_file/);
   assert.match(worker, /expected_size/);
-  assert.match(worker, /MAX_BYTES/);
+  assert.match(worker, /MAX_DOCUMENT_BYTES/);
   assert.doesNotMatch(worker, /SERVICE_ROLE|service_role|SUPABASE_SERVICE_ROLE_KEY/i);
   assert.match(docker, /clamav/);
 });
