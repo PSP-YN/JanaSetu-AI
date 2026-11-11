@@ -65,7 +65,7 @@ Document upload, malware scanning, quarantine, secure downloads, backup/restore 
 
 The final product must provide:
 - A clear notice before each purpose-specific collection.
-- Separate opt-in controls for profile storage, document storage, reminders, assisted form filling, external portal navigation and automated submission.
+- Separate opt-in controls for profile storage, cloud workspace synchronization, document storage, reminders, assisted form filling, external portal navigation and automated submission.
 - The exact scheme, action, destination, data categories and policy version in each relevant consent record.
 - A way to review, withdraw and renew consent.
 - A way to export, correct and request deletion of citizen information.
