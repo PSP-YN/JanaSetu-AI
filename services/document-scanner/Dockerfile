@@ -1,10 +1,12 @@
-FROM node:22-bookworm-slim
-RUN apt-get update && apt-get install -y --no-install-recommends clamav clamav-freshclam gosu ca-certificates \
+FROM python:3.12-slim
+RUN apt-get update && apt-get install -y --no-install-recommends clamav clamav-daemon clamav-freshclam gosu ca-certificates \
  && rm -rf /var/lib/apt/lists/* \
- && useradd --system --uid 10001 --create-home scanner \
- && mkdir -p /var/lib/clamav /tmp/janasetu-scanner \
- && chown -R scanner:scanner /tmp/janasetu-scanner
+ && useradd --system --uid 10001 --home /nonexistent --shell /usr/sbin/nologin scanner \
+ && mkdir -p /run/clamav /var/lib/clamav /opt/janasetu-scanner \
+ && chown -R clamav:clamav /run/clamav /var/lib/clamav
 WORKDIR /opt/janasetu-scanner
-COPY --chown=scanner:scanner package.json worker.mjs ./
-ENV NODE_ENV=production
-CMD ["sh","-c","for attempt in 1 2 3 4 5 6; do freshclam --quiet && break; sleep 20; done; test -s /var/lib/clamav/daily.cvd -o -s /var/lib/clamav/daily.cld; exec gosu scanner node worker.mjs"]
+COPY worker.py entrypoint.sh ./
+COPY clamd.conf /etc/clamav/clamd.conf
+RUN chmod 0755 /opt/janasetu-scanner/entrypoint.sh /opt/janasetu-scanner/worker.py
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+ENTRYPOINT ["/opt/janasetu-scanner/entrypoint.sh"]
