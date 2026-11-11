@@ -73,3 +73,16 @@ test("unsafe government credentials cannot be mapped from citizen profiles",()=>
   const result=assessApprovedScheme(profile,{...scheme,ruleSet:unsafe},now);
   assert.equal(result.state,"needs_verification");
 });
+
+test("date-only scheme end dates remain valid throughout the Indian calendar day",()=>{
+  const sameDay={...scheme,effectiveFrom:"2026-11-11",effectiveTo:"2026-11-11"};
+  const result=assessApprovedScheme(profile,sameDay,now);
+  assert.equal(result.state,"potential_match");
+  const future={...scheme,effectiveFrom:"2026-11-12",effectiveTo:"2027-12-31"};
+  assert.equal(assessApprovedScheme(profile,future,now).state,"needs_verification");
+});
+
+test("scheme rules reject non-government evidence hosts even when HTTPS is used",()=>{
+  const unsafe={...ruleSet,rules:ruleSet.rules.map((r)=>({...r,evidence:{...evidence,sourceUrl:"https://example.com/official-looking-scheme"}}))};
+  assert.equal(assessApprovedScheme(profile,{...scheme,ruleSet:unsafe},now).state,"needs_verification");
+});
