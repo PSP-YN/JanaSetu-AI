@@ -75,7 +75,7 @@ grant execute on function private.attest_document_scan(uuid,text,text,text) to a
 
 create or replace function private.get_clean_citizen_document(p_document_id uuid)
 returns jsonb language plpgsql security definer set search_path=public,private,pg_temp
-as $
+as $body$
 declare v_user uuid:=auth.uid(); v_doc private.citizen_documents%rowtype;
 begin
  if v_user is null then raise exception 'authentication_required' using errcode='42501'; end if;
@@ -84,12 +84,12 @@ begin
  if not private.has_active_citizen_consent(v_user,'document_storage',v_doc.case_id) then raise exception 'document_storage_consent_inactive' using errcode='42501'; end if;
  return jsonb_build_object('storage_object_name',v_doc.storage_object_name,'filename',v_doc.original_filename,'mime_type',v_doc.mime_type,'size',v_doc.expected_size);
 end;
-$;
+$body$;
 revoke all on function private.get_clean_citizen_document(uuid) from public,anon,service_role;
 grant execute on function private.get_clean_citizen_document(uuid) to authenticated;
 create or replace function public.get_clean_citizen_document(p_document_id uuid)
 returns jsonb language sql security invoker set search_path=public,private,pg_temp
-as $ select private.get_clean_citizen_document(p_document_id) $;
+as $body$ select private.get_clean_citizen_document(p_document_id) $body$;
 revoke all on function public.get_clean_citizen_document(uuid) from public,anon;
 grant execute on function public.get_clean_citizen_document(uuid) to authenticated;
 
