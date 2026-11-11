@@ -53,7 +53,7 @@ export async function listPublicSchemes():Promise<PublicScheme[]>{
   const source=version.source_id?bySource.get(version.source_id):undefined;
   return [{id:row.id,slug:row.slug,name:row.name,category:row.category,level:row.level,state_code:row.state_code,
    content:version.content,ruleSet:isRecord(version.rule_set)?version.rule_set:null,sourceUrl:safeUrl(source?.source_url)||safeUrl(version.source_url),
-   sourcePublisher:source?.publisher||null,sourceCheckedAt:source?.last_checked_at||version.reviewed_at,
+   sourcePublisher:source?.publisher||null,sourceCheckedAt:source?.last_checked_at||null,
    effectiveFrom:version.effective_from,effectiveTo:version.effective_to,versionNumber:version.version_number}];
  });
 }
