@@ -38,6 +38,31 @@ test("browser authentication never receives a service-role credential", () => {
   assert.match(callback, /action:"establish",access_token,refresh_token,state/);
 });
 
+test("cloud hydration merges local edits and records instead of replacing the workspace",()=>{
+  const page=read("app/app/page.tsx");
+  assert.match(page,/mergeCitizenProfile/);
+  assert.match(page,/mergeWorkspaceRecords/);
+  assert.match(page,/latestLocalProfile/);
+  assert.match(page,/localStorage\.getItem\(STORAGE\.language\)/);
+  assert.match(page,/item => String\(item\.id\)/);
+});
+
+test("final database invariants preserve consent policy, action scope, idempotency and serialized reviews",()=>{
+  const sql=read("supabase/migrations/20261111160000_restore_consent_and_review_invariants.sql");
+  assert.match(sql,/cloud_workspace_sync/);
+  assert.match(sql,/consent_policy_versions/);
+  assert.match(sql,/p\.active=true/);
+  assert.match(sql,/p\.legal_review_reference is not null/);
+  assert.match(sql,/consent_scope_mismatch/);
+  assert.match(sql,/has_active_citizen_consent/);
+  assert.match(sql,/idempotency_key_reused/);
+  assert.match(sql,/profile_snapshot is distinct from p_profile_snapshot/);
+  assert.match(sql,/for update/);
+  assert.match(sql,/application_preparation_approved/);
+  assert.match(sql,/application_prepared/);
+  assert.match(sql,/No production-approved worker adapter/);
+});
+
 test("cloud workspace rejects unknown top-level fields and oversized payloads", () => {
   const route = read("app/api/workspace/route.ts");
   assert.match(route, /256 \* 1024/);
