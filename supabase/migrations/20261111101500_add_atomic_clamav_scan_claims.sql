@@ -35,7 +35,7 @@ begin
    order by created_at
    for update skip locked limit 1
  )
- update private.citizen_documents d set scan_status='scanning',scan_attempts=d.scan_attempts+1,updated_at=now()
+ update private.citizen_documents d set scan_status='scanning',scan_attempts=d.scan_attempts+1,scanner_user_id=v_user,updated_at=now()
  from candidate c where d.id=c.id
  returning d.* into v_doc;
  if not found then return null; end if;
@@ -58,7 +58,7 @@ begin
    raise exception 'invalid_scan_attestation';
  end if;
  select * into v_doc from private.citizen_documents where id=p_document_id for update;
- if not found or v_doc.scan_status<>'scanning' or v_doc.scanner_user_id is not null and v_doc.scanner_user_id<>v_user then
+ if not found or v_doc.scan_status<>'scanning' or v_doc.scanner_user_id is distinct from v_user then
    raise exception 'document_not_claimed_by_scanner';
  end if;
  update private.citizen_documents set scan_status=p_result,scan_engine=trim(p_engine),scan_signature=trim(p_signature),
