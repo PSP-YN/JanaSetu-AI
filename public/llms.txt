@@ -13,6 +13,7 @@ JanaSetu AI is not a government website, department, scheme authority or applica
 - https://jana-setu-ai.vercel.app/ml — Malayalam overview
 - https://jana-setu-ai.vercel.app/privacy — Privacy information
 - https://jana-setu-ai.vercel.app/terms — Terms and limitations
+- https://jana-setu-ai.vercel.app/schemes — Directory of independently reviewed, source-fresh scheme guides; individual guides appear only after publication checks
 - https://jana-setu-ai.vercel.app/sitemap.xml — Public sitemap
 
 ## What the product does
