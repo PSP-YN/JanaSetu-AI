@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { fillWithCitizenApproval } from "./extension-approval";
 
-for (const route of ["/", "/app", "/privacy", "/terms"]) {
+for (const route of ["/", "/app", "/auth", "/app/automation", "/app/review", "/schemes", "/privacy", "/terms"]) {
   test(`axe WCAG 2.1 AA critical/serious scan: ${route}`, async ({ page }) => {
     await page.goto(route);
     await expect(page.locator("body")).toBeVisible();
