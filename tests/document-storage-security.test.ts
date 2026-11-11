@@ -48,6 +48,16 @@ test("citizens can delete their own documents after storage removal and same-ori
  assert.match(route,/storageResponse\.status!==404/);
 });
 
+test("document upload enforces streamed body limits and byte-level MIME signatures",()=>{
+ const route=read("app/api/documents/route.ts");
+ assert.match(route,/readLimitedForm/);
+ assert.match(route,/request_body_too_large/);
+ assert.match(route,/hasValidSignature/);
+ assert.match(route,/%PDF-/);
+ assert.match(route,/0x89,0x50,0x4e,0x47/);
+ assert.match(route,/unsupported_document_type_or_size/);
+});
+
 test("document download API uses guarded metadata and authenticated private object endpoint",()=>{
  const route=read("app/api/documents/[documentId]/route.ts");
  assert.match(route,/get_clean_citizen_document/);
