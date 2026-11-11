@@ -63,3 +63,19 @@ The database migration history and several backend security controls are reconci
 - Vercel preview deployment remains blocked by the account's daily deployment rate limit. No merge to `main`, production deployment, paid Render worker, legal consent approval, independent scheme approvals or government API authorization has been performed.
 
 The local-first vault is a hackathon demo capability, not a completed independent security audit or a declaration of production readiness. Older document checklist entries created before this feature may contain metadata only; newly added documents are stored as local binary files and included in encrypted exports.
+
+## Zero-cost continuation update — 12 November 2026
+
+The account owner declined paid infrastructure. No payment method was added, no Render charge was approved, and no paid service or persistent disk was provisioned. The Render Blueprint remains `autoSync: false`, status `created`, with an empty resource list. The ClamAV worker remains locally tested only; it is not a live Supabase Storage scanner.
+
+The no-cost operating boundary is local-first: keep documents in the browser's IndexedDB vault and encrypted local backup/restore. Do not activate cloud document upload or claim malware scanning for cloud objects. The free Render web-service tier is not an acceptable substitute for the 4 GB persistent ClamAV worker. Revisit hosted scanning only when a suitable funded host or a separately validated managed scanning architecture is available.
+
+### Live application submission verification
+
+On 12 November 2026, the live Supabase database was inspected. All four scheme records remain `review_pending`; there are zero approved consent-policy versions, zero active scanner identities, zero automation runs and no production-authorized government adapter. The `private.confirm_automation_run` function rejects every external portal action, including `submit_application`, with `government_adapter_execution_not_enabled`. It only queues `prepare_documents` and `schedule_reminder` after fresh, purpose-specific consent and citizen confirmation.
+
+The application preparation endpoint returns `awaiting_citizen_review`; the citizen's confirmation endpoint explicitly returns `submissionStatus: not_submitted`. JanaSetu therefore prepares and waits for citizen review; it does **not** automatically submit an application. A later external submission capability requires a separately authorized government integration and a fresh point-of-submission confirmation. See `docs/citizen-data-and-automation-policy.md` for the verified workflow.
+
+### CI
+
+GitHub Actions run #627 (commit `4d7800c6139bfdf83ca3f03d9cc54d220b139355`) completed successfully. Its required test, type, security and production-smoke job passed, including the ClamAV image build, scheme-review guardrails, consent/automation checks, browser tests, dependency audit and production route smoke tests. This is branch CI evidence, not a production deployment or a live Supabase Storage scanner test.

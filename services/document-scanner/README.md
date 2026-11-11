@@ -36,3 +36,11 @@ The Render `2c-4g` compute plan is currently listed at US$85/month and the 1 GB 
 ### Consent revocation and cleanup
 
 The scanner claim RPC prioritises deletion-only jobs when the exact document-storage consent has expired or been revoked. These jobs return `cleanup_only: true`; the worker deletes the private Storage object without downloading or scanning it, then calls `complete_revoked_document_cleanup`. The database removes metadata only after the Storage object is absent. Cleanup leases expire and are safely retried. The worker never logs document contents or filenames.
+
+## Zero-cost operating decision — 12 November 2026
+
+The hosted Render worker is **not provisioned**. The current `2c-4g` worker plus persistent signature disk requires a paid Render plan; do not downgrade this ClamAV daemon to a 512 MiB free instance or claim that such a plan can run it reliably. The Render Blueprint remains manual-sync and has no managed resources.
+
+For a zero-additional-hosting-cost demonstration, keep citizen documents in the browser's local IndexedDB vault and use the local encrypted `.janasetu` backup/restore workflow. A local ClamAV scan may be run by the workstation operator on an exported copy when ClamAV is installed; an unavailable scanner or failed scan must remain `scan_error`/unverified, never `clean`. This local workflow is not the cloud quarantine pipeline and does not authorize Supabase document uploads. The private cloud bucket remains inactive until legal consent approval, a dedicated scanner identity and a persistent scanner host are available.
+
+Do not replace ClamAV with a MIME check, filename check, browser extension heuristic or an unverified third-party free scanning API and call it equivalent malware protection. No real citizen document should be uploaded while the cloud policy is unapproved.
