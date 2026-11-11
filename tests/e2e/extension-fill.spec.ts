@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import path from "node:path";
+import { fillWithCitizenApproval } from "./extension-approval";
 
 const profile = {
   fullName: "Synthetic Citizen", age: 34, gender: "woman", state: "Karnataka",
@@ -13,7 +14,7 @@ const profile = {
 async function loadFill(page: import("@playwright/test").Page, html: string) {
   await page.setContent(html);
   await page.addScriptTag({ path: path.join(process.cwd(), "extension/fill.js") });
-  return page.evaluate((p) => (window as any).fillProfileInPage(p), profile);
+  return fillWithCitizenApproval(page,profile);
 }
 
 test("synthetic basic labelled text and number fields fill", async ({ page }) => {
@@ -74,7 +75,7 @@ test("React-style controlled input receives native input and change events", asy
     input.addEventListener("change", sync);
   });
   await page.addScriptTag({ path: path.join(process.cwd(), "extension/fill.js") });
-  const result = await page.evaluate((p) => (window as any).fillProfileInPage(p), profile);
+  const result = await fillWithCitizenApproval(page,profile);
   expect(result.filled).toBe(1);
   await expect(page.locator("output")).toHaveText("Synthetic Citizen");
 });
