@@ -11,7 +11,7 @@ The top-level JSON object must contain:
 - `schemaVersion: 1`
 - `state: "approved"`
 - `rules`: 1–100 independently reviewed conjunctive checks
-- optional `application`: reviewed field mappings and a document checklist
+- optional `application`: reviewed field mappings and a required `documents` array (which may be empty)
 
 Each rule contains:
 
@@ -35,7 +35,7 @@ The server maps only existing allowlisted citizen profile fields. Every generate
 
 Never add Aadhaar numbers, bank account numbers, IFSC, passwords, PINs, OTPs, biometric values or identity-proofing secrets to the citizen profile or this mapping contract. If an official portal requires them, the citizen must enter them directly in that official channel unless a separately authorised and legally reviewed delegated API explicitly supports the data flow.
 
-The optional `application.documents` value is an array of citizen-readable checklist strings. It is not proof that a document was uploaded, scanned, accepted or submitted.
+The required `application.documents` value is an array of citizen-readable checklist strings. It is not proof that a document was uploaded, scanned, accepted or submitted.
 
 ## Review and publication
 
