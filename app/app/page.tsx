@@ -35,6 +35,28 @@ const STORAGE = {
   assessments: "janSetu.assessments.v1"
 };
 
+function mergeCitizenProfile(local: CitizenProfile, remote: CitizenProfile): CitizenProfile {
+  const merged = { ...remote } as CitizenProfile;
+  for (const [key, value] of Object.entries(local)) {
+    if (value !== "" && value !== null && value !== undefined) (merged as Record<string, unknown>)[key] = value;
+  }
+  return merged;
+}
+function mergeWorkspaceRecords<T extends Record<string, unknown>>(local: T[], remote: T[], identity: (item: T) => string): T[] {
+  const merged = new Map<string, T>();
+  const timestamp = (item: T) => {
+    const value = item.updatedAt ?? item.updated_at ?? item.createdAt ?? item.created_at ?? item.addedAt ?? item.dueAt;
+    const parsed = typeof value === "string" ? Date.parse(value) : NaN;
+    return Number.isFinite(parsed) ? parsed : -1;
+  };
+  for (const item of remote) merged.set(identity(item), item);
+  for (const item of local) {
+    const key = identity(item), existing = merged.get(key);
+    if (!existing || timestamp(item) >= timestamp(existing)) merged.set(key, item);
+  }
+  return [...merged.values()];
+}
+
 const EMPTY_PROFILE: CitizenProfile = {
   fullName: "", age: "", gender: "", state: "", district: "", residenceType: "",
   annualIncome: "", occupation: "", hasCultivableLand: null, pmKisanExcluded: "unknown",
@@ -921,13 +943,25 @@ export default function Home() {
         const result = await response.json();
         const remote = result.workspace;
         if (remote) {
-          const remoteProfile = parseBackupProfile(remote.profile_data);
-          setProfile(remoteProfile || EMPTY_PROFILE);
-          setLanguage(parseBackupLanguage(remote.preferred_language || "en"));
-          setApplications(invalidateUnapprovedApplications<LocalApplication>(parseBackupApplications(remote.application_drafts, { trustLocalStorage: true })) as LocalApplication[]);
-          setDocuments(parseBackupDocuments(remote.document_refs));
-          setTasks(parseBackupTasks(remote.reminders));
-          setAssessments(invalidateUnapprovedAssessments(parseBackupAssessments(remote.assessments, { trustLocalStorage: true })));
+          // Re-read the local snapshot after the network round-trip so edits made
+          // while authentication/workspace requests were pending are preserved.
+          const latestLocalProfile = parseBackupProfile(read(STORAGE.profile, localProfile || EMPTY_PROFILE)) || localProfile || EMPTY_PROFILE;
+          const latestLocalLanguage = parseBackupLanguage(read(STORAGE.language, localLanguage));
+          const latestLocalApplications = invalidateUnapprovedApplications<LocalApplication>(parseBackupApplications(read(STORAGE.applications, localApplications), { trustLocalStorage: true })) as LocalApplication[];
+          const latestLocalDocuments = parseBackupDocuments(read(STORAGE.documents, localDocuments));
+          const latestLocalTasks = parseBackupTasks(read(STORAGE.tasks, localTasks));
+          const latestLocalAssessments = invalidateUnapprovedAssessments(parseBackupAssessments(read(STORAGE.assessments, localAssessments), { trustLocalStorage: true }));
+          const remoteProfile = parseBackupProfile(remote.profile_data) || EMPTY_PROFILE;
+          const remoteApplications = invalidateUnapprovedApplications<LocalApplication>(parseBackupApplications(remote.application_drafts, { trustLocalStorage: true })) as LocalApplication[];
+          const remoteDocuments = parseBackupDocuments(remote.document_refs);
+          const remoteTasks = parseBackupTasks(remote.reminders);
+          const remoteAssessments = invalidateUnapprovedAssessments(parseBackupAssessments(remote.assessments, { trustLocalStorage: true }));
+          setProfile(mergeCitizenProfile(latestLocalProfile, remoteProfile));
+          setLanguage(localStorage.getItem(STORAGE.language) !== null ? latestLocalLanguage : parseBackupLanguage(remote.preferred_language || "en"));
+          setApplications(mergeWorkspaceRecords(latestLocalApplications, remoteApplications, item => item.id));
+          setDocuments(mergeWorkspaceRecords(latestLocalDocuments, remoteDocuments, item => item.id));
+          setTasks(mergeWorkspaceRecords(latestLocalTasks, remoteTasks, item => item.id));
+          setAssessments(mergeWorkspaceRecords(latestLocalAssessments as unknown as Record<string, unknown>[], remoteAssessments as unknown as Record<string, unknown>[], item => String(item.schemeId)) as unknown as Assessment[]);
         }
         if (active) setCloudReady(true);
       } catch {
