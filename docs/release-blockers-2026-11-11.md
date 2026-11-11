@@ -29,7 +29,7 @@ This report reflects direct inspection of the connected JanaSetu Supabase projec
 ## CI and preview deployment
 
 - Latest CI run before the Playwright workflow adjustment failed at `npx playwright install --with-deps chromium` because apt mirror DNS resolution failed. Unit tests and TypeScript passed; subsequent browser, extension, dependency-audit and smoke-test steps were skipped.
-- CI run #585 for the current branch head is queued/pending. Do not treat it as passed until every required step completes.
+- The current branch's latest CI run is queued/pending. Do not treat it as passed until every required step completes; check the latest run in GitHub Actions because each new commit supersedes the previous PR run.
 - Vercel deployment `dpl_AZpuSRmbsE2BiZbqJVzw4yHv4TQ4` is READY, but it was built from older commit `2ef5b6a`, not the current branch head.
 - A new preview deployment request was blocked by Vercel's account API deployment quota (`api-deployments-free-per-day`, retry after 24 hours). No production deployment or alias change was attempted.
 
