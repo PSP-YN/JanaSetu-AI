@@ -119,13 +119,13 @@ test("mobile navigation opens, changes sections and closes", async ({ page }) =>
 test("extension synthetic select mapping only chooses an exact matching option", async ({ page }) => {
   await page.setContent('<label for="state">State</label><select id="state" name="state"><option value="">Choose</option><option value="Karnataka">Karnataka</option><option value="Kerala">Kerala</option></select>');
   await page.addScriptTag({ path: "extension/fill.js" });
-  const result = await page.evaluate(() => (window as any).fillProfileInPage({
+  const result = await fillWithCitizenApproval(page, {
     state: "Karnataka", fullName: "", age: "", gender: "", district: "",
     residenceType: "", annualIncome: "", occupation: "", hasCultivableLand: null,
     pmKisanExcluded: "unknown", ownsPuccaHouse: null, previousHousingBenefit: "unknown",
     householdHasLpg: null, poorHouseholdDeclaration: null, isStudent: false,
     top20Percentile: null, regularUndergraduate: null, otherScholarship: null, diplomaOrDistance: null
-  }));
+  });
   expect(result.filled).toBe(1);
   await expect(page.locator("#state")).toHaveValue("Karnataka");
 });
