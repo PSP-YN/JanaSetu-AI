@@ -305,6 +305,7 @@ test("clean document retrieval requires caller ownership, active consent and saf
   assert.match(sql, /has_active_citizen_consent\(v_user,'document_storage'/);
   assert.match(route, /getVerifiedSupabaseSession\(\)/);
   assert.match(route, /get_clean_citizen_document/);
+  assert.match(route, /metadata\.object_name/);
   assert.match(route, /Content-Disposition/);
   assert.match(route, /X-Content-Type-Options/);
   assert.match(route, /private, no-store/);
