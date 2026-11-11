@@ -47,7 +47,7 @@ const isRecord = (value: unknown): value is Record<string, unknown> => !!value &
 const isScalar = (value: unknown): value is Scalar => typeof value === "string" || typeof value === "number" && Number.isFinite(value) || typeof value === "boolean";
 const isIsoDate = (value: unknown): value is string =>
   typeof value === "string" &&
-  /^\\d{4}-\\d{2}-\\d{2}(?:T\\d{2}:\\d{2}(?::\\d{2}(?:\\.\\d{1,3})?)?(?:Z|[+-]\\d{2}:\\d{2}))?$/.test(value) &&
+  /^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?(?:Z|[+-]\d{2}:\d{2}))?$/.test(value) &&
   Number.isFinite(Date.parse(value));
 function indiaCalendarDate(now: Date): string {
   const parts = new Intl.DateTimeFormat("en-CA", {
@@ -58,8 +58,8 @@ function indiaCalendarDate(now: Date): string {
 }
 function outsideEffectivePeriod(from:string|null|undefined,to:string|null|undefined,now:Date):boolean {
   const today=indiaCalendarDate(now);
-  const fromOutside=!!from && (/^\\d{4}-\\d{2}-\\d{2}$/.test(from) ? from>today : Date.parse(from)>now.getTime());
-  const toOutside=!!to && (/^\\d{4}-\\d{2}-\\d{2}$/.test(to) ? to<today : Date.parse(to)<now.getTime());
+  const fromOutside=!!from && (/^\d{4}-\d{2}-\d{2}$/.test(from) ? from>today : Date.parse(from)>now.getTime());
+  const toOutside=!!to && (/^\d{4}-\d{2}-\d{2}$/.test(to) ? to<today : Date.parse(to)<now.getTime());
   return fromOutside||toOutside;
 }
 function isOfficialGovernmentSource(value:unknown):value is string {
