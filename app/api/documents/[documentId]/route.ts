@@ -60,8 +60,8 @@ export async function DELETE(request:NextRequest,{params}:{params:Promise<{docum
   });
   if(!targetResponse.ok)return json({error:"This document is unavailable or belongs to another account."},404);
   const target=await targetResponse.json() as {document_id?:string;object_name?:string};
+  if(target.document_id!==documentId||typeof target.object_name!=="string"||
      !/^[0-9a-f-]{36}\/[0-9a-f-]{36}\/[0-9a-f-]{36}\/[0-9a-f-]{36}\.(pdf|jpg|png)$/i.test(target.object_name)){
-     !/^[0-9a-f-]{36}\\/[0-9a-f-]{36}\\/[0-9a-f-]{36}\\/[0-9a-f-]{36}\\.(pdf|jpg|png)$/i.test(target.object_name)){
    return json({error:"Document deletion metadata failed validation."},503);
   }
   const objectPath=target.object_name.split("/").map(encodeURIComponent).join("/");
