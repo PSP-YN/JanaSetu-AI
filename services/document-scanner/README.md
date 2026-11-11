@@ -11,7 +11,7 @@ Dedicated Python worker with a local ClamAV daemon for the private `citizen-docu
 6. Abandoned claims become retryable after 15 minutes. Transient scanner errors have a one-minute backoff. Each object is attempted at most five times; failures never become clean by default.
 
 ## Deployment
-Build this directory as a private persistent Docker background worker. The included Compose file mounts a persistent ClamAV signature volume, keeps the daemon bound to loopback, uses a read-only root filesystem, drops Linux capabilities, and exposes no scanner port. Do not deploy it as a request/response serverless function.
+Build this directory as a private persistent Docker background worker. The included Compose file mounts a persistent ClamAV signature volume, keeps the daemon bound to loopback, uses a read-only root filesystem, drops all Linux capabilities except the minimum startup capabilities (`CHOWN`, `SETUID`, `SETGID`), and exposes no scanner port. Do not deploy it as a request/response serverless function.
 
 Required secrets in `.env`:
 - `SUPABASE_URL`: dedicated JanaSetu Supabase project URL.
@@ -21,7 +21,7 @@ Required secrets in `.env`:
 Do not use CareerOS, a service-role key, a citizen's account or a shared administrator identity.
 
 ## Activation checklist
-1. Apply migrations `20261111101500_add_atomic_clamav_scan_claims.sql`, `20261111130000_harden_scanner_least_privilege.sql` and `20261111135000_backoff_scanner_retries.sql` (the Supabase migration history records the actual applied versions).
+1. Apply migrations `20261111101500_add_atomic_clamav_scan_claims.sql`, `20261111130000_harden_scanner_least_privilege.sql`, `20261111133755_consent_aware_scanner_cleanup_and_citizen_document_deletion.sql`, `20261111133809_complete_revoked_document_storage_cleanup.sql` and `20261111150000_restore_scanner_cleanup_and_global_function_defaults.sql` (the Supabase migration history records the actual applied versions).
 2. Create a dedicated scanner Auth user in JanaSetu.
 3. A privileged operator assigns only that user `private.document_scanner_roles`; the public app cannot assign scanner roles.
 4. Configure the four secrets in `.env`; keep the file out of Git.
