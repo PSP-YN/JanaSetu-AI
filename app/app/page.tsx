@@ -1009,25 +1009,48 @@ export default function Home() {
   }, [notice]);
 
 
-  const exportBackup = () => {
-    const backup = { app: "JanaSetu", schemaVersion: 1, exportedAt: new Date().toISOString(), profile, language, applications, documents, tasks, assessments };
-    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a"); link.href = url; link.download = "janSetu-local-backup.json"; link.click(); URL.revokeObjectURL(url);
-    setNotice(t("noticeBackupExported"));
+  const exportBackup = async () => {
+    const password = window.prompt("Create a vault password (at least 12 characters). JanaSetu cannot recover it.");
+    if (password === null) return;
+    const confirmation = window.prompt("Re-enter the vault password to confirm.");
+    if (confirmation === null) return;
+    if (password !== confirmation) { setNotice("Passwords do not match. Nothing was exported."); return; }
+    setBackupBusy(true);
+    try {
+      const storedFiles = await getLocalDocuments();
+      const documentFiles = await Promise.all(storedFiles.map(async (item) => {
+        const bytes = new Uint8Array(await item.blob.arrayBuffer());
+        let binary = ""; for (let i = 0; i < bytes.length; i += 0x8000) binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+        return { id: item.id, name: item.name, type: item.type, data: btoa(binary) };
+      }));
+      const totalBytes = documentFiles.reduce((sum, item) => sum + Math.floor(item.data.length * 3 / 4), 0);
+      if (totalBytes > 25 * 1024 * 1024) throw new Error("Local documents exceed the 25 MB portable vault limit.");
+      const backup = { app: "JanaSetu", schemaVersion: 1, exportedAt: new Date().toISOString(), profile, language, applications, documents, tasks, assessments, documentFiles };
+      const blob = await encryptVault(backup, password);
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a"); link.href = url; link.download = "JanaSetu-Encrypted-Vault.janasetu"; link.click();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      setNotice("Encrypted vault exported. Keep the password safe; it cannot be recovered.");
+    } catch (error) { setNotice(error instanceof Error ? error.message : "Vault export failed."); }
+    finally { setBackupBusy(false); }
   };
   const importBackup = async (file?: File) => {
-    if (!file) return; setBackupBusy(true);
+    if (!file) return;
+    const password = window.prompt("Enter the password for this JanaSetu encrypted vault.");
+    if (password === null) return;
+    setBackupBusy(true);
     try {
-      if (file.size > 5 * 1024 * 1024) throw new Error("Backup exceeds the 5 MB restore limit.");
-      const data = JSON.parse(await file.text());
-      if (data?.app !== "JanaSetu" || data?.schemaVersion !== 1 || !data?.profile) throw new Error("This is not a supported JanaSetu backup file.");
+      const data = await decryptVault(file, password) as any;
+      if (data?.app !== "JanaSetu" || data?.schemaVersion !== 1 || !data?.profile) throw new Error("This is not a supported JanaSetu vault file.");
       const importedProfile = parseBackupProfile(data.profile);
       if (!importedProfile) throw new Error("Backup profile is invalid.");
       const importedLanguage = parseBackupLanguage(data.language);
       setProfile(importedProfile); setLanguage(importedLanguage);
       setApplications(invalidateUnapprovedApplications(parseBackupApplications(data.applications)));
-      const importedDocuments = parseBackupDocuments(data.documents);\n      const fileItems = Array.isArray(data.documentFiles) ? data.documentFiles.filter((item: any) => item && typeof item.id === "string" && typeof item.name === "string" && typeof item.type === "string" && typeof item.data === "string" && item.data.length <= 36 * 1024 * 1024) : [];\n      await replaceLocalDocuments(fileItems);\n      setDocuments(importedDocuments);
+      const importedDocuments = parseBackupDocuments(data.documents);
+      const fileItems = Array.isArray(data.documentFiles) ? data.documentFiles.filter((item: any) => item && typeof item.id === "string" && typeof item.name === "string" && typeof item.type === "string" && typeof item.data === "string" && item.data.length <= 36 * 1024 * 1024) : [];
+      await replaceLocalDocuments(fileItems);
+      setDocuments(importedDocuments);
       setTasks(parseBackupTasks(data.tasks));
       setAssessments(invalidateUnapprovedAssessments(parseBackupAssessments(data.assessments)));
       setTab("profile"); setNotice(tFor(importedLanguage, "noticeBackupRestored"));
@@ -1120,7 +1143,7 @@ export default function Home() {
     setNotice(t("noticeReminderSaved"));
   };
 
-  const addDocument = (file?: File) => {
+  const addDocument = async (file?: File) => {
     if (!file) return;
     if (file.size > 12 * 1024 * 1024) {
       setNotice(t("noticeFileTooLarge"));
@@ -1134,8 +1157,10 @@ export default function Home() {
       addedAt: new Date().toISOString(),
       status: "Added — manual verification pending"
     };
+    try { await saveLocalDocument(entry.id, file, entry.name, entry.type); }
+    catch { setNotice("This browser could not store the file locally. No document was added."); return; }
     setDocuments((current) => [entry, ...current]);
-    setNotice(t("noticeFileAdded"));
+    setNotice("Document saved on this device only. It has not been malware-scanned.");
   };
 
   const navItems: { id: Tab; label: string; icon: any }[] = [
