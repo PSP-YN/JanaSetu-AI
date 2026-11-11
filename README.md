@@ -12,7 +12,12 @@ JanaSetu is an independent, source-aware public-benefits navigation and applicat
 ## Development
 
 - Node.js 22
-- Install: `npm ci`
+- Install dependencies: `npm ci`
+- Copy `.env.example` to `.env.local` and set the dedicated JanaSetu Supabase project URL and publishable key. The key value must use the `sb_publishable_...` format; never use a `service_role` or secret key in a `NEXT_PUBLIC_*` variable. `.env.local` is ignored by Git.
+- Local-only workspace mode remains available without cloud configuration. Authentication and Supabase-backed endpoints require both variables.
+- Start locally: `npm run dev`
+- Liveness: `GET /api/health`
+- Dependency readiness: `GET /api/ready` (reports database reachability separately from scheme-publication and government-integration gates)
 - Type-check: `npm run typecheck`
 - Unit tests: `npm test`
 - Browser and accessibility tests: `npm run test:e2e`
