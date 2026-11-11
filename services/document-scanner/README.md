@@ -21,7 +21,7 @@ Required secrets in `.env`:
 Do not use CareerOS, a service-role key, a citizen's account or a shared administrator identity.
 
 ## Activation checklist
-1. Apply migrations `20261111101500_add_atomic_clamav_scan_claims.sql`, `20261111130000_harden_scanner_least_privilege.sql`, `20261111133755_consent_aware_scanner_cleanup_and_citizen_document_deletion.sql`, `20261111133809_complete_revoked_document_storage_cleanup.sql` and `20261111150000_restore_scanner_cleanup_and_global_function_defaults.sql` (the Supabase migration history records the actual applied versions).
+1. Confirm the repository migration versions exactly match Supabase history. The scanner migrations already applied are `20261111125606_add_atomic_clamav_scan_claims.sql`, `20261111125926_harden_scanner_least_privilege.sql`, `20261111130024_backoff_scanner_retries.sql`, `20261111131254_enforce_document_consent_on_storage_reads.sql`, `20261111131521_bind_scanner_reads_to_claim_and_validate_attestations.sql`, `20261111133755_consent_aware_scanner_cleanup_and_citizen_document_deletion.sql`, and `20261111133809_complete_revoked_document_storage_cleanup.sql`. Follow-up hardening migrations `20261111161033_restore_scanner_cleanup_and_global_function_defaults.sql`, `20261111161048_restore_consent_and_review_invariants.sql` and `20261111161139_enable_private_schema_rls_defense_in_depth.sql` are also applied.
 2. Create a dedicated scanner Auth user in JanaSetu.
 3. A privileged operator assigns only that user `private.document_scanner_roles`; the public app cannot assign scanner roles.
 4. Configure the four secrets in `.env`; keep the file out of Git.
