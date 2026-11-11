@@ -320,3 +320,12 @@ test("legacy scanner batch API is removed and scanner read predicate is owner-cl
   assert.doesNotMatch(sql, /or exists\(select 1 from private\.document_scanner_roles/);
   assert.match(sql, /get_citizen_document_download/);
 });
+
+
+test("scanner retry logic recovers stale claims and backs off scan errors", () => {
+  const sql = read("supabase/migrations/20261111135000_backoff_scanner_retries.sql");
+  assert.match(sql, /updated_at<now\(\)-interval '15 minutes'/);
+  assert.match(sql, /updated_at<now\(\)-interval '1 minute'/);
+  assert.match(sql, /scan_attempts<5/);
+  assert.match(sql, /scanner_user_id=v_user/);
+});
