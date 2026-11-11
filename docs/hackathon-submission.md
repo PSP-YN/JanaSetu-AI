@@ -1,98 +1,45 @@
-# AgentX Hackathon 2026 — JanaSetu submission pack
+# AgentX Hackathon 2026 — JanaSetu AI
 
-## Form values
+## Submission identity
 
-**Project name**  
-JanaSetu AI — Benefit Readiness Agent
+- **Theme:** Artificial Intelligence & Machine Learning (AI/ML)
+- **Sub-theme:** Agentic AI for CivicTech / GovTech
+- **Problem statement:** PS-01 — Scheme Saathi
+- **Project title:** JanaSetu AI — Benefit Readiness Agent
+- **One-line pitch:** A multilingual agentic-AI benefits assistant that maps scheme rules to citizen evidence and prepares explainable, human-reviewed next steps.
 
-**Theme**  
-Agentic AI / CivicTech / GovTech
+## Submission links
 
-**One-line pitch (under 140 characters)**  
-A multilingual benefits agent that links scheme rules to citizen evidence and prepares human-reviewed application drafts.
+- **GitHub:** https://github.com/PSP-YN/JanaSetu-AI
+- **Live demo:** https://janasetu-qfjrr4m63-pspyn.vercel.app/app
+- **Landing page:** https://janasetu-qfjrr4m63-pspyn.vercel.app/
+- **Interactive six-slide pitch deck:** https://htmlpreview.github.io/?https://github.com/PSP-YN/JanaSetu-AI/blob/backend/harden-supabase-access/public/pitch-deck.html
+- **Demo video (MP4):** https://raw.githubusercontent.com/PSP-YN/JanaSetu-AI/backend/harden-supabase-access/submission/JanaSetu_AI_Demo.mp4
 
-**Description**  
-Citizens often discover a public-benefit scheme but still struggle to interpret its rules, map their circumstances to eligibility conditions, identify missing documents and manage the next steps. JanaSetu AI is a multilingual, citizen-controlled benefits-readiness assistant. It helps users organise a profile, explore a source-aware scheme catalogue, run preliminary rule-based screening, see matched, not-matched and unknown conditions, identify evidence gaps, prepare an application draft and set follow-ups. Its local-first document workflow stores newly added document binaries in browser IndexedDB and supports a portable AES-256-GCM encrypted vault export/import. The system is designed to keep official departments authoritative: screening is preliminary, drafts are not submitted, and unknown facts are not treated as negative answers. The current prototype has a partial catalogue and four deterministic scheme prototypes pending independent human approval; it is not a government service or production eligibility authority.
+Full copy-ready form values and the detailed project description are in [submission/AGENTX_SUBMISSION_FIELDS.md](../submission/AGENTX_SUBMISSION_FIELDS.md).
 
-**Tech stack**  
-Next.js 16, React 19, TypeScript, Supabase, PostgreSQL, Supabase Auth, pgmq, pg_cron, Web Crypto API, IndexedDB, ClamAV, Playwright, Vercel
+## Project summary
 
-**Repository**  
-https://github.com/PSP-YN/JanaSetu-AI
+JanaSetu AI is an India-wide, multilingual benefits-readiness workspace. It connects source-linked scheme information, citizen-stated facts, deterministic preliminary eligibility checks, evidence gaps, local preparation drafts and follow-up actions.
 
-**Live demo**  
-https://janasetu-dalm6g8nb-pspyn.vercel.app/app
+Its central innovation is the **Benefit Readiness Graph**, an inspectable chain connecting scheme conditions to their official sources, citizen facts, evidence state, missing information and next preparation action. The agent-style workflow coordinates retrieval, rule evaluation, evidence mapping and preparation. Unknown information remains unknown rather than being guessed.
 
-**Pitch deck**  
-https://htmlpreview.github.io/?https://github.com/PSP-YN/JanaSetu-AI/blob/backend/harden-supabase-access/public/pitch-deck.html
+## Current prototype and validation boundaries
 
-**Demo video**  
-Not yet recorded or uploaded. Use the two-minute recording script at [docs/hackathon-demo-script.md](hackathon-demo-script.md), then upload the actual screen recording to an accessible video host and replace the form field with that URL. Do not submit the script URL as if it were a video.
+- Six interface languages: English, Hindi, Kannada, Telugu, Tamil and Malayalam.
+- The scheme catalogue contains 142 references; four rule-screened prototype scheme records remain pending independent review.
+- Preliminary screening is not an official eligibility decision.
+- A preparation draft is not a submitted government application.
+- No government department approval, production-authorized government API, or automatic government submission is claimed.
+- Production cloud document scanning is not enabled in the preview.
+- The prototype is not DPDP-certified and has not been represented as independently penetration-tested.
 
-## Useful links
+Use synthetic information only in the demo. Do not enter real Aadhaar, bank, caste, income, medical or other sensitive records.
 
-- Public preview home: https://janasetu-dalm6g8nb-pspyn.vercel.app/
-- Citizen workspace: https://janasetu-dalm6g8nb-pspyn.vercel.app/app
-- Privacy notice: https://janasetu-dalm6g8nb-pspyn.vercel.app/privacy
-- Terms and limitations: https://janasetu-dalm6g8nb-pspyn.vercel.app/terms
-- Interactive pitch deck: https://htmlpreview.github.io/?https://github.com/PSP-YN/JanaSetu-AI/blob/backend/harden-supabase-access/public/pitch-deck.html
-- Repository branch: https://github.com/PSP-YN/JanaSetu-AI/tree/backend/harden-supabase-access
-- Pull request: https://github.com/PSP-YN/JanaSetu-AI/pull/22
-- Latest passing CI run for application code: https://github.com/PSP-YN/JanaSetu-AI/actions/runs/43069709900
-- Current CI run for the submission-pack commit: https://github.com/PSP-YN/JanaSetu-AI/actions/runs/43071273392
+## Demo video
 
-## How to test the live demo
+The 1 minute 47 second MP4 is a browser recording of the live preview with synthetic citizen data, offline Piper narration and burned-in captions. The voice is synthetic, not cloned. It demonstrates scheme discovery, preliminary assessment, a preparation draft marked **Not submitted**, privacy information and the pitch deck.
 
-1. Open the public preview home page and select the citizen workspace.
-2. Use synthetic information only. Do not enter real Aadhaar, bank, caste, income, medical or other sensitive records.
-3. Explore the scheme catalogue and open a scheme detail page. Follow the official source link rather than treating the JanaSetu summary as authoritative.
-4. Open the citizen workspace. Create or edit a synthetic profile and select a State/UT and language.
-5. Run a preliminary assessment. Inspect the condition-level result and source references. Confirm that missing facts remain unknown and that the result is not an official eligibility decision.
-6. Prepare a draft/checklist and inspect the “not submitted” boundary.
-7. Add a harmless sample PDF/JPEG/PNG in Documents. New file binaries are stored in this browser's IndexedDB.
-8. Export a .janasetu vault with a unique demo-only passphrase of at least 12 characters. Try a wrong password on import and confirm that it is rejected; then import with the correct password.
-9. State the limitations: the local IndexedDB copy is not app-level encrypted at rest; the export is encrypted; ClamAV scanning is a separate local CLI action and the app does not automatically mark files clean.
+## Local verification
 
-## Local development and verification
-
-Requirements: Node.js 22.
-
-```bash
-git clone https://github.com/PSP-YN/JanaSetu-AI.git
-cd JanaSetu-AI
-git checkout backend/harden-supabase-access
-npm ci
-npm run check
-npm run build
-npm run dev
-```
-
-Open http://localhost:3000. For browser accessibility tests, install the project's Playwright Chromium browser and run the repository's CI browser test command (npx playwright test) after a successful production build.
-
-Local ClamAV scanning on Fedora is optional and separate from the web UI:
-
-```bash
-sudo dnf install clamav clamav-update
-sudo freshclam
-chmod +x scripts/scan-local-document.sh
-./scripts/scan-local-document.sh /path/to/synthetic-sample.pdf
-```
-
-Exit codes: 0 = no detection, 1 = detection, 2 = scanner unavailable/error. A scan failure is not a clean result.
-
-## Current verification and boundaries
-
-- The application code on commit e69aea3fc7860fa472ac51ba04f21223797b8d7b passed GitHub Actions run #605 (tests, type-check, scanner image build, database guardrails, browser accessibility tests, extension validation, dependency audit and production smoke test).
-- Local Fedora verification passed TypeScript, 127/127 unit tests and a production build.
-- The public Vercel preview for commit e69aea3fc7860fa472ac51ba04f21223797b8d7b reached READY; HTTP 200 was verified for /, /app and /privacy.
-- The interactive pitch deck is served from the public GitHub branch via GitHub HTML Preview. Chromium verified the rendered deck title and slide content.
-- The submission documentation and deck are on newer commit 4a07e43f8468d810114a5d2e1c024a8c20d7b676. Vercel's 100-deployments/day limit blocked a redeploy of that docs-only commit; the deployed app preview is still the tested e69aea3 build.
-- PR #22 is open and mergeable. It is not merged to main; production aliases and the current production site have not been changed.
-- Four deterministic scheme records remain pending independent human approval; none is published. The legal consent-policy registry has zero approved policies. No government API submission adapter is authorised. The cloud scanner worker is not provisioned.
-- JanaSetu must not be described as DPDP-certified, legally approved, independently security-audited, fully scheme-verified or capable of submitting government applications.
-
-## Remaining before final form submission
-
-1. Record a real 2-minute screen walkthrough using synthetic data and upload it to an accessible video host. The demo video field is the only submission URL not yet available.
-2. Paste the form values above into the AgentX submission page and submit before the deadline.
-3. Do not merge to production as part of the hackathon submission; the preview URL is the intended demo target.
+The current branch is `backend/harden-supabase-access`. The feature branch has not been merged into `main`; the Vercel link above is a preview deployment. Do not promote the production domain as part of the hackathon submission.

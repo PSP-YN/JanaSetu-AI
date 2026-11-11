@@ -1,25 +1,31 @@
-# JanaSetu AI — submission package
+# JanaSetu AI — AgentX Hackathon submission package
 
-**Status:** Evidence-led package for a controlled public-beta / prototype submission.
+**Theme:** Artificial Intelligence & Machine Learning (AI/ML)  
+**Sub-theme:** Agentic AI for CivicTech / GovTech  
+**Problem statement:** PS-01 — Scheme Saathi
 
-JanaSetu is an independent, multilingual public-benefits navigation and application-preparation experience. It helps citizens organize a profile, explore source-linked scheme information, inspect preliminary screening outcomes, identify missing evidence and prepare drafts for their own review.
+## Copy-ready submission
+- [AgentX form fields and full description](AGENTX_SUBMISSION_FIELDS.md)
+- [Project submission summary](../docs/hackathon-submission.md)
 
-## Contents
-1. Product overview and impact thesis — 01-product-overview.md
-2. Technical architecture and workflow — 02-technical-architecture.md
-3. Validation and evidence register — 03-validation-evidence.md
-4. Three-minute demonstration script — 04-demo-script.md
-5. Release, privacy and compliance status — 05-release-and-compliance.md
-6. Submission checklist and judge Q&A — 06-submission-checklist.md
-7. Black-box UI acceptance report — 07-black-box-ui-report.md
+## Final public links
+- GitHub repository: https://github.com/PSP-YN/JanaSetu-AI
+- Live citizen workspace: https://janasetu-qfjrr4m63-pspyn.vercel.app/app
+- Interactive six-slide pitch deck: https://htmlpreview.github.io/?https://github.com/PSP-YN/JanaSetu-AI/blob/backend/harden-supabase-access/public/pitch-deck.html
+- Demo video: https://raw.githubusercontent.com/PSP-YN/JanaSetu-AI/backend/harden-supabase-access/submission/JanaSetu_AI_Demo.mp4
 
-## Links
-- Repository: https://github.com/PSP-YN/JanaSetu-AI
-- Implementation PR: https://github.com/PSP-YN/JanaSetu-AI/pull/22
-- Earlier GitHub Actions verification (commit 38f0a8e): https://github.com/PSP-YN/JanaSetu-AI/actions/runs/43087222726
-- Latest verified Vercel preview (Preview target, not Production): https://janasetu-6r56lvi89-pspyn.vercel.app
+## Included deliverables
+- JanaSetu_AI_Demo.mp4 — 1080p H.264/AAC demo with narration and captions
+- JanaSetu_AI_Demo.srt — caption track
+- VIDEO_DEMO_SCRIPT.md — recording and narration notes
+- demo-narration.txt — voice-over transcript
+- assets/ — application screenshots and recording source files
+- AGENTX_SUBMISSION_FIELDS.md — copy-ready form content
 
-## Honest submission scope
-The working prototype demonstrates a local-first citizen workflow, six interface languages, source-linked scheme catalogue records, deterministic preliminary assessment, draft preparation, reminders and portable JSON backup/restore. It does not yet have an independently approved published scheme, active legally approved consent policy, live scanner worker, production-authorized government adapter or verified government submission.
+## Demo scope
+The demo uses synthetic citizen information. It shows the public landing page, citizen workspace, source-linked scheme discovery, preliminary assessment, a local preparation draft marked Not submitted, privacy information and the pitch deck.
 
-Do not describe this as a government service, official eligibility decision, DPDP certification, independently audited security product or fully automated application-submission platform. Never use real citizen data in the demo.
+The voice-over is generated locally with Piper en_GB-alba-medium. It is synthetic narration, not a cloned voice.
+
+## Accuracy boundaries
+The catalogue contains 142 references and four rule-screened prototype records pending independent review. The prototype is not a government service, does not make official eligibility decisions, and does not submit applications. Cloud document scanning and authorized government integrations are not active in this preview.
