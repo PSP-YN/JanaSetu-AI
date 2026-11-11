@@ -28,7 +28,7 @@ Citizen data is purpose-bound. Private document uploads require an approved cons
 - Portal filling and submission require a scheme-specific adapter and written/technical authorization from the responsible service owner.
 - CAPTCHA, OTP, biometric identity proofing, payment approval and portal access controls must not be bypassed.
 - A saved or citizen-reviewed draft is not a submitted application. This is a distinct state and must never be represented as a government submission.
-- Citizen approval means approval of the prepared draft only; it is not government acceptance.
+- Citizen approval is approval of the prepared draft only; it is not government acceptance.
 - No public-facing claim should say that all schemes are automatically applicable or that applications are guaranteed.
 
 ## Coverage and freshness
