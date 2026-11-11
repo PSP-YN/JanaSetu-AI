@@ -29,13 +29,14 @@ async function openPopup(page: import("@playwright/test").Page, initialUrl = "ht
       tabs: { query: async () => [(window as any).__popupTab] },
       scripting: { executeScript: async (call: unknown) => {
         (window as any).__lastScriptCall = call;
-        if (call.args.length === 1) {
+        const scriptCall = call as { args: any[] };
+        if (scriptCall.args.length === 1) {
           return [{ result: { preview: [
             { index: 0, key: "fullName", label: "Applicant name", value: "Synthetic Citizen", fingerprint: "name-1", valid: true, reason: "" },
             { index: 1, key: "age", label: "Age", value: "30", fingerprint: "age-1", valid: true, reason: "" }
           ] } }];
         }
-        return [{ result: { filled: call.args[1].length, stale: 0 } }];
+        return [{ result: { filled: scriptCall.args[1].length, stale: 0 } }];
       } }
     } });
   }, initialUrl);
