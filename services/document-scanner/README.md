@@ -31,3 +31,8 @@ Do not use CareerOS, a service-role key, a citizen's account or a shared adminis
 8. Measure memory, throughput and queue age before scaling. ClamAV signature databases are memory-intensive; a 512 MiB free container is not assumed sufficient.
 
 The worker is not activated by this source change. No scanner identity, legal approval or worker host has been provisioned. Citizen uploads remain blocked until the document-storage policy is legally approved. Do not create real citizen document records during initial validation.
+
+
+### Consent revocation and cleanup
+
+The scanner claim RPC prioritises deletion-only jobs when the exact document-storage consent has expired or been revoked. These jobs return `cleanup_only: true`; the worker deletes the private Storage object without downloading or scanning it, then calls `complete_revoked_document_cleanup`. The database removes metadata only after the Storage object is absent. Cleanup leases expire and are safely retried. The worker never logs document contents or filenames.
