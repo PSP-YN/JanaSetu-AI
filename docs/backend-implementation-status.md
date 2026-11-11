@@ -33,7 +33,7 @@ Updated: 11 November 2026
 - Supabase Auth routes, HttpOnly session cookies, refresh and verified-session API helpers are implemented. A controlled test-account lifecycle (confirmation, recovery, sign-out and SMTP delivery) is still outstanding. Profile/draft/assessment/reminder data remains local-first until an approved cloud-sync consent policy is activated.
 - Two-independent-user RLS tests and end-to-end account lifecycle.
 - Server-side application-case APIs, consent-gated durable automation queue, idempotent transitions and in-app reminder worker are implemented; no approved scheme or citizen-confirmed production run exists yet. External email/SMS/push delivery is not configured.
-- Scanner service deployment, scanner identity provisioning, end-to-end malware scan acceptance, retention/deletion and clean-only document retrieval (download API now implemented; scanner deployment remains outstanding).
+- Scanner service deployment, scanner identity provisioning, end-to-end malware scan acceptance, retention/deletion and live clean-document retrieval remain outstanding. The private ClamAV worker/container and guarded download API are implemented. Storage object reads now re-check the exact upload consent, scheme-version scope, active legally approved policy and later revocations on every direct Storage read as well as the download API. No scanner identity is assigned, no document records exist, and no document-storage legal policy is active; uploads therefore remain blocked.
 - Full verified scheme catalogue, actual human reviewer assignments/approvals and freshness automation across all records. The deterministic eligibility engine and application preparation workflow are implemented, but no seeded scheme has an approved structured rule set.
 - Authorised government portal adapters and official acknowledgement/receipt verification.
 - Independent privacy/legal/security review, disaster recovery and load testing.
@@ -189,3 +189,11 @@ No permission, partner approval, production API credentials or portal sandbox cr
 - Added migrations `20261110190604_persist_citizen_application_preparations.sql` and `20261110190708_harden_application_preparation_consent_and_payload.sql`.
 - Rule schema and reviewer contract: `docs/eligibility-rule-set-contract.md`.
 - **Current gate:** the four seeded scheme versions still have draft rule notes and remain `review_pending`; zero schemes are published, zero are independently approved, zero citizen cases exist, and no active profile-storage consent policy exists. The engine correctly refuses to produce an automated potential match or save an application today. No automatic applicability claim is made.
+
+
+## Private document read-path hardening — 11 November 2026
+
+- Applied migration `20261111142000_enforce_document_consent_on_storage_reads` to the dedicated JanaSetu database.
+- Direct Supabase Storage reads and the application download endpoint both require a clean scan, document ownership, the exact upload consent, matching case/scheme-version scope, a current active legal-approved document-storage policy, and no later consent revocation.
+- Verified database function definitions and grants: authenticated callers can invoke the private predicates/download path; anon cannot. The storage SELECT policy delegates to the consent-aware predicate.
+- Current database state remains fail-closed: zero document rows, zero active scanner identities and zero active legally approved document-storage policies. No citizen documents were created or accessed during this verification.
