@@ -1032,3 +1032,12 @@ input, select, textarea { min-height: 44px; }
 .account-bar .account-email{max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)}
 .account-bar-loading{display:none}
 @media(max-width:700px){.account-bar{min-height:30px;padding:3px 12px}.account-bar a,.account-bar button{min-height:26px;padding:3px 8px}.account-bar .account-email{max-width:180px}}
+
+/* Tablet-width landing header: keep navigation from competing with the brand and CTA. */
+@media(max-width:800px){
+  .site-shell .desktop-nav,.site-shell .header-text-link{display:none}
+  .site-shell .site-header-inner{min-width:0}
+  .site-shell .footer-main{grid-template-columns:1fr;gap:12px}
+  .site-shell .footer-main>p{max-width:100%}
+  .site-shell .footer-links{gap:14px}
+}

@@ -132,7 +132,7 @@ test("extension synthetic select mapping only chooses an exact matching option",
 
 
 test("landing page and workspace share the same warm brand color and do not overflow common viewports", async ({ page }) => {
-  for (const width of [320, 360, 390, 430, 768, 1024, 1366]) {
+  for (const width of [320, 360, 390, 430, 768, 800, 820, 1024, 1366]) {
     await page.setViewportSize({ width, height: 900 });
     for (const route of ["/", "/app"]) {
       await page.goto(route);
