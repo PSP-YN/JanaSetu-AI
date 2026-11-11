@@ -120,6 +120,20 @@ function parseRuleSet(value: unknown): ApprovedRuleSet | null {
   return { schemaVersion:1,state:"approved",rules,application };
 }
 
+export function isApprovedRuleSetForPublication(value: unknown, now = new Date()): boolean {
+  const parsed = parseRuleSet(value);
+  if (!parsed) return false;
+  return parsed.rules.every((rule) => {
+    const checkedAt = Date.parse(rule.evidence.sourceCheckedAt);
+    return Number.isFinite(checkedAt) && checkedAt <= now.getTime() + 86400000 && now.getTime() - checkedAt <= 90 * 86400000;
+  });
+}
+
+export function isWithinSchemeEffectivePeriod(from: string | null | undefined, to: string | null | undefined, now = new Date()): boolean {
+  if (from && !isIsoDate(from) || to && !isIsoDate(to)) return false;
+  return !outsideEffectivePeriod(from, to, now);
+}
+
 function missing(value: unknown): boolean {
   return value === null || value === undefined || value === "" || value === "unknown";
 }
