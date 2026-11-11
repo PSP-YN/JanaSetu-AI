@@ -1258,7 +1258,7 @@ export default function Home() {
           {tab === "overview" && <>
             <div className="welcome-row">
               <div><div className="eyebrow"><span className="eyebrow-line"/> {t("governmentWorkspace")}</div><h1>{t("hello")}</h1><p>{t("intro")}</p></div>
-              <div className="date-chip"><CalendarClock size={15}/> {new Date().toLocaleDateString(({ en: "en-IN", hi: "hi-IN", kn: "kn-IN", ta: "ta-IN", te: "te-IN", ml: "ml-IN" } as const)[language], { weekday: "short", day: "numeric", month: "short" })}</div>
+              <div className="date-chip"><CalendarClock size={15}/> {hydrated ? new Date().toLocaleDateString(({ en: "en-IN", hi: "hi-IN", kn: "kn-IN", ta: "ta-IN", te: "te-IN", ml: "ml-IN" } as const)[language], { weekday: "short", day: "numeric", month: "short", timeZone: "Asia/Kolkata" }) : ""}</div>
             </div>
 
             <section className="cloud-status" aria-live="polite">
