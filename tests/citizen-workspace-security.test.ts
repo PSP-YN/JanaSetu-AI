@@ -310,3 +310,13 @@ test("clean document retrieval requires caller ownership, active consent and saf
   assert.match(route, /private, no-store/);
   assert.doesNotMatch(route, /SUPABASE_SERVICE_ROLE_KEY/);
 });
+
+
+test("legacy scanner batch API is removed and scanner read predicate is owner-clean only", () => {
+  const sql = read("supabase/migrations/20261111130000_harden_scanner_least_privilege.sql");
+  assert.match(sql, /drop function if exists public\.claim_document_scan_batch/);
+  assert.match(sql, /d\.user_id=auth\.uid\(\)/);
+  assert.match(sql, /d\.scan_status='clean'/);
+  assert.doesNotMatch(sql, /or exists\(select 1 from private\.document_scanner_roles/);
+  assert.match(sql, /get_citizen_document_download/);
+});
