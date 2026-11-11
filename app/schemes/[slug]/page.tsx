@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { approvedRuleSummaries,getPublicScheme,schemeString,schemeStringList } from "@/lib/public-scheme-content";
+import { approvedRuleSummaries,getPublicScheme,isOfficialSchemeSource,schemeString,schemeStringList } from "@/lib/public-scheme-content";
 type Props={params:Promise<{slug:string}>};
 export const revalidate=3600;
 const BASE="https://jana-setu-ai.vercel.app";
@@ -18,8 +18,8 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{
 }
 export default async function PublicSchemeGuide({params}:Props){
  const scheme=await load({params});if(!scheme)notFound();
- const summary=schemeString(scheme,"summary","");const benefit=schemeString(scheme,"benefit","");const ministry=schemeString(scheme,"ministry","");const documents=schemeStringList(scheme,"documents");const related=schemeStringList(scheme,"related_sources").filter(url=>/^https:\/\//i.test(url));const rules=approvedRuleSummaries(scheme);
- const applicationUrl=/^https:\/\//i.test(schemeString(scheme,"application_url",""))?schemeString(scheme,"application_url",""):scheme.sourceUrl;
+ const summary=schemeString(scheme,"summary","");const benefit=schemeString(scheme,"benefit","");const ministry=schemeString(scheme,"ministry","");const documents=schemeStringList(scheme,"documents");const related=schemeStringList(scheme,"related_sources").filter(isOfficialSchemeSource);const rules=approvedRuleSummaries(scheme);
+ const applicationUrl=isOfficialSchemeSource(schemeString(scheme,"application_url",""))?schemeString(scheme,"application_url",""):scheme.sourceUrl;
  const parsedChecked=scheme.sourceCheckedAt?new Date(scheme.sourceCheckedAt):null;const checked=parsedChecked&&Number.isFinite(parsedChecked.getTime())?parsedChecked:null;const stale=!checked||Date.now()-checked.getTime()>90*86400000||checked.getTime()>Date.now()+86400000;
  const faq=[{q:"Does this guide make an official eligibility decision?",a:"No. It explains the independently reviewed criteria available in this scheme version. The responsible government department verifies applications and makes the final decision."},{q:"Can I submit my application on JanaSetu?",a:"No. A guide or prepared draft is not a government submission. Use the official application route and follow its identity verification and submission process."},{q:"Is JanaSetu a government website?",a:"No. JanaSetu AI is an independent public-benefits navigation project and is not affiliated with a government department."}];
  const graph={"@context":"https://schema.org","@graph":[
