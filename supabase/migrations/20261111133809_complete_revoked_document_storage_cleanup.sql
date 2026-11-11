@@ -8,12 +8,12 @@ begin
   select 1 from private.document_scanner_roles where user_id=v_user and active=true
  ) then raise exception 'scanner_role_required' using errcode='42501'; end if;
  select * into v_doc from private.citizen_documents where id=p_document_id for update;
- if not found or v_doc.storage_object_name<>p_object_name
+ if p_object_name is null or not found or v_doc.storage_object_name is distinct from p_object_name
     or v_doc.scan_status<>'deleting' or v_doc.scanner_user_id is distinct from v_user
     or private.has_active_document_storage_consent(v_doc.user_id,v_doc.case_id,v_doc.consent_id) then
   raise exception 'document_cleanup_not_authorized' using errcode='42501';
  end if;
- if exists(select 1 from storage.objects where bucket_id='citizen-documents' and name=p_object_name) then
+ if exists(select 1 from storage.objects where bucket_id='citizen-documents' and name=v_doc.storage_object_name) then
   raise exception 'storage_object_still_exists';
  end if;
  delete from private.citizen_documents where id=p_document_id;
