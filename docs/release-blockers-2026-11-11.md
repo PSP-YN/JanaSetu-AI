@@ -6,17 +6,18 @@ This report reflects direct inspection of the connected JanaSetu Supabase projec
 
 ## Completed in this hardening pass
 
-- Reconciled all 40 repository migration filenames with the 40 migration versions recorded by Supabase. The three scanner migration timestamps were corrected to their already-applied database versions; two follow-up migrations and the private-schema RLS migration were recorded and renamed to their exact applied versions.
+- Reconciled all 41 repository migration filenames with the 41 migration versions recorded by Supabase. The three scanner migration timestamps were corrected to their already-applied database versions; two follow-up migrations and the private-schema RLS migration were recorded and renamed to their exact applied versions.
 - Applied `restore_scanner_cleanup_and_global_function_defaults`, `restore_consent_and_review_invariants` and `enable_private_schema_rls_defense_in_depth` to the connected database.
 - Enabled RLS on private `application_preparations`, `citizen_documents`, `consent_policy_versions`, `document_scanner_roles` and `scheme_reviewer_roles`. No direct table privileges are granted to `anon` or `authenticated`; audited SECURITY DEFINER routines retain their narrowly scoped access.
 - Corrected the scanner public deletion wrappers to SECURITY INVOKER. Verified the three wrappers are no longer SECURITY DEFINER and are not executable by `anon`.
 - Added the missing private foreign-key indexes reported by Supabase Performance Advisors.
+- Added a database trigger and check constraint binding each scheme-version SHA-256 to both its content and structured rule set; reviewed scheme-version evidence fields become immutable after the first review approval. Recomputed and verified all four pending scheme hashes.
 - Updated scanner deployment instructions to use the exact applied migration versions.
 - Updated CI's Playwright installation to avoid the apt-based `--with-deps` step. The previous run failed because the GitHub runner could not resolve Ubuntu package mirrors; unit tests and type-checking had passed before that infrastructure failure.
 
 ## Live Supabase findings
 
-- 40/40 migration versions match the repository filenames.
+- 41/41 migration versions match the repository filenames.
 - Four schemes exist; all four remain `review_pending`; none is published.
 - The consent-policy registry contains zero legally approved policies.
 - The scanner role registry contains zero active scanner identities.
