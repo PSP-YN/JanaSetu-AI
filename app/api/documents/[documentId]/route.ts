@@ -20,11 +20,11 @@ export async function GET(_request:NextRequest,{params}:{params:Promise<{documen
    if(message.includes("document_storage_consent_inactive"))return json({error:"Document retrieval is disabled because document-storage consent is not active."},403);
    return json({error:"This document is unavailable. It may still be quarantined, rejected, or owned by another account."},404);
   }
-  const metadata=await metadataResponse.json() as {storage_object_name?:string;filename?:string;mime_type?:string;size?:number};
+  const metadata=await metadataResponse.json() as {object_name?:string;filename?:string;mime_type?:string;size?:number};
   if(typeof metadata.storage_object_name!=="string"||!/^[0-9a-f-]{36}\/[0-9a-f-]{36}\/[0-9a-f-]{36}\/[0-9a-f-]{36}\.(pdf|jpg|png)$/i.test(metadata.storage_object_name)||
      typeof metadata.filename!=="string"||metadata.filename.length>255||!TYPES.has(String(metadata.mime_type))||
      !Number.isInteger(metadata.size)||Number(metadata.size)<1||Number(metadata.size)>12*1024*1024)return json({error:"Document metadata failed validation."},503);
-  const objectPath=metadata.storage_object_name.split("/").map(encodeURIComponent).join("/");
+  const objectPath=metadata.object_name.split("/").map(encodeURIComponent).join("/");
   const storageResponse=await fetch(session.url+"/storage/v1/object/citizen-documents/"+objectPath,{
    headers:{apikey:session.key,Authorization:"Bearer "+session.accessToken},cache:"no-store"
   });
