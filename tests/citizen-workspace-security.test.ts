@@ -308,7 +308,7 @@ test("government portal integration records default to no authorised API actions
 
 
 test("document scanning uses atomic claims, scanner-only object reads and bounded retries", () => {
-  const sql = read("supabase/migrations/20261111101500_add_atomic_clamav_scan_claims.sql");
+  const sql = read("supabase/migrations/20261111125606_add_atomic_clamav_scan_claims.sql");
   assert.match(sql, /for update skip locked/i);
   assert.match(sql, /scan_attempts<5/);
   assert.match(sql, /scanner_user_id=v_user/);
@@ -335,7 +335,7 @@ test("document scanner worker never uses service-role credentials and checks fil
 });
 
 test("clean document retrieval requires caller ownership, active consent and safe response headers", () => {
-  const sql = read("supabase/migrations/20261111101500_add_atomic_clamav_scan_claims.sql");
+  const sql = read("supabase/migrations/20261111125606_add_atomic_clamav_scan_claims.sql");
   const route = read("app/api/documents/[documentId]/route.ts");
   assert.match(sql, /user_id=v_user and scan_status='clean'/);
   assert.match(sql, /has_active_citizen_consent\(v_user,'document_storage'/);
@@ -350,7 +350,7 @@ test("clean document retrieval requires caller ownership, active consent and saf
 
 
 test("legacy scanner batch API is removed and scanner read predicate is owner-clean only", () => {
-  const sql = read("supabase/migrations/20261111130000_harden_scanner_least_privilege.sql");
+  const sql = read("supabase/migrations/20261111125926_harden_scanner_least_privilege.sql");
   assert.match(sql, /drop function if exists public\.claim_document_scan_batch/);
   assert.match(sql, /d\.user_id=auth\.uid\(\)/);
   assert.match(sql, /d\.scan_status='clean'/);
@@ -360,7 +360,7 @@ test("legacy scanner batch API is removed and scanner read predicate is owner-cl
 
 
 test("scanner retry logic recovers stale claims and backs off scan errors", () => {
-  const sql = read("supabase/migrations/20261111135000_backoff_scanner_retries.sql");
+  const sql = read("supabase/migrations/20261111130024_backoff_scanner_retries.sql");
   assert.match(sql, /updated_at<now\(\)-interval '15 minutes'/);
   assert.match(sql, /updated_at<now\(\)-interval '1 minute'/);
   assert.match(sql, /scan_attempts<5/);
