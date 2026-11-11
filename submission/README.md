@@ -11,6 +11,7 @@ JanaSetu is an independent, multilingual public-benefits navigation and applicat
 4. Three-minute demonstration script — 04-demo-script.md
 5. Release, privacy and compliance status — 05-release-and-compliance.md
 6. Submission checklist and judge Q&A — 06-submission-checklist.md
+7. Black-box UI acceptance report — 07-black-box-ui-report.md
 
 ## Links
 - Repository: https://github.com/PSP-YN/JanaSetu-AI
