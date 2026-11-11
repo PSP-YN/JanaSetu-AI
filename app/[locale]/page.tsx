@@ -5,6 +5,7 @@ import { LANDING_LOCALES,type LandingLocale } from "@/lib/landing-locales";
 const BASE="https://jana-setu-ai.vercel.app";
 const LOCALES=Object.values(LANDING_LOCALES);
 type Props={params:Promise<{locale:string}>};
+export const dynamicParams = false;
 export function generateStaticParams(){return LOCALES.map(item=>({locale:item.code}));}
 const getLocale=(code:string)=>LANDING_LOCALES[code as keyof typeof LANDING_LOCALES] as LandingLocale|undefined;
 export async function generateMetadata({params}:Props):Promise<Metadata>{
