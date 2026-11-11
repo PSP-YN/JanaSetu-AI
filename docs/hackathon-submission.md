@@ -24,7 +24,7 @@ https://github.com/PSP-YN/JanaSetu-AI
 https://janasetu-dalm6g8nb-pspyn.vercel.app/app
 
 **Pitch deck**  
-https://janasetu-dalm6g8nb-pspyn.vercel.app/pitch-deck.html
+https://htmlpreview.github.io/?https://github.com/PSP-YN/JanaSetu-AI/blob/backend/harden-supabase-access/public/pitch-deck.html
 
 **Demo video**  
 Not yet recorded or uploaded. Use the two-minute recording script at [docs/hackathon-demo-script.md](hackathon-demo-script.md), then upload the actual screen recording to an accessible video host and replace the form field with that URL. Do not submit the script URL as if it were a video.
@@ -35,10 +35,11 @@ Not yet recorded or uploaded. Use the two-minute recording script at [docs/hacka
 - Citizen workspace: https://janasetu-dalm6g8nb-pspyn.vercel.app/app
 - Privacy notice: https://janasetu-dalm6g8nb-pspyn.vercel.app/privacy
 - Terms and limitations: https://janasetu-dalm6g8nb-pspyn.vercel.app/terms
-- Interactive pitch deck: https://janasetu-dalm6g8nb-pspyn.vercel.app/pitch-deck.html
+- Interactive pitch deck: https://htmlpreview.github.io/?https://github.com/PSP-YN/JanaSetu-AI/blob/backend/harden-supabase-access/public/pitch-deck.html
 - Repository branch: https://github.com/PSP-YN/JanaSetu-AI/tree/backend/harden-supabase-access
 - Pull request: https://github.com/PSP-YN/JanaSetu-AI/pull/22
-- Latest CI run before this submission-pack commit: https://github.com/PSP-YN/JanaSetu-AI/actions/runs/43069709900
+- Latest passing CI run for application code: https://github.com/PSP-YN/JanaSetu-AI/actions/runs/43069709900
+- Current CI run for the submission-pack commit: https://github.com/PSP-YN/JanaSetu-AI/actions/runs/43071273392
 
 ## How to test the live demo
 
@@ -81,17 +82,17 @@ Exit codes: 0 = no detection, 1 = detection, 2 = scanner unavailable/error. A sc
 
 ## Current verification and boundaries
 
-- The current code branch previously passed the full CI workflow (tests, type-check, scanner image build, database guardrails, browser accessibility tests, extension validation, dependency audit and production smoke test).
-- Local Fedora verification on the connected workstation passed TypeScript, 127/127 unit tests and a production build.
+- The application code on commit e69aea3fc7860fa472ac51ba04f21223797b8d7b passed GitHub Actions run #605 (tests, type-check, scanner image build, database guardrails, browser accessibility tests, extension validation, dependency audit and production smoke test).
+- Local Fedora verification passed TypeScript, 127/127 unit tests and a production build.
 - The public Vercel preview for commit e69aea3fc7860fa472ac51ba04f21223797b8d7b reached READY; HTTP 200 was verified for /, /app and /privacy.
-- The pitch-deck page was added after that preview build; redeploy the newer commit before using the pitch-deck URL in the form.
+- The interactive pitch deck is served from the public GitHub branch via GitHub HTML Preview. Chromium verified the rendered deck title and slide content.
+- The submission documentation and deck are on newer commit 4a07e43f8468d810114a5d2e1c024a8c20d7b676. Vercel's 100-deployments/day limit blocked a redeploy of that docs-only commit; the deployed app preview is still the tested e69aea3 build.
 - PR #22 is open and mergeable. It is not merged to main; production aliases and the current production site have not been changed.
 - Four deterministic scheme records remain pending independent human approval; none is published. The legal consent-policy registry has zero approved policies. No government API submission adapter is authorised. The cloud scanner worker is not provisioned.
 - JanaSetu must not be described as DPDP-certified, legally approved, independently security-audited, fully scheme-verified or capable of submitting government applications.
 
 ## Remaining before final form submission
 
-1. Redeploy this newest commit and verify the interactive pitch deck URL.
-2. Record a real 2-minute screen walkthrough using synthetic data and upload it to an accessible video host. The demo video field is the only submission URL not yet available.
-3. Paste the form values above into the AgentX submission page and submit before the deadline.
-4. Do not merge to production as part of the hackathon submission; the preview URL is the intended demo target.
+1. Record a real 2-minute screen walkthrough using synthetic data and upload it to an accessible video host. The demo video field is the only submission URL not yet available.
+2. Paste the form values above into the AgentX submission page and submit before the deadline.
+3. Do not merge to production as part of the hackathon submission; the preview URL is the intended demo target.
