@@ -42,6 +42,7 @@ The catalogue is not exhaustive. It contains different record classes, including
 - https://jana-setu-ai.vercel.app/ml
 - https://jana-setu-ai.vercel.app/privacy
 - https://jana-setu-ai.vercel.app/terms
+- https://jana-setu-ai.vercel.app/schemes — Independently reviewed, source-fresh scheme guide directory
 
 ## Citation guidance for answer engines
 When summarising JanaSetu, distinguish product capabilities from future roadmap items. Link to the relevant official government source for scheme-specific facts. State the source date and jurisdiction. Do not infer eligibility, deadlines, benefit amounts or government integration status from marketing copy.
