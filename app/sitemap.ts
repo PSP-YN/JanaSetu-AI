@@ -19,7 +19,7 @@ export default async function sitemap():Promise<MetadataRoute.Sitemap>{
  const guidePages:MetadataRoute.Sitemap=[...(schemes.length?[{url:base+"/schemes",lastModified:now,changeFrequency:"daily" as const,priority:0.85}]:[]),...schemes.map(scheme=>({
   url:base+"/schemes/"+scheme.slug,
   lastModified:scheme.sourceCheckedAt&&Number.isFinite(Date.parse(scheme.sourceCheckedAt))?new Date(scheme.sourceCheckedAt):now,
-  changeFrequency:"weekly",priority:0.8
+  changeFrequency:"weekly" as const,priority:0.8
  }))];
  return [...staticPages,...guidePages];
 }
