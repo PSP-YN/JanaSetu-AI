@@ -9,10 +9,10 @@ async function load(params:Props){const {slug}=await params.params;return getPub
 export async function generateMetadata({params}:Props):Promise<Metadata>{
  const scheme=await load({params});if(!scheme)return {title:"Scheme guide unavailable",robots:{index:false,follow:false}};
  const summary=schemeString(scheme,"summary","Independently reviewed public-benefit scheme information and official application links.");
- const stale=scheme.sourceCheckedAt?Date.now()-Date.parse(scheme.sourceCheckedAt)>90*86400000:false;
+ const checkedAt=scheme.sourceCheckedAt?Date.parse(scheme.sourceCheckedAt):NaN;const fresh=Number.isFinite(checkedAt)&&checkedAt<=Date.now()+86400000&&Date.now()-checkedAt<=90*86400000;
  return {title:scheme.name+" — Eligibility, Benefits & Application Guide",description:summary.slice(0,155),
   alternates:{canonical:"/schemes/"+scheme.slug},keywords:[scheme.name,scheme.name+" eligibility",scheme.name+" application",scheme.name+" documents","government schemes India",scheme.category],
-  robots:{index:!stale,follow:true,googleBot:{index:!stale,follow:true,"max-snippet":-1}},
+  robots:{index:fresh,follow:true,googleBot:{index:fresh,follow:true,"max-snippet":-1}},
   openGraph:{type:"article",siteName:"JanaSetu AI",title:scheme.name+" | Verified Scheme Guide",description:summary,url:BASE+"/schemes/"+scheme.slug,images:[{url:"/opengraph-image",width:1200,height:630,alt:"JanaSetu AI independently reviewed public-benefit guide"}]},
   twitter:{card:"summary_large_image",title:scheme.name+" | JanaSetu AI",description:summary,images:["/opengraph-image"]}};
 }
@@ -20,7 +20,7 @@ export default async function PublicSchemeGuide({params}:Props){
  const scheme=await load({params});if(!scheme)notFound();
  const summary=schemeString(scheme,"summary","");const benefit=schemeString(scheme,"benefit","");const ministry=schemeString(scheme,"ministry","");const documents=schemeStringList(scheme,"documents");const related=schemeStringList(scheme,"related_sources").filter(url=>/^https:\/\//i.test(url));const rules=approvedRuleSummaries(scheme);
  const applicationUrl=/^https:\/\//i.test(schemeString(scheme,"application_url",""))?schemeString(scheme,"application_url",""):scheme.sourceUrl;
- const checked=scheme.sourceCheckedAt?new Date(scheme.sourceCheckedAt):null;const stale=checked?Date.now()-checked.getTime()>90*86400000:false;
+ const parsedChecked=scheme.sourceCheckedAt?new Date(scheme.sourceCheckedAt):null;const checked=parsedChecked&&Number.isFinite(parsedChecked.getTime())?parsedChecked:null;const stale=!checked||Date.now()-checked.getTime()>90*86400000||checked.getTime()>Date.now()+86400000;
  const faq=[{q:"Does this guide make an official eligibility decision?",a:"No. It explains the independently reviewed criteria available in this scheme version. The responsible government department verifies applications and makes the final decision."},{q:"Can I submit my application on JanaSetu?",a:"No. A guide or prepared draft is not a government submission. Use the official application route and follow its identity verification and submission process."},{q:"Is JanaSetu a government website?",a:"No. JanaSetu AI is an independent public-benefits navigation project and is not affiliated with a government department."}];
  const graph={"@context":"https://schema.org","@graph":[
   {"@type":"WebPage","@id":BASE+"/schemes/"+scheme.slug+"#webpage","url":BASE+"/schemes/"+scheme.slug,"name":scheme.name+" — Eligibility, Benefits & Application Guide","description":summary,"isPartOf":{"@id":BASE+"/#website"}},
