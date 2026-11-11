@@ -1045,16 +1045,25 @@ export default function Home() {
       const importedProfile = parseBackupProfile(data.profile);
       if (!importedProfile) throw new Error("Backup profile is invalid.");
       const importedLanguage = parseBackupLanguage(data.language);
+      const importedDocuments = parseBackupDocuments(data.documents);
+      const allowedDocumentIds = new Set(importedDocuments.map((item) => item.id));
+      const fileItems = Array.isArray(data.documentFiles) ? data.documentFiles.filter((item: any) =>
+        item && typeof item.id === "string" && allowedDocumentIds.has(item.id) &&
+        typeof item.name === "string" && item.name.length <= 255 &&
+        ["application/pdf", "image/jpeg", "image/png"].includes(item.type) &&
+        typeof item.data === "string" && item.data.length <= 16 * 1024 * 1024 &&
+        item.data.length % 4 === 0 && /^[A-Za-z0-9+/]*={0,2}$/.test(item.data)
+      ).slice(0, 100) : [];
+      const encodedTotal = fileItems.reduce((sum: number, item: any) => sum + item.data.length, 0);
+      if (encodedTotal > 36 * 1024 * 1024) throw new Error("Vault document payload exceeds the import limit.");
+      await replaceLocalDocuments(fileItems);
       setProfile(importedProfile); setLanguage(importedLanguage);
       setApplications(invalidateUnapprovedApplications(parseBackupApplications(data.applications)));
-      const importedDocuments = parseBackupDocuments(data.documents);
-      const fileItems = Array.isArray(data.documentFiles) ? data.documentFiles.filter((item: any) => item && typeof item.id === "string" && typeof item.name === "string" && typeof item.type === "string" && typeof item.data === "string" && item.data.length <= 36 * 1024 * 1024) : [];
-      await replaceLocalDocuments(fileItems);
       setDocuments(importedDocuments);
       setTasks(parseBackupTasks(data.tasks));
       setAssessments(invalidateUnapprovedAssessments(parseBackupAssessments(data.assessments)));
       setTab("profile"); setNotice(tFor(importedLanguage, "noticeBackupRestored"));
-    } catch (error) { setNotice(t("noticeBackupRestoreFailed")); } finally { setBackupBusy(false); }
+    } catch (error) { setNotice(error instanceof Error ? error.message : t("noticeBackupRestoreFailed")); } finally { setBackupBusy(false); }
   };
 
   const updateProfile = <K extends keyof CitizenProfile>(key: K, value: CitizenProfile[K]) => {
