@@ -7,7 +7,7 @@ JanaSetu is an independent, source-aware public-benefits navigation and applicat
 - Privacy: `/privacy`
 - Terms and limitations: `/terms`
 
-**Important:** the current citizen workspace is a browser-local prototype, not a complete government application submission service. It does not provide a JanaSetu citizen account database, secure server-side document storage, universal official portal integration or guaranteed benefit eligibility. Never treat a prepared draft as a submitted application.
+**Important:** JanaSetu now has a connected Supabase backend, authenticated citizen routes, consent-gated application preparation and private document-quarantine/scanner code. However, legal consent policies are not approved, no scanner identity or persistent scanner host is provisioned, all four deterministic scheme records remain under independent review, and no government integration is authorized. Cloud/document storage remains fail-closed. JanaSetu is not a government service or eligibility authority; never treat a preliminary assessment or prepared draft as an approved or submitted application.
 
 ## Development
 
@@ -41,7 +41,11 @@ Production deployments are triggered by the protected main-branch release flow. 
 - [Citizen data and automation policy](docs/citizen-data-and-automation-policy.md)
 - [Production readiness](docs/production-readiness.md)
 
-A dedicated JanaSetu Supabase project now exists in Mumbai. The citizen-data foundation and least-privilege grants are applied; all 12 public tables have RLS enabled. The workspace includes password-based Supabase account routes and a consent-gated cloud-sync implementation. Cloud profile storage is deliberately disabled until the purpose-specific privacy policy receives legal approval and a citizen explicitly accepts it. Local workspace mode remains available; retain local JSON backups.
+A dedicated JanaSetu Supabase project exists in Mumbai. The citizen-data foundation and least-privilege grants are applied; all public tables have RLS enabled. The repository and live database now have 40 matching migration versions. Private preparation, document, consent-policy, scanner-role and reviewer-role tables also have RLS enabled as defense in depth. Password-based Supabase account routes, consent-gated workspace sync, application preparation, private document quarantine and ClamAV worker code are implemented. Cloud profile/document storage remains disabled because the legal consent-policy registry is empty; the scanner worker has not been provisioned. Local workspace mode remains available; retain local JSON backups.
+
+
+
+Latest verified release-gate status: [11 November 2026 readiness report](docs/release-blockers-2026-11-11.md).
 
 ## Previous detailed project documentation
 
