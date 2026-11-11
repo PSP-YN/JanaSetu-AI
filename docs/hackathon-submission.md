@@ -6,7 +6,7 @@
 - **Sub-theme:** Agentic AI for CivicTech / GovTech
 - **Problem statement:** PS-01 — Scheme Saathi
 - **Project title:** JanaSetu AI — Benefit Readiness Agent
-- **One-line pitch:** A multilingual agentic-AI benefits assistant that maps scheme rules to citizen evidence and prepares explainable, human-reviewed next steps.
+- **One-line pitch:** A multilingual AI benefits agent that links scheme rules to citizen evidence and prepares explainable, human-reviewed next steps.
 
 ## Submission links
 

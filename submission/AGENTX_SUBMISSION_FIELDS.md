@@ -12,7 +12,7 @@ Use these values in the submission form. Replace the team-name and member placeh
 **JanaSetu AI — Benefit Readiness Agent**
 
 ## One-line pitch
-A multilingual agentic-AI benefits assistant that maps scheme rules to citizen evidence and prepares explainable, human-reviewed next steps.
+A multilingual AI benefits agent that links scheme rules to citizen evidence and prepares explainable, human-reviewed next steps.
 
 ## Full description
 Citizens across India often discover a government welfare scheme but still struggle to understand whether it may apply to them, which facts and documents matter, and what to do next. Scheme conditions, official sources, application channels and supporting evidence are spread across different portals and documents. A directory or generic chatbot does not preserve the relationship between a rule, a citizen's evidence, missing information and the next preparation action.
