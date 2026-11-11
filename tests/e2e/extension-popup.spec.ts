@@ -51,7 +51,7 @@ test("extension popup imports the reviewed backup language and click-fills only 
   });
   await page.locator("#save").click();
   await expect(page.locator("#status")).toContainText("ಪ್ರೊಫೈಲ್");
-  await expect(page.locator("#fill")).toContainText("ಸಕ್ರಿಯ ಟ್ಯಾಬ್");
+  await expect(page.locator("#fill")).toContainText("ಪೂರ್ವವೀಕ್ಷಿಸಿ");
 
   await page.locator("#fill").click();
   await expect(page.locator("#status")).toContainText("ಪ್ರತಿ ಸೂಚಿಸಿದ ಕ್ಷೇತ್ರ");
