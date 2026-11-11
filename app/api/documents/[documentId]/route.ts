@@ -43,3 +43,36 @@ export async function GET(_request:NextRequest,{params}:{params:Promise<{documen
   }});
  }catch{return json({error:"Secure document retrieval is unavailable."},503);}
 }
+
+export async function DELETE(request:NextRequest,{params}:{params:Promise<{documentId:string}>}){
+ try{
+  const origin=request.headers.get("origin");
+  const fetchSite=request.headers.get("sec-fetch-site");
+  if(origin&&new URL(origin).origin!==request.nextUrl.origin)return json({error:"Cross-origin document deletion is not allowed."},403);
+  if(!origin&&fetchSite&&fetchSite!=="same-origin"&&fetchSite!=="none")return json({error:"Cross-origin document deletion is not allowed."},403);
+  const {documentId}=await params;
+  if(!/^[0-9a-f-]{36}$/i.test(documentId))return json({error:"A valid document ID is required."},400);
+  const session=await getVerifiedSupabaseSession();
+  if(!session)return json({error:"Sign in required."},401);
+  const headers={apikey:session.key,Authorization:"Bearer "+session.accessToken,"Content-Type":"application/json"};
+  const targetResponse=await fetch(session.url+"/rest/v1/rpc/get_citizen_document_delete_target",{
+   method:"POST",headers,body:JSON.stringify({p_document_id:documentId}),cache:"no-store"
+  });
+  if(!targetResponse.ok)return json({error:"This document is unavailable or belongs to another account."},404);
+  const target=await targetResponse.json() as {document_id?:string;object_name?:string};
+  if(target.document_id!==documentId||typeof target.object_name!=="string"||
+     !/^[0-9a-f-]{36}\\/[0-9a-f-]{36}\\/[0-9a-f-]{36}\\/[0-9a-f-]{36}\\.(pdf|jpg|png)$/i.test(target.object_name)){
+   return json({error:"Document deletion metadata failed validation."},503);
+  }
+  const objectPath=target.object_name.split("/").map(encodeURIComponent).join("/");
+  const storageResponse=await fetch(session.url+"/storage/v1/object/citizen-documents/"+objectPath,{
+   method:"DELETE",headers:{apikey:session.key,Authorization:"Bearer "+session.accessToken},cache:"no-store"
+  });
+  if(!storageResponse.ok&&storageResponse.status!==404)return json({error:"The private file could not be deleted. No metadata was removed."},503);
+  const completeResponse=await fetch(session.url+"/rest/v1/rpc/complete_citizen_document_delete",{
+   method:"POST",headers,body:JSON.stringify({p_document_id:documentId,p_object_name:target.object_name}),cache:"no-store"
+  });
+  if(!completeResponse.ok)return json({error:"The file was deleted, but metadata cleanup is pending. Retry deletion to finish cleanup."},503);
+  return json({deleted:true,documentId});
+ }catch{return json({error:"Secure document deletion is unavailable."},503);}
+}
