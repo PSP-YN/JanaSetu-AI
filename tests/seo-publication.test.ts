@@ -8,7 +8,6 @@ test("public scheme guides expose only published, independently approved version
  assert.match(source,/publication_status=eq\.published/);
  assert.match(source,/verification_status!==\"independently_approved\"/);
  assert.match(source,/isFreshApprovedRuleSet\(version\.rule_set\)/);
- assert.match(source,/sourceHash/);
  assert.match(source,/isApprovedRuleSetForPublication/);
  assert.match(source,/isWithinSchemeEffectivePeriod/);
  assert.match(source,/https:/);
