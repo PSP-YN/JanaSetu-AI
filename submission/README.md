@@ -9,7 +9,7 @@
 - [Project submission summary](../docs/hackathon-submission.md)
 
 ## Final public links
-- GitHub repository: https://github.com/PSP-YN/JanaSetu-AI
+- GitHub repository (submission branch): https://github.com/PSP-YN/JanaSetu-AI/tree/backend/harden-supabase-access
 - Live citizen workspace: https://janasetu-qfjrr4m63-pspyn.vercel.app/app
 - Interactive six-slide pitch deck: https://htmlpreview.github.io/?https://github.com/PSP-YN/JanaSetu-AI/blob/backend/harden-supabase-access/public/pitch-deck.html
 - Demo video: https://raw.githubusercontent.com/PSP-YN/JanaSetu-AI/backend/harden-supabase-access/submission/JanaSetu_AI_Demo.mp4

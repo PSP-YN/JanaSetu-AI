@@ -39,7 +39,7 @@ Citizens across India's States and Union Territories, including students, farmer
 Next.js, React, TypeScript, Supabase, PostgreSQL, browser Web Crypto API, IndexedDB, Vercel, Playwright and ClamAV tooling. Do not describe external LLM inference as an implemented dependency in the current prototype.
 
 ## Links
-- **GitHub repository:** https://github.com/PSP-YN/JanaSetu-AI
+- **GitHub repository (submission branch):** https://github.com/PSP-YN/JanaSetu-AI/tree/backend/harden-supabase-access
 - **Live demo — citizen workspace:** https://janasetu-qfjrr4m63-pspyn.vercel.app/app
 - **Live demo — landing page:** https://janasetu-qfjrr4m63-pspyn.vercel.app/
 - **Pitch deck — interactive six-slide deck:** https://htmlpreview.github.io/?https://github.com/PSP-YN/JanaSetu-AI/blob/backend/harden-supabase-access/public/pitch-deck.html

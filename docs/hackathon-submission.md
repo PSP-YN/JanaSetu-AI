@@ -10,7 +10,7 @@
 
 ## Submission links
 
-- **GitHub:** https://github.com/PSP-YN/JanaSetu-AI
+- **GitHub (submission branch):** https://github.com/PSP-YN/JanaSetu-AI/tree/backend/harden-supabase-access
 - **Live demo:** https://janasetu-qfjrr4m63-pspyn.vercel.app/app
 - **Landing page:** https://janasetu-qfjrr4m63-pspyn.vercel.app/
 - **Interactive six-slide pitch deck:** https://htmlpreview.github.io/?https://github.com/PSP-YN/JanaSetu-AI/blob/backend/harden-supabase-access/public/pitch-deck.html

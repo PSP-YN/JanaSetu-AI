@@ -17,7 +17,7 @@ Prepared: 12 November 2026
 - Video notes: VIDEO_DEMO_SCRIPT.md
 
 ## Public links
-- Repository: https://github.com/PSP-YN/JanaSetu-AI
+- Repository (submission branch): https://github.com/PSP-YN/JanaSetu-AI/tree/backend/harden-supabase-access
 - Preview workspace: https://janasetu-qfjrr4m63-pspyn.vercel.app/app
 - Pitch deck: https://htmlpreview.github.io/?https://github.com/PSP-YN/JanaSetu-AI/blob/backend/harden-supabase-access/public/pitch-deck.html
 - Demo video: https://raw.githubusercontent.com/PSP-YN/JanaSetu-AI/backend/harden-supabase-access/submission/JanaSetu_AI_Demo.mp4
