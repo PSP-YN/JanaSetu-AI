@@ -23,6 +23,10 @@ services:
       - no-new-privileges:true
     cap_drop:
       - ALL
+    cap_add:
+      - CHOWN
+      - SETUID
+      - SETGID
     # ClamAV is reachable only over loopback inside this container; never publish port 3310.
     healthcheck:
       test: ["CMD", "python", "-c", "import socket; s=socket.create_connection(('127.0.0.1',3310),3); s.close()"]
