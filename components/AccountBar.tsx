@@ -17,8 +17,14 @@ export default function AccountBar() {
   },[]);
   async function signOut() {
     setBusy(true);
-    try { await fetch("/api/auth",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"signout"})}); setUser(null); router.refresh(); window.location.reload(); }
-    finally { setBusy(false); }
+    try {
+      const response = await fetch("/api/auth",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"signout"})});
+      const result = await response.json().catch(()=>({}));
+      if (!response.ok || result.signedOut !== true) throw new Error(result.error || "Sign-out could not be completed.");
+      setUser(null); router.refresh(); window.location.reload();
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "Sign-out could not be completed.");
+    } finally { setBusy(false); }
   }
   if (!ready) return <div className="account-bar" aria-live="polite">Checking account…</div>;
   return <div className="account-bar">{user ? <><Link href="/app/automation">Applications &amp; automation</Link><span className="account-email">{user.email || "Citizen account"}</span><span className="account-sync">Account · cloud sync gated</span><button onClick={signOut} disabled={busy}>{busy?"Signing out…":"Sign out"}</button></> : <><span className="account-sync">Local workspace · cloud sync awaits privacy approval and explicit consent</span><Link href="/app/automation">Applications &amp; automation</Link><Link href="/auth">Sign in / Create account</Link></>}</div>;
