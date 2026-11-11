@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import socket
 import struct
 import time
@@ -123,8 +124,11 @@ def attest(document_id: str, result: str, engine: str, digest: str, token: str) 
 
 
 def process_one(item: dict, token: str, engine: str) -> None:
-    document_id = item["document_id"]
-    content = download_document(item["object_name"], token)
+    document_id = item["id"]
+    object_name = item["storage_object_name"]
+    if not re.fullmatch(r"[0-9a-f-]{36}/[0-9a-f-]{36}/[0-9a-f-]{36}/[0-9a-f-]{36}\.(pdf|jpg|png)", object_name, re.IGNORECASE):
+        raise RuntimeError("Claimed storage path failed validation.")
+    content = download_document(object_name, token)
     digest = hashlib.sha256(content).hexdigest()
     if not validate_file(item["mime_type"], content, int(item["expected_size"])):
         attest(document_id, "rejected", engine, digest, token)
@@ -141,20 +145,26 @@ def main() -> None:
                 raise RuntimeError("ClamAV daily signature database missing or older than 48 hours; failing closed.")
             token = scanner_token()
             engine = clamd_version()
-            batch = request_json(
-                SUPABASE_URL + "/rest/v1/rpc/claim_document_scan_batch",
+            item = request_json(
+                SUPABASE_URL + "/rest/v1/rpc/claim_next_document_scan",
                 "POST",
-                {"p_limit": 5},
+                {},
                 token,
-            ) or []
-            for item in batch:
+            )
+            if item:
                 try:
                     process_one(item, token, engine)
-                    print("Document scan completed: " + item["document_id"], flush=True)
+                    print("Document scan completed: " + item["id"], flush=True)
                 except Exception as error:
-                    # No clean attestation on a network or scanner failure; the lease expires and is retried.
-                    print("Document scan deferred: " + item.get("document_id", "unknown") + " (" + type(error).__name__ + ")", flush=True)
-            if not batch:
+                    # A failed scan is never attested as clean. Mark it retryable; DB caps attempts.
+                    try:
+                        digest = hashlib.sha256(type(error).__name__.encode()).hexdigest()
+                        attest(item["id"], "scan_error", engine, digest, token)
+                    except Exception:
+                        # If Supabase is unavailable, the claim expires and is safely retried.
+                        pass
+                    print("Document scan deferred: " + item.get("id", "unknown") + " (" + type(error).__name__ + ")", flush=True)
+            else:
                 time.sleep(POLL_SECONDS)
         except (urllib.error.URLError, TimeoutError, OSError, KeyError, ValueError, RuntimeError) as error:
             print("Scanner health check failed (" + type(error).__name__ + "); retrying without releasing quarantine.", flush=True)
