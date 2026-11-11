@@ -56,7 +56,7 @@ test("final database invariants preserve consent policy, action scope, idempoten
   assert.match(sql,/consent_scope_mismatch/);
   assert.match(sql,/has_active_citizen_consent/);
   assert.match(sql,/idempotency_key_reused/);
-  assert.match(sql,/profile_snapshot is distinct from p_profile_snapshot/);
+  assert.match(sql,/v_existing_snapshot is distinct from p_profile_snapshot/);
   assert.match(sql,/for update/);
   assert.match(sql,/application_preparation_approved/);
   assert.match(sql,/application_prepared/);
