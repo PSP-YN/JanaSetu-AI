@@ -65,6 +65,8 @@ export async function GET(request:NextRequest){
   const message=error instanceof Error?error.message:"";
   if(message.includes("document_not_available"))return json({error:"Document is not available. It may still be quarantined or may have been deleted."},404);
   if(message.includes("document_consent_required"))return json({error:"Document access is disabled because the required consent is not active."},403);
+  if(message.includes("case_not_found"))return json({error:"Application case not found."},404);
+  if(message.includes("authentication_required"))return json({error:"Sign in required."},401);
   return json({error:"Document service is unavailable."},503);
  }
 }
