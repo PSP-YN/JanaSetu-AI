@@ -34,5 +34,6 @@ test("localized pages and answer-engine references are discoverable without expo
  assert.match(short,/A preliminary match is not an official eligibility decision/i);
  assert.match(full,/source-check date/);
  assert.match(full,/citizen approval/);
+ assert.match(full,/A saved or citizen-reviewed draft is not a submitted application/);
  assert.match(full,/official government source/i);
 });
