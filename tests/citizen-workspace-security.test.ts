@@ -48,7 +48,7 @@ test("cloud hydration merges local edits and records instead of replacing the wo
 });
 
 test("final database invariants preserve consent policy, action scope, idempotency and serialized reviews",()=>{
-  const sql=read("supabase/migrations/20261111160000_restore_consent_and_review_invariants.sql");
+  const sql=read("supabase/migrations/20261111161048_restore_consent_and_review_invariants.sql");
   assert.match(sql,/cloud_workspace_sync/);
   assert.match(sql,/consent_policy_versions/);
   assert.match(sql,/p\.active=true/);
@@ -61,6 +61,12 @@ test("final database invariants preserve consent policy, action scope, idempoten
   assert.match(sql,/application_preparation_approved/);
   assert.match(sql,/application_prepared/);
   assert.match(sql,/No production-approved worker adapter/);
+  const rls = read("supabase/migrations/20261111161139_enable_private_schema_rls_defense_in_depth.sql");
+  assert.match(rls,/private\.application_preparations enable row level security/);
+  assert.match(rls,/private\.citizen_documents enable row level security/);
+  assert.match(rls,/private\.consent_policy_versions enable row level security/);
+  assert.match(rls,/private\.document_scanner_roles enable row level security/);
+  assert.match(rls,/private\.scheme_reviewer_roles enable row level security/);
 });
 
 test("cloud workspace rejects unknown top-level fields and oversized payloads", () => {
