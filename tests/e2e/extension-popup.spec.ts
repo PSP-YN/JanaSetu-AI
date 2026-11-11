@@ -29,7 +29,7 @@ async function openPopup(page: import("@playwright/test").Page, initialUrl = "ht
       tabs: { query: async () => [(window as any).__popupTab] },
       scripting: { executeScript: async (call: unknown) => {
         (window as any).__lastScriptCall = call;
-        return [{ result: { filled: 2 } }];
+        return [{ result: call.func(...call.args) }];
       } }
     } });
   }, initialUrl);
@@ -48,10 +48,17 @@ test("extension popup imports the reviewed backup language and click-fills only 
   await expect(page.locator("#fill")).toContainText("ಸಕ್ರಿಯ ಟ್ಯಾಬ್");
 
   await page.locator("#fill").click();
+  await expect(page.locator("#status")).toContainText("ಪ್ರತಿ ಸೂಚಿಸಿದ ಕ್ಷೇತ್ರ");
+  const fields = page.locator("#preview input[type=checkbox]");
+  await expect(fields).toHaveCount(6);
+  await fields.nth(0).check();
+  await fields.nth(1).check();
+  await page.locator("#apply").click();
   await expect(page.locator("#status")).toContainText("2 ಹೊಂದಾಣಿಕೆಯ ಕ್ಷೇತ್ರ");
   const call = await page.evaluate(() => (window as any).__lastScriptCall);
   expect(call.target.tabId).toBe(44);
   expect(call.args[0].fullName).toBe("Synthetic Citizen");
+  expect(call.args[1]).toHaveLength(2);
 });
 
 test("extension popup rejects deceptive non-government hostnames", async ({ page }) => {
