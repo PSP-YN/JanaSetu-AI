@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs";
 const read=(path:string)=>readFileSync(path,"utf8");
 
 test("private document storage rechecks exact active consent on every read",()=>{
- const migration=read("supabase/migrations/20261111142000_enforce_document_consent_on_storage_reads.sql");
+ const migration=read("supabase/migrations/20261111131254_enforce_document_consent_on_storage_reads.sql");
  assert.match(migration,/private\.can_read_citizen_document/);
  assert.match(migration,/private\.has_active_citizen_consent\(d\.user_id,'document_storage',d\.case_id\)/);
  assert.match(migration,/c\.scope->>'action_type'='upload_document'/);
@@ -15,7 +15,7 @@ test("private document storage rechecks exact active consent on every read",()=>
 });
 
 test("scanner storage reads are limited to the active lease and SHA-256 attestation",()=>{
- const migration=read("supabase/migrations/20261111143000_bind_scanner_reads_to_claim_and_validate_attestations.sql");
+ const migration=read("supabase/migrations/20261111131521_bind_scanner_reads_to_claim_and_validate_attestations.sql");
  assert.match(migration,/d\\.scan_status='scanning'/);
  assert.match(migration,/d\\.scanner_user_id=auth\\.uid\\(\\)/);
  assert.match(migration,/r\\.active=true/);
