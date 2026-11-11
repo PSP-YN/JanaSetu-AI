@@ -14,6 +14,15 @@ test("private document storage rechecks exact active consent on every read",()=>
  assert.match(migration,/captured_at>now\(\)-interval '365 days'/);
 });
 
+test("scanner storage reads are limited to the active lease and SHA-256 attestation",()=>{
+ const migration=read("supabase/migrations/20261111143000_bind_scanner_reads_to_claim_and_validate_attestations.sql");
+ assert.match(migration,/d\\.scan_status='scanning'/);
+ assert.match(migration,/d\\.scanner_user_id=auth\\.uid\\(\\)/);
+ assert.match(migration,/r\\.active=true/);
+ assert.match(migration,/ClamAV/);
+ assert.match(migration,/a-f0-9/);
+});
+
 test("document download API uses guarded metadata and authenticated private object endpoint",()=>{
  const route=read("app/api/documents/[documentId]/route.ts");
  assert.match(route,/get_clean_citizen_document/);
