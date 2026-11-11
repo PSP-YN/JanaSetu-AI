@@ -86,7 +86,7 @@ test("scanner service is private, signature-fresh and fails closed",()=>{
 });
 
 test("latest scanner claim preserves consent-revoked deletion and bounded retry semantics",()=>{
- const latest=read("supabase/migrations/20261111150000_restore_scanner_cleanup_and_global_function_defaults.sql");
+ const latest=read("supabase/migrations/20261111161033_restore_scanner_cleanup_and_global_function_defaults.sql");
  assert.match(latest,/alter default privileges for role postgres revoke execute on functions from public/i);
  assert.match(latest,/scan_status='consent_revoked'/);
  assert.match(latest,/scan_status='deleting'/);
