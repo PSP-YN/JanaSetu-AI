@@ -165,19 +165,18 @@ No permission, partner approval, production API credentials or portal sandbox cr
 - Storage bucket is private, 12 MB limit, MIME allowlist PDF/JPEG/PNG. No Aadhaar or bank documents should be collected unless a separately approved purpose and retention policy explicitly require them.
 
 
-## Leased ClamAV scanner implementation — 11 November 2026
+## ClamAV scanner and clean-document retrieval — 11 November 2026
 
-- Applied and tracked migration `20261110185200_add_leased_clamav_document_scanner.sql` on the dedicated JanaSetu Supabase project.
-- Added a private scanner worker built around ClamAV INSTREAM; it authenticates as a dedicated scanner Auth user and does not require the Supabase service-role key.
-- Added database claims with `FOR UPDATE SKIP LOCKED`, bounded batches, 10-minute leases, five-attempt ceiling and authenticated scanner-role checks.
-- Storage read policy now allows only the document owner after a clean attestation, or an explicitly active scanner identity while quarantined. Scanner access is not granted to ordinary citizens.
-- Worker validates file signatures, size and MIME, computes SHA-256, scans locally, and only attests clean when ClamAV returns `OK`. Infected/invalid files are rejected; network, scanner and indeterminate failures leave files quarantined for lease-based retry.
-- ClamAV daily signatures must be present and no older than 48 hours; otherwise the worker fails closed. No file bytes are sent to third-party scanning services.
-- Added a hardened Docker Compose deployment, scanner provisioning/runbook and Python protocol/MIME tests; CI now runs the Python scanner test suite.
-- Remote probes confirm both scanner RPCs exist, authenticated can execute them, anon cannot, and there are currently zero active scanner roles and zero citizen documents.
-- **Not yet live:** no scanner Auth identity has been provisioned or assigned, no scanner host/container is deployed, no ClamAV/EICAR acceptance test has run against Supabase Storage, and the legal consent policy remains inactive. Therefore no citizen upload can yet become downloadable. Keep the upload gate closed.
-
-- Clean-document retrieval migration `20261110185906_secure_clean_document_retrieval` is applied and tracked; citizens cannot retrieve quarantined documents through the new API.
+- Dedicated JanaSetu scanner protocol and private storage bucket are implemented; the Supabase project remains separate from CareerOS.
+- The existing Python worker uses ClamAV INSTREAM, authenticates as a dedicated scanner Auth user, and does not require the Supabase service-role key.
+- Applied migrations add atomic single-document claims, scanner identity binding, stale-claim recovery, a one-minute retry backoff and a five-attempt ceiling. A claim older than 15 minutes is recovered; scanner/network failures never produce a clean attestation.
+- Storage access is separated: citizen read predicate allows only the document owner with a clean scan; scanner predicate allows only active scanner identities to read quarantined/scanning/error objects. The legacy broad scanner-read path and batch claim API have been removed.
+- Worker validates object path, file signature, MIME and exact size, checks ClamAV signature freshness (48-hour maximum), streams content to a local ClamAV daemon and records a SHA-256 attestation. No document bytes are sent to third-party scanning services.
+- Docker Compose uses a private loopback-only Clamd listener, persistent signature volume, read-only root filesystem, dropped capabilities and no exposed scanner port. The worker runs as a dedicated non-root user.
+- Added authenticated clean-document retrieval through `app/api/documents/[documentId]`; database checks owner, clean state, exact upload consent scope, scheme version and active legal policy. Response is attachment-only, no-store and nosniff; no signed public URL is issued.
+- Added Python protocol, MIME, object-path and claim-metadata tests plus TypeScript checks for storage policy and download authorization.
+- Remote Supabase probes confirm scanner claim RPC is executable by authenticated users only, anonymous access is denied, scanner role count is zero, document count is zero, and there are four portal-only integration records. The scanner has not been provisioned.
+- **Not yet live:** no scanner Auth identity has been created or assigned, no worker host/container is deployed, no ClamAV/EICAR acceptance test has run against Supabase Storage, and the legal document-storage policy remains inactive. Live uploads remain blocked until legal approval and scanner deployment. Do not enable uploads or make a document downloadable before those gates pass.
 
 
 ## Deterministic eligibility and application preparation — 11 November 2026
