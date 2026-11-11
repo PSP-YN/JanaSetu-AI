@@ -114,6 +114,32 @@ def download_document(object_name: str, token: str) -> bytes:
     return content
 
 
+def delete_storage_object(object_name: str, token: str) -> None:
+    encoded = urllib.parse.quote(object_name, safe="/")
+    url = SUPABASE_URL + "/storage/v1/object/citizen-documents/" + encoded
+    req = urllib.request.Request(
+        url,
+        headers={"apikey": SUPABASE_ANON_KEY, "Authorization": "Bearer " + token},
+        method="DELETE",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=60):
+            return
+    except urllib.error.HTTPError as error:
+        if error.code == 404:
+            return
+        raise
+
+
+def complete_revoked_cleanup(document_id: str, object_name: str, token: str) -> None:
+    request_json(
+        SUPABASE_URL + "/rest/v1/rpc/complete_revoked_document_cleanup",
+        "POST",
+        {"p_document_id": document_id, "p_object_name": object_name},
+        token,
+    )
+
+
 def attest(document_id: str, result: str, engine: str, digest: str, token: str) -> None:
     request_json(
         SUPABASE_URL + "/rest/v1/rpc/attest_document_scan",
@@ -123,19 +149,23 @@ def attest(document_id: str, result: str, engine: str, digest: str, token: str) 
     )
 
 
-def process_one(item: dict, token: str, engine: str) -> None:
+def process_one(item: dict, token: str, engine: str) -> str:
     document_id = item["id"]
     object_name = item["storage_object_name"]
     if not re.fullmatch(r"[0-9a-f-]{36}/[0-9a-f-]{36}/[0-9a-f-]{36}/[0-9a-f-]{36}\.(pdf|jpg|png)", object_name, re.IGNORECASE):
         raise RuntimeError("Claimed storage path failed validation.")
+    if item.get("cleanup_only") is True:
+        delete_storage_object(object_name, token)
+        complete_revoked_cleanup(document_id, object_name, token)
+        return "deleted"
     content = download_document(object_name, token)
     digest = hashlib.sha256(content).hexdigest()
     if not validate_file(item["mime_type"], content, int(item["expected_size"])):
         attest(document_id, "rejected", engine, digest, token)
-        return
+        return "scanned"
     result = scan_bytes(content)
     attest(document_id, result, engine, digest, token)
-
+    return "scanned"
 
 def main() -> None:
     print("JanaSetu document scanner starting; document contents are never logged.", flush=True)
@@ -153,17 +183,21 @@ def main() -> None:
             )
             if item:
                 try:
-                    process_one(item, token, engine)
-                    print("Document scan completed: " + item["id"], flush=True)
+                    outcome = process_one(item, token, engine)
+                    message = "Revoked document deleted: " if outcome == "deleted" else "Document scan completed: "
+                    print(message + item["id"], flush=True)
                 except Exception as error:
-                    # A failed scan is never attested as clean. Mark it retryable; DB caps attempts.
-                    try:
-                        digest = hashlib.sha256(type(error).__name__.encode()).hexdigest()
-                        attest(item["id"], "scan_error", engine, digest, token)
-                    except Exception:
-                        # If Supabase is unavailable, the claim expires and is safely retried.
-                        pass
-                    print("Document scan deferred: " + item.get("id", "unknown") + " (" + type(error).__name__ + ")", flush=True)
+                    # Cleanup failures retain their deleting lease and are retried;
+                    # they must never be converted into malware-scan attestations.
+                    if item.get("cleanup_only") is not True:
+                        try:
+                            digest = hashlib.sha256(type(error).__name__.encode()).hexdigest()
+                            attest(item["id"], "scan_error", engine, digest, token)
+                        except Exception:
+                            # If Supabase is unavailable or the lease was revoked,
+                            # the database safely reclaims the job after its expiry.
+                            pass
+                    print("Document job deferred: " + item.get("id", "unknown") + " (" + type(error).__name__ + ")", flush=True)
             else:
                 time.sleep(POLL_SECONDS)
         except (urllib.error.URLError, TimeoutError, OSError, KeyError, ValueError, RuntimeError) as error:
