@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { assessApprovedScheme, prepareApplicationDraft } from "../lib/eligibility-engine";
+import { assessApprovedScheme, prepareApplicationDraft, isApprovedRuleSetForPublication, isWithinSchemeEffectivePeriod } from "../lib/eligibility-engine";
 import type { CitizenProfile } from "../lib/catalog";
 
 const profile: CitizenProfile = {
@@ -80,6 +80,20 @@ test("date-only scheme end dates remain valid throughout the Indian calendar day
   assert.equal(result.state,"potential_match");
   const future={...scheme,effectiveFrom:"2026-11-12",effectiveTo:"2027-12-31"};
   assert.equal(assessApprovedScheme(profile,future,now).state,"needs_verification");
+});
+
+test("publication gate rejects unsupported operators and malformed document checklists",()=>{
+  const unsupported={...ruleSet,rules:ruleSet.rules.map((r)=>({...r,operator:"unsupported"}))};
+  assert.equal(isApprovedRuleSetForPublication(unsupported,now),false);
+  const blankDocument={...ruleSet,application:{...ruleSet.application,documents:["  "]}};
+  assert.equal(isApprovedRuleSetForPublication(blankDocument,now),false);
+  assert.equal(isApprovedRuleSetForPublication(ruleSet,now),true);
+});
+
+test("public effective-period validation uses Indian calendar-day boundaries",()=>{
+  assert.equal(isWithinSchemeEffectivePeriod("2026-11-11","2026-11-11",now),true);
+  assert.equal(isWithinSchemeEffectivePeriod("2026-11-12","2027-12-31",now),false);
+  assert.equal(isWithinSchemeEffectivePeriod("2025-01-01","2026-11-10",now),false);
 });
 
 test("scheme rules reject non-government evidence hosts even when HTTPS is used",()=>{
