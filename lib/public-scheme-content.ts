@@ -17,6 +17,18 @@ type SchemeRow={id:string;slug:string;name:string;category:string;level:string;s
 type VersionRow={id:string;version_number:number;source_id:string|null;source_url:string|null;content:unknown;rule_set:unknown;verification_status:string;effective_from:string|null;effective_to:string|null;reviewed_at:string|null};
 type SourceRow={id:string;publisher:string;source_url:string;last_checked_at:string|null};
 const isRecord=(v:unknown):v is Record<string,unknown>=>!!v&&typeof v==="object"&&!Array.isArray(v);
+function isFreshApprovedRuleSet(value:unknown):value is Record<string,unknown>{
+ if(!isRecord(value)||value.schemaVersion!==1||value.state!=="approved"||!Array.isArray(value.rules)||value.rules.length===0||value.rules.length>100)return false;
+ const now=Date.now();
+ return value.rules.every(rule=>{
+  if(!isRecord(rule)||rule.reviewStatus!=="approved"||typeof rule.label!=="string"||!isRecord(rule.evidence))return false;
+  const evidence=rule.evidence;const checked=typeof evidence.sourceCheckedAt==="string"?Date.parse(evidence.sourceCheckedAt):NaN;
+  return typeof evidence.sourceUrl==="string"&&/^https:\/\//i.test(evidence.sourceUrl)&&
+   typeof evidence.sourceHash==="string"&&/^[a-f0-9]{64}$/i.test(evidence.sourceHash)&&
+   typeof evidence.excerpt==="string"&&evidence.excerpt.trim().length>=12&&
+   Number.isFinite(checked)&&checked<=now+86400000&&now-checked<=90*86400000;
+ });
+}
 export async function listPublicSchemes():Promise<PublicScheme[]>{
  const rows=await rest<SchemeRow[]>("schemes?select=id,slug,name,category,level,state_code,current_version_id&publication_status=eq.published&order=name.asc&limit=500");
  if(!rows?.length)return [];
@@ -37,7 +49,7 @@ export async function listPublicSchemes():Promise<PublicScheme[]>{
  const bySource=new Map(sources.map(source=>[source.id,source]));
  return current.flatMap(row=>{
   const version=byVersion.get(row.current_version_id as string);
-  if(!version||version.verification_status!=="independently_approved"||!isRecord(version.content))return [];
+  if(!version||version.verification_status!=="independently_approved"||!isRecord(version.content)||!isFreshApprovedRuleSet(version.rule_set))return [];
   const source=version.source_id?bySource.get(version.source_id):undefined;
   return [{id:row.id,slug:row.slug,name:row.name,category:row.category,level:row.level,state_code:row.state_code,
    content:version.content,ruleSet:isRecord(version.rule_set)?version.rule_set:null,sourceUrl:safeUrl(source?.source_url)||safeUrl(version.source_url),
