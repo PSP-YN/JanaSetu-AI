@@ -98,7 +98,7 @@ function parseRuleSet(value: unknown): ApprovedRuleSet | null {
   let application: ApprovedRuleSet["application"];
   if (value.application !== undefined) {
     if (!isRecord(value.application) || !Array.isArray(value.application.fields) || value.application.fields.length > 0 && value.application.fields.length > 100) return null;
-    if (!Array.isArray(value.application.documents) || value.application.documents.length > 100 || !value.application.documents.every((d) => typeof d === "string" && d.length <= 240)) return null;
+    if (!Array.isArray(value.application.documents) || value.application.documents.length > 100 || !value.application.documents.every((d) => typeof d === "string" && d.trim().length > 0 && d.length <= 240)) return null;
     const fields: ApplicationFieldMapping[] = [];
     const fieldKeys = new Set<string>();
     for (const item of value.application.fields) {
