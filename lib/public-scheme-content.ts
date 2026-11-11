@@ -62,7 +62,7 @@ export async function getPublicScheme(slug:string):Promise<PublicScheme|null>{
  const schemes=await rest<SchemeRow[]>("schemes?select=id,slug,name,category,level,state_code,current_version_id&slug=eq."+encodeURIComponent(slug)+"&publication_status=eq.published&limit=1");
  const row=schemes?.[0];if(!row?.current_version_id)return null;
  const versions=await rest<VersionRow[]>("scheme_versions?select=id,version_number,source_id,source_url,content,rule_set,verification_status,effective_from,effective_to,reviewed_at&id=eq."+encodeURIComponent(row.current_version_id)+"&limit=1");
- const version=versions?.[0];if(!version||version.verification_status!=="independently_approved"||!isRecord(version.content))return null;
+ const version=versions?.[0];if(!version||version.verification_status!=="independently_approved"||!isRecord(version.content)||!isFreshApprovedRuleSet(version.rule_set))return null;
  let source:SourceRow|undefined;
  if(version.source_id){const sources=await rest<SourceRow[]>("scheme_sources?select=publisher,source_url,last_checked_at&id=eq."+encodeURIComponent(version.source_id)+"&limit=1");source=sources?.[0];}
  return {id:row.id,slug:row.slug,name:row.name,category:row.category,level:row.level,state_code:row.state_code,
