@@ -84,7 +84,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     match: "Potential match", review: "Needs verification", noMatch: "Not matched",
     source: "Official source", privacy: "Your profile, assessment, drafts and reminders stay in this browser. JanaSetu performs preliminary rule screening and text extraction locally. Exported backups are files you control. Browser speech recognition may process audio through your browser provider; external government portals receive data only if you choose to fill/submit there.",
     profileTitle: "Build your citizen profile", profileText: "Share only the details needed to screen the pathways in this catalogue.",
-    documentsTitle: "Document checklist", documentsText: "Add file references to organize what you have. Prototype files are not uploaded to a server.",
+    documentsTitle: "Document checklist", documentsText: "Add documents to this device only. Files stay in browser storage and are included in your password-encrypted portable vault; they are not uploaded or automatically malware-scanned.",
     applicationsTitle: "Application workspace", applicationsText: "Drafts are preparation records. Nothing here has been submitted to a government portal.",
     language: "Language", allIndia: "Designed for every State and Union Territory", catalogue: "Source-linked Central + Karnataka starter catalogue · partial coverage",
     official: "Official decision remains with the department", noUpload: "Files are not uploaded",
@@ -1145,8 +1145,17 @@ export default function Home() {
 
   const addDocument = async (file?: File) => {
     if (!file) return;
-    if (file.size > 12 * 1024 * 1024) {
+    if (file.size < 1 || file.size > 12 * 1024 * 1024) {
       setNotice(t("noticeFileTooLarge"));
+      return;
+    }
+    const signature = new Uint8Array(await file.slice(0, 8).arrayBuffer());
+    const validPdf = file.type === "application/pdf" && String.fromCharCode(...signature.slice(0, 5)) === "%PDF-";
+    const validJpeg = file.type === "image/jpeg" && signature[0] === 0xff && signature[1] === 0xd8 && signature[2] === 0xff;
+    const png = [0x89,0x50,0x4e,0x47,0x0d,0x0a,0x1a,0x0a];
+    const validPng = file.type === "image/png" && png.every((value,index) => signature[index] === value);
+    if (!validPdf && !validJpeg && !validPng) {
+      setNotice("Unsupported file. Select a valid PDF, JPEG or PNG.");
       return;
     }
     const entry: LocalDocument = {
@@ -1453,7 +1462,7 @@ export default function Home() {
             <div className="document-layout">
               <div className="panel upload-panel">
                 <div className="upload-illustration"><Upload size={27}/></div><h2>{t("addDocumentReference")}</h2><p>{t("documentUploadText")}</p>
-                <label className="button button-primary upload-button"><Upload size={16}/> {t("chooseFile")}<input type="file" accept=".pdf,image/*" onChange={(e) => addDocument(e.target.files?.[0])}/></label>
+                <label className="button button-primary upload-button"><Upload size={16}/> {t("chooseFile")}<input type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" onChange={(e) => addDocument(e.target.files?.[0])}/></label>
                 <div className="upload-limits"><span>{t("fileTypes")}</span><span>{t("max12MB")}</span></div>
               </div>
               <div className="panel document-list-panel">
