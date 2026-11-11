@@ -280,6 +280,7 @@ h1, h2, h3 { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
 .application-meta { display: grid; grid-template-columns: repeat(3,1fr); border-top: 1px solid #efede6; border-bottom: 1px solid #efede6; padding: 13px 0; margin: 16px 0 12px; }
 .application-meta small { display: block; color: #9b9e95; font-size: 8px; margin-bottom: 4px; }
 .application-meta strong { display: block; color: #6b4b36; font-size: 10px; }
+.application-status-note { margin: 0 0 12px; color: #596b7e; font-size: 11px; line-height: 1.5; }
 .application-disclaimer { display: flex; align-items: start; gap: 7px; color: #897344; background: #f6f0e3; border-radius: 6px; padding: 9px 10px; font-size: 8px; line-height: 1.5; }
 .application-disclaimer svg { flex: 0 0 auto; margin-top: 1px; }
 .application-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: flex-end; }

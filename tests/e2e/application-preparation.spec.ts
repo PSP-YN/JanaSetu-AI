@@ -19,11 +19,15 @@ test("synthetic citizen journey prepares a local draft but never claims governme
   await page.locator(".search-box input").fill("PM-KISAN");
   await page.getByRole("button", { name: "View details" }).first().click();
   await expect(page.locator(".scheme-grid")).toContainText("Scheme source approval pending");
-  await page.getByRole("button", { name: "Prepare draft" }).first().click();
+  await expect(page.locator(".scheme-grid")).toContainText("Rule prototype · independent review pending");
+  await expect(page.locator(".scheme-grid")).toContainText("Potential benefit · verify with department");
+  await expect(page.locator(".scheme-grid")).toContainText("Local preparation only — not an application case.");
+  await page.getByRole("button", { name: "Prepare local checklist" }).first().click();
 
   await expect(page.locator(".application-list")).toContainText("Synthetic Mobile Citizen");
   await expect(page.locator(".application-list")).toContainText("Not submitted");
   await expect(page.locator(".application-list")).toContainText("Scheme source approval pending");
+  await expect(page.locator(".application-list")).toContainText("Preparation record only — not an eligibility decision or submitted application.");
   await expect(page.locator(".application-disclaimer")).toContainText("has not been submitted to a government portal");
 
   await page.goto("/app/automation");
