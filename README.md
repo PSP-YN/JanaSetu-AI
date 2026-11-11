@@ -41,7 +41,7 @@ Production deployments are triggered by the protected main-branch release flow. 
 - [Citizen data and automation policy](docs/citizen-data-and-automation-policy.md)
 - [Production readiness](docs/production-readiness.md)
 
-A dedicated JanaSetu Supabase project exists in Mumbai. The citizen-data foundation and least-privilege grants are applied; all public tables have RLS enabled. The repository and live database now have 40 matching migration versions. Private preparation, document, consent-policy, scanner-role and reviewer-role tables also have RLS enabled as defense in depth. Password-based Supabase account routes, consent-gated workspace sync, application preparation, private document quarantine and ClamAV worker code are implemented. Cloud profile/document storage remains disabled because the legal consent-policy registry is empty; the scanner worker has not been provisioned. Local workspace mode remains available; retain local JSON backups.
+A dedicated JanaSetu Supabase project exists in Mumbai. The citizen-data foundation and least-privilege grants are applied; all public tables have RLS enabled. The repository and live database now have 41 matching migration versions. Private preparation, document, consent-policy, scanner-role and reviewer-role tables also have RLS enabled as defense in depth. Password-based Supabase account routes, consent-gated workspace sync, application preparation, private document quarantine and ClamAV worker code are implemented. Cloud profile/document storage remains disabled because the legal consent-policy registry is empty; the scanner worker has not been provisioned. Local workspace mode remains available; retain local JSON backups.
 
 
 
