@@ -84,6 +84,25 @@ class ScannerTests(unittest.TestCase):
         self.assertEqual(attest.call_args.args[1], "clean")
         self.assertEqual(len(attest.call_args.args[3]), 64)
 
+    def test_revoked_consent_cleanup_deletes_storage_without_scanning_or_downloading(self):
+        item = {
+            "id": "11111111-1111-4111-8111-111111111111",
+            "storage_object_name": "22222222-2222-4222-8222-222222222222/33333333-3333-4333-8333-333333333333/44444444-4444-4444-8444-444444444444/55555555-5555-4555-8555-555555555555.pdf",
+            "cleanup_only": True,
+        }
+        with (
+            patch.object(worker, "delete_storage_object") as delete,
+            patch.object(worker, "complete_revoked_cleanup") as complete,
+            patch.object(worker, "download_document") as download,
+            patch.object(worker, "scan_bytes") as scan,
+        ):
+            outcome = worker.process_one(item, "scanner-jwt", "ClamAV test")
+        self.assertEqual(outcome, "deleted")
+        delete.assert_called_once_with(item["storage_object_name"], "scanner-jwt")
+        complete.assert_called_once_with(item["id"], item["storage_object_name"], "scanner-jwt")
+        download.assert_not_called()
+        scan.assert_not_called()
+
     def test_process_one_rejects_untrusted_storage_paths_before_download(self):
         item = {
             "id": "11111111-1111-4111-8111-111111111111",
