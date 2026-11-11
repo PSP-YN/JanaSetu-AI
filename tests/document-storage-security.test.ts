@@ -67,6 +67,19 @@ test("scanner service is private, signature-fresh and fails closed",()=>{
  assert.match(worker,/object\/authenticated\/citizen-documents/);
  assert.match(compose,/read_only: true/);
  assert.match(compose,/cap_drop:/);
+ assert.match(compose,/cap_add:[\\s\\S]*CHOWN[\\s\\S]*SETUID[\\s\\S]*SETGID/);
  assert.doesNotMatch(compose,/ports:/);
  assert.match(entrypoint,/freshclam/);
+});
+
+test("latest scanner claim preserves consent-revoked deletion and bounded retry semantics",()=>{
+ const latest=read("supabase/migrations/20261111150000_restore_scanner_cleanup_and_global_function_defaults.sql");
+ assert.match(latest,/alter default privileges for role postgres revoke execute on functions from public/i);
+ assert.match(latest,/scan_status='consent_revoked'/);
+ assert.match(latest,/scan_status='deleting'/);
+ assert.match(latest,/cleanup_only',true/);
+ assert.match(latest,/has_active_document_storage_consent/);
+ assert.match(latest,/scan_attempts>=5/);
+ assert.match(latest,/interval '15 minutes'/);
+ assert.match(latest,/security invoker/i);
 });
