@@ -37,7 +37,9 @@ export default function AutomationCenterPage(){
         const applicationCases=caseData.applications||[];
         setCases(applicationCases);setRuns(runData.runs||[]);setReminders(reminderData.reminders||[]);
         const preparationResponse=await fetch("/api/applications/prepare",{cache:"no-store"});
-        if(preparationResponse.ok){const preparationData=await preparationResponse.json();setPreparations(preparationData.preparations||[]);}else{setPreparations([]);}
+        const preparationData=await preparationResponse.json().catch(()=>({}));
+        if(preparationResponse.ok){setPreparations(preparationData.preparations||[]);}
+        else{setPreparations([]);setError(preparationData.error||"Saved application preparations could not be loaded.");}
 
       }else{setCases([]);setRuns([]);setReminders([]);setPreparations([]);}
       setRefreshedAt(new Date().toLocaleTimeString());
