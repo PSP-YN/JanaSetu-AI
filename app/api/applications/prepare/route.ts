@@ -83,7 +83,10 @@ export async function POST(request:NextRequest){
    const message=error instanceof Error?error.message:"";
    if(message.includes("profile_storage_consent_required")||message.includes("consent_policy_not_approved"))return json({error:"An active, legally approved profile-storage consent for this exact scheme version is required."},409);
    if(message.includes("scheme_not_published_or_approved"))return json({error:"The scheme has not passed all independent publication checks."},409);
-   if(caseId)return json({error:"The application case exists, but its prepared fields were not saved. Retry with the same idempotency key.",case_id:caseId},503);
+   if(message.includes("idempotency_key_reused"))return json({error:"This idempotency key was already used with a different profile or scheme. Start a new preparation with a new key."},409);
+   if(message.includes("preparation_already_approved"))return json({error:"This preparation was already approved and cannot be changed.",case_id:caseId},409);
+   if(message.includes("invalid_document_checklist"))return json({error:"The approved document checklist is invalid and must be corrected by a scheme reviewer."},422);
+   if(caseId)return json({error:"The application case exists, but its prepared fields were not saved. Check the case before retrying.",case_id:caseId},503);
    return json({error:"Application preparation could not be saved."},409);
   }
   return json({case_id:caseId,status:"awaiting_citizen_review",assessment,preparation:{...preparation,submissionStatus:"not_submitted"}},201);
