@@ -80,3 +80,17 @@ end;
 $body$;
 revoke all on function private.claim_next_document_scan() from public,anon,service_role;
 grant execute on function private.claim_next_document_scan() to authenticated;
+
+-- Public RPC wrappers execute with caller privileges; private functions retain
+-- their own SECURITY DEFINER boundary and explicit auth.uid()/role checks.
+alter function public.complete_citizen_document_delete(uuid,text) security invoker;
+alter function public.get_citizen_document_delete_target(uuid) security invoker;
+alter function public.complete_revoked_document_cleanup(uuid,text) security invoker;
+
+-- Cover the remaining private-schema foreign keys reported by the advisor.
+create index if not exists application_preparations_scheme_version_id_idx on private.application_preparations(scheme_version_id);
+create index if not exists application_preparations_user_id_idx on private.application_preparations(user_id);
+create index if not exists citizen_documents_case_id_idx on private.citizen_documents(case_id);
+create index if not exists citizen_documents_consent_id_idx on private.citizen_documents(consent_id);
+create index if not exists citizen_documents_scanner_user_id_idx on private.citizen_documents(scanner_user_id);
+create index if not exists scheme_reviewer_roles_assigned_by_idx on private.scheme_reviewer_roles(assigned_by);
