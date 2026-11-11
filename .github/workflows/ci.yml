@@ -49,6 +49,9 @@ jobs:
       - name: Test private document scanner protocol and fail-closed validation
         run: python -m unittest discover -s tests -p 'test_*.py' -v
 
+      - name: Build the private ClamAV scanner container
+        run: docker build --pull --tag janasetu-document-scanner:test services/document-scanner
+
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
 
