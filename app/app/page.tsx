@@ -36,11 +36,11 @@ const STORAGE = {
 };
 
 function mergeCitizenProfile(local: CitizenProfile, remote: CitizenProfile): CitizenProfile {
-  const merged = { ...remote } as CitizenProfile;
+  const merged: Record<string, unknown> = { ...remote };
   for (const [key, value] of Object.entries(local)) {
     if (value !== "" && value !== null && value !== undefined) (merged as Record<string, unknown>)[key] = value;
   }
-  return merged;
+  return merged as unknown as CitizenProfile;
 }
 function mergeWorkspaceRecords<T extends Record<string, unknown>>(local: T[], remote: T[], identity: (item: T) => string): T[] {
   const merged = new Map<string, T>();
@@ -958,7 +958,7 @@ export default function Home() {
           const remoteAssessments = invalidateUnapprovedAssessments(parseBackupAssessments(remote.assessments, { trustLocalStorage: true }));
           setProfile(mergeCitizenProfile(latestLocalProfile, remoteProfile));
           setLanguage(localStorage.getItem(STORAGE.language) !== null ? latestLocalLanguage : parseBackupLanguage(remote.preferred_language || "en"));
-          setApplications(mergeWorkspaceRecords(latestLocalApplications, remoteApplications, item => item.id));
+          setApplications(mergeWorkspaceRecords(latestLocalApplications, remoteApplications, item => String(item.id)));
           setDocuments(mergeWorkspaceRecords(latestLocalDocuments, remoteDocuments, item => item.id));
           setTasks(mergeWorkspaceRecords(latestLocalTasks, remoteTasks, item => item.id));
           setAssessments(mergeWorkspaceRecords(latestLocalAssessments as unknown as Record<string, unknown>[], remoteAssessments as unknown as Record<string, unknown>[], item => String(item.schemeId)) as unknown as Assessment[]);
