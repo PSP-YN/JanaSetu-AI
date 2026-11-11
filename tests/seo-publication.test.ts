@@ -27,7 +27,7 @@ test("empty and stale scheme guides are excluded from indexing and sitemap",()=>
  const directory=read("app/schemes/page.tsx");
  const sitemap=read("app/sitemap.ts");
  assert.match(directory,/robots:\{index:schemes\.length>0/);
- assert.match(sitemap,/schemes\.filter/);
+ assert.match(sitemap,/allSchemes/);
  assert.match(sitemap,/90\*86400000/);
  assert.match(sitemap,/scheme\.sourceCheckedAt/);
 });
