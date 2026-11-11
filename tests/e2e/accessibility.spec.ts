@@ -131,6 +131,57 @@ test("extension synthetic select mapping only chooses an exact matching option",
 });
 
 
+test("landing page and workspace share the same warm brand color and do not overflow common viewports", async ({ page }) => {
+  for (const width of [320, 360, 390, 430, 768, 1024, 1366]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const route of ["/", "/app"]) {
+      await page.goto(route);
+      const metrics = await page.evaluate(() => ({
+        viewport: document.documentElement.clientWidth,
+        document: document.documentElement.scrollWidth,
+        body: document.body.scrollWidth,
+        primary: getComputedStyle(document.querySelector(".button-primary")!).backgroundColor
+      }));
+      expect(metrics.document, `${route} horizontal overflow at ${width}px`).toBeLessThanOrEqual(metrics.viewport + 1);
+      expect(metrics.body, `${route} body overflow at ${width}px`).toBeLessThanOrEqual(metrics.viewport + 1);
+      expect(metrics.primary, `${route} primary brand color at ${width}px`).toBe("rgb(169, 68, 11)");
+    }
+  }
+});
+
+test("mobile citizen journey can save a profile, discover schemes and add a local document", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/app");
+  await page.getByRole("button", { name: "Open navigation" }).click();
+  await page.getByRole("button", { name: "My profile" }).click();
+  await expect(page.locator(".sidebar")).not.toHaveClass(/sidebar-open/);
+
+  const fields = page.locator(".form-grid").first().locator(".field");
+  await fields.nth(0).locator("input").fill("Synthetic Mobile Citizen");
+  await fields.nth(1).locator("input").fill("34");
+  await fields.nth(2).locator("select").selectOption("woman");
+  await fields.nth(3).locator("select").selectOption({ label: "Karnataka" });
+  await fields.nth(4).locator("input").fill("Mysuru");
+  await fields.nth(6).locator("input").fill("150000");
+  await fields.nth(7).locator("select").selectOption("Farmer");
+  await page.locator(".form-footer .button-primary").click();
+  await expect(page.locator(".search-box input")).toBeVisible();
+  await expect(page.locator(".toast")).toContainText("Assessment completed locally");
+
+  await page.getByRole("button", { name: "Open navigation" }).click();
+  await page.getByRole("button", { name: "Find benefits" }).click();
+  await page.locator(".search-box input").fill("PM-KISAN");
+  await expect(page.locator(".scheme-grid")).toBeVisible();
+
+  await page.getByRole("button", { name: "Open navigation" }).click();
+  await page.getByRole("button", { name: "Documents" }).click();
+  await page.locator('input[type="file"]').nth(1).setInputFiles({
+    name: "synthetic-demo.pdf", mimeType: "application/pdf", buffer: Buffer.from("%PDF-1.7\n% synthetic test file\n")
+  });
+  await expect(page.locator(".document-row")).toContainText("synthetic-demo.pdf");
+  await expect(page.locator(".toast")).toContainText("saved on this device only");
+});
+
 test("mobile viewport homepage has no serious or critical axe violations", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/app");
@@ -215,10 +266,17 @@ test("hero focus outline and primary button text remain high-contrast", async ({
   expect(await primaryButton.evaluate((element) => getComputedStyle(element).color)).toBe("rgb(255, 255, 255)");
 });
 
+test("citizen workspace keeps account access compact and removes the secondary automation shortcut", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/app");
+  await expect(page.locator(".account-bar")).not.toContainText("Applications & automation");
+  await expect(page.locator(".account-bar a")).toHaveCount(1);
+});
+
 test("uploaded JanaSetu brand mark loads and citizen avatar uses a safe initials fallback", async ({ page }) => {
   await page.goto("/app");
   const mark = page.locator(".brand-mark img");
-  await expect(mark).toHaveAttribute("src", "/janasetu-logo.png");
+  await expect(mark).toHaveAttribute("src", "/janasetu-mark.svg");
   await expect.poll(() => mark.evaluate((node) => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
   await expect(page.locator(".avatar-fallback")).toBeVisible();
 });
