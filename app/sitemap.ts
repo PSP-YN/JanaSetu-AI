@@ -14,8 +14,9 @@ export default async function sitemap():Promise<MetadataRoute.Sitemap>{
   {url:base+"/privacy",lastModified:now,changeFrequency:"yearly",priority:0.3},
   {url:base+"/terms",lastModified:now,changeFrequency:"yearly",priority:0.3}
  ];
- const schemes=await listPublicSchemes();
- const guidePages:MetadataRoute.Sitemap=[...(schemes.length?[{url:base+"/schemes",lastModified:now,changeFrequency:"daily" as const,priority:0.85}]:[]),...schemes.filter(scheme=>scheme.sourceCheckedAt&&Number.isFinite(Date.parse(scheme.sourceCheckedAt))&&Date.parse(scheme.sourceCheckedAt)<=Date.now()+86400000&&Date.now()-Date.parse(scheme.sourceCheckedAt)<=90*86400000).map(scheme=>({
+ const allSchemes=await listPublicSchemes();
+ const schemes=allSchemes.filter(scheme=>scheme.sourceCheckedAt&&Number.isFinite(Date.parse(scheme.sourceCheckedAt))&&Date.parse(scheme.sourceCheckedAt)<=Date.now()+86400000&&Date.now()-Date.parse(scheme.sourceCheckedAt)<=90*86400000);
+ const guidePages:MetadataRoute.Sitemap=[...(schemes.length?[{url:base+"/schemes",lastModified:now,changeFrequency:"daily" as const,priority:0.85}]:[]),...schemes.map(scheme=>({
   url:base+"/schemes/"+scheme.slug,
   lastModified:scheme.sourceCheckedAt&&Number.isFinite(Date.parse(scheme.sourceCheckedAt))?new Date(scheme.sourceCheckedAt):now,
   changeFrequency:"weekly",priority:0.8
