@@ -1,3 +1,5 @@
+import { isApprovedRuleSetForPublication, isWithinSchemeEffectivePeriod } from "@/lib/eligibility-engine";
+
 export type PublicScheme = {
  id:string;slug:string;name:string;category:string;level:string;state_code:string|null;
  content:Record<string,unknown>;ruleSet:Record<string,unknown>|null;
@@ -18,24 +20,16 @@ const safeUrl=(value:unknown)=>isOfficialSchemeSource(value)?value:null;
 async function rest<T>(path:string):Promise<T|null>{
  const url=base(),anon=key();if(!url||!anon)return null;
  try{const response=await fetch(url+"/rest/v1/"+path,{headers:{apikey:anon,Accept:"application/json"},next:{revalidate:3600}});
-  if(!response.ok)return null;return await response.json() as T;
- }catch{return null;}
+  if(!response.ok)throw new Error("Public scheme catalogue request failed with status "+response.status);
+  return await response.json() as T;
+ }catch(error){throw error instanceof Error?error:new Error("Public scheme catalogue request failed.");}
 }
 type SchemeRow={id:string;slug:string;name:string;category:string;level:string;state_code:string|null;current_version_id:string|null};
 type VersionRow={id:string;version_number:number;source_id:string|null;source_url:string|null;content:unknown;rule_set:unknown;verification_status:string;effective_from:string|null;effective_to:string|null;reviewed_at:string|null};
 type SourceRow={id:string;publisher:string;source_url:string;last_checked_at:string|null};
 const isRecord=(v:unknown):v is Record<string,unknown>=>!!v&&typeof v==="object"&&!Array.isArray(v);
 function isFreshApprovedRuleSet(value:unknown):value is Record<string,unknown>{
- if(!isRecord(value)||value.schemaVersion!==1||value.state!=="approved"||!Array.isArray(value.rules)||value.rules.length===0||value.rules.length>100)return false;
- const now=Date.now();
- return value.rules.every(rule=>{
-  if(!isRecord(rule)||rule.reviewStatus!=="approved"||typeof rule.label!=="string"||!isRecord(rule.evidence))return false;
-  const evidence=rule.evidence;const checked=typeof evidence.sourceCheckedAt==="string"?Date.parse(evidence.sourceCheckedAt):NaN;
-  return isOfficialSchemeSource(evidence.sourceUrl)&&
-   typeof evidence.sourceHash==="string"&&/^[a-f0-9]{64}$/i.test(evidence.sourceHash)&&
-   typeof evidence.excerpt==="string"&&evidence.excerpt.trim().length>=12&&
-   Number.isFinite(checked)&&checked<=now+86400000&&now-checked<=90*86400000;
- });
+ return isRecord(value)&&isApprovedRuleSetForPublication(value);
 }
 export async function listPublicSchemes():Promise<PublicScheme[]>{
  const rows=await rest<SchemeRow[]>("schemes?select=id,slug,name,category,level,state_code,current_version_id&publication_status=eq.published&order=name.asc&limit=500");
@@ -45,19 +39,21 @@ export async function listPublicSchemes():Promise<PublicScheme[]>{
  const versions:VersionRow[]=[];
  for(let offset=0;offset<ids.length;offset+=100){
   const batch=await rest<VersionRow[]>("scheme_versions?select=id,version_number,source_id,source_url,content,rule_set,verification_status,effective_from,effective_to,reviewed_at&id=in.("+ids.slice(offset,offset+100).join(",")+")");
-  if(batch)versions.push(...batch);
+  if(!batch)throw new Error("Published scheme versions could not be loaded.");
+  versions.push(...batch);
  }
  const byVersion=new Map(versions.map(version=>[version.id,version]));
  const sourceIds=[...new Set(versions.filter(version=>version.source_id).map(version=>version.source_id as string))];
  const sources:SourceRow[]=[];
  for(let offset=0;offset<sourceIds.length;offset+=100){
   const batch=await rest<SourceRow[]>("scheme_sources?select=id,publisher,source_url,last_checked_at&id=in.("+sourceIds.slice(offset,offset+100).join(",")+")");
-  if(batch)sources.push(...batch);
+  if(!batch)throw new Error("Published scheme sources could not be loaded.");
+  sources.push(...batch);
  }
  const bySource=new Map(sources.map(source=>[source.id,source]));
  return current.flatMap(row=>{
   const version=byVersion.get(row.current_version_id as string);
-  if(!version||version.verification_status!=="independently_approved"||!isRecord(version.content)||!isFreshApprovedRuleSet(version.rule_set))return [];
+  if(!version||version.verification_status!=="independently_approved"||!isRecord(version.content)||!isFreshApprovedRuleSet(version.rule_set)||!isWithinSchemeEffectivePeriod(version.effective_from,version.effective_to))return [];
   const source=version.source_id?bySource.get(version.source_id):undefined;
   return [{id:row.id,slug:row.slug,name:row.name,category:row.category,level:row.level,state_code:row.state_code,
    content:version.content,ruleSet:isRecord(version.rule_set)?version.rule_set:null,sourceUrl:safeUrl(source?.source_url)||safeUrl(version.source_url),
@@ -70,12 +66,12 @@ export async function getPublicScheme(slug:string):Promise<PublicScheme|null>{
  const schemes=await rest<SchemeRow[]>("schemes?select=id,slug,name,category,level,state_code,current_version_id&slug=eq."+encodeURIComponent(slug)+"&publication_status=eq.published&limit=1");
  const row=schemes?.[0];if(!row?.current_version_id)return null;
  const versions=await rest<VersionRow[]>("scheme_versions?select=id,version_number,source_id,source_url,content,rule_set,verification_status,effective_from,effective_to,reviewed_at&id=eq."+encodeURIComponent(row.current_version_id)+"&limit=1");
- const version=versions?.[0];if(!version||version.verification_status!=="independently_approved"||!isRecord(version.content)||!isFreshApprovedRuleSet(version.rule_set))return null;
+ const version=versions?.[0];if(!version||version.verification_status!=="independently_approved"||!isRecord(version.content)||!isFreshApprovedRuleSet(version.rule_set)||!isWithinSchemeEffectivePeriod(version.effective_from,version.effective_to))return null;
  let source:SourceRow|undefined;
  if(version.source_id){const sources=await rest<SourceRow[]>("scheme_sources?select=publisher,source_url,last_checked_at&id=eq."+encodeURIComponent(version.source_id)+"&limit=1");source=sources?.[0];}
  return {id:row.id,slug:row.slug,name:row.name,category:row.category,level:row.level,state_code:row.state_code,
   content:version.content,ruleSet:isRecord(version.rule_set)?version.rule_set:null,sourceUrl:safeUrl(source?.source_url)||safeUrl(version.source_url),
-  sourcePublisher:source?.publisher||null,sourceCheckedAt:source?.last_checked_at||version.reviewed_at,
+  sourcePublisher:source?.publisher||null,sourceCheckedAt:source?.last_checked_at||null,
   effectiveFrom:version.effective_from,effectiveTo:version.effective_to,versionNumber:version.version_number};
 }
 export function schemeString(scheme:PublicScheme,key:string,fallback=""):string{
