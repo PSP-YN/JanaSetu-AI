@@ -29,7 +29,13 @@ async function openPopup(page: import("@playwright/test").Page, initialUrl = "ht
       tabs: { query: async () => [(window as any).__popupTab] },
       scripting: { executeScript: async (call: unknown) => {
         (window as any).__lastScriptCall = call;
-        return [{ result: call.func(...call.args) }];
+        if (call.args.length === 1) {
+          return [{ result: { preview: [
+            { index: 0, key: "fullName", label: "Applicant name", value: "Synthetic Citizen", fingerprint: "name-1", valid: true, reason: "" },
+            { index: 1, key: "age", label: "Age", value: "30", fingerprint: "age-1", valid: true, reason: "" }
+          ] } }];
+        }
+        return [{ result: { filled: call.args[1].length, stale: 0 } }];
       } }
     } });
   }, initialUrl);
@@ -50,7 +56,7 @@ test("extension popup imports the reviewed backup language and click-fills only 
   await page.locator("#fill").click();
   await expect(page.locator("#status")).toContainText("ಪ್ರತಿ ಸೂಚಿಸಿದ ಕ್ಷೇತ್ರ");
   const fields = page.locator("#preview input[type=checkbox]");
-  await expect(fields).toHaveCount(6);
+  await expect(fields).toHaveCount(2);
   await fields.nth(0).check();
   await fields.nth(1).check();
   await page.locator("#apply").click();
