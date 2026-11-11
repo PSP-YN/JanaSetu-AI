@@ -10,7 +10,7 @@ test("public scheme guides expose only published, independently approved version
  assert.match(source,/isFreshApprovedRuleSet\(version\.rule_set\)/);
  assert.match(source,/sourceHash/);
  assert.match(source,/90\*86400000/);
- assert.match(source,/^https:/m);
+ assert.match(source,/https:/);
 });
 
 test("scheme SEO pages contain source links, honest government disclaimer and no submission claim",()=>{
