@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { fillWithCitizenApproval } from "./extension-approval";
 
 for (const route of ["/", "/app", "/privacy", "/terms"]) {
   test(`axe WCAG 2.1 AA critical/serious scan: ${route}`, async ({ page }) => {
@@ -88,14 +89,14 @@ test("extension synthetic form fills unique safe fields and skips sensitive or a
       <input id="hidden" type="hidden" name="age">
     </form>`);
   await page.addScriptTag({ path: "extension/fill.js" });
-  const result = await page.evaluate(() => (window as any).fillProfileInPage({
+  const result = await fillWithCitizenApproval(page, {
     fullName: "Synthetic Citizen", age: 34, state: "Karnataka", district: "Mysuru", gender: "woman",
     annualIncome: 150000, occupation: "Farmer", residenceType: "urban",
     hasCultivableLand: true, pmKisanExcluded: "no", ownsPuccaHouse: false,
     previousHousingBenefit: "no", householdHasLpg: false, poorHouseholdDeclaration: true,
     isStudent: false, top20Percentile: null, regularUndergraduate: null,
     otherScholarship: null, diplomaOrDistance: null
-  }));
+  });
   expect(result.filled).toBe(1);
   await expect(page.locator("#applicant")).toHaveValue("Synthetic Citizen");
   await expect(page.locator("#aadhaar")).toHaveValue("");
