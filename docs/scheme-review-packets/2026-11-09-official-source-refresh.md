@@ -2,7 +2,7 @@
 
 **Checked: 9 November 2026**  
 **Approval state: PENDING — no scheme is approved by this packet.**  
-This is a source-refresh handoff for two independent reviewers. It does not authorize publication or application creation.
+This is a source-refresh handoff for two distinct source reviewers, two distinct eligibility-rule reviewers and one legal reviewer, followed by a separate publisher. It does not authorize publication or application creation.
 
 ## 1. PM-KISAN Samman Nidhi
 
@@ -77,4 +77,4 @@ Referenced detailed guideline: https://scholarships.gov.in/public/schemeGuidelin
 
 ## Publication decision
 
-All four records remain `reviewStatus: pending`. Source refresh date is 9 November 2026. No database scheme version is published, no eligibility case can be created, and no automatic application may be initiated until two independent reviewers approve source accuracy and eligibility-rule accuracy for the exact version. Legal review and scheme-owner integration approval remain separate gates.
+All four records remain `reviewStatus: pending`. Source refresh date is 9 November 2026. No database scheme version is published, no eligibility case can be created, and no automatic application may be initiated until two distinct source reviewers, two distinct eligibility-rule reviewers and one legal reviewer approve the exact version, and a separate publisher publishes it. Scheme-owner integration approval remains a separate gate.
