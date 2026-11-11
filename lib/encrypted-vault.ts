@@ -13,9 +13,14 @@ function fromBase64(value: string): Uint8Array {
   for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
   return bytes;
 }
+function toArrayBuffer(bytes: Uint8Array): ArrayBuffer {
+  const buffer = new ArrayBuffer(bytes.byteLength);
+  new Uint8Array(buffer).set(bytes);
+  return buffer;
+}
 async function deriveKey(password: string, salt: Uint8Array): Promise<CryptoKey> {
-  const material = await crypto.subtle.importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveKey"]);
-  return crypto.subtle.deriveKey({ name: "PBKDF2", salt, iterations: ITERATIONS, hash: "SHA-256" }, material,
+  const material = await crypto.subtle.importKey("raw", toArrayBuffer(new TextEncoder().encode(password)), "PBKDF2", false, ["deriveKey"]);
+  return crypto.subtle.deriveKey({ name: "PBKDF2", salt: toArrayBuffer(salt), iterations: ITERATIONS, hash: "SHA-256" }, material,
     { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]);
 }
 export async function encryptVault(payload: unknown, password: string): Promise<Blob> {
@@ -24,7 +29,7 @@ export async function encryptVault(payload: unknown, password: string): Promise<
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const key = await deriveKey(password, salt);
   const plaintext = new TextEncoder().encode(JSON.stringify(payload));
-  const ciphertext = new Uint8Array(await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, plaintext));
+  const ciphertext = new Uint8Array(await crypto.subtle.encrypt({ name: "AES-GCM", iv: toArrayBuffer(iv) }, key, toArrayBuffer(plaintext)));
   const envelope = { magic: MAGIC, version: VERSION, kdf: "PBKDF2-SHA-256", iterations: ITERATIONS, cipher: "AES-256-GCM", salt: toBase64(salt), iv: toBase64(iv), ciphertext: toBase64(ciphertext) };
   return new Blob([JSON.stringify(envelope)], { type: "application/vnd.janasetu.vault+json" });
 }
@@ -40,7 +45,7 @@ export async function decryptVault(file: File, password: string): Promise<unknow
   if (salt.length !== 16 || iv.length !== 12 || ciphertext.length < 16) throw new Error("Invalid vault structure.");
   const key = await deriveKey(password, salt);
   try {
-    const plaintext = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, ciphertext);
+    const plaintext = await crypto.subtle.decrypt({ name: "AES-GCM", iv: toArrayBuffer(iv) }, key, toArrayBuffer(ciphertext));
     return JSON.parse(new TextDecoder().decode(plaintext));
   } catch {
     throw new Error("Incorrect password or vault integrity check failed.");
