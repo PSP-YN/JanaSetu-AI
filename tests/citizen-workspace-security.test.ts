@@ -269,3 +269,43 @@ test("government portal integration records default to no authorised API actions
   assert.match(sql, /authorization_reference/);
   assert.match(sql, /approved_at/);
 });
+
+
+test("document scanning uses atomic claims, scanner-only object reads and bounded retries", () => {
+  const sql = read("supabase/migrations/20261111101500_add_atomic_clamav_scan_claims.sql");
+  assert.match(sql, /for update skip locked/i);
+  assert.match(sql, /scan_attempts<5/);
+  assert.match(sql, /scanner_user_id=v_user/);
+  assert.match(sql, /document_not_claimed_by_scanner/);
+  assert.match(sql, /scanner_read_quarantined_citizen_documents/);
+  assert.match(sql, /private\.can_scan_citizen_document/);
+  assert.match(sql, /scan_status='clean'/);
+  assert.match(sql, /document_storage_consent_inactive/);
+});
+
+test("document scanner worker never uses service-role credentials and checks file integrity", () => {
+  const worker = read("services/document-scanner/worker.mjs");
+  const docker = read("services/document-scanner/Dockerfile");
+  assert.match(worker, /SCANNER_EMAIL/);
+  assert.match(worker, /SCANNER_PASSWORD/);
+  assert.match(worker, /claim_next_document_scan/);
+  assert.match(worker, /clamscan/);
+  assert.match(worker, /validMagic/);
+  assert.match(worker, /expected_size/);
+  assert.match(worker, /MAX_BYTES/);
+  assert.doesNotMatch(worker, /SERVICE_ROLE|service_role|SUPABASE_SERVICE_ROLE_KEY/i);
+  assert.match(docker, /clamav/);
+});
+
+test("clean document retrieval requires caller ownership, active consent and safe response headers", () => {
+  const sql = read("supabase/migrations/20261111101500_add_atomic_clamav_scan_claims.sql");
+  const route = read("app/api/documents/[documentId]/route.ts");
+  assert.match(sql, /user_id=v_user and scan_status='clean'/);
+  assert.match(sql, /has_active_citizen_consent\(v_user,'document_storage'/);
+  assert.match(route, /getVerifiedSupabaseSession\(\)/);
+  assert.match(route, /get_clean_citizen_document/);
+  assert.match(route, /Content-Disposition/);
+  assert.match(route, /X-Content-Type-Options/);
+  assert.match(route, /private, no-store/);
+  assert.doesNotMatch(route, /SUPABASE_SERVICE_ROLE_KEY/);
+});
