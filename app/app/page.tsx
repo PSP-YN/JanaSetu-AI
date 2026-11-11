@@ -16,6 +16,8 @@ import { createDraftRecord } from "@/lib/draft";
 import { localizedSchemeText } from "@/lib/scheme-translations";
 import { invalidateUnapprovedApplications, invalidateUnapprovedAssessments } from "@/lib/assessment-safety";
 import { parseBackupApplications, parseBackupAssessments, parseBackupDocuments, parseBackupLanguage, parseBackupProfile, parseBackupTasks, type DraftField, type LocalApplicationRecord, type LocalDocumentRecord, type LocalTaskRecord } from "@/lib/backup-validation";
+import { encryptVault, decryptVault } from "@/lib/encrypted-vault";
+import { saveLocalDocument, getLocalDocuments, deleteLocalDocument, replaceLocalDocuments } from "@/lib/local-document-vault";
 import {
   LANGUAGE_OPTIONS, SCHEMES, STATES_AND_UTS,
   type Assessment, type CitizenProfile, type LanguageCode
@@ -1025,7 +1027,7 @@ export default function Home() {
       const importedLanguage = parseBackupLanguage(data.language);
       setProfile(importedProfile); setLanguage(importedLanguage);
       setApplications(invalidateUnapprovedApplications(parseBackupApplications(data.applications)));
-      setDocuments(parseBackupDocuments(data.documents));
+      const importedDocuments = parseBackupDocuments(data.documents);\n      const fileItems = Array.isArray(data.documentFiles) ? data.documentFiles.filter((item: any) => item && typeof item.id === "string" && typeof item.name === "string" && typeof item.type === "string" && typeof item.data === "string" && item.data.length <= 36 * 1024 * 1024) : [];\n      await replaceLocalDocuments(fileItems);\n      setDocuments(importedDocuments);
       setTasks(parseBackupTasks(data.tasks));
       setAssessments(invalidateUnapprovedAssessments(parseBackupAssessments(data.assessments)));
       setTab("profile"); setNotice(tFor(importedLanguage, "noticeBackupRestored"));
@@ -1231,8 +1233,8 @@ export default function Home() {
           </div>
           <div className="topbar-actions">
             <div className="system-status"><span className="status-pulse"/> {t("localStatus")}</div>
-            <button className="button button-small button-outline backup-button" onClick={exportBackup} title={t("backupTitle")}><Download size={13}/> {t("backup")}</button>
-            <label className="button button-small button-outline backup-button" title={t("restoreTitle")}><Upload size={13}/> {t("restore")}<input type="file" accept=".json,application/json" hidden disabled={backupBusy} onChange={(e) => { importBackup(e.target.files?.[0]); e.currentTarget.value = ""; }}/></label>
+            <button className="button button-small button-outline backup-button" onClick={exportBackup} title="Export a password-encrypted .janasetu file; the password is never uploaded"><Download size={13}/> {t("backup")}</button>
+            <label className="button button-small button-outline backup-button" title="Import a password-encrypted .janasetu file"><Upload size={13}/> {t("restore")}<input type="file" accept=".janasetu,application/vnd.janasetu.vault+json" hidden disabled={backupBusy} onChange={(e) => { importBackup(e.target.files?.[0]); e.currentTarget.value = ""; }}/></label>
             <label className="language-control"><Globe2 size={16}/><span>{t("language")}</span>
               <select aria-label={t("language")} value={language} onChange={(event) => setLanguage(event.target.value as LanguageCode)}>
                 {LANGUAGE_OPTIONS.map((item) => <option key={item.code} value={item.code}>{item.label}</option>)}
@@ -1431,7 +1433,7 @@ export default function Home() {
               </div>
               <div className="panel document-list-panel">
                 <div className="section-heading"><div><div className="eyebrow">{t("yourRecords")}</div><h2>{documents.length} {t("schemeRecords")}</h2></div><span className="section-index">{t("localLabel")}</span></div>
-                {documents.length === 0 ? <div className="empty-state compact"><FileText size={26}/><h3>{t("noDocumentRefs")}</h3><p>{t("checklistAppears")}</p></div> : <div className="document-list">{documents.map((doc) => <div className="document-row" key={doc.id}><div className="file-icon"><FileText size={19}/></div><div className="document-info"><strong>{doc.name}</strong><small>{doc.type} · {(doc.size / 1024).toFixed(0)} KB · {t("addedLabel")} {shortDate(doc.addedAt, language)}</small><em>{t("manualVerificationPending")}</em></div><button className="icon-button" onClick={() => setDocuments((current) => current.filter((item) => item.id !== doc.id))} aria-label={t("removeDocumentReference")}><X size={16}/></button></div>)}</div>}
+                {documents.length === 0 ? <div className="empty-state compact"><FileText size={26}/><h3>{t("noDocumentRefs")}</h3><p>{t("checklistAppears")}</p></div> : <div className="document-list">{documents.map((doc) => <div className="document-row" key={doc.id}><div className="file-icon"><FileText size={19}/></div><div className="document-info"><strong>{doc.name}</strong><small>{doc.type} · {(doc.size / 1024).toFixed(0)} KB · {t("addedLabel")} {shortDate(doc.addedAt, language)}</small><em>{t("manualVerificationPending")}</em></div><button className="icon-button" onClick={async () => { await deleteLocalDocument(doc.id).catch(() => undefined); setDocuments((current) => current.filter((item) => item.id !== doc.id)); }} aria-label={t("removeDocumentReference")}><X size={16}/></button></div>)}</div>}
               </div>
             </div>
             <div className="empty-guidance"><ShieldCheck size={17}/><span>{t("securityDocs")}</span></div>
