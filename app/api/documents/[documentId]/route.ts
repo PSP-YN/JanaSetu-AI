@@ -25,14 +25,14 @@ export async function GET(_request:NextRequest,{params}:{params:Promise<{documen
      typeof metadata.filename!=="string"||metadata.filename.length>255||!TYPES.has(String(metadata.mime_type))||
      !Number.isInteger(metadata.size)||Number(metadata.size)<1||Number(metadata.size)>12*1024*1024)return json({error:"Document metadata failed validation."},503);
   const objectPath=metadata.object_name.split("/").map(encodeURIComponent).join("/");
-  const storageResponse=await fetch(session.url+"/storage/v1/object/citizen-documents/"+objectPath,{
+  const storageResponse=await fetch(session.url+"/storage/v1/object/authenticated/citizen-documents/"+objectPath,{
    headers:{apikey:session.key,Authorization:"Bearer "+session.accessToken},cache:"no-store"
   });
   if(!storageResponse.ok)return json({error:"The verified document could not be retrieved."},503);
-  const length=Number(storageResponse.headers.get("content-length"));
-  if(Number.isFinite(length)&&length!==metadata.size)return json({error:"Stored document size does not match its verified metadata."},503);
+  const bytes=await storageResponse.arrayBuffer();
+  if(bytes.byteLength!==metadata.size)return json({error:"Stored document size does not match its verified metadata."},503);
   const safeName=metadata.filename.replace(/[\r\n"]/g,"_");
-  return new Response(storageResponse.body,{status:200,headers:{
+  return new Response(bytes,{status:200,headers:{
    "Content-Type":String(metadata.mime_type),
    "Content-Length":String(metadata.size),
    "Content-Disposition":"attachment; filename*=UTF-8''"+encodeURIComponent(safeName),
