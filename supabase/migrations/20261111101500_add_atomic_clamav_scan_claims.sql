@@ -72,6 +72,27 @@ revoke all on function private.attest_document_scan(uuid,text,text,text) from pu
 grant execute on function private.claim_next_document_scan() to authenticated;
 grant execute on function private.attest_document_scan(uuid,text,text,text) to authenticated;
 
+
+create or replace function private.get_clean_citizen_document(p_document_id uuid)
+returns jsonb language plpgsql security definer set search_path=public,private,pg_temp
+as $
+declare v_user uuid:=auth.uid(); v_doc private.citizen_documents%rowtype;
+begin
+ if v_user is null then raise exception 'authentication_required' using errcode='42501'; end if;
+ select * into v_doc from private.citizen_documents where id=p_document_id and user_id=v_user and scan_status='clean';
+ if not found then raise exception 'clean_document_not_found' using errcode='P0002'; end if;
+ if not private.has_active_citizen_consent(v_user,'document_storage',v_doc.case_id) then raise exception 'document_storage_consent_inactive' using errcode='42501'; end if;
+ return jsonb_build_object('storage_object_name',v_doc.storage_object_name,'filename',v_doc.original_filename,'mime_type',v_doc.mime_type,'size',v_doc.expected_size);
+end;
+$;
+revoke all on function private.get_clean_citizen_document(uuid) from public,anon,service_role;
+grant execute on function private.get_clean_citizen_document(uuid) to authenticated;
+create or replace function public.get_clean_citizen_document(p_document_id uuid)
+returns jsonb language sql security invoker set search_path=public,private,pg_temp
+as $ select private.get_clean_citizen_document(p_document_id) $;
+revoke all on function public.get_clean_citizen_document(uuid) from public,anon;
+grant execute on function public.get_clean_citizen_document(uuid) to authenticated;
+
 create or replace function public.claim_next_document_scan()
 returns jsonb language sql security invoker set search_path=public,private,pg_temp
 as $$ select private.claim_next_document_scan() $$;
