@@ -8,13 +8,8 @@ if ! command -v clamscan >/dev/null 2>&1; then
   echo "UNAVAILABLE: install ClamAV locally; no clean verdict was produced."
   exit 2
 fi
-if ! command -v freshclam >/dev/null 2>&1; then
-  echo "UNAVAILABLE: freshclam is required to update signatures."
-  exit 2
-fi
-echo "Updating local ClamAV signatures..."
-freshclam
 echo "Scanning local file: $(basename "$1")"
+echo "Ensure signatures were recently updated with: sudo freshclam"
 set +e
 clamscan --infected --no-summary -- "$1"
 status=$?
