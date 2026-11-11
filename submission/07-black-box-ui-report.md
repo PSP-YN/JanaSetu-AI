@@ -24,18 +24,25 @@ Tested preview: https://janasetu-8qlb5584m-pspyn.vercel.app
 ## Defect found and code correction
 The assessment cards used the label “Rule-screened · source linked” and the benefit label “Published benefit” even while all four rule prototypes were pending independent approval. This was misleading even though the engine itself returned a pending-review state and the application-creation gate blocked the next step.
 
-Corrected in commit e59dddad0810548367981a658ff5c36eb0cbf9d3:
+Corrected in commit e66314cd2be48d045e4bac10bd23cd61a6cb3d31:
 - Reworded cards as rule prototypes with independent review pending.
 - Reworded benefits as indicative and requiring department verification.
 - Corrected catalogue metrics to count pending review accurately.
 - Reworded the unpersonalized assessment notice to state that four rule prototypes are not eligibility decisions.
 - Changed the pending-scheme action to “Prepare local checklist” and added an explicit note that this is local preparation only, not an application case.
+- Added a localized status note to every preparation record stating it is not an eligibility decision or submitted application.
 
-The correction requires a fresh CI pass and deployment before it can be considered verified in the hosted UI.
+## Final hosted verification — 12 November 2026
+Exact preview: https://janasetu-6r56lvi89-pspyn.vercel.app
+Exact commit: e66314cd2be48d045e4bac10bd23cd61a6cb3d31
+Black-box run: https://agent.tinyfish.ai/runs/a4a89586-d618-464d-bbee-3f04c2e9795c
+
+The final black-box run passed the profile/assessment, corrected rule and benefit labels, review-pending explanation, local checklist, Not submitted badge, scheme approval warning, non-eligibility disclaimer, automation lock and all seven public/workspace routes. No visible console or network errors were reported. The external browser could not set a mobile viewport; the local Playwright suite passed the 390×844 mobile citizen journey and mobile navigation/viewport checks.
+
+Local verification for the same commit: 131/131 unit tests, 49/49 Playwright tests, TypeScript and production build passed. The application-preparation E2E verifies the local checklist, Not submitted status, review-pending status and submission disclaimer.
 
 ## Remaining verification
-- Re-run CI on the latest commit.
-- Deploy the exact latest commit to a fresh Vercel preview and repeat the black-box test.
-- Verify the local checklist appears with “Not submitted” and the scheme-review-pending status.
-- Verify mobile layouts at 320, 360, 390, 430, 768, 1024 and 1366 CSS-pixel widths.
+- Merge the reviewed implementation PR only after required repository checks/approvals are satisfied.
+- Promote through the protected main-branch production flow and verify the production domain.
+- Keep cloud sync, cloud document storage and government integrations disabled until their separate legal, scanner and department gates are satisfied.
 - Keep public application creation disabled until independently approved scheme versions exist.

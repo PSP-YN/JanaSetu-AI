@@ -32,10 +32,10 @@ Connected Supabase project qjiuclkhvxbnojdysmmp, region ap-south-1:
 The four seeded schemes remain unpublished/review-pending. These are intentional release gates, not demo data to fabricate.
 
 ## Hosting evidence
-Vercel project uses Next.js and Node.js 22. The latest listed deployment is READY at:
-https://janasetu-p5pajpww0-pspyn.vercel.app
+Vercel project uses Next.js and Node.js 22. The latest verified preview is READY at:
+https://janasetu-6r56lvi89-pspyn.vercel.app
 
-It was built from older commit c17742f55be77fe877e95f248e8915a3374b1914, not the latest implementation commit. The project metadata reports live=false. No production alias or production release is claimed.
+Deployment commit: e66314cd2be48d045e4bac10bd23cd61a6cb3d31 (the exact implementation and UI-correction commit). Deployment target is Preview, not Production. The Vercel project metadata reports live=false. No production alias or production release is claimed.
 
 ## Manual verification limitations
 Automated browser tests and viewport checks are not a substitute for a screen-reader user study, formal localization review, penetration test, disaster-recovery exercise or production load test.

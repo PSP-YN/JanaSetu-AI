@@ -16,8 +16,8 @@ JanaSetu is an independent, multilingual public-benefits navigation and applicat
 ## Links
 - Repository: https://github.com/PSP-YN/JanaSetu-AI
 - Implementation PR: https://github.com/PSP-YN/JanaSetu-AI/pull/22
-- CI run #615: https://github.com/PSP-YN/JanaSetu-AI/actions/runs/43087222726
-- Existing Vercel preview (older commit, not latest): https://janasetu-p5pajpww0-pspyn.vercel.app
+- Earlier GitHub Actions verification (commit 38f0a8e): https://github.com/PSP-YN/JanaSetu-AI/actions/runs/43087222726
+- Latest verified Vercel preview (Preview target, not Production): https://janasetu-6r56lvi89-pspyn.vercel.app
 
 ## Honest submission scope
 The working prototype demonstrates a local-first citizen workflow, six interface languages, source-linked scheme catalogue records, deterministic preliminary assessment, draft preparation, reminders and portable JSON backup/restore. It does not yet have an independently approved published scheme, active legally approved consent policy, live scanner worker, production-authorized government adapter or verified government submission.
