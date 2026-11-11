@@ -51,6 +51,9 @@ test("citizens can delete their own documents after storage removal and same-ori
 test("document upload enforces streamed body limits and byte-level MIME signatures",()=>{
  const route=read("app/api/documents/route.ts");
  assert.match(route,/readLimitedForm/);
+ assert.match(route,/message\.includes\("case_not_found"\)\)return json\(\{error:"Application case not found\."\},404\)/);
+ assert.match(route,/message\.includes\("invalid_filename"\)\)return json\(\{error:"The file name is not valid\."\},400\)/);
+ assert.match(route,/message\.includes\("unsupported_document_type_or_size"\)\)return json\(\{error:"The file type or size is not supported\."\},415\)/);
  assert.match(route,/request_body_too_large/);
  assert.match(route,/hasValidSignature/);
  assert.match(route,/%PDF-/);
