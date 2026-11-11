@@ -21,7 +21,7 @@ export async function GET(_request:NextRequest,{params}:{params:Promise<{documen
    return json({error:"This document is unavailable. It may still be quarantined, rejected, or owned by another account."},404);
   }
   const metadata=await metadataResponse.json() as {object_name?:string;filename?:string;mime_type?:string;size?:number};
-  if(typeof metadata.storage_object_name!=="string"||!/^[0-9a-f-]{36}\/[0-9a-f-]{36}\/[0-9a-f-]{36}\/[0-9a-f-]{36}\.(pdf|jpg|png)$/i.test(metadata.storage_object_name)||
+  if(typeof metadata.object_name!=="string"||!/^[0-9a-f-]{36}\/[0-9a-f-]{36}\/[0-9a-f-]{36}\/[0-9a-f-]{36}\.(pdf|jpg|png)$/i.test(metadata.object_name)||
      typeof metadata.filename!=="string"||metadata.filename.length>255||!TYPES.has(String(metadata.mime_type))||
      !Number.isInteger(metadata.size)||Number(metadata.size)<1||Number(metadata.size)>12*1024*1024)return json({error:"Document metadata failed validation."},503);
   const objectPath=metadata.object_name.split("/").map(encodeURIComponent).join("/");
