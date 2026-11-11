@@ -23,6 +23,7 @@ The portable vault encryption and malware scanning are separate controls. Encryp
 On Fedora:
 ```bash
 sudo dnf install clamav clamav-update
+sudo freshclam
 chmod +x scripts/scan-local-document.sh
 ./scripts/scan-local-document.sh /path/to/document.pdf
 ```
