@@ -77,7 +77,7 @@ test("scanner service is private, signature-fresh and fails closed",()=>{
  assert.match(worker,/object\/authenticated\/citizen-documents/);
  assert.match(compose,/read_only: true/);
  assert.match(compose,/cap_drop:/);
- assert.match(compose,/cap_add:[\\s\\S]*CHOWN[\\s\\S]*SETUID[\\s\\S]*SETGID/);
+ assert.match(compose,/cap_add:[\s\S]*CHOWN[\s\S]*SETUID[\s\S]*SETGID/);
  assert.doesNotMatch(compose,/ports:/);
  assert.match(entrypoint,/freshclam/);
 });
