@@ -6,7 +6,15 @@ export type PublicScheme = {
 };
 const base=()=>process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/,"");
 const key=()=>process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const safeUrl=(value:unknown)=>typeof value==="string"&&/^https:\/\//i.test(value)?value:null;
+export function isOfficialSchemeSource(value:unknown):value is string{
+ if(typeof value!=="string")return false;
+ try{
+  const url=new URL(value);const host=url.hostname.toLowerCase();
+  return url.protocol==="https:"&&!url.username&&!url.password&&!url.port&&
+   (host==="gov.in"||host.endsWith(".gov.in")||host==="nic.in"||host.endsWith(".nic.in"));
+ }catch{return false;}
+}
+const safeUrl=(value:unknown)=>isOfficialSchemeSource(value)?value:null;
 async function rest<T>(path:string):Promise<T|null>{
  const url=base(),anon=key();if(!url||!anon)return null;
  try{const response=await fetch(url+"/rest/v1/"+path,{headers:{apikey:anon,Accept:"application/json"},next:{revalidate:3600}});
@@ -23,7 +31,7 @@ function isFreshApprovedRuleSet(value:unknown):value is Record<string,unknown>{
  return value.rules.every(rule=>{
   if(!isRecord(rule)||rule.reviewStatus!=="approved"||typeof rule.label!=="string"||!isRecord(rule.evidence))return false;
   const evidence=rule.evidence;const checked=typeof evidence.sourceCheckedAt==="string"?Date.parse(evidence.sourceCheckedAt):NaN;
-  return typeof evidence.sourceUrl==="string"&&/^https:\/\//i.test(evidence.sourceUrl)&&
+  return isOfficialSchemeSource(evidence.sourceUrl)&&
    typeof evidence.sourceHash==="string"&&/^[a-f0-9]{64}$/i.test(evidence.sourceHash)&&
    typeof evidence.excerpt==="string"&&evidence.excerpt.trim().length>=12&&
    Number.isFinite(checked)&&checked<=now+86400000&&now-checked<=90*86400000;
