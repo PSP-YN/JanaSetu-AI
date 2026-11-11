@@ -197,3 +197,13 @@ No permission, partner approval, production API credentials or portal sandbox cr
 - Direct Supabase Storage reads and the application download endpoint both require a clean scan, document ownership, the exact upload consent, matching case/scheme-version scope, a current active legal-approved document-storage policy, and no later consent revocation.
 - Verified database function definitions and grants: authenticated callers can invoke the private predicates/download path; anon cannot. The storage SELECT policy delegates to the consent-aware predicate.
 - Current database state remains fail-closed: zero document rows, zero active scanner identities and zero active legally approved document-storage policies. No citizen documents were created or accessed during this verification.
+
+
+## Consent-revocation cleanup and citizen deletion — 11 November 2026
+
+- Added an exact document-storage consent predicate binding the citizen, application case, captured consent ID, scheme version, action scope, active legal-approved policy and revocation history.
+- The scanner claim path now re-checks consent before every scan; the Storage scanner-read policy also re-checks it. If consent expires or is revoked, the document moves to a deletion-only queue and can no longer be scanned or downloaded.
+- The private scanner can delete only an object held under its active cleanup lease. It cannot delete ordinary citizen documents or other workers' objects. Metadata is removed only after Storage confirms the object is absent.
+- Added a citizen-authenticated DELETE API for owned documents. It checks same-origin context, deletes the private Storage object first, and removes metadata only after confirming that the object no longer exists. This works for quarantined, rejected and clean records and does not require active consent.
+- The worker's cleanup path never downloads or scans a consent-revoked document. Cleanup retries use a lease and treat Storage 404 as an idempotent success.
+- This is implemented but not yet live: there are zero document rows, no scanner identity, and no active legally approved document-storage policy. The scanner container is built and its protocol tests pass; a persistent private worker host and authorised scanner credentials still need provisioning.
