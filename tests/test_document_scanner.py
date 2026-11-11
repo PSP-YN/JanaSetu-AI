@@ -65,10 +65,6 @@ class ScannerTests(unittest.TestCase):
                 worker.scan_bytes(b"test")
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
     def test_process_one_uses_atomic_claim_metadata_and_attests_clean_only_after_scan(self):
         item = {
             "id": "11111111-1111-4111-8111-111111111111",
@@ -76,9 +72,11 @@ if __name__ == "__main__":
             "mime_type": "application/pdf",
             "expected_size": 13,
         }
-        with patch.object(worker, "download_document", return_value=b"%PDF-1.7 test"), \\
-             patch.object(worker, "scan_bytes", return_value="clean") as scan, \\
-             patch.object(worker, "attest") as attest:
+        with (
+            patch.object(worker, "download_document", return_value=b"%PDF-1.7 test"),
+            patch.object(worker, "scan_bytes", return_value="clean") as scan,
+            patch.object(worker, "attest") as attest,
+        ):
             worker.process_one(item, "scanner-jwt", "ClamAV test")
         scan.assert_called_once()
         attest.assert_called_once()
@@ -97,3 +95,7 @@ if __name__ == "__main__":
             with self.assertRaises(RuntimeError):
                 worker.process_one(item, "scanner-jwt", "ClamAV test")
         download.assert_not_called()
+
+
+if __name__ == "__main__":
+    unittest.main()
