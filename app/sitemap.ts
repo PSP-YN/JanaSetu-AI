@@ -16,7 +16,7 @@ export default async function sitemap():Promise<MetadataRoute.Sitemap>{
   {url:base+"/terms",lastModified:now,changeFrequency:"yearly",priority:0.3}
  ];
  const schemes=await listPublicSchemes();
- const guidePages:MetadataRoute.Sitemap=schemes.map(scheme=>({
+ const guidePages:MetadataRoute.Sitemap=schemes.filter(scheme=>scheme.sourceCheckedAt&&Number.isFinite(Date.parse(scheme.sourceCheckedAt))&&Date.now()-Date.parse(scheme.sourceCheckedAt)<=90*86400000).map(scheme=>({
   url:base+"/schemes/"+scheme.slug,
   lastModified:scheme.sourceCheckedAt&&Number.isFinite(Date.parse(scheme.sourceCheckedAt))?new Date(scheme.sourceCheckedAt):now,
   changeFrequency:"weekly",priority:0.8
