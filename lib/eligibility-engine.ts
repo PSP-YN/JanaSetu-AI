@@ -45,7 +45,32 @@ const FORBIDDEN = /(aadhaar|aadhar|bank|account_number|ifsc|otp|password|biometr
 const OPERATORS = new Set<Operator>(["eq","neq","gt","gte","lt","lte","in","not_in","is_true","is_false"]);
 const isRecord = (value: unknown): value is Record<string, unknown> => !!value && typeof value === "object" && !Array.isArray(value);
 const isScalar = (value: unknown): value is Scalar => typeof value === "string" || typeof value === "number" && Number.isFinite(value) || typeof value === "boolean";
-const isIsoDate = (value: unknown): value is string => typeof value === "string" && Number.isFinite(Date.parse(value));
+const isIsoDate = (value: unknown): value is string =>
+  typeof value === "string" &&
+  /^\\d{4}-\\d{2}-\\d{2}(?:T\\d{2}:\\d{2}(?::\\d{2}(?:\\.\\d{1,3})?)?(?:Z|[+-]\\d{2}:\\d{2}))?$/.test(value) &&
+  Number.isFinite(Date.parse(value));
+function indiaCalendarDate(now: Date): string {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit"
+  }).formatToParts(now);
+  const part = (type:string) => parts.find((item)=>item.type===type)?.value ?? "";
+  return part("year")+"-"+part("month")+"-"+part("day");
+}
+function outsideEffectivePeriod(from:string|null|undefined,to:string|null|undefined,now:Date):boolean {
+  const today=indiaCalendarDate(now);
+  const fromOutside=!!from && (/^\\d{4}-\\d{2}-\\d{2}$/.test(from) ? from>today : Date.parse(from)>now.getTime());
+  const toOutside=!!to && (/^\\d{4}-\\d{2}-\\d{2}$/.test(to) ? to<today : Date.parse(to)<now.getTime());
+  return fromOutside||toOutside;
+}
+function isOfficialGovernmentSource(value:unknown):value is string {
+  if(typeof value!=="string")return false;
+  try {
+    const url=new URL(value);
+    const host=url.hostname.toLowerCase();
+    return url.protocol==="https:"&&!url.username&&!url.password&&!url.port&&
+      (host==="gov.in"||host.endsWith(".gov.in")||host==="nic.in"||host.endsWith(".nic.in"));
+  } catch { return false; }
+}
 const isHash = (value: unknown): value is string => typeof value === "string" && /^[a-f0-9]{64}$/i.test(value);
 
 function parseRuleSet(value: unknown): ApprovedRuleSet | null {
@@ -62,7 +87,7 @@ function parseRuleSet(value: unknown): ApprovedRuleSet | null {
     if (ruleKeys.has(item.key)) return null;
     ruleKeys.add(item.key);
     const evidence = item.evidence;
-    if (typeof evidence.sourceUrl !== "string" || !evidence.sourceUrl.startsWith("https://") ||
+    if (!isOfficialGovernmentSource(evidence.sourceUrl) ||
       !isIsoDate(evidence.sourceCheckedAt) || !isHash(evidence.sourceHash) ||
       typeof evidence.excerpt !== "string" || evidence.excerpt.trim().length < 12 || evidence.excerpt.length > 1000) return null;
     const operator = item.operator as Operator;
@@ -126,7 +151,7 @@ export function assessApprovedScheme(profile: CitizenProfile, scheme: ApprovedSc
   }
   const rules = parseRuleSet(scheme.ruleSet);
   if (!rules) return { ...base,state:"needs_verification",headline:"Eligibility rules are not machine-verifiable",explanation:"The published scheme does not contain a complete, approved, supported rule-set version. No automated assessment was made.",nextActions:["Complete the structured eligibility rules and independent review."] };
-  if (scheme.effectiveFrom && Date.parse(scheme.effectiveFrom) > now.getTime() || scheme.effectiveTo && Date.parse(scheme.effectiveTo) < now.getTime()) {
+  if (outsideEffectivePeriod(scheme.effectiveFrom,scheme.effectiveTo,now)) {
     return { ...base,state:"needs_verification",headline:"Scheme version is outside its effective period",explanation:"The approved scheme version is not currently effective.",nextActions:["Check the latest official scheme notification."] };
   }
   const checks: RuleCheck[] = rules.rules.map((rule) => {
