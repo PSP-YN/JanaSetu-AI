@@ -80,3 +80,43 @@ No approval is implied until this section is completed by the qualified reviewer
 The official MeitY source page now lists the Digital Personal Data Protection Rules, 2025, a corrigendum dated 16 December 2025 and the official enforcement timeline. The Act and Rules have phased commencement dates; the legal-review plan records the extracted dates and primary Gazette links. Counsel must verify the exact current Gazette/corrigendum position and later notifications before giving advice.
 
 This PIA remains a draft. It is not a DPIA approval, legal opinion or compliance certification. See docs/review-plans/legal-review.md for the required counsel deliverables and docs/review-plans/language-review.md for the six-locale human review plan.
+
+
+## 9. Architecture and activation addendum — 11 November 2026
+
+This addendum supersedes any earlier assumption that the project has no server-side citizen-data architecture. The current repository and connected Supabase project now include authenticated workspace and application-case services, purpose-specific consent checks, a private document-quarantine schema, a ClamAV worker implementation and a role-gated scheme-review workflow. This is implementation evidence, not proof that the controls have been independently audited or that the feature is activated.
+
+### Current backend data flows
+
+| Flow | Implemented path | Activation status and consequence |
+|---|---|---|
+| Citizen account | Next.js auth routes proxy Supabase Auth; session tokens are stored in HttpOnly cookies; callback state is bound to a browser cookie | Authentication code exists. Account creation does not authorize cloud storage or scheme processing. Hosting/Auth provider logging and retention still need contractual review. |
+| Cloud workspace | Authenticated /api/workspace routes and private workspace storage | The cloud_workspace_sync policy registry is empty. No approved policy means sync must fail closed; local workspace remains the usable mode. |
+| Application preparation | Authenticated case creation, profile snapshot, scheme-version binding and preparation fields | The profile_storage policy registry is empty and all schemes are pending. No application case can be prepared against the current catalogue. |
+| Document upload | Authenticated multipart upload to private citizen-documents storage; metadata in private.citizen_documents; clean-only retrieval | The document_storage policy registry is empty. Upload must be blocked before bytes are persisted. No document bytes should be uploaded in testing until counsel approves the exact purpose and notice. |
+| Malware scanning | Dedicated scanner-role account claims leased jobs, scans with ClamAV and attests clean/rejected/error | No scanner identity or worker host exists. A Render background-worker Blueprint is prepared but could not be planned because the workspace requires payment information; no service was created. Quarantine must remain inaccessible. |
+| Scheme review | Private reviewer roles and distinct source/rule/legal approvals plus separate publisher | Four seed versions are review_pending; no approval rows or reviewer roles are present. Do not create synthetic reviewers or approvals. |
+| Government adapter | Scheme integration registry and consent-bound automation request path | Four portal-only records exist; none is production-authorized. No external submission or portal automation is enabled. |
+
+### Database and infrastructure facts verified on 11 November 2026
+
+- Supabase is hosted in Mumbai, India.
+- 41 migration versions are recorded by Supabase and exactly match the repository filenames.
+- RLS is enabled on all five private operational tables: application preparations, citizen documents, consent policy versions, scanner roles and reviewer roles. anon and authenticated have no direct DML privileges on these tables.
+- A database trigger and check constraint bind each scheme-version SHA-256 to both content and rule_set; changes to review-relevant version fields are rejected after the first review approval.
+- The consent-policy registry has zero approved versions; the citizen consent table has no active grants.
+- Four schemes remain review_pending; no version is published.
+- The scanner-role registry has zero active identities.
+- Four integration registry entries are portal-only; none has an authorization reference or production approval.
+
+### Remaining privacy/security evidence
+
+1. Qualified Indian counsel must review the exact data-flow, notice, consent purposes, legal basis, retention schedule, processor contracts, children/minors handling, grievance process, rights requests and breach response against the law and commencement dates in force on the advice date.
+2. Confirm hosting, Supabase Auth, Vercel, Render, speech recognition, analytics, CDN and error-monitoring provider regions, subprocessors, access controls and log-retention settings from the actual provider dashboards/contracts. Repository inspection cannot prove provider-side deletion.
+3. Capture browser network traces for account creation, local-only use, consent withdrawal, blocked cloud sync, blocked document upload and error handling. Verify no profile, document or token appears in logs.
+4. Obtain independent penetration-test results on a staging deployment after the current commit can be deployed. The latest available Vercel READY deployment is from an older commit; the current branch preview is blocked by the account's deployment API quota.
+5. Keep the consent-policy registry empty and storage features disabled until counsel's written approval and the product owner's documented activation decision are recorded.
+
+### Approval record — unchanged and intentionally blank
+
+No counsel, privacy officer or independent security assessor has signed this addendum. Do not represent the product as DPDP-compliant or production-approved on the basis of implementation changes alone.
