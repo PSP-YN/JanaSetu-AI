@@ -9,8 +9,11 @@ test("public scheme guides expose only published, independently approved version
  assert.match(source,/verification_status!==\"independently_approved\"/);
  assert.match(source,/isFreshApprovedRuleSet\(version\.rule_set\)/);
  assert.match(source,/sourceHash/);
- assert.match(source,/90\*86400000/);
+ assert.match(source,/isApprovedRuleSetForPublication/);
+ assert.match(source,/isWithinSchemeEffectivePeriod/);
  assert.match(source,/https:/);
+ assert.match(source,/throw error instanceof Error/);
+ assert.match(source,/sourceCheckedAt:source\?\.last_checked_at\|\|null/);
 });
 
 test("scheme SEO pages contain source links, honest government disclaimer and no submission claim",()=>{
