@@ -193,7 +193,7 @@ No permission, partner approval, production API credentials or portal sandbox cr
 
 ## Private document read-path hardening — 11 November 2026
 
-- Applied migration `20261111142000_enforce_document_consent_on_storage_reads` to the dedicated JanaSetu database.
+- Applied migration `20261111131254_enforce_document_consent_on_storage_reads` to the dedicated JanaSetu database.
 - Direct Supabase Storage reads and the application download endpoint both require a clean scan, document ownership, the exact upload consent, matching case/scheme-version scope, a current active legal-approved document-storage policy, and no later consent revocation.
 - Verified database function definitions and grants: authenticated callers can invoke the private predicates/download path; anon cannot. The storage SELECT policy delegates to the consent-aware predicate.
 - Current database state remains fail-closed: zero document rows, zero active scanner identities and zero active legally approved document-storage policies. No citizen documents were created or accessed during this verification.
