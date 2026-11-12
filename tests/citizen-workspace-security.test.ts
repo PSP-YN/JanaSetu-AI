@@ -389,3 +389,8 @@ test("encrypted sync refuses to overwrite a pre-existing plaintext workspace dur
   assert.match(route, /legacy_workspace_data_present/);
   assert.match(route, /It was not changed/);
 });
+
+test("future postgres functions do not inherit PUBLIC EXECUTE", () => {
+  const migration = read("supabase/migrations/20261112025319_revoke_global_default_function_execute.sql");
+  assert.match(migration, /ALTER DEFAULT PRIVILEGES FOR ROLE postgres REVOKE EXECUTE ON FUNCTIONS FROM PUBLIC/i);
+});
