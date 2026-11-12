@@ -22,7 +22,7 @@ JanaSetu is an independent, multilingual public-benefits discovery and applicati
 - Browser-local workspace data and password-encrypted local backup/restore.
 - Expanded citizen profile covering contact, address, household, agriculture and education details, with a separate citizen-confirmed plaintext export for the browser form assistant.
 - Signed-in, plan-only application automation endpoint and dashboard: profile completeness, approved-scheme checks, evidence gaps and official portal handoff. The planner does not persist the submitted profile.
-- Experimental browser form assistant for supported official domains: previews matching non-sensitive fields for citizen approval; it does not upload documents or submit applications.
+- Browser Form Assistant: imports a citizen-confirmed profile export and previews selected fields. Live portal filling is blocked unless an exact route has independent review and department authorization; none of the four initial scheme routes is currently authorized. It never uploads documents or submits applications.
 
 ## What is intentionally not in this release
 
