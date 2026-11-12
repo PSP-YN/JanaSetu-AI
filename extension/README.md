@@ -1,10 +1,10 @@
 # JanaSetu Form Assistant — installation and usage
 
-The extension is a user-triggered, field-by-field form-filling helper for Chromium-based browsers. It is **not** an official government integration and does not submit applications.
+The extension is a user-triggered, field-by-field form-filling helper for Chromium-based browsers. It is **not** an official government integration and does not submit applications. It can fill only fields it can match safely; no universal scheme-portal compatibility is claimed.
 
 ## Install on Chrome or Brave
 
-1. Download the repository ZIP from [JanaSetu-AI](https://github.com/PSP-YN/JanaSetu-AI/archive/refs/heads/main.zip) and extract it.
+1. Download the repository ZIP from [JanaSetu-AI](https://github.com/PSP-YN/JanaSetu-AI/archive/refs/heads/backend/harden-supabase-access.zip) and extract it.
 2. Open `chrome://extensions` in Chrome or `brave://extensions` in Brave.
 3. Enable **Developer mode**.
 4. Select **Load unpacked**.
@@ -20,7 +20,7 @@ The extension is a user-triggered, field-by-field form-filling helper for Chromi
 5. Click **Preview matching fields**. The extension inspects only visible, empty controls on HTTPS `.gov.in` and `.nic.in` hosts.
 6. Review the suggested label and value for every field. Invalid length/range fields and custom-pattern fields are disabled for manual entry.
 7. Select only the individual fields you approve, then click **Fill selected fields**.
-8. Re-check every filled value on the portal. Complete OTP, CAPTCHA, identity proofing, document upload and any other required steps yourself. Submit only through the official portal after your final review.
+8. Re-check every filled value on the portal. JanaSetu stops after filling: it does not click Next, Apply, Save or Submit, upload documents, or complete OTP/CAPTCHA/identity checks. Any further portal interaction is performed manually by the citizen.
 
 ## Safety and privacy
 

@@ -62,6 +62,8 @@ test("extension popup imports the reviewed backup language and click-fills only 
   await fields.nth(1).check();
   await page.locator("#apply").click();
   await expect(page.locator("#status")).toContainText("2 ಹೊಂದಾಣಿಕೆಯ ಕ್ಷೇತ್ರ");
+  await expect(page.locator("#status")).toContainText("ಇಲ್ಲಿಯೇ ನಿಲ್ಲುತ್ತದೆ");
+  await expect(page.locator("#status")).not.toContainText("ಸಲ್ಲಿಸಿ");
   const call = await page.evaluate(() => (window as any).__lastScriptCall);
   expect(call.target.tabId).toBe(44);
   expect(call.args[0].fullName).toBe("Synthetic Citizen");
