@@ -20,7 +20,7 @@ JanaSetu is an independent, multilingual public-benefits discovery and applicati
 - Local application preparation, document checklists and versioned local backup/restore.
 - Expanded citizen profile for contact, address, household, agriculture and education details; a separate, citizen-triggered profile-only JSON export supports the browser assistant. That export is plaintext, not an encrypted backup.
 - Signed-in application planner in the Applications & automation dashboard. It checks published scheme rules, identifies missing profile information and documents, and produces a plan without persisting the submitted profile.
-- Experimental browser form assistant: HTTPS `.gov.in` and `.nic.in` only; citizens preview and approve each suggested field. Matching is heuristic and portal-specific; it does not upload documents or submit forms.
+- Browser Form Assistant: imports a citizen-confirmed profile export and previews selected fields. Live portal filling is blocked unless an exact route has independent review and department authorization; none of the four initial scheme routes is currently authorized. It never uploads documents or submits applications.
 - Authenticated Supabase account and private citizen-workspace foundation.
 - Client-side AES-256-GCM vault encryption and revision-aware sync API. Cloud sync is **fail-closed** until its exact consent policy has qualified privacy/legal approval and a citizen grants it.
 - Scheme adapter registry and guarded automation queue. Current database records include four scheme integrations, all `not_requested`; no external government submission is enabled.
