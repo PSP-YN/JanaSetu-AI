@@ -207,3 +207,28 @@ No permission, partner approval, production API credentials or portal sandbox cr
 - Added a citizen-authenticated DELETE API for owned documents. It checks same-origin context, deletes the private Storage object first, and removes metadata only after confirming that the object no longer exists. This works for quarantined, rejected and clean records and does not require active consent.
 - The worker's cleanup path never downloads or scans a consent-revoked document. Cleanup retries use a lease and treat Storage 404 as an idempotent success.
 - This is implemented but not yet live: there are zero document rows, no scanner identity, and no active legally approved document-storage policy. The scanner container is built and its protocol tests pass; a persistent private worker host and authorised scanner credentials still need provisioning.
+
+
+## Encrypted cross-device sync — 12 November 2026 update
+
+The encrypted sync implementation supersedes the earlier last-write-wins description above.
+
+- Browser encryption: PBKDF2-SHA-256 (600,000 iterations) and AES-256-GCM; vault password remains in browser memory.
+- API validates the strict versioned envelope, request size, same-origin write and verified authenticated session.
+- Reads and writes use guarded Supabase RPCs. Direct browser table writes remain revoked.
+- The database checks the authenticated user, active cloud_workspace_sync consent and envelope structure.
+- A monotonic revision with compare-and-swap rejects stale writes with HTTP 409.
+- Encrypted payload is stored under profile_data.encrypted_workspace_v1; document bytes remain local.
+- Existing legacy workspace fields are preserved by migration; encrypted sync refuses unsafe overwrite of incompatible legacy state.
+- Legacy plaintext workspace endpoints are retired. Do not reintroduce plaintext sync.
+- A cloud-sync policy draft is registered as inactive. It has no legal review reference and no approval timestamp. An authenticated citizen must not be shown an opt-in control until qualified review and policy-owner approval are recorded.
+- CI on feature branch commit ddfe8b4 passed: unit tests, type-check, production build, browser/accessibility suite, extension validation, dependency audit and production smoke.
+
+### Remaining live acceptance tests
+
+- Two separately authenticated test accounts: account isolation and RLS.
+- Two browsers/devices: sync, restore, wrong password, stale revision conflict and consent revocation.
+- Controlled test account lifecycle: email confirmation, recovery, sign-out and session refresh.
+- Production deployment and production-domain smoke after required Vercel status is green.
+
+A passing CI run does not substitute for these live acceptance tests or the independent legal approval.
