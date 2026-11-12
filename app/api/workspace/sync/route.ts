@@ -48,7 +48,8 @@ export async function GET() {
       if (response.status === 401 || response.status === 403) return json({ error: "Encrypted workspace access is not authorized." }, 403);
       return json({ error: "Encrypted workspace could not be restored." }, 503);
     }
-    const result = await response.json() as { vault?: unknown; revision?: number; updated_at?: string | null };
+    const result = await response.json() as { vault?: unknown; revision?: number; updated_at?: string | null; legacy_data_present?: boolean };
+    if (result.legacy_data_present) return json({ error: "An older plaintext cloud workspace exists. It was not changed. Export and verify your local backup before requesting a reviewed migration path.", code: "legacy_workspace_data_present" }, 409);
     return json({ vault: validEnvelope(result.vault) ? result.vault : null, revision: Number.isSafeInteger(result.revision) && Number(result.revision) >= 0 ? Number(result.revision) : 0, updated_at: result.updated_at ?? null });
   } catch {
     return json({ error: "Encrypted workspace could not be restored." }, 503);
@@ -76,6 +77,7 @@ export async function PUT(request: NextRequest) {
       const message = databaseErrorMessage(await response.json().catch(() => ({})));
       if (message.includes("profile_storage_consent_required")) return json({ error: "Encrypted sync is disabled until the cloud-sync privacy policy is approved and you opt in.", code: "sync_consent_unavailable" }, 403);
       if (message.includes("workspace_revision_conflict")) return json({ error: "Another device saved a newer workspace. Restore the latest version and reconcile your changes before retrying.", code: "sync_conflict" }, 409);
+      if (message.includes("legacy_workspace_data_present")) return json({ error: "An older plaintext cloud workspace exists. It was not changed. Export and verify your local backup before requesting a reviewed migration path.", code: "legacy_workspace_data_present" }, 409);
       if (response.status === 401 || response.status === 403) return json({ error: "Encrypted workspace access is not authorized." }, 403);
       if (message.includes("invalid_encrypted_workspace_envelope")) return json({ error: "The encrypted vault envelope is invalid." }, 400);
       return json({ error: "Encrypted workspace could not be saved." }, 503);
