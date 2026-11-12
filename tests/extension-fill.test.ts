@@ -37,7 +37,7 @@ function input({type="text",name,id,label,value=""}:{type?:string;name:string;id
   maxLength:-1,min:"",max:"",labels:[{innerText:label}],options:[],selectedIndex:0,
   getAttribute:(_key:string)=>"",closest:(_selector?:string)=>null,getClientRects:()=>[{}],dispatchEvent:(_event:Event)=>{}};
 }
-const profile:Record<string,unknown>={fullName:"Citizen Example",age:28,gender:"woman",state:"Karnataka",district:"Mysuru",residenceType:"rural",annualIncome:250000,occupation:"Farmer",hasCultivableLand:true,pmKisanExcluded:"no",ownsPuccaHouse:null,previousHousingBenefit:"unknown",householdHasLpg:null,poorHouseholdDeclaration:null,isStudent:false,top20Percentile:null,regularUndergraduate:null,otherScholarship:null,diplomaOrDistance:null};
+const profile:Record<string,unknown>={fullName:"Citizen Example",age:28,gender:"woman",state:"Karnataka",district:"Mysuru",residenceType:"rural",annualIncome:250000,occupation:"Farmer",hasCultivableLand:true,pmKisanExcluded:"no",ownsPuccaHouse:null,previousHousingBenefit:"unknown",householdHasLpg:null,poorHouseholdDeclaration:null,isStudent:false,top20Percentile:null,regularUndergraduate:null,otherScholarship:null,diplomaOrDistance:null,mobileNumber:"9876543210",emailAddress:"citizen@example.test",addressLine1:"12 Test Road",addressLine2:"Near Park",villageOrTown:"Mysuru",pincode:"570001",fatherOrGuardianName:"Synthetic Guardian",motherName:"Synthetic Mother",socialCategory:"OBC",landholdingAcres:1.5,institutionName:"Synthetic College",courseName:"Computer Science",courseYear:"2nd year",rationCardCategory:"PHH"};
 
 test("extension previews matching fields without changing portal values",()=>{
  const name=input({name:"applicant_name",id:"applicant-name",label:"Applicant name"});
@@ -102,4 +102,16 @@ test("custom portal patterns require manual entry",()=>{
  const preview=runFill([name],profile).preview;
  assert.equal(preview[0].valid,false);
  assert.match(preview[0].reason,/manual validation/i);
+});
+
+test("extension previews additional reviewed profile fields while keeping phone and email fields blocked",()=>{
+ const pin=input({name:"postal_code",id:"postal-code",label:"PIN code"});
+ const college=input({name:"institution_name",id:"institution-name",label:"Institution name"});
+ const phone=input({name:"mobile_number",id:"mobile-number",label:"Mobile number"});
+ const email=input({name:"email",id:"email",label:"Email address"});
+ const result=runFill([pin,college,phone,email],profile);
+ assert.equal(result.preview.length,2);
+ assert.deepEqual(result.preview.map(item=>item.value),["570001","Synthetic College"]);
+ assert.equal(phone.value,"");
+ assert.equal(email.value,"");
 });
