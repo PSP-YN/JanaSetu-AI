@@ -25,7 +25,7 @@ const isBoolOrNull = (value: unknown): value is boolean | null => value === null
 const isNumberOrEmpty = (value: unknown, max: number): value is number | "" =>
   value === "" || (typeof value === "number" && Number.isFinite(value) && value >= 0 && value <= max);
 
-export function parseCitizenProfile(value: unknown): CitizenProfile | null {
+export function parseCitizenProfile(value: unknown, options: { allowIncompleteContact?: boolean } = {}): CitizenProfile | null {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;
   const input = value as Record<string, unknown>;
   if (Object.keys(input).some((key) => !keys.includes(key as keyof CitizenProfile))) return null;
@@ -45,9 +45,9 @@ export function parseCitizenProfile(value: unknown): CitizenProfile | null {
   if (typeof profile.fullName !== "string" || profile.fullName.length > 100) return null;
   const boundedText: (keyof CitizenProfile)[] = ["mobileNumber","emailAddress","addressLine1","addressLine2","villageOrTown","pincode","fatherOrGuardianName","motherName","institutionName","courseName","courseYear"];
   for (const key of boundedText) if (typeof profile[key] !== "string" || String(profile[key]).length > 160) return null;
-  if (profile.mobileNumber && !/^\+?[0-9]{10,13}$/.test(profile.mobileNumber.replace(/[\s-]/g,""))) return null;
-  if (profile.emailAddress && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.emailAddress)) return null;
-  if (profile.pincode && !/^[0-9]{6}$/.test(profile.pincode)) return null;
+  if (!options.allowIncompleteContact && profile.mobileNumber && !/^\+?[0-9]{10,13}$/.test(profile.mobileNumber.replace(/[\s-]/g,""))) return null;
+  if (!options.allowIncompleteContact && profile.emailAddress && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.emailAddress)) return null;
+  if (!options.allowIncompleteContact && profile.pincode && !/^[0-9]{6}$/.test(profile.pincode)) return null;
   if (!["","General","OBC","SC","ST","EWS","Other"].includes(profile.socialCategory ?? "")) return null;
   if (!["","AAY","PHH","BPL","APL","Other"].includes(profile.rationCardCategory ?? "")) return null;
   if (!isNumberOrEmpty(profile.landholdingAcres, 100000)) return null;

@@ -21,7 +21,7 @@ JanaSetu separates a shared citizen application workflow from scheme-specific po
 
 The signed-in Applications & automation dashboard reads the citizen's browser-local profile and calls `POST /api/automation/plan`. The API validates the profile, loads the current published scheme version using the authenticated Supabase session, derives the preliminary assessment server-side and returns a plan-only response. It does not persist the submitted profile, create an application case or execute a portal action. The profile-only export for the browser extension is a separate plaintext JSON file created only after the citizen confirms the warning.
 
-The four seeded schemes currently have no independently approved versions or department-authorized portal actions. Their planner output therefore remains a preparation/manual-handoff plan; no production government form autofill is enabled by these adapter records.
+The four seeded schemes currently have no independently approved versions or department-authorized portal actions. Their planner output is therefore verification-required, with discovery-only checklist hints explicitly labelled unverified and a manual official-portal handoff. It is not a preparation-ready plan, does not create an application case, and does not enable live government form filling.
 
 ## Adapter contract
 

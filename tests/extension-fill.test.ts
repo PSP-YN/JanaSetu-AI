@@ -128,3 +128,14 @@ test("extension treats postal PIN as a fillable address field but blocks securit
  assert.equal(result.preview[0].key,"pincode");
  assert.equal(result.preview[0].value,"570001");
 });
+
+test("OTP and authentication PIN identifiers stay blocked even when another field label says postal PIN code", () => {
+ const deceptiveOtp=input({name:"otp",id:"otp",label:"PIN code"});
+ const compactSecurityPin=input({name:"securitypin",id:"securitypin",label:"Applicant name"});
+ const mobilePin=input({name:"mpin",id:"mpin",label:"Mobile number"});
+ const result=runFill([deceptiveOtp,compactSecurityPin,mobilePin],profile);
+ assert.equal(result.preview.length,0);
+ assert.equal(deceptiveOtp.value,"");
+ assert.equal(compactSecurityPin.value,"");
+ assert.equal(mobilePin.value,"");
+});

@@ -48,10 +48,13 @@ function fillProfileInPage(profile,approvedFields){
     courseYear:["year of study","current academic year","study year","course year","अध्ययन वर्ष","ಅಧ್ಯಯನ ವರ್ಷ","படிப்பு ஆண்டு","చదువు సంవత్సరం","പഠന വർഷം"],
     rationCardCategory:["ration card category","ration card type","ration card classification","राशन कार्ड श्रेणी","ಪಡಿತರ ಚೀಟಿ ವರ್ಗ","குடும்ப அட்டை வகை","రేషన్ కార్డు వర్గం","റേഷൻ കാർഡ് വിഭാഗം"]
   };
-  const isSensitive=(text)=>{
-    const normalized=norm(text);
-    if(/(?:postal pin|pin code|pincode|postal code|zip code)/.test(normalized))return false;
-    return /(?:^| )(?:aadhaar|aadhar|uidai|pan|bank|account|ifsc|otp|captcha|password|passcode|pin|identity|document|upload|file)(?: |$)/.test(normalized);
+  const isSensitive=(parts)=>{
+    const normalizedParts=(Array.isArray(parts)?parts:[parts]).map(norm);
+    const protectedTerm=/(?:^| )(?:aadhaar|aadhar|uidai|pan|bank|account|ifsc|otp|captcha|password|passcode|identity|document|upload|file|security pin|securitypin|mpin|atm pin|atm_pin|transaction pin|transaction_pin|debit pin|credit pin|login pin)(?: |$)/;
+    if(normalizedParts.some(part=>protectedTerm.test(part)))return true;
+    const postalTerm=/(?:postal pin|pin code|pincode|postal code|zip code)/;
+    const ambiguousPin=/(?:^| )pin(?: |$)/;
+    return normalizedParts.some(part=>ambiguousPin.test(part)&&!postalTerm.test(part));
   };
   const profileValue=(key)=>{
     let value=profile[key];
@@ -91,8 +94,7 @@ function fillProfileInPage(profile,approvedFields){
       if(group.some(item=>item.checked))continue;
       const legend=element.closest("fieldset")?.querySelector("legend")?.innerText||"";
       const parts=[...fieldParts(element),norm(legend)];
-      const allText=parts.join(" ");
-      if(isSensitive(allText))continue;
+      if(isSensitive(parts))continue;
       const key=Object.keys(aliases).find(name=>aliases[name].some(alias=>matchesAlias(parts,alias)));
       if(!key)continue;
       const value=profileValue(key);if(!value)continue;
@@ -105,14 +107,14 @@ function fillProfileInPage(profile,approvedFields){
       continue;
     }
     if(element.type==="checkbox"||element.type==="file"||element.type==="password")continue;
-    const parts=fieldParts(element);const joined=parts.join(" ");
-    if(isSensitive(joined))continue;
+    const parts=fieldParts(element);
+    if(isSensitive(parts))continue;
     const key=Object.keys(aliases).find(name=>aliases[name].some(alias=>matchesAlias(parts,alias)));
     if(!key)continue;
     const duplicates=controls.filter(candidate=>{
       if(candidate.type==="radio"||candidate.type==="checkbox"||candidate.type==="file")return false;
       const candidateParts=fieldParts(candidate);
-      return !isSensitive(candidateParts.join(" "))&&aliases[key].some(alias=>matchesAlias(candidateParts,alias));
+      return !isSensitive(candidateParts)&&aliases[key].some(alias=>matchesAlias(candidateParts,alias));
     });
     if(duplicates.length>1)continue;
     const value=profileValue(key);if(!value)continue;

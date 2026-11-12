@@ -44,7 +44,12 @@ const PROFILE_FIELDS = new Set<ProfileField>([
   "fatherOrGuardianName","motherName","socialCategory","landholdingAcres","institutionName",
   "courseName","courseYear","rationCardCategory"
 ]);
-const FORBIDDEN = /(aadhaar|aadhar|bank|account_number|ifsc|otp|password|biometric|(?:^|[^a-z0-9])pin(?:$|[^a-z0-9]))/i;
+const FORBIDDEN = /(aadhaar|aadhar|bank|account_number|ifsc|otp|password|biometric|(?:security|atm|transaction|debit|credit|login|m)[_-]?pin(?:$|[^a-z0-9])|(?:^|[^a-z0-9])pin(?:$|[^a-z0-9]))/i;
+const isForbiddenIdentifier = (value: string) => {
+  const normalized = value.toLowerCase().replace(/[^a-z0-9]/g, "");
+  if (["pincode", "postalpin", "postalcode", "zipcode"].includes(normalized)) return false;
+  return FORBIDDEN.test(value);
+};
 const OPERATORS = new Set<Operator>(["eq","neq","gt","gte","lt","lte","in","not_in","is_true","is_false"]);
 const isRecord = (value: unknown): value is Record<string, unknown> => !!value && typeof value === "object" && !Array.isArray(value);
 const isScalar = (value: unknown): value is Scalar => typeof value === "string" || typeof value === "number" && Number.isFinite(value) || typeof value === "boolean";
@@ -86,7 +91,7 @@ function parseRuleSet(value: unknown): ApprovedRuleSet | null {
       typeof item.profileField !== "string" || !PROFILE_FIELDS.has(item.profileField as ProfileField) ||
       typeof item.operator !== "string" || !OPERATORS.has(item.operator as Operator) ||
       item.reviewStatus !== "approved" || !isRecord(item.evidence)) return null;
-    if (FORBIDDEN.test(item.key) || FORBIDDEN.test(item.profileField)) return null;
+    if (isForbiddenIdentifier(item.key) || isForbiddenIdentifier(item.profileField)) return null;
     if (ruleKeys.has(item.key)) return null;
     ruleKeys.add(item.key);
     const evidence = item.evidence;
@@ -109,7 +114,7 @@ function parseRuleSet(value: unknown): ApprovedRuleSet | null {
         typeof item.label !== "string" || !item.label.trim() || item.label.length > 180 ||
         typeof item.profileField !== "string" || !PROFILE_FIELDS.has(item.profileField as ProfileField) ||
         typeof item.required !== "boolean" || !["text","number","boolean"].includes(String(item.type))) return null;
-      if (FORBIDDEN.test(item.key) || FORBIDDEN.test(item.profileField) || fieldKeys.has(item.key)) return null;
+      if (isForbiddenIdentifier(item.key) || isForbiddenIdentifier(item.profileField) || fieldKeys.has(item.key)) return null;
       fieldKeys.add(item.key);
       if (item.maxLength !== undefined && (!Number.isInteger(item.maxLength) || Number(item.maxLength) < 1 || Number(item.maxLength) > 500)) return null;
       if (item.min !== undefined && (typeof item.min !== "number" || !Number.isFinite(item.min))) return null;
@@ -121,6 +126,16 @@ function parseRuleSet(value: unknown): ApprovedRuleSet | null {
     application = { fields, documents:value.application.documents as string[] };
   }
   return { schemaVersion:1,state:"approved",rules,application };
+}
+
+export function getApprovedApplicationRequirements(scheme: ApprovedSchemeVersion): { requiredFields: { key: string; profileField: ProfileField }[]; documents: string[] } | null {
+  if (scheme.publicationStatus !== "published" || scheme.verificationStatus !== "independently_approved") return null;
+  const rules = parseRuleSet(scheme.ruleSet);
+  if (!rules?.application || rules.application.fields.length === 0) return null;
+  return {
+    requiredFields: rules.application.fields.filter((field) => field.required).map((field) => ({ key: field.key, profileField: field.profileField })),
+    documents: [...rules.application.documents]
+  };
 }
 
 export function isApprovedRuleSetForPublication(value: unknown, now = new Date()): boolean {

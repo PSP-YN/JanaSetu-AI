@@ -1,13 +1,13 @@
 # JanaSetu AI backend implementation status
 
 **Updated:** 12 November 2026
-**Current release candidate:** [PR #29](https://github.com/PSP-YN/JanaSetu-AI/pull/29) · integration commit `5df3f5ddc8a9fcaddfa0bf8da75cf6bbfa0b8dd9`
+**Current release candidate:** [PR #29](https://github.com/PSP-YN/JanaSetu-AI/pull/29) · initial integration baseline `5df3f5ddc8a9fcaddfa0bf8da75cf6bbfa0b8dd9` · follow-up review fixes are included in the current PR head
 **Supabase project:** JanaSetu-AI · Mumbai (ap-south-1) · `qjiuclkhvxbnojdysmmp`
 **Vercel project:** `psp-adb0 / jana-setu-ai` · canonical domain `jana-setu-ai.vercel.app`
 
 ## Current release state
 
-The integration branch includes the current citizen workspace, application planner, consent-gated automation foundation, exact-route portal registry, encrypted vault foundation, and the latest safe release baseline. Local verification passed: 167 unit tests, TypeScript, production build, 63 Playwright tests, 10 scanner tests, extension syntax/manifest validation and npm high-severity audit. The new-account Vercel preview built successfully and its route/API smoke checks passed. See `docs/production-readiness.md` and `docs/operations-runbook.md` for the authoritative current capability matrix and release evidence.
+The integration branch includes the current citizen workspace, application planner, consent-gated automation foundation, exact-route portal registry, encrypted vault foundation, and the latest safe release baseline. Follow-up review fixes now make the planner use approved application mappings, discard stale responses, preserve partial local profile edits, localize the new profile/export workflow in six languages, and keep OTP/authentication PIN identifiers blocked. Local verification passed: 173 unit tests, TypeScript, production build, 66 Playwright tests, 10 scanner tests, extension syntax/manifest validation, Supabase local migration/lint checks and npm high-severity audit. The new-account Vercel preview for the initial integration baseline built successfully; the follow-up fixes require a fresh preview before production promotion. See `docs/production-readiness.md` and `docs/operations-runbook.md` for the authoritative capability matrix and release evidence.
 
 At the time of this status update, PR #29 is awaiting merge to protected `main`. Required CI and Vercel checks passed; an optional Octopus Review status remained pending and the release owner explicitly authorized proceeding without waiting for it. Do not weaken branch protection or delete unmerged branches. Production is not complete until the merged main SHA is deployed and verified on the canonical domain.
 

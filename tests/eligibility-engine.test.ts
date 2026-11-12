@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { assessApprovedScheme, prepareApplicationDraft, isApprovedRuleSetForPublication, isWithinSchemeEffectivePeriod } from "../lib/eligibility-engine";
+import { assessApprovedScheme, prepareApplicationDraft, getApprovedApplicationRequirements, isApprovedRuleSetForPublication, isWithinSchemeEffectivePeriod } from "../lib/eligibility-engine";
 import type { CitizenProfile } from "../lib/catalog";
 
 const profile: CitizenProfile = {
@@ -66,6 +66,32 @@ test("required missing application fields block the draft",()=>{
   const draft=prepareApplicationDraft(incomplete,scheme,assessment);
   assert.equal(draft.status,"blocked");
   assert.ok(draft.missingFields.includes("Applicant name"));
+});
+
+test("automation requirements come from the published approved application mapping", () => {
+  assert.deepEqual(getApprovedApplicationRequirements(scheme), {
+    requiredFields: [
+      { key: "applicant_name", profileField: "fullName" },
+      { key: "annual_income", profileField: "annualIncome" }
+    ],
+    documents: ["Income certificate"]
+  });
+  assert.equal(getApprovedApplicationRequirements({ ...scheme, verificationStatus: "source_checked" }), null);
+});
+
+test("authentication PIN mapping identifiers remain forbidden while postal identifiers remain allowed", () => {
+  for (const key of ["securitypin", "mpin", "atm_pin", "transactionpin"]) {
+    const unsafe = {
+      ...ruleSet,
+      application: { ...ruleSet.application, fields: [{ key, label: "PIN", profileField: "fullName", required: true, type: "text" as const }] }
+    };
+    assert.equal(isApprovedRuleSetForPublication(unsafe, now), false, key);
+  }
+  const postal = {
+    ...ruleSet,
+    application: { ...ruleSet.application, fields: [{ key: "pincode", label: "Postal PIN code", profileField: "pincode", required: true, type: "text" as const }] }
+  };
+  assert.equal(isApprovedRuleSetForPublication(postal, now), true);
 });
 
 test("unsafe government credentials cannot be mapped from citizen profiles",()=>{

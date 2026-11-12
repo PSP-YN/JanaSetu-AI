@@ -2,7 +2,8 @@
 
 **Assessment date:** 12 November 2026
 **Release candidate:** [PR #29](https://github.com/PSP-YN/JanaSetu-AI/pull/29)
-**Integration commit:** 5df3f5ddc8a9fcaddfa0bf8da75cf6bbfa0b8dd9
+**Initial integration baseline:** 5df3f5ddc8a9fcaddfa0bf8da75cf6bbfa0b8dd9
+**Follow-up review fixes:** included in the current PR #29 head.
 **State at assessment:** local verification passed; new-account preview built; production promotion pending merge and live verification.
 
 ## Deployment state
@@ -21,9 +22,9 @@ The preview build and required Vercel Preview/CI checks passed for the assessed 
 | Check | Result |
 |---|---:|
 | TypeScript | Passed |
-| Unit tests | 167/167 |
+| Unit tests | 173/173 |
 | Next.js production build | Passed |
-| Playwright E2E | 63/63 |
+| Playwright E2E | 66/66 |
 | Document scanner protocol/unit tests | 10/10 |
 | Extension JavaScript syntax | Passed |
 | Extension manifest JSON | Passed |

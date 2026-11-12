@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getVerifiedSupabaseSession } from "@/lib/supabase/rest";
 import { parseCitizenProfile } from "@/lib/profile-validation";
-import { assessApprovedScheme, type ApprovedSchemeVersion } from "@/lib/eligibility-engine";
+import { assessApprovedScheme, getApprovedApplicationRequirements, type ApprovedSchemeVersion } from "@/lib/eligibility-engine";
 import { buildApplicationAutomationPlan, type EligibilityGate } from "@/lib/automation-engine";
 import { SCHEMES } from "@/lib/catalog";
 import { getPortalAdapter } from "@/lib/portal-adapters/registry";
@@ -64,19 +64,39 @@ export async function POST(request: NextRequest) {
     const eligibility: EligibilityGate = !assessment || assessment.state === "needs_verification"
       ? "needs_verification"
       : assessment.state === "potential_match" ? "approved_potential_match" : "not_a_match";
-    const suppliedProfileFields = Object.entries(profile)
-      .filter(([, value]) => value !== "" && value !== null && value !== undefined && value !== "unknown")
-      .map(([key]) => key);
+    const applicationRequirements = approved ? getApprovedApplicationRequirements(approved.model) : null;
+    const planEligibility: EligibilityGate = eligibility === "approved_potential_match" && !applicationRequirements
+      ? "needs_verification"
+      : eligibility;
     const scheme = SCHEMES.find((item) => item.id === slug);
+    const requiredProfileFields = applicationRequirements
+      ? applicationRequirements.requiredFields.map((field) => field.key)
+      : approved ? [] : requiredFields[slug];
+    const suppliedProfileFields = applicationRequirements
+      ? applicationRequirements.requiredFields
+          .filter(({ profileField }) => {
+            const value = profile[profileField];
+            return value !== "" && value !== null && value !== undefined && value !== "unknown";
+          })
+          .map((field) => field.key)
+      : approved ? [] : Object.entries(profile)
+          .filter(([, value]) => value !== "" && value !== null && value !== undefined && value !== "unknown")
+          .map(([key]) => key);
+    const requiredDocuments = applicationRequirements
+      ? applicationRequirements.documents
+      : approved ? [] : scheme?.documents ?? [];
     const plan = buildApplicationAutomationPlan({
       schemeSlug: slug,
-      eligibility,
-      requiredProfileFields: requiredFields[slug],
+      eligibility: planEligibility,
+      requiredProfileFields,
       suppliedProfileFields,
-      requiredDocuments: scheme?.documents ?? [],
+      requiredDocuments,
       availableDocuments: [],
       portalSnapshot: null
     });
+    const requirementsSource = applicationRequirements
+      ? "approved_application_mapping"
+      : approved ? "none" : "discovery_only_unverified";
     const adapter = getPortalAdapter(slug);
     const officialPortalUrl = adapter?.portalHomePath ? new URL(adapter.portalHomePath, adapter.officialOrigin).toString() : adapter?.officialOrigin ?? null;
     return json({
@@ -84,6 +104,14 @@ export async function POST(request: NextRequest) {
       officialPortalUrl,
       assessment: assessment ?? { state: "needs_verification", headline: "Scheme not independently published", explanation: "The scheme has no currently published, independently approved version. No eligibility decision was made." },
       plan,
+      requirements: {
+        source: requirementsSource,
+        disclaimer: requirementsSource === "discovery_only_unverified"
+          ? "Checklist hints come from the prototype discovery catalogue and are not verified scheme requirements."
+          : requirementsSource === "none"
+            ? "No independently reviewed application-field mapping is available for this approved scheme version."
+            : "Required fields and documents come from the current independently approved application mapping."
+      },
       execution: { mode: "plan_only", portalLogin: false, documentUpload: false, finalSubmission: false, identityChallengeBypass: false },
       dataHandling: "The profile is processed for this signed-in request only. This endpoint does not persist the profile or create an application case."
     });

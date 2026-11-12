@@ -26,3 +26,12 @@ test("planner requires a currently published scheme version and never persists t
   assert.doesNotMatch(route, /\.insert\(/);
   assert.doesNotMatch(route, /\.update\(/);
 });
+
+test("approved application plans use the reviewed version mapping, with discovery hints clearly marked unverified", () => {
+  assert.match(route, /getApprovedApplicationRequirements\(approved\.model\)/);
+  assert.match(route, /applicationRequirements\.requiredFields/);
+  assert.match(route, /applicationRequirements\.documents/);
+  assert.match(route, /discovery_only_unverified/);
+  assert.match(route, /Checklist hints come from the prototype discovery catalogue/);
+  assert.match(route, /approved \? \[\] : scheme\?\.documents/);
+});

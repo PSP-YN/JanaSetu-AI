@@ -19,6 +19,7 @@ import { parseBackupApplications, parseBackupAssessments, parseBackupDocuments, 
 import { encryptVault, decryptVault } from "@/lib/encrypted-vault";
 import { saveLocalDocument, getLocalDocuments, deleteLocalDocument, replaceLocalDocuments } from "@/lib/local-document-vault";
 import { buildFormAssistantBackup } from "@/lib/form-assistant-backup";
+import { profileFormText } from "@/lib/profile-form-copy";
 import {
   LANGUAGE_OPTIONS, SCHEMES, STATES_AND_UTS,
   type Assessment, type CitizenProfile, type LanguageCode
@@ -822,7 +823,7 @@ export default function Home() {
   const [openDataSearchFallback, setOpenDataSearchFallback] = useState(false);
   const [openDataFreshness, setOpenDataFreshness] = useState<"stale" | "within_policy">("stale");
 
-  const tFor = (lang: LanguageCode, key: string) => UI_COPY[lang][key] || COPY[lang][key] || UI_COPY.en[key] || COPY.en[key] || key;
+  const tFor = (lang: LanguageCode, key: string) => profileFormText(lang, key) || UI_COPY[lang][key] || COPY[lang][key] || UI_COPY.en[key] || COPY.en[key] || key;
   const t = (key: string) => tFor(language, key);
   const categoryLabel = (category: string) => {
     const keyByCategory: Record<string, string> = {
@@ -889,7 +890,7 @@ export default function Home() {
       try { const value = localStorage.getItem(key); return value ? JSON.parse(value) : fallback; }
       catch { return fallback; }
     };
-    const localProfile = parseBackupProfile(read(STORAGE.profile, EMPTY_PROFILE));
+    const localProfile = parseBackupProfile(read(STORAGE.profile, EMPTY_PROFILE), { allowIncompleteContact: true });
     const localLanguage = parseBackupLanguage(read(STORAGE.language, "en"));
     const localApplications: LocalApplication[] = invalidateUnapprovedApplications<LocalApplication>(parseBackupApplications(read(STORAGE.applications, []), { trustLocalStorage: true }));
     const localDocuments = parseBackupDocuments(read(STORAGE.documents, []));
@@ -985,7 +986,7 @@ export default function Home() {
   };
 
   const exportProfileForFormAssistant = () => {
-    const warning = "This export is a plain-text JSON file containing your personal profile. It is not encrypted. Save it only on a device you control, import it into the JanaSetu Form Assistant extension, and delete the file after import. Continue?";
+    const warning = t("formAssistantExportWarning");
     if (!window.confirm(warning)) return;
     try {
       const backup = buildFormAssistantBackup(profile, language);
@@ -996,9 +997,9 @@ export default function Home() {
       link.download = "JanaSetu-Form-Assistant-Profile.json";
       link.click();
       window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-      setNotice("Profile export created. Import it in the JanaSetu Form Assistant extension, then review every suggested field before filling.");
+      setNotice(t("formAssistantExportCreated"));
     } catch (error) {
-      setNotice(error instanceof Error ? error.message : "Profile export failed.");
+      setNotice(error instanceof Error ? error.message : t("formAssistantExportFailed"));
     }
   };
 
@@ -1336,24 +1337,24 @@ export default function Home() {
                   <Field label={t("scholarship")}><YesNo t={t} value={profile.otherScholarship} onChange={(v) => updateProfile("otherScholarship", v)} unknown/></Field>
                   <Field label={t("distanceCourse")}><YesNo t={t} value={profile.diplomaOrDistance} onChange={(v) => updateProfile("diplomaOrDistance", v)} unknown/></Field>
                 </div>
-                <div className="form-section-title subsection"><span>05</span><div><h2>Application contact & address</h2><p>Enter reusable contact and postal details. These remain in this browser and are not sent to a government portal automatically.</p></div></div>
+                <div className="form-section-title subsection"><span>05</span><div><h2>{t("contactSectionTitle")}</h2><p>{t("contactSectionText")}</p></div></div>
                 <div className="form-grid">
-                  <Field label="Mobile number"><input type="tel" autoComplete="tel" inputMode="tel" placeholder="10-digit mobile number" value={profile.mobileNumber} onChange={(e) => updateProfile("mobileNumber", e.target.value)}/></Field>
-                  <Field label="Email address"><input type="email" autoComplete="email" placeholder="name@example.com" value={profile.emailAddress} onChange={(e) => updateProfile("emailAddress", e.target.value)}/></Field>
-                  <Field label="Address line 1"><input autoComplete="address-line1" value={profile.addressLine1} onChange={(e) => updateProfile("addressLine1", e.target.value)}/></Field>
-                  <Field label="Address line 2"><input autoComplete="address-line2" value={profile.addressLine2} onChange={(e) => updateProfile("addressLine2", e.target.value)}/></Field>
-                  <Field label="Village / Town / City"><input autoComplete="address-level2" value={profile.villageOrTown} onChange={(e) => updateProfile("villageOrTown", e.target.value)}/></Field>
-                  <Field label="PIN code"><input inputMode="numeric" maxLength={6} autoComplete="postal-code" value={profile.pincode} onChange={(e) => updateProfile("pincode", e.target.value)}/></Field>
-                  <Field label="Father / Guardian name"><input value={profile.fatherOrGuardianName} onChange={(e) => updateProfile("fatherOrGuardianName", e.target.value)}/></Field>
-                  <Field label="Mother name"><input value={profile.motherName} onChange={(e) => updateProfile("motherName", e.target.value)}/></Field>
-                  <Field label="Social category"><Select value={profile.socialCategory ?? ""} onChange={(v) => updateProfile("socialCategory", v as NonNullable<CitizenProfile["socialCategory"]>)}><option value="">Select</option>{["General","OBC","SC","ST","EWS","Other"].map(v=><option key={v}>{v}</option>)}</Select></Field>
-                  <Field label="Ration card category"><Select value={profile.rationCardCategory ?? ""} onChange={(v) => updateProfile("rationCardCategory", v as NonNullable<CitizenProfile["rationCardCategory"]>)}><option value="">Select</option>{["AAY","PHH","BPL","APL","Other"].map(v=><option key={v}>{v}</option>)}</Select></Field>
-                  <Field label="Cultivable land (acres)"><input type="number" min="0" step="0.01" value={profile.landholdingAcres} onChange={(e) => updateProfile("landholdingAcres", e.target.value === "" ? "" : Number(e.target.value))}/></Field>
-                  <Field label="Educational institution"><input value={profile.institutionName} onChange={(e) => updateProfile("institutionName", e.target.value)}/></Field>
-                  <Field label="Course / programme"><input value={profile.courseName} onChange={(e) => updateProfile("courseName", e.target.value)}/></Field>
-                  <Field label="Current academic year"><input placeholder="e.g. 2026-27 / 2nd year" value={profile.courseYear} onChange={(e) => updateProfile("courseYear", e.target.value)}/></Field>
+                  <Field label={t("mobileNumberLabel")}><input type="tel" autoComplete="tel" inputMode="tel" maxLength={14} placeholder={t("mobileNumberPlaceholder")} value={profile.mobileNumber} onChange={(e) => updateProfile("mobileNumber", e.target.value)}/></Field>
+                  <Field label={t("emailAddressLabel")}><input type="email" autoComplete="email" maxLength={160} placeholder={t("emailAddressPlaceholder")} value={profile.emailAddress} onChange={(e) => updateProfile("emailAddress", e.target.value)}/></Field>
+                  <Field label={t("addressLine1Label")}><input autoComplete="address-line1" value={profile.addressLine1} onChange={(e) => updateProfile("addressLine1", e.target.value)}/></Field>
+                  <Field label={t("addressLine2Label")}><input autoComplete="address-line2" value={profile.addressLine2} onChange={(e) => updateProfile("addressLine2", e.target.value)}/></Field>
+                  <Field label={t("villageTownCityLabel")}><input autoComplete="address-level2" value={profile.villageOrTown} onChange={(e) => updateProfile("villageOrTown", e.target.value)}/></Field>
+                  <Field label={t("pinCodeLabel")}><input inputMode="numeric" maxLength={6} autoComplete="postal-code" value={profile.pincode} onChange={(e) => updateProfile("pincode", e.target.value)}/></Field>
+                  <Field label={t("fatherGuardianNameLabel")}><input value={profile.fatherOrGuardianName} onChange={(e) => updateProfile("fatherOrGuardianName", e.target.value)}/></Field>
+                  <Field label={t("motherNameLabel")}><input value={profile.motherName} onChange={(e) => updateProfile("motherName", e.target.value)}/></Field>
+                  <Field label={t("socialCategoryLabel")}><Select value={profile.socialCategory ?? ""} onChange={(v) => updateProfile("socialCategory", v as NonNullable<CitizenProfile["socialCategory"]>)}><option value="">{t("selectOption")}</option>{["General","OBC","SC","ST","EWS","Other"].map(v=><option key={v} value={v}>{v==="General"?t("generalCategory"):v==="Other"?t("otherCategory"):v}</option>)}</Select></Field>
+                  <Field label={t("rationCardCategoryLabel")}><Select value={profile.rationCardCategory ?? ""} onChange={(v) => updateProfile("rationCardCategory", v as NonNullable<CitizenProfile["rationCardCategory"]>)}><option value="">{t("selectOption")}</option>{["AAY","PHH","BPL","APL","Other"].map(v=><option key={v} value={v}>{v==="Other"?t("otherCategory"):v}</option>)}</Select></Field>
+                  <Field label={t("cultivableLandAcresLabel")}><input type="number" min="0" step="0.01" value={profile.landholdingAcres} onChange={(e) => updateProfile("landholdingAcres", e.target.value === "" ? "" : Number(e.target.value))}/></Field>
+                  <Field label={t("institutionNameLabel")}><input value={profile.institutionName} onChange={(e) => updateProfile("institutionName", e.target.value)}/></Field>
+                  <Field label={t("courseNameLabel")}><input value={profile.courseName} onChange={(e) => updateProfile("courseName", e.target.value)}/></Field>
+                  <Field label={t("courseYearLabel")}><input placeholder={t("courseYearPlaceholder")} value={profile.courseYear} onChange={(e) => updateProfile("courseYear", e.target.value)}/></Field>
                 </div>
-                <div className="form-footer"><span><LockKeyhole size={14}/> {t("noAadhaarRequest")}</span><div className="form-footer-actions"><button className="button button-outline" onClick={exportProfileForFormAssistant}>Export for form assistant</button><button className="button button-primary" onClick={() => { setNotice(t("saved")); runAssessment(); }}>{t("run")} <ArrowRight size={16}/></button></div></div>
+                <div className="form-footer"><span><LockKeyhole size={14}/> {t("noAadhaarRequest")}</span><div className="form-footer-actions"><button className="button button-outline" onClick={exportProfileForFormAssistant}>{t("exportFormAssistant")}</button><button className="button button-primary" onClick={() => { setNotice(t("saved")); runAssessment(); }}>{t("run")} <ArrowRight size={16}/></button></div></div>
               </div>
               <aside className="profile-aside">
                 <div className="panel aside-card">

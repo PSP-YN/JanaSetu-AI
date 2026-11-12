@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 type Scheme={id:string;slug:string;name:string;category:string;current_version_id:string|null};
@@ -10,7 +10,7 @@ type Reminder={id:string;case_id:string|null;title:string;due_at:string;channel:
 type PreparedField={key:string;label:string;value:string|number|boolean|null;status:"provided"|"missing";requiresCitizenConfirmation:boolean};
 type Preparation={case_id:string;status:"awaiting_citizen_review"|"citizen_approved";fields:PreparedField[];documents:string[];citizen_approved_at:string|null};
 type User={id:string;email:string|null};
-type PlanResult={scheme:{slug:string;name:string};officialPortalUrl:string|null;assessment:{state:string;headline:string;explanation:string};plan:{status:string;steps:{id:string;title:string;status:string;reason:string}[];capabilities:{prepareApplication:boolean;inspectPortal:boolean;assistFormFilling:boolean;uploadDocuments:boolean;bypassIdentityOrCaptcha:boolean;submitApplication:boolean;markSubmittedWithoutReceipt:boolean};disclaimer:string};execution:{mode:string;portalLogin:boolean;documentUpload:boolean;finalSubmission:boolean;identityChallengeBypass:boolean};dataHandling:string};
+type PlanResult={scheme:{slug:string;name:string};officialPortalUrl:string|null;assessment:{state:string;headline:string;explanation:string};plan:{status:string;steps:{id:string;title:string;status:string;reason:string}[];capabilities:{prepareApplication:boolean;inspectPortal:boolean;assistFormFilling:boolean;uploadDocuments:boolean;bypassIdentityOrCaptcha:boolean;submitApplication:boolean;markSubmittedWithoutReceipt:boolean};disclaimer:string};requirements:{source:string;disclaimer:string};execution:{mode:string;portalLogin:boolean;documentUpload:boolean;finalSubmission:boolean;identityChallengeBypass:boolean};dataHandling:string};
 
 export default function AutomationCenterPage(){
   const [user,setUser]=useState<User|null>(null);
@@ -26,6 +26,7 @@ export default function AutomationCenterPage(){
   const [planSlug,setPlanSlug]=useState("pm-kisan");
   const [planBusy,setPlanBusy]=useState(false);
   const [planResult,setPlanResult]=useState<PlanResult|null>(null);
+  const planRequestId=useRef(0);
   const refresh=useCallback(async()=>{
     setBusy(true);setError("");
     try{
@@ -53,17 +54,19 @@ export default function AutomationCenterPage(){
   useEffect(()=>{void refresh();},[refresh]);
   const statusLabel=(s:string)=>s.replaceAll("_"," ").replace(/\b\w/g,m=>m.toUpperCase());
   const generatePlan=async()=>{
+    const requestId=++planRequestId.current;
+    const requestedSlug=planSlug;
     setPlanBusy(true);setError("");setPlanResult(null);
     try{
       const raw=localStorage.getItem("janSetu.profile.v1");
       if(!raw)throw new Error("Complete your citizen profile first in My profile.");
       const profile=JSON.parse(raw);
-      const response=await fetch("/api/automation/plan",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({scheme_slug:planSlug,profile})});
+      const response=await fetch("/api/automation/plan",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({scheme_slug:requestedSlug,profile})});
       const data=await response.json().catch(()=>({}));
       if(!response.ok)throw new Error(data.error||"Could not generate an automation plan.");
-      setPlanResult(data as PlanResult);
-    }catch(e){setError(e instanceof Error?e.message:"Could not generate an automation plan.");}
-    finally{setPlanBusy(false);}
+      if(requestId===planRequestId.current)setPlanResult(data as PlanResult);
+    }catch(e){if(requestId===planRequestId.current)setError(e instanceof Error?e.message:"Could not generate an automation plan.");}
+    finally{if(requestId===planRequestId.current)setPlanBusy(false);}
   };
   const confirmPreparation=async(caseId:string)=>{
     setConfirming(caseId);setError("");
@@ -84,7 +87,7 @@ export default function AutomationCenterPage(){
       <p>Use the details saved in My profile to build a scheme-specific preparation plan. Your profile is processed for this request only and is not saved by the planner API.</p>
       <div className="automation-plan-controls">
         <label htmlFor="automation-scheme">Scheme</label>
-        <select id="automation-scheme" value={planSlug} onChange={e=>{setPlanSlug(e.target.value);setPlanResult(null);}}>
+        <select id="automation-scheme" value={planSlug} disabled={planBusy} onChange={e=>{planRequestId.current+=1;setPlanBusy(false);setPlanSlug(e.target.value);setPlanResult(null);}}>
           <option value="pm-kisan">PM-KISAN Samman Nidhi</option>
           <option value="pmay-u-2">PMAY-U 2.0</option>
           <option value="pm-ujjwala">PM Ujjwala Yojana 2.0</option>
@@ -95,6 +98,7 @@ export default function AutomationCenterPage(){
       {planResult&&<div className="automation-plan-result">
         <div className="automation-preparation-heading"><strong>{planResult.scheme.name}</strong><span>{statusLabel(planResult.plan.status)}</span></div>
         <p><strong>{planResult.assessment.headline}.</strong> {planResult.assessment.explanation}</p>
+        <p className="automation-requirements-note">{planResult.requirements.disclaimer}</p>
         <ol>{planResult.plan.steps.map(step=><li key={step.id}><strong>{step.title} · {statusLabel(step.status)}</strong><small>{step.reason}</small></li>)}</ol>
         <p><strong>Current execution:</strong> {planResult.plan.capabilities.assistFormFilling?"Reviewed form assistance is enabled for this route.":"Automatic portal filling is not enabled for this scheme yet."} Final submission, OTP/CAPTCHA, identity checks and document upload remain disabled.</p>
         {planResult.officialPortalUrl&&<p><a href={planResult.officialPortalUrl} target="_blank" rel="noreferrer">Open official scheme portal</a></p>}

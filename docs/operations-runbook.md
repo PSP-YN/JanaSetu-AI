@@ -78,9 +78,9 @@ The form assistant is intentionally fail-closed. A matching `.gov.in`/`.nic.in` 
 
 ### Verified local release checks (12 November 2026)
 
-- `npm run check`: TypeScript passed; 167/167 unit tests passed.
+- `npm run check`: TypeScript passed; 173/173 unit tests passed.
 - `npm run build`: optimized Next.js production build passed.
-- `npx playwright test`: 63/63 browser tests passed, including synthetic extension filling, identity-field safety, blocked PM-KISAN route and six-language/accessibility flows.
+- `npx playwright test`: 66/66 browser tests passed, including synthetic extension filling, identity-field safety, blocked PM-KISAN route and six-language/accessibility flows.
 - `python3 tests/test_document_scanner.py`: 10/10 tests passed. These are scanner unit tests, not evidence of a deployed scanner service.
 - `node --check extension/popup.js`, `node --check extension/fill.js`, and extension manifest JSON validation passed.
 - `npm audit --audit-level=high`: zero reported vulnerabilities.
