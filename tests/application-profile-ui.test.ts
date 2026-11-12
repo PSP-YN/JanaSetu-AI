@@ -25,7 +25,7 @@ test("form assistant export is explicitly plaintext and requires citizen confirm
 });
 
 test("extension matches profile fields by reviewed label aliases and never treats a field as an official submission", () => {
-  for (const field of ["villageOrTown", "pincode", "fatherOrGuardianName", "motherName", "socialCategory", "landholdingAcres", "institutionName", "courseName", "courseYear", "rationCardCategory"]) {
+  for (const field of ["mobileNumber", "emailAddress", "villageOrTown", "pincode", "fatherOrGuardianName", "motherName", "socialCategory", "landholdingAcres", "institutionName", "courseName", "courseYear", "rationCardCategory"]) {
     assert.match(extension, new RegExp(field));
   }
   assert.match(extension, /approved/);
