@@ -1,20 +1,20 @@
 # JanaSetu AI — production readiness and release gate
 
 **Assessment date:** 12 November 2026
-**Merged release:** PR #29 plus CI/action, Playwright and production dependency updates (#18, #19, #15).
-**Production main SHA:** `d8928e8fc891a76f692cf4ba12e8d213d9d2b876`.
+**Merged release:** PR #29 plus CI/action, Playwright, production dependency and release-documentation updates (#18, #19, #15, #30).
+**Application code baseline:** `d8928e8fc891a76f692cf4ba12e8d213d9d2b876` (PR #29 plus the verified dependency updates).
 **Release state:** merged to protected main; refreshed production deployment READY; canonical-domain smoke and browser checks passed.
 
 ## Deployment state
 
 | Environment | URL | State |
 |---|---|---|
-| Canonical production | https://jana-setu-ai.vercel.app | READY · deployment `dpl_AtvjwMvehUtGwYgt9XXbpjRs2ie8` · main SHA `d8928e8fc891a76f692cf4ba12e8d213d9d2b876` · alias verified |
+| Canonical production | https://jana-setu-ai.vercel.app | READY · canonical alias verified on 12 November 2026 · current deployment metadata is available in the Vercel project |
 | New-account preview | https://jana-setu-grubsq4ns-psp-adb0.vercel.app | READY · deployment dpl_w6L5tdjRaXcC8MwdaF6HLseXUcmu · preview bypass revoked |
 | New Vercel project | psp-adb0 / jana-setu-ai | Supabase URL and public anon key configured for production, preview and development |
-| GitHub source | https://github.com/PSP-YN/JanaSetu-AI | PR #29 and dependency/CI PRs #18, #19, #15 merged · current main `d8928e8fc891a76f692cf4ba12e8d213d9d2b876` |
+| GitHub source | https://github.com/PSP-YN/JanaSetu-AI | PRs #29, #15, #18, #19 and #30 merged to protected `main` |
 
-PR #29 merged normally after all required CI and Vercel checks passed and all seven CodeRabbit review threads were resolved. Maintenance PRs #18, #19 and #15 also passed required checks and merged. Octopus Review was skipped where it was not required by branch protection. No administrator merge override was used and branch protection was not disabled. The canonical domain serves the READY deployment built from main SHA `d8928e8fc891a76f692cf4ba12e8d213d9d2b876`.
+PR #29 merged normally after all required CI and Vercel checks passed and all seven CodeRabbit review threads were resolved. Maintenance PRs #18, #19 and #15 also passed required checks and merged. Documentation PR #30 passed the required CI and new-account Vercel checks before merging; optional Octopus Review was not required by branch protection. No administrator merge override was used and branch protection was not disabled. The canonical domain serves the latest READY main deployment.
 
 ## Verification completed for the merged release
 
