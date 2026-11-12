@@ -14,6 +14,8 @@ function fillProfileInPage(profile,approvedFields){
     return parts.some(part=>hasAlias(part,alias));
   };
   const aliases={
+    mobileNumber:["mobile number","mobile no","phone number","contact number","मोबाइल नंबर","मोबाइल संख्या","ಮೊಬೈಲ್ ಸಂಖ್ಯೆ","தொலைபேசி எண்","మొబైల్ నంబర్","മൊബൈൽ നമ്പർ"],
+    emailAddress:["email address","email id","e-mail address","e-mail id","email","ईमेल पता","ईमेल","ಇಮೇಲ್ ವಿಳಾಸ","மின்னஞ்சல் முகவரி","ఇమెయిల్ చిరునామా","ഇമെയിൽ വിലാസം"],
     fullName:["name","full name","applicant name","applicant full name","name of applicant","beneficiary name","beneficiary full name","name of beneficiary","पूरा नाम","ಹೆಸರು","பெயர்","పేరు","പേര്"],
     age:["age","उम्र","ವಯಸ್ಸು","வயது","వయస్సు","പ്രായം"],
     state:["state","union territory","राज्य","ರಾಜ್ಯ","மாநிலம்","రాష్ట్రం","സംസ്ഥാനം"],
@@ -49,7 +51,7 @@ function fillProfileInPage(profile,approvedFields){
   const isSensitive=(text)=>{
     const normalized=norm(text);
     if(/(?:postal pin|pin code|pincode|postal code|zip code)/.test(normalized))return false;
-    return /(?:^| )(?:aadhaar|aadhar|uidai|pan|bank|account|ifsc|otp|captcha|password|passcode|pin|mobile|phone|email|identity|document|upload|file)(?: |$)/.test(normalized);
+    return /(?:^| )(?:aadhaar|aadhar|uidai|pan|bank|account|ifsc|otp|captcha|password|passcode|pin|identity|document|upload|file)(?: |$)/.test(normalized);
   };
   const profileValue=(key)=>{
     let value=profile[key];
@@ -75,10 +77,12 @@ function fillProfileInPage(profile,approvedFields){
         if(Math.abs((number-base)/Number(step)-Math.round((number-base)/Number(step)))>1e-8)return {valid:false,reason:"Value does not match the portal step constraint."};
       }
     }
+    if(element.type==="email"&&value&&!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(value))return {valid:false,reason:"Value is not a valid email address."};
+    if(element.type==="tel"&&value&&!/^\\+?[0-9]{10,13}$/.test(value.replace(/[\\s-]/g,"")))return {valid:false,reason:"Value is not a valid phone number."};
     if(element.getAttribute("pattern"))return {valid:false,reason:"The portal has a custom format rule that needs manual validation."};
     return {valid:true,reason:""};
   };
-  const controls=[...document.querySelectorAll('input:not([type]),input[type="text"],input[type="number"],input[type="radio"],select,textarea')].filter(visible);
+  const controls=[...document.querySelectorAll('input:not([type]),input[type="text"],input[type="number"],input[type="email"],input[type="tel"],input[type="radio"],select,textarea')].filter(visible);
   const candidates=[];const handledRadio=new Set();
   for(const element of controls){
     const radio=element.type==="radio";
