@@ -1,7 +1,7 @@
 # JanaSetu AI backend implementation status
 
 **Updated:** 12 November 2026
-**Current release candidate:** [PR #29](https://github.com/PSP-YN/JanaSetu-AI/pull/29) · initial integration baseline `5df3f5ddc8a9fcaddfa0bf8da75cf6bbfa0b8dd9` · follow-up review fixes are included in the current PR head
+**Current release candidate:** [PR #29](https://github.com/PSP-YN/JanaSetu-AI/pull/29) · initial integration baseline `5df3f5ddc8a9fcaddfa0bf8da75cf6bbfa0b8dd9` · review-fix implementation commit `3f861c7ae9bb3e78948ed00ec62dc4052719fc93`
 **Supabase project:** JanaSetu-AI · Mumbai (ap-south-1) · `qjiuclkhvxbnojdysmmp`
 **Vercel project:** `psp-adb0 / jana-setu-ai` · canonical domain `jana-setu-ai.vercel.app`
 

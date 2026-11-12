@@ -3,7 +3,7 @@
 **Assessment date:** 12 November 2026
 **Release candidate:** [PR #29](https://github.com/PSP-YN/JanaSetu-AI/pull/29)
 **Initial integration baseline:** 5df3f5ddc8a9fcaddfa0bf8da75cf6bbfa0b8dd9
-**Follow-up review fixes:** included in the current PR #29 head.
+**Review-fix implementation commit:** 3f861c7ae9bb3e78948ed00ec62dc4052719fc93.
 **State at assessment:** local verification passed; new-account preview built; production promotion pending merge and live verification.
 
 ## Deployment state
