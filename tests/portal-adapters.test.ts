@@ -61,3 +61,19 @@ test("a lookalike domain cannot match the PM-KISAN adapter", () => {
   assert.equal(result.matched, false);
   assert.equal(result.canSubmitApplication, false);
 });
+
+test("a landing page without a verified application route cannot activate an adapter", () => {
+  const adapter = getPortalAdapter("pmay-u-2");
+  assert.ok(adapter);
+  const result = inspectAdapter(adapter, {
+    origin: "https://pmay-urban.gov.in",
+    pathname: "/",
+    controls: [],
+    fileUploadCount: 0,
+    captchaPresent: false,
+    otpPresent: false
+  });
+  assert.equal(result.matched, false);
+  assert.equal(result.canAssistFormFilling, false);
+  assert.equal(result.canSubmitApplication, false);
+});
