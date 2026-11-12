@@ -19,8 +19,8 @@ test("legacy plaintext workspace API is retired and encrypted API derives identi
   assert.match(legacy, /status: 410/);
   assert.match(legacy, /Plaintext workspace sync has been retired/);
   assert.match(route, /getVerifiedSupabaseSession\(\)/);
-  assert.match(route, /rpc\/get_encrypted_workspace/);
-  assert.match(route, /rpc\/put_encrypted_workspace/);
+  assert.match(route, /get_encrypted_workspace/);
+  assert.match(route, /put_encrypted_workspace/);
   assert.match(route, /Cross-origin request blocked/);
   assert.match(session, /httpOnly:\s*true/);
   assert.match(session, /secure:\s*process\.env\.NODE_ENV\s*===\s*"production"/);
@@ -47,7 +47,7 @@ test("workspace sync is explicit, client-encrypted and revision-aware rather tha
   assert.match(page,/syncEncryptedWorkspace/);
   assert.match(page,/syncConsentChecked/);
   assert.match(page,/snapshot\.revision/);
-  assert.match(page,/document file bytes remain on this device/);
+  assert.match(page,/document references were synchronized/);
   assert.doesNotMatch(page,/fetch\("\/api\/workspace"/);
   assert.doesNotMatch(page,/setCloudReady/);
   assert.match(helper,/expectedRevision/);
