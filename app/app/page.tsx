@@ -1458,6 +1458,23 @@ export default function Home() {
                   <Field label={t("scholarship")}><YesNo t={t} value={profile.otherScholarship} onChange={(v) => updateProfile("otherScholarship", v)} unknown/></Field>
                   <Field label={t("distanceCourse")}><YesNo t={t} value={profile.diplomaOrDistance} onChange={(v) => updateProfile("diplomaOrDistance", v)} unknown/></Field>
                 </div>
+                <div className="form-section-title subsection"><span>05</span><div><h2>Application contact & address</h2><p>Enter reusable contact and postal details. These remain in this browser and are not sent to a government portal automatically.</p></div></div>
+                <div className="form-grid">
+                  <Field label="Mobile number"><input type="tel" autoComplete="tel" inputMode="tel" placeholder="10-digit mobile number" value={profile.mobileNumber} onChange={(e) => updateProfile("mobileNumber", e.target.value)}/></Field>
+                  <Field label="Email address"><input type="email" autoComplete="email" placeholder="name@example.com" value={profile.emailAddress} onChange={(e) => updateProfile("emailAddress", e.target.value)}/></Field>
+                  <Field label="Address line 1"><input autoComplete="address-line1" value={profile.addressLine1} onChange={(e) => updateProfile("addressLine1", e.target.value)}/></Field>
+                  <Field label="Address line 2"><input autoComplete="address-line2" value={profile.addressLine2} onChange={(e) => updateProfile("addressLine2", e.target.value)}/></Field>
+                  <Field label="Village / Town / City"><input autoComplete="address-level2" value={profile.villageOrTown} onChange={(e) => updateProfile("villageOrTown", e.target.value)}/></Field>
+                  <Field label="PIN code"><input inputMode="numeric" maxLength={6} autoComplete="postal-code" value={profile.pincode} onChange={(e) => updateProfile("pincode", e.target.value)}/></Field>
+                  <Field label="Father / Guardian name"><input value={profile.fatherOrGuardianName} onChange={(e) => updateProfile("fatherOrGuardianName", e.target.value)}/></Field>
+                  <Field label="Mother name"><input value={profile.motherName} onChange={(e) => updateProfile("motherName", e.target.value)}/></Field>
+                  <Field label="Social category"><Select value={profile.socialCategory} onChange={(v) => updateProfile("socialCategory", v as CitizenProfile["socialCategory"])}><option value="">Select</option>{["General","OBC","SC","ST","EWS","Other"].map(v=><option key={v}>{v}</option>)}</Select></Field>
+                  <Field label="Ration card category"><Select value={profile.rationCardCategory} onChange={(v) => updateProfile("rationCardCategory", v as CitizenProfile["rationCardCategory"])}><option value="">Select</option>{["AAY","PHH","BPL","APL","Other"].map(v=><option key={v}>{v}</option>)}</Select></Field>
+                  <Field label="Cultivable land (acres)"><input type="number" min="0" step="0.01" value={profile.landholdingAcres} onChange={(e) => updateProfile("landholdingAcres", e.target.value === "" ? "" : Number(e.target.value))}/></Field>
+                  <Field label="Educational institution"><input value={profile.institutionName} onChange={(e) => updateProfile("institutionName", e.target.value)}/></Field>
+                  <Field label="Course / programme"><input value={profile.courseName} onChange={(e) => updateProfile("courseName", e.target.value)}/></Field>
+                  <Field label="Current academic year"><input placeholder="e.g. 2026-27 / 2nd year" value={profile.courseYear} onChange={(e) => updateProfile("courseYear", e.target.value)}/></Field>
+                </div>
                 <div className="form-footer"><span><LockKeyhole size={14}/> {t("noAadhaarRequest")}</span><button className="button button-primary" onClick={() => { setNotice(t("saved")); runAssessment(); }}>{t("run")} <ArrowRight size={16}/></button></div>
               </div>
               <aside className="profile-aside">
