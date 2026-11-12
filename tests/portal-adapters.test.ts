@@ -77,3 +77,30 @@ test("a landing page without a verified application route cannot activate an ada
   assert.equal(result.canAssistFormFilling, false);
   assert.equal(result.canSubmitApplication, false);
 });
+
+test("all four seeded scheme adapters fail closed without department authorization", () => {
+  for (const slug of ["pm-kisan", "pmay-u-2", "pm-ujjwala", "pm-usp-csss"]) {
+    const adapter = getPortalAdapter(slug);
+    assert.ok(adapter, slug + " must have an explicit adapter record");
+    assert.equal(adapter.accessStatus, "not_requested", slug);
+    assert.deepEqual(adapter.allowedActions, [], slug);
+    assert.equal(adapter.authorizationReference, null, slug);
+    assert.equal(adapter.approvedAt, null, slug);
+    assert.equal(adapter.applicationPath === null, slug !== "pm-kisan", slug + " route must not be guessed");
+  }
+});
+
+test("PMAY-U, Ujjwala and NSP landing pages are not treated as application forms", () => {
+  for (const [slug, origin] of [
+    ["pmay-u-2", "https://pmay-urban.gov.in"],
+    ["pm-ujjwala", "https://www.pmuy.gov.in"],
+    ["pm-usp-csss", "https://scholarships.gov.in"]
+  ] as const) {
+    const adapter = getPortalAdapter(slug);
+    assert.ok(adapter);
+    const result = inspectAdapter(adapter, { origin, pathname: "/", controls: [], fileUploadCount: 0, captchaPresent: false, otpPresent: false });
+    assert.equal(result.matched, false);
+    assert.equal(result.canAssistFormFilling, false);
+    assert.equal(result.canSubmitApplication, false);
+  }
+});
