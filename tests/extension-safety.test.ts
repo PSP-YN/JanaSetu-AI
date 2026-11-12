@@ -5,15 +5,16 @@ import { readFileSync } from "node:fs";
 const extension = readFileSync(new URL("../extension/popup.js", import.meta.url), "utf8");
 const popupHtml = readFileSync(new URL("../extension/popup.html", import.meta.url), "utf8");
 
-test("form assistant requires an exact independently authorized portal route, not a government-domain suffix", () => {
-  assert.match(extension, /PORTAL_ROUTE_POLICIES/);
-  assert.match(extension, /route\.origin===portalUrl\.origin&&route\.path===portalUrl\.pathname/);
-  assert.match(extension, /accessStatus==="approved"/);
-  assert.match(extension, /allowedActions\.includes\("assist_form_filling"\)/);
-  assert.match(extension, /authorizationReference&&policy\.approvedAt/);
-  assert.doesNotMatch(extension, /host\.endsWith\("\.gov\.in"\)/);
-  assert.doesNotMatch(extension, /host\.endsWith\("\.nic\.in"\)/);
-  assert.match(extension, /accessStatus: "not_requested"/);
+test("form assistant requires per-session citizen verification of an HTTPS government portal address", () => {
+  assert.ok(extension.includes("getCitizenConfirmedPortalTab"));
+  assert.ok(extension.includes('host.endsWith(".gov.in")'));
+  assert.ok(extension.includes('host.endsWith(".nic.in")'));
+  assert.ok(extension.includes('portalUrl.protocol!=="https:"'));
+  assert.ok(extension.includes("verifyPortalCheckbox.checked"));
+  assert.ok(extension.includes("tab.url!==pendingUrl"));
+  assert.doesNotMatch(extension, /PORTAL_ROUTE_POLICIES/);
+  assert.match(popupHtml, /id="verify-portal"/);
+  assert.match(popupHtml, /id="active-site"/);
 });
 
 test("form assistant has no automatic submission or document upload code", () => {

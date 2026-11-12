@@ -348,14 +348,14 @@ test("disabled primary actions remain readable and retain the warm application t
   expect(styles.label).toBe("Refreshing status");
 });
 
-test("application workspace clearly discloses exact-route authorization and disabled live autofill", async ({ page }) => {
+test("application workspace explains citizen-directed portal field assistance and submission boundaries", async ({ page }) => {
   await page.goto("/app/automation");
   const assistant = page.locator(".portal-assistant-panel");
   await expect(assistant.getByRole("heading", { name: "JanaSetu Form Assistant" })).toBeVisible();
   await expect(assistant.locator(".portal-assistant-steps li")).toHaveCount(4);
-  await expect(assistant).toContainText("exact portal route");
-  await expect(assistant).toContainText("All four initial scheme routes remain blocked");
-  await expect(assistant).toContainText("No initial scheme route is currently authorized");
+  await expect(assistant).toContainText("verify its address");
+  await expect(assistant).toContainText("approve each safe field");
+  await expect(assistant).toContainText("not a government-authorized integration");
   await expect(assistant).toContainText("never uploads documents");
   await expect(assistant.getByRole("link", { name: "Get the form assistant" })).toHaveAttribute("href", "https://github.com/PSP-YN/JanaSetu-AI/tree/main/extension");
 });
