@@ -96,7 +96,7 @@ test("approved scheme mappings can use extended profile fields without treating 
   assert.equal(result.state, "potential_match");
   const draft = prepareApplicationDraft(citizen, approved, result);
   assert.equal(draft.status, "ready_for_citizen_review");
-  assert.equal(draft.fields.at(-1)?.value, "570001");
+  assert.equal(draft.fields[draft.fields.length - 1]?.value, "570001");
 });
 
 test("date-only scheme end dates remain valid throughout the Indian calendar day",()=>{
