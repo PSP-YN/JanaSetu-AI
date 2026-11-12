@@ -115,3 +115,12 @@ test("extension previews additional reviewed profile fields while keeping phone 
  assert.equal(phone.value,"");
  assert.equal(email.value,"");
 });
+
+test("extension treats postal PIN as a fillable address field but blocks security PINs",()=>{
+ const postal=input({name:"postal_code",id:"postal-code",label:"PIN code"});
+ const security=input({name:"security_pin",id:"security-pin",label:"Security PIN"});
+ const result=runFill([postal,security],profile);
+ assert.equal(result.preview.length,1);
+ assert.equal(result.preview[0].key,"pincode");
+ assert.equal(result.preview[0].value,"570001");
+});
