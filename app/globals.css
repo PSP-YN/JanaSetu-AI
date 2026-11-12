@@ -1337,3 +1337,81 @@ button:disabled,
   font-size: 12px;
   font-weight: 650;
 }
+
+/* Public landing-page alignment and coverage clarity — 13 Nov 2026 */
+.site-shell .coverage-summary{margin-top:28px;padding:24px 26px;border:1px solid var(--line);border-radius:15px;background:linear-gradient(135deg,#fffdf9 0%,#fff3e7 100%)}
+.site-shell .coverage-summary-copy{max-width:700px}
+.site-shell .coverage-summary-copy h3{margin:10px 0 7px;color:var(--forest-dark);font-size:22px;line-height:1.2;letter-spacing:-.6px}
+.site-shell .coverage-summary-copy p{max-width:700px;margin:0;color:var(--muted);font-size:12px;line-height:1.75}
+.site-shell .coverage-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:20px}
+.site-shell .coverage-stats article{min-width:0;padding:15px 16px;border:1px solid #ecd9c7;border-radius:10px;background:rgba(255,255,255,.82);display:flex;flex-direction:column;gap:7px}
+.site-shell .coverage-stats strong{color:var(--forest-dark);font-size:29px;line-height:1;letter-spacing:-1px;font-variant-numeric:tabular-nums}
+.site-shell .coverage-stats span{color:var(--muted);font-size:10px;line-height:1.5}
+.site-shell .coverage-footnote{margin:15px 0 0;color:#70543f;font-size:10px;line-height:1.65}
+.site-shell .principles-card{min-width:0}
+.site-shell .principles-card ul{min-width:0}
+.site-shell .principles-card li{align-items:flex-start}
+.site-shell .principles-card li svg{margin-top:1px}
+.site-shell .cta-section{max-width:1088px;margin-left:auto;margin-right:auto}
+.site-shell .site-footer{padding-top:34px;padding-bottom:22px}
+.site-shell .footer-main{width:100%;max-width:1088px;margin:0 auto;display:grid;grid-template-columns:minmax(240px,.85fr) minmax(0,1.15fr);align-items:center;gap:36px}
+.site-shell .footer-brand-block{min-width:0}
+.site-shell .footer-brand-block>p{max-width:330px;margin:12px 0 0 8px;color:var(--muted);font-size:11px;line-height:1.65}
+.site-shell .footer-navigation{min-width:0;display:grid;justify-items:end;gap:15px}
+.site-shell .footer-links{display:flex;justify-content:flex-end;align-items:center;gap:12px 20px;flex-wrap:wrap}
+.site-shell .footer-links a{white-space:nowrap}
+.site-shell .footer-languages{display:flex;justify-content:flex-end;align-items:center;flex-wrap:wrap;gap:8px 15px;margin:0}
+.site-shell .footer-languages a{color:#684b37;font-size:10px;line-height:1.5;text-decoration:none;white-space:nowrap}
+.site-shell .footer-languages a:hover{text-decoration:underline;text-underline-offset:3px;color:var(--forest)}
+.site-shell .footer-bottom{width:100%;max-width:1088px;margin:25px auto 0;padding-top:15px;display:flex;justify-content:space-between;align-items:flex-start;gap:24px}
+.site-shell .footer-bottom span:last-child{max-width:650px;text-align:right}
+.site-shell :where(a,button,summary,input,select,textarea):focus-visible{outline:3px solid #d97706;outline-offset:3px}
+@media(max-width:900px){
+  .site-shell .coverage-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .site-shell .footer-main{grid-template-columns:minmax(200px,.8fr) minmax(0,1.2fr);gap:22px}
+  .site-shell .footer-links{gap:10px 14px}
+  .site-shell .footer-bottom{gap:14px}
+}
+@media(max-width:760px){
+  .site-shell .footer-main{grid-template-columns:1fr;gap:18px}
+  .site-shell .footer-navigation{justify-items:start;gap:12px}
+  .site-shell .footer-links,.site-shell .footer-languages{justify-content:flex-start}
+  .site-shell .footer-bottom{display:grid;grid-template-columns:1fr;gap:8px}
+  .site-shell .footer-bottom span:last-child{text-align:left}
+  .site-shell .coverage-summary{padding:20px 17px}
+  .site-shell .principles-section{padding-top:52px;padding-bottom:52px}
+  .site-shell .cta-section{margin-left:14px;margin-right:14px}
+}
+@media(max-width:600px){
+  .site-shell .coverage-stats{gap:8px}
+  .site-shell .coverage-stats article{padding:13px 12px}
+  .site-shell .coverage-stats strong{font-size:25px}
+  .site-shell .coverage-stats span{font-size:9px}
+}
+
+/* Localized public header: keep long regional-language taglines inside the viewport. */
+.localized-header{min-width:0}
+.localized-header .brand{min-width:0;max-width:100%;flex:1 1 210px;padding:0;gap:10px;white-space:normal}
+.localized-header .brand>span{min-width:0;overflow-wrap:anywhere}
+.localized-header .brand small{max-width:260px;line-height:1.35;letter-spacing:.2px}
+.localized-header nav{min-width:0;max-width:100%;flex:0 1 auto}
+.localized-header nav a{min-width:0;white-space:normal}
+.localized-header>.button-primary{flex:0 0 auto;max-width:100%;white-space:normal;text-align:center}
+@media(max-width:850px){
+  .localized-header{align-items:center}
+  .localized-header nav{flex:1 0 100%;width:100%;order:3;justify-content:flex-start}
+}
+@media(max-width:600px){
+  .localized-header{gap:12px;padding:13px 14px}
+  .localized-header .brand{flex:1 1 145px;gap:7px;font-size:17px}
+  .localized-header .brand img{width:35px;height:35px;flex:0 0 35px}
+  .localized-header .brand small{display:none}
+  .localized-header>.button-primary{font-size:10px;padding:9px 10px;gap:5px;min-height:38px}
+  .localized-header nav{gap:8px 13px}
+  .localized-header nav a{font-size:10px}
+}
+@media(max-width:600px){
+  .localized-trust>div{min-width:0}
+  .localized-trust strong{min-width:0;overflow-wrap:anywhere;word-break:normal}
+  .localized-steps h3,.localized-faq summary{overflow-wrap:anywhere}
+}
