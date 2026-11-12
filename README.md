@@ -20,7 +20,9 @@ JanaSetu is an independent, multilingual public-benefits discovery and applicati
 - Preliminary checklist comparisons that preserve unknown answers and display **Needs verification** for pending schemes.
 - Local application-preparation drafts, evidence checklists and official-source handoff.
 - Browser-local workspace data and password-encrypted local backup/restore.
-- Experimental browser form assistant for supported official domains: previews suggested field values for citizen approval; it does not upload documents or submit applications.
+- Expanded citizen profile covering contact, address, household, agriculture and education details, with a separate citizen-confirmed plaintext export for the browser form assistant.
+- Signed-in, plan-only application automation endpoint and dashboard: profile completeness, approved-scheme checks, evidence gaps and official portal handoff. The planner does not persist the submitted profile.
+- Experimental browser form assistant for supported official domains: previews matching non-sensitive fields for citizen approval; it does not upload documents or submit applications.
 
 ## What is intentionally not in this release
 
@@ -32,7 +34,7 @@ JanaSetu is an independent, multilingual public-benefits discovery and applicati
 
 ## Privacy and safety
 
-The current demo stores profile information, checklists and drafts in the browser. Browser storage is not the same as encrypted local storage. A separately exported backup can be password-encrypted; keep the password safe because JanaSetu cannot recover it. Do not enter Aadhaar numbers, bank-account numbers, OTPs, passwords or CAPTCHA answers into the general profile.
+The current demo stores profile information, checklists and drafts in the browser. Browser storage is not the same as encrypted local storage. A separately exported backup can be password-encrypted; keep the password safe because JanaSetu cannot recover it. Do not enter Aadhaar numbers, bank-account numbers, OTPs, passwords or CAPTCHA answers into the general profile. The form-assistant profile export is plaintext JSON, not an encrypted vault; keep it private and delete it after importing into the extension.
 
 ## Hackathon demo flow
 
