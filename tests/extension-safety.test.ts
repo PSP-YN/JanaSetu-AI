@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 
 const extension = readFileSync(new URL("../extension/popup.js", import.meta.url), "utf8");
 const popupHtml = readFileSync(new URL("../extension/popup.html", import.meta.url), "utf8");
+const extensionReadme = readFileSync(new URL("../extension/README.md", import.meta.url), "utf8");
 
 test("form assistant requires per-session citizen verification of an HTTPS government portal address", () => {
   assert.ok(extension.includes("getCitizenConfirmedPortalTab"));
@@ -15,6 +16,9 @@ test("form assistant requires per-session citizen verification of an HTTPS gover
   assert.doesNotMatch(extension, /PORTAL_ROUTE_POLICIES/);
   assert.match(popupHtml, /id="verify-portal"/);
   assert.match(popupHtml, /id="active-site"/);
+  assert.match(extensionReadme, /per-session address-confirmation checkbox/);
+  assert.match(extensionReadme, /not a department-authorized or certified scheme integration/i);
+  assert.doesNotMatch(extensionReadme, /blocks live portal filling until an exact route/i);
 });
 
 test("form assistant has no automatic submission or document upload code", () => {
