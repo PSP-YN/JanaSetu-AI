@@ -25,6 +25,9 @@ test("readiness fails closed when Supabase configuration is missing", async () =
   assert.equal(body.ready, false);
   assert.equal(body.status, "misconfigured");
   assert.equal(body.checks.supabaseConfiguration, false);
+  assert.equal(body.capabilities.publicSchemeDiscovery, true);
+  assert.equal(body.capabilities.localChecklistPreparation, true);
+  assert.equal(body.capabilities.sourceLinkedSchemeReferences, 46);
 });
 
 test("readiness separates database health from scheme and portal release gates", async () => {
@@ -45,7 +48,10 @@ test("readiness separates database health from scheme and portal release gates",
   assert.equal(body.ready, true);
   assert.equal(body.checks.databaseReachable, true);
   assert.equal(body.capabilities.publishedSchemes, 0);
-  assert.equal(body.capabilities.applicationPreparation, false);
+  assert.equal(body.capabilities.applicationPreparation, true);
+  assert.equal(body.capabilities.backendApplicationPreparation, false);
+  assert.equal(body.capabilities.persistedApplicationPreparation, false);
+  assert.equal(body.capabilities.localChecklistPreparation, true);
   assert.equal(body.capabilities.governmentPortalAutomation, "disabled_pending_department_authorization");
   assert.equal(response.headers.get("cache-control"), "no-store");
 });

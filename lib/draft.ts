@@ -27,7 +27,7 @@ export function createDraftRecord(schemeId: string, profile: CitizenProfile, sch
     status: scheme.reviewStatus !== "approved" ? "Scheme review pending — not an eligibility result" : "Draft prepared — eligibility requires official verification",
     createdAt: new Date().toISOString(), reviewRequired: true, assessmentState: assessment.state,
     missingChecks: missing.map((item) => item.label), fields, reviewedAt: null,
-    sourceUrl: scheme.sourceUrl,
+    sourceUrl: scheme.sourceUrl, applicationUrl: scheme.applicationUrl, documents: scheme.documents.slice(0, 30),
     disclaimer: "This is a preparation draft created by JanaSetu. It has not been submitted to a government portal."
   };
   return { draft, assessment };

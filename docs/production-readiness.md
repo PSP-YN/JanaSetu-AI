@@ -1,5 +1,14 @@
 # JanaSetu AI — production readiness and release gate
 
+## Public-use release update — 12 November 2026
+
+The current public release adds local checklist preparation for all 46 source-linked built-in scheme references, including the 42 catalogue-only references that previously had no preparation action. A citizen can create a browser-local draft, review source-derived document checklist items and official links, and download a plaintext checklist after an explicit warning. This is not an eligibility decision, persisted government application or submission.
+
+The 4,693-row SmartDuke snapshot is now optional in the discovery UI and excluded from default results because it is stale and machine-parsed. The source-health endpoint now reports the 46-reference curated register separately from the supplemental dataset. The overall monitor still reports attention while the supplemental snapshot is stale or its upstream search service is unavailable.
+
+The 96 Karnataka budget leads remain non-application research leads. The four deterministic rule prototypes remain pending independent approval. Server-persisted application preparation, cloud document upload/scanning, cross-device sync and government portal automation remain gated. Full workflow and user instructions: [public-use release notes](public-use-release-2026-11-12.md). The public-use branch passed 174 unit tests, 68 Playwright tests, the production build and `npm audit --audit-level=high` (0 vulnerabilities).
+
+
 **Assessment date:** 12 November 2026
 **Merged release:** PR #29 plus CI/action, Playwright, production dependency and release-documentation updates (#18, #19, #15, #30, #31).
 **Application code baseline:** `d8928e8fc891a76f692cf4ba12e8d213d9d2b876` (PR #29 plus the verified dependency updates).
@@ -36,7 +45,7 @@ PR #29 merged normally after all required CI and Vercel checks passed and all se
 | Live browser smoke | 9 routes returned HTTP 200; Kannada profile/export and automation disclosures verified; zero console errors |
 | Supabase Auth readiness | Production `/api/ready` returned ready with database connectivity; local `.env.local` Auth health returned HTTP 200 |
 | Automation security boundary | Cross-origin POST blocked (403); same-origin unauthenticated planner blocked (401); no published schemes |
-| Latest live readiness gate | API ready and database reachable; `publishedSchemes: 0`, `applicationPreparation: false`, government portal automation disabled pending department authorization |
+| Latest live readiness gate | API ready and database reachable; `publishedSchemes: 0`, local `applicationPreparation: true`, `backendApplicationPreparation: false`, government portal automation disabled pending department authorization |
 
 These results verify the exercised code paths. They do not establish legal authorization, external portal compatibility, live scanner operation, two-device sync, independent penetration-test completion or high-load capacity.
 

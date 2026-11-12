@@ -36,3 +36,17 @@ test("approved scheme with unknown profile facts is not mislabeled as source app
 test("draft creation rejects a non-State/UT value", () => {
   assert.throws(() => createDraftRecord("pm-kisan", { ...profile, state: "Atlantis" }), /State\/UT/i);
 });
+
+
+test("catalogue-only official source reference can create a local checklist without an eligibility result", () => {
+  const scheme = SCHEMES.find((entry) => entry.catalogueStatus === "catalogue-only" && entry.recordKind !== "budget-line-item-lead");
+  assert.ok(scheme);
+  const { draft, assessment } = createDraftRecord(scheme.id, profile);
+  assert.equal(draft.schemeReviewStatus, "pending");
+  assert.equal(assessment.state, "needs_verification");
+  assert.equal(draft.assessmentState, "needs_verification");
+  assert.deepEqual(draft.documents, scheme.documents.slice(0, 30));
+  assert.equal(draft.sourceUrl, scheme.sourceUrl);
+  assert.equal(draft.applicationUrl, scheme.applicationUrl);
+  assert.match(draft.disclaimer, /not been submitted/i);
+});

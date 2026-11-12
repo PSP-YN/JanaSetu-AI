@@ -8,7 +8,7 @@ export type LocalApplicationRecord = {
   reviewRequired: boolean; assessmentState?: Assessment["state"];
   schemeReviewStatus?: "pending" | "approved" | "missing";
   missingChecks: string[]; sourceUrl: string; disclaimer: string;
-  fields?: DraftField[]; reviewedAt?: string | null;
+  fields?: DraftField[]; documents?: string[]; applicationUrl?: string; reviewedAt?: string | null;
 };
 export type LocalDocumentRecord = { id: string; name: string; type: string; size: number; addedAt: string; status: string };
 export type LocalTaskRecord = { id: string; title: string; dueAt: string; status: string; note: string };
@@ -93,6 +93,9 @@ export function parseBackupApplications(value: unknown, options: { trustLocalSto
     const district = text(record.district, 100) || "Not provided";
     const createdAt = iso(record.createdAt) || new Date().toISOString();
     const missingChecks = Array.isArray(record.missingChecks) ? record.missingChecks.slice(0, 50).flatMap((check) => { const v = text(check, 200); return v ? [v] : []; }) : [];
+    const documents = Array.isArray(record.documents) ? record.documents.slice(0, 30).flatMap((entry) => { const value = text(entry, 300); return value ? [value] : []; }) : [];
+    let applicationUrl: string | undefined;
+    if (typeof record.applicationUrl === "string") { try { const url = new URL(record.applicationUrl); if (url.protocol === "https:") applicationUrl = url.toString(); } catch { /* ignore invalid backup URL */ } }
     const reviewedAt = iso(record.reviewedAt);
     const preserveReviewedState = options.trustLocalStorage === true && scheme?.reviewStatus === "approved" && record.reviewRequired === false && reviewedAt !== null;
     return [{
@@ -102,7 +105,7 @@ export function parseBackupApplications(value: unknown, options: { trustLocalSto
       schemeReviewStatus: scheme?.reviewStatus ?? "missing", missingChecks,
       sourceUrl: scheme?.sourceUrl || "https://www.myscheme.gov.in/",
       disclaimer: "This is a preparation draft created by JanaSetu. It has not been submitted to a government portal.",
-      fields: parseDraftFields(record.fields), reviewedAt: preserveReviewedState ? reviewedAt : null
+      fields: parseDraftFields(record.fields), documents, applicationUrl: scheme?.applicationUrl || applicationUrl, reviewedAt: preserveReviewedState ? reviewedAt : null
     }];
   });
 }

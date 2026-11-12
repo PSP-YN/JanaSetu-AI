@@ -40,6 +40,14 @@ test("source monitor reports local full-index search while upstream search is un
     assert.equal(official.publicCatalogueBenchmark.languagesAdvertised, 15);
     assert.equal(official.publicCatalogueBenchmark.languageSource, "https://www.myscheme.gov.in/faqs");
     assert.equal(report.overall, "attention_required");
+    assert.equal(report.curatedCatalogue.status, "available_with_review_limits");
+    assert.equal(report.curatedCatalogue.totalBuiltInRecords, 142);
+    assert.equal(report.curatedCatalogue.sourceLinkedSchemeReferences, 46);
+    assert.equal(report.curatedCatalogue.rulePrototypesPendingIndependentApproval, 4);
+    assert.equal(report.curatedCatalogue.catalogueOnlySchemeReferences, 42);
+    assert.equal(report.curatedCatalogue.budgetLineItemLeadsNotConfirmedSchemes, 96);
+    assert.equal(report.curatedCatalogue.sourceCheckDateRange.earliest, "2026-11-02");
+    assert.equal(report.curatedCatalogue.sourceCheckDateRange.latest, "2026-11-12");
   } finally {
     globalThis.fetch = originalFetch;
   }

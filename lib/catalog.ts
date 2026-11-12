@@ -1045,7 +1045,7 @@ SCHEMES.push(...([
     "sourceUrl": "https://nha.gov.in/img/resources/Adhikar-Patra.pdf",
     "sourceName": "National Health Authority — PM-JAY beneficiary charter",
     "sourcePeriod": "Official beneficiary charter; confirm current beneficiary criteria and package rules.",
-    "sourceChecked": "2026-11-02",
+    "sourceChecked": "2026-11-12",
     "geography": "Central scheme — India",
     "documents": [
       "Use the official beneficiary eligibility checker or a Common Service Centre; exact requirements depend on the beneficiary record."
@@ -1062,7 +1062,7 @@ SCHEMES.push(...([
     ],
     "catalogueStatus": "catalogue-only",
     "jurisdiction": "central",
-    "applicationUrl": "https://pmjay.gov.in/"
+    "applicationUrl": "https://mera.pmjay.gov.in/"
   },
   {
     "id": "pmmvy",
@@ -1071,10 +1071,10 @@ SCHEMES.push(...([
     "ministry": "Ministry of Women & Child Development",
     "summary": "Maternity benefit for eligible pregnant and lactating women in specified socio-economic categories; not an unconditional benefit for every pregnancy.",
     "benefit": "The Ministry describes ₹5,000 in two instalments for the first living child and ₹6,000 for a second living child if the second child is a girl, subject to conditions.",
-    "sourceUrl": "https://www.wcd.gov.in/offerings/pradhan-mantri-matru-vandana-yojana",
-    "sourceName": "Ministry of Women & Child Development — PMMVY",
-    "sourcePeriod": "Ministry FAQ checked 2 November 2026; verify eligibility categories, ANC requirements and claim deadlines.",
-    "sourceChecked": "2026-11-02",
+    "sourceUrl": "https://www.wcd.gov.in/women/pradhan-mantri-matru-vandana-yojna",
+    "sourceName": "Ministry of Women & Child Development — current PMMVY scheme page and FAQ",
+    "sourcePeriod": "Official Ministry page rechecked 12 November 2026; it describes first-child and second-child-girl benefits and the current listed eligibility categories. Verify pregnancy registration, antenatal-care, claim deadlines and state implementation before applying.",
+    "sourceChecked": "2026-11-12",
     "geography": "Central scheme — India",
     "documents": [
       "Follow the current scheme checklist. Do not upload sensitive health records or bank details to JanaSetu."
@@ -1128,10 +1128,10 @@ SCHEMES.push(...([
     "ministry": "Department of Financial Services, Ministry of Finance",
     "summary": "Voluntary, renewable one-year life insurance for eligible savings-bank or post-office account holders.",
     "benefit": "Life cover of ₹2 lakh for death due to any cause under current scheme terms; the DFS FAQ checked lists an annual premium of ₹436.",
-    "sourceUrl": "https://www.financialservices.gov.in/pmjjby",
-    "sourceName": "Department of Financial Services — PMJJBY",
-    "sourcePeriod": "Official DFS FAQ checked 2 November 2026; premium, age and policy conditions may be revised.",
-    "sourceChecked": "2026-11-02",
+    "sourceUrl": "https://financialservices.gov.in/pradhan-mantri-jeevan-jyoti-bima-yojana-pmjjby",
+    "sourceName": "Department of Financial Services — current PMJJBY scheme page",
+    "sourcePeriod": "Official DFS scheme page rechecked 12 November 2026; it lists ₹2 lakh life cover and a ₹436 annual premium. Verify current premium, entry-age conditions, auto-debit consent and policy exclusions with the participating bank/post office before enrolment.",
+    "sourceChecked": "2026-11-12",
     "geography": "Central scheme — India",
     "documents": [
       "Participating bank or post-office savings account and consent/auto-debit as required by enrolment."
@@ -1275,7 +1275,7 @@ SCHEMES.push(...([
     "sourceUrl": "https://chamrajnagar.nic.in/en/welfareschemes/",
     "sourceName": "Chamarajanagar District — Welfare Schemes",
     "sourcePeriod": "District government listing checked 2 November 2026; confirm current exclusions and disbursement notices.",
-    "sourceChecked": "2026-11-02",
+    "sourceChecked": "2026-11-12",
     "geography": "State scheme — Karnataka",
     "documents": [
       "Ration-card household details; provide bank/payment details only through the official State channel, never JanaSetu."
@@ -1292,7 +1292,7 @@ SCHEMES.push(...([
     ],
     "catalogueStatus": "catalogue-only",
     "jurisdiction": "state",
-    "applicationUrl": "https://sevasindhuservices.karnataka.gov.in/"
+    "applicationUrl": "https://sevaone.karnataka.gov.in/"
   },
   {
     "id": "karnataka-gruha-jyothi",
@@ -1304,7 +1304,7 @@ SCHEMES.push(...([
     "sourceUrl": "https://fpibengaluru.karnataka.gov.in/uploads/media_to_upload1762775113.pdf",
     "sourceName": "Karnataka policy research — From Guarantees to Rights",
     "sourcePeriod": "Government-hosted policy study; confirm latest billing rules with the relevant ESCOM.",
-    "sourceChecked": "2026-11-02",
+    "sourceChecked": "2026-11-12",
     "geography": "State scheme — Karnataka",
     "documents": [
       "Domestic electricity account and consumer details; follow current ESCOM/Seva Sindhu requirements."
@@ -1321,7 +1321,7 @@ SCHEMES.push(...([
     ],
     "catalogueStatus": "catalogue-only",
     "jurisdiction": "state",
-    "applicationUrl": "https://sevasindhuservices.karnataka.gov.in/"
+    "applicationUrl": "https://sevaone.karnataka.gov.in/"
   },
   {
     "id": "karnataka-yuva-nidhi",
@@ -1330,10 +1330,10 @@ SCHEMES.push(...([
     "ministry": "Government of Karnataka — Department of Skill Development, Entrepreneurship & Livelihood",
     "summary": "Unemployment assistance described for eligible Karnataka-domiciled graduates and diploma holders, subject to current pass-out-year, waiting-period and exclusion rules.",
     "benefit": "A 2024 Karnataka Legislative Council draft guideline describes ₹3,000/month for graduates and ₹1,500/month for diploma holders; these are not asserted as current entitlement.",
-    "sourceUrl": "https://kla.kar.nic.in/council/Replies/unstarred/19022024/usq403%2819022024%29.pdf",
-    "sourceName": "Karnataka Legislative Council — draft Yuva Nidhi guidelines",
-    "sourcePeriod": "Draft guidelines dated 2024; not a current final eligibility notification. Confirm current rules on Seva Sindhu.",
-    "sourceChecked": "2026-11-02",
+    "sourceUrl": "https://kla.kar.nic.in/council/Replies/replies.htm",
+    "sourceName": "Karnataka Legislative Council — official answers archive (19 February 2024 session)",
+    "sourcePeriod": "The 2024 Legislative Council archive is a historical reference, not a current final eligibility notification. Confirm current rules, application windows and status through the current Karnataka citizen-services portal or the department.",
+    "sourceChecked": "2026-11-12",
     "geography": "State scheme — Karnataka",
     "documents": [
       "Degree/diploma certificate and Karnataka domicile evidence; check current checklist."
@@ -1351,7 +1351,7 @@ SCHEMES.push(...([
     ],
     "catalogueStatus": "catalogue-only",
     "jurisdiction": "state",
-    "applicationUrl": "https://sevasindhuservices.karnataka.gov.in/"
+    "applicationUrl": "https://sevaone.karnataka.gov.in/"
   },
   {
     "id": "karnataka-cm-kk-y",

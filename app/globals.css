@@ -240,6 +240,8 @@ h1, h2, h3 { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
 .filter-select { height: 39px; border: 1px solid #e5e2d8; border-radius: 7px; background: var(--paper); position: relative; display: flex; align-items: center; gap: 8px; padding: 0 11px; color: #92968c; font-size: 9px; }
 .filter-select select { position: relative; border: 0; width: 125px; padding: 0 13px 0 0; height: 35px; appearance: none; background: transparent; color: var(--ink); font-size: 10px; }
 .filter-select svg { pointer-events: none; }
+.catalogue-source-toggle { display: flex; align-items: flex-start; gap: 10px; margin: 4px 0 12px; padding: 12px 14px; border: 1px solid #e7d8c9; border-radius: 12px; color: #6b4b36; background: #fffaf5; font-size: 12px; line-height: 1.5; }
+.catalogue-source-toggle input { margin-top: 2px; accent-color: #b25916; flex: 0 0 auto; }
 .catalogue-head { display: flex; justify-content: space-between; color: #92968c; font-size: 9px; padding: 8px 1px 11px; }
 .catalogue-head span:first-child { color: #6b4b36; font-weight: 700; }
 .empty-state { min-height: 185px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 25px; color: #a2a59a; }
@@ -269,6 +271,9 @@ h1, h2, h3 { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
 .empty-large { padding: 15px; }
 .application-list { display: grid; gap: 13px; }
 .application-card { padding: 19px 21px; }
+.draft-document-checklist { margin: 14px 0; padding: 14px 16px; border-radius: 12px; background: #fff8f1; border: 1px solid #ead8c8; }
+.draft-document-checklist strong { display: block; margin-bottom: 8px; color: #6b3e20; font-size: 13px; }
+.draft-document-checklist ul { margin: 0; padding-left: 19px; display: grid; gap: 5px; color: #5e5148; font-size: 12px; }
 .application-top { display: flex; align-items: center; gap: 12px; }
 .application-icon { width: 39px; height: 39px; border-radius: 10px; color: var(--forest); background: #fff0e2; display: grid; place-items: center; }
 .application-top > div:nth-child(2) { flex: 1; }
