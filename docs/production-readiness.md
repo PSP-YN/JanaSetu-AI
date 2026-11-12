@@ -24,7 +24,7 @@ The latest PR-head CI run [43144514981](https://github.com/PSP-YN/JanaSetu-AI/ac
 - Database/RLS and citizen automation guardrail checks
 - Private document-scanner protocol and ClamAV container build
 
-Vercel currently reports: **“Deployment rate limited — retry in 24 hours.”** The failed required deployment status was recorded around 12 November 2026 02:50 UTC; the stated retry time is approximately 13 November 2026 02:50 UTC (08:20 IST). PR #22 has not been merged to main, no status check has been bypassed, and no production deployment has been attempted.
+Vercel currently reports: **“Deployment rate limited — retry in 24 hours.”** The failed required deployment status was recorded at 12 November 2026 02:59:37 UTC; the stated retry time is approximately 13 November 2026 02:59:37 UTC (08:29 IST). PR #22 has not been merged to main, no status check has been bypassed, and no production deployment has been attempted.
 
 ## Implemented release candidate
 
