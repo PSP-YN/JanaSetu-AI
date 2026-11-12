@@ -48,3 +48,18 @@ test("valid encrypted payload still requires authentication", async ({ request }
   });
   expect(response.status()).toBe(401);
 });
+
+test("legacy plaintext workspace endpoint is permanently retired", async ({ request }) => {
+  const get = await request.get("/api/workspace");
+  const put = await request.put("/api/workspace", {
+    headers: { origin: base, "content-type": "application/json" },
+    data: { profile_data: { fullName: "Synthetic Citizen" } }
+  });
+  expect(get.status()).toBe(410);
+  expect(put.status()).toBe(410);
+});
+
+test("sync policy status requires authentication", async ({ request }) => {
+  const response = await request.get("/api/workspace/sync/status");
+  expect(response.status()).toBe(401);
+});
