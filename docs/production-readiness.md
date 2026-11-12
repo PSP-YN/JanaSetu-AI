@@ -1,9 +1,9 @@
 # JanaSetu AI — production readiness and release gate
 
 **Assessment date:** 12 November 2026
-**Merged release:** PR #29 plus CI/action, Playwright, production dependency and release-documentation updates (#18, #19, #15, #30, #31).
+**Merged release:** PR #29 plus CI/action, Playwright, production dependency and release-documentation updates (#18, #19, #15, #30, #31, #32).
 **Application code baseline:** `d8928e8fc891a76f692cf4ba12e8d213d9d2b876` (PR #29 plus the verified dependency updates).
-**Latest release documentation:** PR #31; documentation-only updates are automatically deployed from protected `main`.
+**Latest release documentation:** PRs #31 and #32; documentation-only updates are automatically deployed from protected `main`.
 **Release state:** merged to protected main; refreshed production deployment READY; canonical-domain smoke and browser checks passed.
 
 ## Deployment state
@@ -13,9 +13,9 @@
 | Canonical production | https://jana-setu-ai.vercel.app | READY · canonical alias verified · current deployment ID and Git SHA are available in the Vercel project |
 | New-account preview | https://jana-setu-grubsq4ns-psp-adb0.vercel.app | READY · deployment dpl_w6L5tdjRaXcC8MwdaF6HLseXUcmu · preview bypass revoked |
 | New Vercel project | psp-adb0 / jana-setu-ai | Supabase URL and public anon key configured for production, preview and development |
-| GitHub source | https://github.com/PSP-YN/JanaSetu-AI | PRs #29, #15, #18, #19, #30 and #31 merged to protected `main` |
+| GitHub source | https://github.com/PSP-YN/JanaSetu-AI | PRs #29, #15, #18, #19, #30, #31 and #32 merged to protected `main` |
 
-PR #29 merged normally after all required CI and Vercel checks passed and all seven CodeRabbit review threads were resolved. Maintenance PRs #18, #19 and #15 also passed required checks and merged. Documentation PR #30 passed the required CI and new-account Vercel checks before merging; optional Octopus Review was not required by branch protection. No administrator merge override was used and branch protection was not disabled. The canonical domain serves the latest READY production deployment from protected `main`. The latest live smoke check returned HTTP 200 for 18 public routes/APIs; planner requests were blocked cross-origin (403) and without a signed-in session (401).
+PR #29 merged normally after all required CI and Vercel checks passed and all seven CodeRabbit review threads were resolved. Maintenance PRs #18, #19 and #15 also passed required checks and merged. Documentation PRs #30, #31 and #32 passed the required CI and new-account Vercel checks before merging; optional Octopus Review was not required by branch protection. No administrator merge override was used and branch protection was not disabled. The canonical domain serves the latest READY production deployment from protected `main`. The latest live smoke check returned HTTP 200 for 18 public routes/APIs; planner requests were blocked cross-origin (403) and without a signed-in session (401).
 
 ## Verification completed for the merged release
 
