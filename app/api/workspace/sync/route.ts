@@ -58,7 +58,14 @@ export async function GET() {
 
 export async function PUT(request: NextRequest) {
   try {
-    if (request.headers.get("origin") !== request.nextUrl.origin) return json({ error: "Cross-origin request blocked." }, 403);
+    const originHeader = request.headers.get("origin");
+    const requestHost = request.headers.get("host");
+    let originMatchesRequest = false;
+    try {
+      const parsedOrigin = originHeader ? new URL(originHeader) : null;
+      originMatchesRequest = Boolean(parsedOrigin && requestHost && parsedOrigin.host === requestHost && parsedOrigin.protocol === request.nextUrl.protocol);
+    } catch { originMatchesRequest = false; }
+    if (!originMatchesRequest) return json({ error: "Cross-origin request blocked." }, 403);
     const declaredLength = Number(request.headers.get("content-length") ?? 0);
     if (declaredLength > MAX_BYTES) return json({ error: "Encrypted workspace exceeds the 8 MB limit." }, 413);
     const raw = await request.text();
