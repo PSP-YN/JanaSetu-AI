@@ -62,7 +62,10 @@ export async function PUT(request: NextRequest) {
     if (declaredLength > MAX_BYTES) return json({ error: "Encrypted workspace exceeds the 8 MB limit." }, 413);
     const raw = await request.text();
     if (new TextEncoder().encode(raw).byteLength > MAX_BYTES) return json({ error: "Encrypted workspace exceeds the 8 MB limit." }, 413);
-    const body = JSON.parse(raw) as Record<string, unknown>;
+    let parsed: unknown;
+    try { parsed = JSON.parse(raw); } catch { return json({ error: "Request body must be valid JSON." }, 400); }
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return json({ error: "Request body must be a JSON object." }, 400);
+    const body = parsed as Record<string, unknown>;
     if (Object.keys(body).sort().join(",") !== "expected_revision,vault" || !validEnvelope(body.vault) || !Number.isSafeInteger(body.expected_revision) || Number(body.expected_revision) < 0) {
       return json({ error: "Provide a valid encrypted vault and the revision last restored by this device." }, 400);
     }
