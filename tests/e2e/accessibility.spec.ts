@@ -295,7 +295,7 @@ test("PM-KISAN preparation clearly distinguishes documents to keep ready from of
     buffer: Buffer.from("%PDF-1.7 synthetic test")
   });
   await expect(page.locator(".pmkisan-doc").first()).toContainText("synthetic-land-record.pdf");
-  await expect(page.locator(".pmkisan-doc").first()).toContainText("not sent to JanaSetu or any server");
+  await expect(page.locator(".pmkisan-section-head")).toContainText("Files selected here stay in this browser and are not sent to JanaSetu or any server.");
   await page.locator(".pmkisan-doc").first().getByRole("button", { name: "Mark as ready" }).click();
   await expect(page.locator(".pmkisan-progress")).toContainText("1 / 5");
   await page.reload();
