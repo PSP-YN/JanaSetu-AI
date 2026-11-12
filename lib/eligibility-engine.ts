@@ -39,7 +39,10 @@ export type PreparedApplication = {
 const PROFILE_FIELDS = new Set<ProfileField>([
   "fullName","age","gender","state","district","residenceType","annualIncome","occupation",
   "hasCultivableLand","pmKisanExcluded","ownsPuccaHouse","previousHousingBenefit","householdHasLpg",
-  "poorHouseholdDeclaration","isStudent","top20Percentile","regularUndergraduate","otherScholarship","diplomaOrDistance"
+  "poorHouseholdDeclaration","isStudent","top20Percentile","regularUndergraduate","otherScholarship","diplomaOrDistance",
+  "mobileNumber","emailAddress","addressLine1","addressLine2","villageOrTown","pincode",
+  "fatherOrGuardianName","motherName","socialCategory","landholdingAcres","institutionName",
+  "courseName","courseYear","rationCardCategory"
 ]);
 const FORBIDDEN = /(aadhaar|aadhar|bank|account_number|ifsc|otp|password|biometric|pin)/i;
 const OPERATORS = new Set<Operator>(["eq","neq","gt","gte","lt","lte","in","not_in","is_true","is_false"]);
