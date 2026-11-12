@@ -12,13 +12,15 @@ test("citizen workspace is tenant-isolated by auth.uid()", () => {
   assert.match(privacy, /revoke all on public\.citizen_workspaces from public,anon,authenticated/i);
 });
 
-test("workspace API derives identity from verified HttpOnly session", () => {
-  const route = read("app/api/workspace/route.ts");
+test("legacy plaintext workspace API is retired and encrypted API derives identity from verified session", () => {
+  const legacy = read("app/api/workspace/route.ts");
+  const route = read("app/api/workspace/sync/route.ts");
   const session = read("lib/supabase/rest.ts");
+  assert.match(legacy, /status: 410/);
+  assert.match(legacy, /Plaintext workspace sync has been retired/);
   assert.match(route, /getVerifiedSupabaseSession\(\)/);
-  assert.match(route, /rpc\/get_citizen_workspace/);
-  assert.match(route, /rpc\/save_citizen_workspace/);
-  assert.doesNotMatch(route, /citizen_workspaces\?on_conflict/);
+  assert.match(route, /rpc\/get_encrypted_workspace/);
+  assert.match(route, /rpc\/put_encrypted_workspace/);
   assert.match(route, /Cross-origin request blocked/);
   assert.match(session, /httpOnly:\s*true/);
   assert.match(session, /secure:\s*process\.env\.NODE_ENV\s*===\s*"production"/);
@@ -38,13 +40,19 @@ test("browser authentication never receives a service-role credential", () => {
   assert.match(callback, /action:"establish",access_token,refresh_token,state/);
 });
 
-test("cloud hydration merges local edits and records instead of replacing the workspace",()=>{
+test("workspace sync is explicit, client-encrypted and revision-aware rather than plaintext autosave",()=>{
   const page=read("app/app/page.tsx");
-  assert.match(page,/mergeCitizenProfile/);
-  assert.match(page,/mergeWorkspaceRecords/);
-  assert.match(page,/latestLocalProfile/);
-  assert.match(page,/localStorage\.getItem\(STORAGE\.language\)/);
-  assert.match(page,/item => String\(item\.id\)/);
+  const helper=read("lib/workspace-sync.ts");
+  assert.match(page,/restoreEncryptedWorkspace/);
+  assert.match(page,/syncEncryptedWorkspace/);
+  assert.match(page,/syncConsentChecked/);
+  assert.match(page,/snapshot\.revision/);
+  assert.match(page,/document file bytes remain on this device/);
+  assert.doesNotMatch(page,/fetch\("\/api\/workspace"/);
+  assert.doesNotMatch(page,/setCloudReady/);
+  assert.match(helper,/expectedRevision/);
+  assert.match(helper,/expected_revision/);
+  assert.match(helper,/decryptVault/);
 });
 
 test("final database invariants preserve consent policy, action scope, idempotency and serialized reviews",()=>{
@@ -69,12 +77,14 @@ test("final database invariants preserve consent policy, action scope, idempoten
   assert.match(rls,/private\.scheme_reviewer_roles enable row level security/);
 });
 
-test("cloud workspace rejects unknown top-level fields and oversized payloads", () => {
-  const route = read("app/api/workspace/route.ts");
-  assert.match(route, /256 \* 1024/);
-  assert.match(route, /Unsupported workspace field/);
-  assert.match(route, /Unsupported language/);
-  assert.match(route, /preferred_language/);
+test("encrypted workspace API rejects plaintext, malformed and oversized payloads", () => {
+  const route = read("app/api/workspace/sync/route.ts");
+  assert.match(route, /MAX_BYTES = 8 \* 1024 \* 1024/);
+  assert.match(route, /validEnvelope/);
+  assert.match(route, /expected_revision/);
+  assert.match(route, /Request body must be valid JSON/);
+  assert.match(route, /Cross-origin request blocked/);
+  assert.match(route, /workspace_revision_conflict/);
 });
 
 test("automation requests require independent scheme approval and purpose consent", () => {
@@ -121,14 +131,17 @@ test("revoked consent cannot authorize a later automation run", () => {
   assert.match(confirm, /return p_run_id/);
 });
 
-test("cloud storage remains disabled until a legal-approved consent policy is active", () => {
-  const sql = read("supabase/migrations/20261109135140_gate_cloud_storage_on_approved_consent.sql");
-  const route = read("app/api/workspace/route.ts");
-  assert.match(sql, /private\.consent_policy_versions/);
-  assert.match(sql, /legal_review_reference is not null/);
+test("cloud sync remains fail-closed until its exact policy is legally approved and citizen consent is recorded", () => {
+  const sql = read("supabase/migrations/20261112022221_add_revisioned_encrypted_workspace_sync.sql");
+  const policy = read("supabase/migrations/20261112022458_register_cloud_sync_policy_draft.sql");
+  const route = read("app/api/workspace/sync/route.ts");
+  const status = read("app/api/workspace/sync/status/route.ts");
+  assert.match(sql, /has_active_citizen_consent/);
   assert.match(sql, /profile_storage_consent_required/);
-  assert.match(sql, /revoke all on public\.citizen_workspaces from public,anon,authenticated/);
-  assert.match(route, /Cloud storage is disabled until the profile-storage privacy policy is legally approved/);
+  assert.match(policy, /active/);
+  assert.match(policy, /false/);
+  assert.match(route, /sync_consent_unavailable/);
+  assert.match(status, /get_workspace_sync_status/);
 });
 
 test("consent and reminder writes cannot bypass guarded RPCs", () => {
