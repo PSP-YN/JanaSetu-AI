@@ -1353,7 +1353,7 @@ export default function Home() {
                   <Field label="Course / programme"><input value={profile.courseName ?? ""} onChange={(e) => updateProfile("courseName", e.target.value)}/></Field>
                   <Field label="Course year"><input value={profile.courseYear ?? ""} onChange={(e) => updateProfile("courseYear", e.target.value)}/></Field>
                 </div>
-                <div className="form-footer"><span><LockKeyhole size={14}/> {t("noAadhaarRequest")}</span><div className="form-footer-actions"><button className="button button-outline" onClick={exportProfileForFormAssistant}>Export for form assistant</button><button className="button button-primary" onClick={() => { setNotice(t("saved")); runAssessment(); }}>{t("run")} <ArrowRight size={16}/></button></div>
+                <div className="form-footer"><span><LockKeyhole size={14}/> {t("noAadhaarRequest")}</span><div className="form-footer-actions"><button className="button button-outline" onClick={exportProfileForFormAssistant}>Export for form assistant</button><button className="button button-primary" onClick={() => { setNotice(t("saved")); runAssessment(); }}>{t("run")} <ArrowRight size={16}/></button></div></div>
               </div>
               <aside className="profile-aside">
                 <div className="panel aside-card">
