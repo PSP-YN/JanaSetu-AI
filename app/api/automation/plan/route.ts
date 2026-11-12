@@ -4,6 +4,7 @@ import { parseCitizenProfile } from "@/lib/profile-validation";
 import { assessApprovedScheme, type ApprovedSchemeVersion } from "@/lib/eligibility-engine";
 import { buildApplicationAutomationPlan, type EligibilityGate } from "@/lib/automation-engine";
 import { SCHEMES } from "@/lib/catalog";
+import { getPortalAdapter } from "@/lib/portal-adapters/registry";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
