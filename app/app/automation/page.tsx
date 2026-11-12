@@ -22,6 +22,9 @@ export default function AutomationCenterPage(){
   const [busy,setBusy]=useState(true);
   const [error,setError]=useState("");
   const [refreshedAt,setRefreshedAt]=useState("");
+  const [planSlug,setPlanSlug]=useState("pm-kisan");
+  const [planBusy,setPlanBusy]=useState(false);
+  const [planResult,setPlanResult]=useState<PlanResult|null>(null);
   const refresh=useCallback(async()=>{
     setBusy(true);setError("");
     try{
@@ -48,6 +51,19 @@ export default function AutomationCenterPage(){
   },[]);
   useEffect(()=>{void refresh();},[refresh]);
   const statusLabel=(s:string)=>s.replaceAll("_"," ").replace(/\b\w/g,m=>m.toUpperCase());
+  const generatePlan=async()=>{
+    setPlanBusy(true);setError("");setPlanResult(null);
+    try{
+      const raw=localStorage.getItem("janSetu.profile.v1");
+      if(!raw)throw new Error("Complete your citizen profile first in My profile.");
+      const profile=JSON.parse(raw);
+      const response=await fetch("/api/automation/plan",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({scheme_slug:planSlug,profile})});
+      const data=await response.json().catch(()=>({}));
+      if(!response.ok)throw new Error(data.error||"Could not generate an automation plan.");
+      setPlanResult(data as PlanResult);
+    }catch(e){setError(e instanceof Error?e.message:"Could not generate an automation plan.");}
+    finally{setPlanBusy(false);}
+  };
   const confirmPreparation=async(caseId:string)=>{
     setConfirming(caseId);setError("");
     try{
