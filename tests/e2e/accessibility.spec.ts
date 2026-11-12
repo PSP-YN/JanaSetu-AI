@@ -359,3 +359,16 @@ test("application workspace explains citizen-directed portal field assistance an
   await expect(assistant).toContainText("never uploads documents");
   await expect(assistant.getByRole("link", { name: "Get the form assistant" })).toHaveAttribute("href", "https://github.com/PSP-YN/JanaSetu-AI/tree/main/extension");
 });
+
+
+test("automation center reports live production gates and leaves final portal steps to the citizen", async ({ page }) => {
+  await page.goto("/app/automation");
+  const assistant = page.locator(".portal-assistant-panel");
+  await expect(assistant).toContainText("JanaSetu stops after filling");
+  await expect(assistant).toContainText("clicks Next, Apply, Save or Submit");
+  const gates = page.locator(".automation-panel[aria-labelledby=release-gates-title]");
+  await expect(gates).toContainText("Backend application preparation");
+  await expect(gates).toContainText("Cloud document uploads");
+  await expect(gates).toContainText("Government portal integration");
+  await expect(gates).toContainText("Third-party catalogue freshness");
+});

@@ -38,7 +38,9 @@ test("readiness separates database health from scheme and portal release gates",
     assert.equal(url.pathname, "/rest/v1/schemes");
     assert.equal(url.searchParams.get("publication_status"), "eq.published");
     assert.equal(new Headers(init?.headers).get("apikey"), "sb_publishable_test");
-    return new Response("[]", { status: 200, headers: { "Content-Type": "application/json" } });
+    assert.equal(new Headers(init?.headers).get("Prefer"), "count=exact");
+    assert.equal(new Headers(init?.headers).get("Range"), "0-0");
+    return new Response("[]", { status: 200, headers: { "Content-Type": "application/json", "Content-Range": "*/0" } });
   };
 
   const response = await GET();
@@ -49,10 +51,12 @@ test("readiness separates database health from scheme and portal release gates",
   assert.equal(body.checks.databaseReachable, true);
   assert.equal(body.capabilities.publishedSchemes, 0);
   assert.equal(body.capabilities.applicationPreparation, true);
-  assert.equal(body.capabilities.backendApplicationPreparation, false);
+  assert.equal(body.capabilities.backendApplicationPreparation, true);
   assert.equal(body.capabilities.persistedApplicationPreparation, false);
+  assert.equal(body.capabilities.applicationPreparationGate, "no_independently_approved_published_schemes_and_profile_storage_consent_policy_approval_required");
   assert.equal(body.capabilities.localChecklistPreparation, true);
   assert.equal(body.capabilities.governmentPortalAutomation, "disabled_pending_department_authorization");
+  assert.equal(body.capabilities.cloudDocumentUploads, "disabled_pending_legal_approval");
   assert.equal(response.headers.get("cache-control"), "no-store");
 });
 
@@ -68,4 +72,21 @@ test("readiness reports dependency failure without leaking upstream response dat
   assert.equal(body.ready, false);
   assert.equal(body.status, "dependency_unavailable");
   assert.equal(JSON.stringify(body).includes("sensitive upstream detail"), false);
+});
+
+
+test("readiness counts all published schemes while keeping the legal consent gate explicit", async () => {
+  process.env.NEXT_PUBLIC_SUPABASE_URL = "https://example.supabase.co";
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = "sb_publishable_test";
+  global.fetch = async () => new Response('[{"id":"one"}]', {
+    status: 200, headers: { "Content-Type": "application/json", "Content-Range": "0-0/3" }
+  });
+
+  const response = await GET();
+  const body = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(body.capabilities.publishedSchemes, 3);
+  assert.equal(body.capabilities.backendApplicationPreparation, true);
+  assert.equal(body.capabilities.persistedApplicationPreparation, false);
+  assert.equal(body.capabilities.applicationPreparationGate, "profile_storage_consent_policy_approval_required");
 });

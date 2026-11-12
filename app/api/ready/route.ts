@@ -10,8 +10,22 @@ const PUBLIC_CAPABILITIES = {
   localChecklistPreparation: true,
   localDocumentStorage: "browser_only_unscanned",
   cloudDocumentStorage: "disabled_pending_legal_approval",
+  cloudDocumentUploads: "disabled_pending_legal_approval",
   governmentPortalAutomation: "disabled_pending_department_authorization"
-};
+} as const;
+
+const UNAVAILABLE_CAPABILITIES = {
+  ...PUBLIC_CAPABILITIES,
+  applicationPreparation: true,
+  backendApplicationPreparation: false,
+  persistedApplicationPreparation: false,
+  applicationPreparationGate: "supabase_unavailable"
+} as const;
+
+function publishedCountFrom(response: Response, rows: unknown[]): number {
+  const match = response.headers.get("content-range")?.match(/\/(\d+|\*)$/);
+  return match && match[1] !== "*" ? Number(match[1]) : rows.length;
+}
 
 const json = (body: unknown, status = 200) =>
   NextResponse.json(body, {
@@ -28,7 +42,7 @@ export async function GET() {
       ready: false,
       status: "misconfigured",
       checks: { supabaseConfiguration: false, databaseReachable: false },
-      capabilities: { ...PUBLIC_CAPABILITIES, publishedSchemes: 0, applicationPreparation: true, backendApplicationPreparation: false, persistedApplicationPreparation: false },
+      capabilities: { ...UNAVAILABLE_CAPABILITIES, publishedSchemes: 0 },
       timestamp: new Date().toISOString()
     }, 503);
   }
@@ -47,7 +61,7 @@ export async function GET() {
       ready: false,
       status: "misconfigured",
       checks: { supabaseConfiguration: false, databaseReachable: false },
-      capabilities: { ...PUBLIC_CAPABILITIES, publishedSchemes: 0, applicationPreparation: true, backendApplicationPreparation: false, persistedApplicationPreparation: false },
+      capabilities: { ...UNAVAILABLE_CAPABILITIES, publishedSchemes: 0 },
       timestamp: new Date().toISOString()
     }, 503);
   }
@@ -56,14 +70,15 @@ export async function GET() {
     const endpoint = new URL("/rest/v1/schemes", base);
     endpoint.search = new URLSearchParams({
       select: "id",
-      publication_status: "eq.published",
-      limit: "1"
+      publication_status: "eq.published"
     }).toString();
 
     const response = await fetch(endpoint, {
       headers: {
         apikey: publishableKey,
-        Accept: "application/json"
+        Accept: "application/json",
+        Prefer: "count=exact",
+        Range: "0-0"
       },
       cache: "no-store",
       signal: AbortSignal.timeout(4000)
@@ -74,7 +89,7 @@ export async function GET() {
         ready: false,
         status: "dependency_unavailable",
         checks: { supabaseConfiguration: true, databaseReachable: false },
-        capabilities: { ...PUBLIC_CAPABILITIES, publishedSchemes: 0, applicationPreparation: true, backendApplicationPreparation: false, persistedApplicationPreparation: false },
+        capabilities: { ...UNAVAILABLE_CAPABILITIES, publishedSchemes: 0 },
         timestamp: new Date().toISOString()
       }, 503);
     }
@@ -82,12 +97,21 @@ export async function GET() {
     const rows: unknown = await response.json();
     if (!Array.isArray(rows)) throw new Error("Unexpected scheme catalogue response");
 
-    const publishedSchemeAvailable = rows.length > 0;
+    const publishedSchemes = publishedCountFrom(response, rows);
     return json({
       ready: true,
       status: "ready",
       checks: { supabaseConfiguration: true, databaseReachable: true },
-      capabilities: { ...PUBLIC_CAPABILITIES, publishedSchemes: publishedSchemeAvailable ? "at_least_one" : 0, applicationPreparation: true, backendApplicationPreparation: publishedSchemeAvailable, persistedApplicationPreparation: publishedSchemeAvailable },
+      capabilities: {
+        ...PUBLIC_CAPABILITIES,
+        publishedSchemes,
+        applicationPreparation: true,
+        backendApplicationPreparation: true,
+        persistedApplicationPreparation: false,
+        applicationPreparationGate: publishedSchemes > 0
+          ? "profile_storage_consent_policy_approval_required"
+          : "no_independently_approved_published_schemes_and_profile_storage_consent_policy_approval_required"
+      },
       timestamp: new Date().toISOString()
     });
   } catch {
@@ -95,7 +119,7 @@ export async function GET() {
       ready: false,
       status: "dependency_unavailable",
       checks: { supabaseConfiguration: true, databaseReachable: false },
-      capabilities: { ...PUBLIC_CAPABILITIES, publishedSchemes: 0, applicationPreparation: true, backendApplicationPreparation: false, persistedApplicationPreparation: false },
+      capabilities: { ...UNAVAILABLE_CAPABILITIES, publishedSchemes: 0 },
       timestamp: new Date().toISOString()
     }, 503);
   }
