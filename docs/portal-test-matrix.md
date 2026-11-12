@@ -1,34 +1,46 @@
 # Browser extension portal compatibility matrix
 
-**Status: NOT EXECUTED against production portals.** This document defines synthetic fixtures and evidence capture. Do not test with real citizen accounts or submit applications.
+**Status updated:** 12 November 2026
+**Live government portal tests:** NOT AUTHORIZED / NOT EXECUTED
+**Synthetic regression suite:** PASS (Playwright extension popup, field safety and identity-safety tests).
 
 ## Safety invariants
-- Only HTTPS `.gov.in` and `.nic.in` hostnames are eligible for the current extension gate.
-- A citizen must click Fill on the extension popup for each page.
-- Never populate password, OTP, CAPTCHA, Aadhaar/identity number, bank account, file input or hidden fields.
+
+- A domain suffix is only a preliminary allowlist condition; it is not authorization.
+- Live filling requires exact HTTPS origin + path, adapter approval, permitted action, written department/provider authorization reference, approval timestamp and current field-contract evidence.
+- All four initial scheme routes remain not_requested with no allowed actions; the extension must block them.
+- A citizen must explicitly click the extension action and approve each selected field.
+- Never populate password, OTP, CAPTCHA, Aadhaar/identity number, bank account, file input, hidden field or declaration/consent checkbox.
 - Never submit, click Next/Apply/Save, upload documents, bypass validation or alter hidden fields.
-- Ambiguous or unsupported fields stay unchanged. Every filled field must be reviewed by the user.
+- Ambiguous or unsupported fields stay unchanged. Every filled field must be reviewed by the citizen.
+
+## Current scheme route matrix
+
+| Scheme | Exact route state | Department authorization | Expected extension result |
+|---|---|---|---|
+| PM-KISAN | First-step registration path observed read-only | Not requested | Block |
+| PMAY-U 2.0 | Landing page only; application path not verified | Not requested | Block |
+| PM Ujjwala 2.0 | Official information page only; application path not verified | Not requested | Block |
+| NSP / CSSS | Official portal landing page only; application path not verified | Not requested | Block |
 
 ## Synthetic fixture matrix
 
-| Fixture | Form shape | Expected result | Status |
-|---|---|---|---|
-| Basic HTML | Label + input text, number, select | Correct labelled fields fill | Automated synthetic fixture added; CI execution pending |
-| Radio groups | Gender / rural-urban radio labels | Only exact unambiguous option selected | Not run |
-| Checkboxes | Boolean consent / declarations | Never infer consent; leave declaration unchecked | Not run |
-| React controlled fields | Input value setter + input/change events | Framework state updates; visible value persists | Not run |
-| Vue controlled fields | v-model fields | Visible value and app state agree | Not run |
-| Dynamic form | Fields added after initial page load | Fill uses current visible DOM only | Not run |
-| Duplicate labels / substring collisions | Multiple applicant/household name fields and login username | Ambiguous matches skipped; username must not be treated as applicant name | Synthetic Playwright fixtures added; CI execution pending |
-| Localized labels | Hindi/Kannada/Tamil/Telugu/Malayalam labels | Exact aliases map; unknown labels skipped | Not run |
-| Select options | Exact label/value match, partial collision (Male/Female), missing option and duplicate exact labels | Only one unique exact enabled option fills; unmatched or ambiguous options stay unchanged and are not counted as filled | Synthetic Playwright fixtures added; CI execution pending |
-| Iframe / shadow DOM | Cross-origin iframe and shadow root | Unsupported contexts skipped, no broad traversal | Not run |
-| Sensitive fields | OTP, CAPTCHA, Aadhaar, bank, password, file | Always skipped | Automated synthetic fixture added; CI execution pending |
-| Hostile page | deceptive labels, offscreen/hidden/disabled inputs | Hidden/disabled and ambiguous fields skipped | Not run |
-| Non-government origin | lookalike hostname and HTTP | Fill blocked | Not run |
+| Fixture | Expected result | Current evidence |
+|---|---|---|
+| Basic labelled text/number inputs | Correct unique fields preview and fill | Automated Playwright test |
+| Select/radio controls | Only one exact, enabled, unambiguous option is selected | Automated Playwright test |
+| Duplicate applicant/household names | Ambiguous matches skipped | Automated Playwright test |
+| First/last name, username and relative-name fields | Applicant full name is not copied into semantically different fields | Automated Playwright test |
+| React controlled input | Native input/change events update visible framework state | Automated Playwright test |
+| Hidden, disabled and sensitive fields | Remain untouched | Automated Playwright test |
+| File inputs and account-holder names | Remain untouched | Automated Playwright test |
+| Deceptive hostnames and generic government domains | Blocked | Automated Playwright popup test |
+| PM-KISAN observed registration route | Blocked until exact-route authorization | Automated Playwright popup test |
+| Invalid backup profile | Rejected before extension storage | Automated Playwright popup test |
+| Six locale translations | Translation keys remain in parity | Unit test |
 
-## Evidence record per test
+## Evidence record for future live acceptance
 
-Record fixture commit, browser/version, OS, extension version, page URL/hostname, synthetic field labels and types, expected/actual filled fields, skipped fields and reason, screenshots/trace with no personal data, tester and date. Never include real personal information in evidence.
+For each separately authorized route, record fixture/adapter commit, browser/version, OS, extension version, exact URL/path, authorization reference, field-contract version, synthetic values, expected/actual filled fields, skipped fields and reasons, screenshots/trace with no personal data, tester and date. Use only official sandbox/test accounts and dummy data. Never include real citizen information in evidence.
 
-A green synthetic fixture suite proves behaviour only for those fixtures; it does not prove compatibility with any named live government portal. Obtain portal owner permission and official test/sandbox access before portal-specific validation.
+A green synthetic suite proves only the tested fixtures. It does not certify compatibility with a named live government portal. Obtain portal-owner permission and official test/sandbox access before portal-specific validation.

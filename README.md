@@ -80,6 +80,9 @@ Never put Supabase service-role or secret keys in `NEXT_PUBLIC_*` variables. Nev
 - [Security threat model](docs/security-threat-model.md)
 - [Privacy impact assessment draft](docs/privacy-impact-assessment.md)
 - [Production readiness and release gates](docs/production-readiness.md)
+- [Production operations runbook and current automation capability matrix](docs/operations-runbook.md)
+- [Form Assistant installation, route authorization and safety limits](docs/extension.md)
+- [Backend implementation status](docs/backend-implementation-status.md)
 - [Hackathon demo script](docs/hackathon-demo-script.md)
 
 ## Contributing

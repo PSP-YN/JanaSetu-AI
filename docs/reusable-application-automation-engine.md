@@ -51,7 +51,7 @@ These four records are the current seeded integration set, not all schemes in th
 - Next.js application and API on the existing Vercel project, subject to its free plan limits.
 - Supabase Auth/Postgres/RLS for authenticated cases and audit records, subject to free project quotas.
 - GitHub Actions for scheduled source refresh, CI and synthetic regression tests, subject to Actions quotas.
-- Chromium extension for citizen-triggered form preview and selected field filling on supported domains.
+- Chromium extension for citizen-triggered form preview and selected field filling in synthetic fixtures; all four live scheme routes remain blocked pending exact-route authorization.
 - Browser-local document vault and encrypted backup/restore instead of paid cloud scanning infrastructure.
 - No always-on paid worker, no third-party paid AI API requirement and no secret-key exposure in browser code.
 

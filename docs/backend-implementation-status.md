@@ -1,14 +1,17 @@
 # JanaSetu AI backend implementation status
 
-**Updated:** 12 November 2026  
-**Release candidate:** [PR #26](https://github.com/PSP-YN/JanaSetu-AI/pull/26)  
+**Updated:** 12 November 2026
+**Current release candidate:** [PR #29](https://github.com/PSP-YN/JanaSetu-AI/pull/29) · integration commit `5df3f5ddc8a9fcaddfa0bf8da75cf6bbfa0b8dd9`
 **Supabase project:** JanaSetu-AI · Mumbai (ap-south-1) · `qjiuclkhvxbnojdysmmp`
+**Vercel project:** `psp-adb0 / jana-setu-ai` · canonical domain `jana-setu-ai.vercel.app`
 
 ## Current release state
 
-The current release candidate is local-first. Production still serves the older `main` commit `3b54af4`. PR #26 is open and must pass the latest GitHub Actions run and the required Vercel deployment check before it can be merged and deployed.
+The integration branch includes the current citizen workspace, application planner, consent-gated automation foundation, exact-route portal registry, encrypted vault foundation, and the latest safe release baseline. Local verification passed: 167 unit tests, TypeScript, production build, 63 Playwright tests, 10 scanner tests, extension syntax/manifest validation and npm high-severity audit. The new-account Vercel preview built successfully and its route/API smoke checks passed. See `docs/production-readiness.md` and `docs/operations-runbook.md` for the authoritative current capability matrix and release evidence.
 
-The previous GitHub Actions run failed two unit-test assertions after a migration change; 142/144 tests passed. The assertions were corrected in a later commit, but a complete passing run against the latest head has not yet been confirmed. Vercel's Hobby build-rate limit is blocking new preview/production builds. No branch protection check has been bypassed.
+At the time of this status update, PR #29 is awaiting merge to protected `main`. Required CI and Vercel checks passed; an optional Octopus Review status remained pending and the release owner explicitly authorized proceeding without waiting for it. Do not weaken branch protection or delete unmerged branches. Production is not complete until the merged main SHA is deployed and verified on the canonical domain.
+
+**Historical note:** Sections below are dated implementation records. Statements describing earlier PRs, earlier deployment states, last-write-wins sync, or earlier release blockers are historical and are superseded by the current release state above and the dated updates at the end of this document.
 
 ## Citizen-facing backend boundary
 
@@ -50,17 +53,18 @@ Unknown, unapproved or untested schemes must use official navigation and manual 
 - No persistent production scanner identity/worker is provisioned.
 - Document upload and retrieval remain disabled; no live production scanning is claimed.
 
-## Production operations still required
+## Remaining production operations
 
-1. Passing CI and successful required Vercel check on the latest PR #26 head.
-2. Merge to protected `main`, production deployment and live smoke/accessibility verification.
-3. Real test-account lifecycle, SMTP delivery, redirect allow-list and recovery verification.
-4. Independent scheme-source/rule approval and written department authorization before external integrations.
-5. Independent security review, backup/restore and disaster-recovery exercises, monitoring and load testing.
+1. Merge PR #29 after the branch-protection-required CI and new-account Vercel checks are green; the release owner authorized skipping the optional Octopus Review status. Do not disable branch protection or bypass required checks.
+2. Verify the merged main SHA is deployed by the new Vercel project and serves the canonical domain.
+3. Verify controlled production account lifecycle, SMTP delivery, redirect allow-list and password recovery.
+4. Obtain independent scheme-source/rule approval and written department authorization before external integrations.
+5. Provision and test the private scanner service before enabling uploads; complete legal approval and two-device tests before enabling sync.
+6. Complete independent security review, backup/restore and disaster-recovery exercises, monitoring, accessibility and load testing.
 
 ## Release boundary
 
-The database foundation is applied, but the application is not production-ready. No public deployment, domain change, merge to `main`, or production release is authorised by this status update. Continue on reviewed branches until the release gates are independently verified and explicit release approval is given.
+The application is a tested public prototype/beta for discovery and application preparation, not an officially authorized government benefits service. Local code/build tests and a successful preview do not certify live portal automation, official eligibility, document scanning, cross-device sync or final application submission. Production release is complete only after the merged main SHA is deployed and verified on the canonical domain.
 
 
 ## Authenticated cloud workspace implementation — 9 November 2026

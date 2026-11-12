@@ -1,35 +1,54 @@
-# JanaSetu Form Assistant (experimental)
+# JanaSetu Form Assistant
 
-This extension is a local, user-triggered form-filling prototype. It is not a government integration and does not intentionally submit forms or upload files. It dispatches input/change events so websites can recognize filled values; a portal may react to those events, including by navigating or submitting. Inspect the page after filling.
+**Status updated:** 12 November 2026
 
-## Install locally (Chrome / Chromium / Edge)
+The JanaSetu Form Assistant is a Manifest V3 browser extension for importing a citizen-reviewed profile export, previewing field matches and filling only individually selected, non-sensitive fields on a supported page.
 
-1. Open JanaSetu and create/review a profile.
-2. Click **Backup** and save the JSON file to your device.
-3. Download/clone this repository and open `extension/`.
-4. In Chrome, visit `chrome://extensions`; enable **Developer mode**.
-5. Choose **Load unpacked** and select the repository's `extension` folder.
-6. Open the official scheme portal in a tab.
-7. Click the extension icon, choose the exported JanaSetu JSON file, and click **Import reviewed profile**.
-8. Click **Fill fields on active tab**. After filling, check whether the portal reacted or navigated. Review every populated field and submit only if the page has not already advanced and you decide to continue.
+## Current live-portal state
 
-## Safety and limitations
+**Live government form filling is disabled for all four initial scheme routes.** The PM-KISAN, PMAY-U 2.0, PM Ujjwala and NSP registry entries are all `not_requested`, have no allowed actions and have no department authorization reference or approval timestamp. The extension checks an exact HTTPS origin and path plus an approved action; a `.gov.in` or `.nic.in` suffix alone is never sufficient.
 
-- The extension requests `activeTab`, `storage`, and `scripting`; it does not request blanket access to all websites.
-- Form matching is heuristic (visible labels, placeholders, names and IDs) and uses whole-word/phrase alias matching to avoid substring collisions such as `username` being treated as `name`.
-- Select controls are filled only when exactly one enabled option has an exact normalized label or value match. Partial matches, missing options and duplicate matching options are skipped and are not counted as filled.
-- Boolean declaration checkboxes are deliberately not auto-checked. Unknown or ambiguous values stay unchanged.
-- The extension itself does not click Submit/Apply, call form submission APIs or upload files. Portal scripts may react to the input/change events it dispatches; inspect the page after filling. It does not solve CAPTCHA, bypass authentication or claim to have applied.
-- Profile data is imported into extension storage on the current browser profile. Treat the backup as private; delete it when no longer needed.
-- Do not import Aadhaar, bank account, OTP, or other highly sensitive identifiers into this prototype.
-- Test only with dummy data before use on official portals.
+The extension can be imported and tested on synthetic forms. The production route guard intentionally blocks real government portal tabs until the exact route, field contract, department authorization and acceptance evidence have been reviewed and recorded. Do not change this gate to make the extension appear operational.
 
-## Cross-device continuity
+## Install for local/synthetic testing
 
-Browser localStorage is device/browser-specific. For no-account, privacy-first use:
-- Keep the working draft locally in JanaSetu.
-- Export a versioned JSON backup for machine-readable restore on another device.
-- Use PDF for printing/sharing a human-readable checklist, not as the restore format.
-- Keep a human confirmation step before extension fill and before final submission.
+1. Clone the JanaSetu repository and open its `extension/` folder.
+2. In Chrome/Chromium/Edge, open `chrome://extensions` and enable Developer mode.
+3. Select **Load unpacked** and choose the repository's `extension/` folder.
+4. In JanaSetu, create and review a synthetic profile. Use the profile-only JSON export only after reading its plaintext-export warning.
+5. Import that JSON file into the extension.
+6. Test field preview and selected filling on a local synthetic form or the Playwright fixtures. The four live scheme routes remain blocked.
 
-A future production extension should add explicit portal-specific field mapping, test fixtures, conflict warnings, per-field consent, and a clear data wipe control.
+The extension requires only `activeTab`, `storage` and `scripting`; it does not request blanket access to all sites.
+
+## Field matching and safety
+
+- Matching uses visible labels, placeholders, names, IDs and reviewed aliases.
+- Ambiguous duplicate fields, hidden/disabled controls, sensitive identifiers, OTP/security PIN/CAPTCHA controls, file inputs and declaration checkboxes are left untouched.
+- Select controls require one exact normalized option match; ambiguous matches are skipped.
+- The citizen explicitly selects each previewed field before the fill action.
+- A stale tab or changed URL invalidates the preview.
+- The extension does not upload documents, click Submit/Apply, call form-submission APIs, solve CAPTCHA or automate OTP, Aadhaar/e-KYC, biometrics, payments or declarations.
+- Dispatching input/change events can cause a portal's own scripts to react. Inspect the page immediately after any fill; do not assume the portal stayed on the same step.
+- Imported profile data is stored in the browser extension's local storage. Treat exports as sensitive and delete them when no longer needed.
+
+## Authorization required before any live route is enabled
+
+For each scheme and route, obtain and verify:
+
+1. Written department/provider authorization naming the exact origin, path and permitted action.
+2. A reviewed current field contract and non-sensitive field allowlist.
+3. Current read-only route observation and synthetic/live sandbox acceptance tests.
+4. A scheme-specific risk review, citizen consent scope and a rollback/disable mechanism.
+5. Independent approval recorded with an authorization reference and timestamp.
+
+Even after approval, protected identity checks and final submission remain citizen-controlled unless a lawful delegated API explicitly authorizes otherwise. Never infer route approval from a domain suffix or from another scheme's adapter.
+
+## Verification
+
+- Unit tests cover safe field matching, exact select values, ambiguous labels, sensitive fields, identity/name confusion, stale previews and route authorization.
+- Playwright tests cover synthetic forms and confirm that the four live scheme routes remain blocked.
+- `node --check extension/popup.js` and `node --check extension/fill.js` validate JavaScript syntax.
+- The manifest is validated as JSON in CI.
+
+A passing synthetic test suite is not a live government-portal acceptance test.
