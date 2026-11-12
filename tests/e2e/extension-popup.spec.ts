@@ -63,6 +63,7 @@ test("extension imports the reviewed profile and fills only after address and fi
   await page.locator("#preview .preview-row input").first().check();
   await page.locator("#apply").click();
   await expect(page.locator("#status")).toContainText("1 ಹೊಂದಾಣಿಕೆಯ ಕ್ಷೇತ್ರಗಳನ್ನು ತುಂಬಲಾಗಿದೆ");
+  await expect(page.locator("#status")).toContainText("ಇಲ್ಲಿಯೇ ನಿಲ್ಲುತ್ತದೆ");
   const call = await page.evaluate(() => (window as any).__lastScriptCall);
   expect(call.args[1]).toHaveLength(1);
 });

@@ -93,3 +93,21 @@ The audit is data-quality triage, not verification of scheme existence, current 
 
 
 API Setu documentation identifies myScheme as a service-API partner and describes consumer subscription subject to publisher approval. The API directory search did not establish that a public row-level myScheme catalogue feed is currently available. Treat API Setu as an access-request route, not as an API already available to JanaSetu. References: https://docs.apisetu.gov.in/document-central/explore-apisetu/Overview.html ; https://apisetu.gov.in/contact
+
+
+## Live refresh verification — 13 November 2026
+
+The production source monitor was checked against the live publisher endpoints on 13 November 2026. The local refresh script was also run directly.
+
+- The publisher API returned the same revision (`a1bbf7b20778f4e82ed35e09b187bf4fd86a1a29`) and repository modification time (6 July 2026). The refresh script correctly reported **no publisher revision change** and did not rewrite the known-good snapshot.
+- The 5 July 2026 collection snapshot is **130 days old** at the live production check, exceeding the 90-day policy. Its freshness remains `stale` and overall source health remains `attention_required`.
+- Publisher metadata and row endpoints responded successfully; the publisher search endpoint was unavailable. JanaSetu retains the bundled full-text index of 4,693 rows as a discovery-only fallback.
+- No new dataset revision was available to import. The collection date must not be advanced and the 90-day threshold must not be relaxed merely to clear the warning. A new revision must pass row-count, unique-slug, HTTPS-source, integrity and human-review checks before replacing the current index.
+
+The live Supabase release gates were also inspected:
+
+- Four scheme records remain `review_pending`; there are zero approval records and zero active reviewer-role assignments.
+- Four portal integration records remain `not_requested`; zero have an authorization reference or approval timestamp.
+- The only consent-policy row is an inactive `cloud_workspace_sync` draft with no legal approval reference. There is no approved `profile_storage` or `document_storage` policy.
+
+These are external approval and authorization dependencies, not deployment switches. Scheme publication, persisted application preparation, cloud uploads and department-authorized portal API automation remain fail-closed until the corresponding independent reviewers, legal reviewer and department authorization are actually in place. Citizen-directed browser field filling remains separate and never performs final submission.
