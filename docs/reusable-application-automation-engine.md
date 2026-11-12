@@ -40,9 +40,9 @@ Missing values fail closed. A landing page is not an application route. A select
 | Scheme | Adapter state | Runtime behavior |
 |---|---|---|
 | PM-KISAN | Read-only first-step route observed; no department authorization | Manual handoff; protected identity/OTP/CAPTCHA remain citizen-controlled |
-| PMAY-U 2.0 | Landing page only; no verified form route | Manual handoff |
-| PM Ujjwala 2.0 | Official information page only; no verified form route | Manual handoff |
-| PM-USP CSSS / NSP | Official portal landing page only; no verified form route | Manual handoff |
+| PMAY-U 2.0 | Official eligibility-entry route observed; Aadhaar/OTP and beneficiary survey follow later | Manual handoff; no form selectors or authorization |
+| PM Ujjwala 2.0 | Official Ujjwala information page verified; it links to three separate OMC portals | Manual handoff; provider selection and KYC stay with the citizen |
+| PM-USP CSSS / NSP | Official scholarship login route observed; OTR and Aadhaar/APAAR login precede application | Manual handoff; protected identity and application controls remain citizen-controlled |
 
 These four records are the current seeded integration set, not all schemes in the wider discovery catalogue.
 
@@ -71,3 +71,12 @@ The pure automation planner tests cover unknown schemes, pending eligibility, mi
 ## Activation policy
 
 Do not change a scheme integration to approved by editing a client-side registry or adding a test fixture. Record authorization only after the responsible department/provider grants it in writing. Do not activate sync or cloud document policies without the required privacy/legal approval. Do not claim universal portal automation or official eligibility decisions.
+
+
+## Read-only portal route evidence (12 November 2026)
+
+- PMAY-U 2.0: the official MIS homepage links to the eligibility-entry route `/PMAYMIS2_2024/PMAY_SURVEY/EligiblityCheck.aspx`. The official beneficiary manual describes subsequent Aadhaar authentication and OTP before the survey form; those steps are not automated. See [PMAY-U 2.0 MIS](https://pmaymis.gov.in/PMAYMIS2_2024/PmayDefault.aspx) and [beneficiary application manual](https://pmaymis.gov.in/PMAYMIS2_2024/PDF/UserManual/BeneficairyApplication_for_SoP_27_12_24.pdf).
+- PM Ujjwala 2.0: the official page links to three OMC portals (IndianOil, Bharatgas and HP Gas). Their routes and forms differ; the registry therefore keeps the scheme-level application path unset until a citizen chooses a provider and a provider-specific adapter is reviewed. See [PMUY application information](https://pmuy.gov.in/Ujjwala2.html).
+- NSP: the official Students page links to the `/ApplicationForm/` login route and separately to OTR registration. OTR is identity-bound; the extension does not fill those controls. See [NSP Students](https://scholarships.gov.in/Students) and [NSP OTR](https://scholarships.gov.in/otrapplication/).
+
+These are route observations, not department authorization. All four integration records remain `not_requested`, with no permitted external actions.
