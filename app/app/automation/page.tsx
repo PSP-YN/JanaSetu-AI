@@ -10,7 +10,7 @@ type Reminder={id:string;case_id:string|null;title:string;due_at:string;channel:
 type PreparedField={key:string;label:string;value:string|number|boolean|null;status:"provided"|"missing";requiresCitizenConfirmation:boolean};
 type Preparation={case_id:string;status:"awaiting_citizen_review"|"citizen_approved";fields:PreparedField[];documents:string[];citizen_approved_at:string|null};
 type User={id:string;email:string|null};
-type PlanResult={scheme:{slug:string;name:string};assessment:{state:string;headline:string;explanation:string};plan:{status:string;steps:{id:string;title:string;status:string;reason:string}[];capabilities:{prepareApplication:boolean;inspectPortal:boolean;assistFormFilling:boolean;uploadDocuments:boolean;bypassIdentityOrCaptcha:boolean;submitApplication:boolean;markSubmittedWithoutReceipt:boolean};disclaimer:string};execution:{mode:string;portalLogin:boolean;documentUpload:boolean;finalSubmission:boolean;identityChallengeBypass:boolean};dataHandling:string};
+type PlanResult={scheme:{slug:string;name:string};officialPortalUrl:string|null;assessment:{state:string;headline:string;explanation:string};plan:{status:string;steps:{id:string;title:string;status:string;reason:string}[];capabilities:{prepareApplication:boolean;inspectPortal:boolean;assistFormFilling:boolean;uploadDocuments:boolean;bypassIdentityOrCaptcha:boolean;submitApplication:boolean;markSubmittedWithoutReceipt:boolean};disclaimer:string};execution:{mode:string;portalLogin:boolean;documentUpload:boolean;finalSubmission:boolean;identityChallengeBypass:boolean};dataHandling:string};
 
 export default function AutomationCenterPage(){
   const [user,setUser]=useState<User|null>(null);
@@ -97,6 +97,7 @@ export default function AutomationCenterPage(){
         <p><strong>{planResult.assessment.headline}.</strong> {planResult.assessment.explanation}</p>
         <ol>{planResult.plan.steps.map(step=><li key={step.id}><strong>{step.title} · {statusLabel(step.status)}</strong><small>{step.reason}</small></li>)}</ol>
         <p><strong>Current execution:</strong> {planResult.plan.capabilities.assistFormFilling?"Reviewed form assistance is enabled for this route.":"Automatic portal filling is not enabled for this scheme yet."} Final submission, OTP/CAPTCHA, identity checks and document upload remain disabled.</p>
+        {planResult.officialPortalUrl&&<p><a href={planResult.officialPortalUrl} target="_blank" rel="noreferrer">Open official scheme portal</a></p>}
         <small>{planResult.dataHandling}</small>
       </div>}
     </section>}
