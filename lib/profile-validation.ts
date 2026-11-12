@@ -5,7 +5,9 @@ const keys: (keyof CitizenProfile)[] = [
   "occupation", "hasCultivableLand", "pmKisanExcluded", "ownsPuccaHouse",
   "previousHousingBenefit", "householdHasLpg", "poorHouseholdDeclaration",
   "isStudent", "top20Percentile", "regularUndergraduate", "otherScholarship",
-  "diplomaOrDistance"
+  "diplomaOrDistance", "mobileNumber", "emailAddress", "addressLine1", "addressLine2",
+  "villageOrTown", "pincode", "fatherOrGuardianName", "motherName", "socialCategory",
+  "landholdingAcres", "institutionName", "courseName", "courseYear", "rationCardCategory"
 ];
 
 const OCCUPATION_ALIASES: Record<string, string> = {
