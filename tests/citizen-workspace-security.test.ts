@@ -40,16 +40,14 @@ test("browser authentication never receives a service-role credential", () => {
   assert.match(callback, /action:"establish",access_token,refresh_token,state/);
 });
 
-test("workspace sync is explicit, client-encrypted and revision-aware rather than plaintext autosave",()=>{
+test("cloud workspace sync stays out of the citizen UI until privacy/legal approval",()=>{
   const page=read("app/app/page.tsx");
   const helper=read("lib/workspace-sync.ts");
-  assert.match(page,/restoreEncryptedWorkspace/);
-  assert.match(page,/syncEncryptedWorkspace/);
-  assert.match(page,/syncConsentChecked/);
-  assert.match(page,/snapshot\.revision/);
-  assert.match(page,/document references were synchronized/);
+  assert.match(page,/Local-first workspace/);
+  assert.match(page,/password-encrypted vault/);
+  assert.doesNotMatch(page,/restoreEncryptedWorkspace|syncEncryptedWorkspace|syncConsentChecked|syncWorkspaceNow/);
+  assert.doesNotMatch(page,/Encrypted cross-device sync|\/api\/workspace\/sync\/status/);
   assert.doesNotMatch(page,/fetch\("\/api\/workspace"/);
-  assert.doesNotMatch(page,/setCloudReady/);
   assert.match(helper,/expectedRevision/);
   assert.match(helper,/expected_revision/);
   assert.match(helper,/decryptVault/);
