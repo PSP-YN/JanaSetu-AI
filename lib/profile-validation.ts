@@ -5,7 +5,9 @@ const keys: (keyof CitizenProfile)[] = [
   "occupation", "hasCultivableLand", "pmKisanExcluded", "ownsPuccaHouse",
   "previousHousingBenefit", "householdHasLpg", "poorHouseholdDeclaration",
   "isStudent", "top20Percentile", "regularUndergraduate", "otherScholarship",
-  "diplomaOrDistance"
+  "diplomaOrDistance", "mobileNumber", "emailAddress", "addressLine1", "addressLine2",
+  "villageOrTown", "pincode", "fatherOrGuardianName", "motherName", "socialCategory",
+  "landholdingAcres", "institutionName", "courseName", "courseYear", "rationCardCategory"
 ];
 
 const OCCUPATION_ALIASES: Record<string, string> = {
@@ -33,11 +35,22 @@ export function parseCitizenProfile(value: unknown): CitizenProfile | null {
     annualIncome: "", occupation: "", hasCultivableLand: null, pmKisanExcluded: "unknown",
     ownsPuccaHouse: null, previousHousingBenefit: "unknown", householdHasLpg: null,
     poorHouseholdDeclaration: null, isStudent: false, top20Percentile: null,
-    regularUndergraduate: null, otherScholarship: null, diplomaOrDistance: null
+    regularUndergraduate: null, otherScholarship: null, diplomaOrDistance: null,
+    mobileNumber: "", emailAddress: "", addressLine1: "", addressLine2: "", villageOrTown: "",
+    pincode: "", fatherOrGuardianName: "", motherName: "", socialCategory: "",
+    landholdingAcres: "", institutionName: "", courseName: "", courseYear: "", rationCardCategory: ""
   };
   const profile = { ...defaults, ...input } as CitizenProfile;
 
   if (typeof profile.fullName !== "string" || profile.fullName.length > 100) return null;
+  const boundedText: (keyof CitizenProfile)[] = ["mobileNumber","emailAddress","addressLine1","addressLine2","villageOrTown","pincode","fatherOrGuardianName","motherName","institutionName","courseName","courseYear"];
+  for (const key of boundedText) if (typeof profile[key] !== "string" || String(profile[key]).length > 160) return null;
+  if (profile.mobileNumber && !/^\+?[0-9]{10,13}$/.test(profile.mobileNumber.replace(/[\s-]/g,""))) return null;
+  if (profile.emailAddress && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.emailAddress)) return null;
+  if (profile.pincode && !/^[0-9]{6}$/.test(profile.pincode)) return null;
+  if (!["","General","OBC","SC","ST","EWS","Other"].includes(profile.socialCategory ?? "")) return null;
+  if (!["","AAY","PHH","BPL","APL","Other"].includes(profile.rationCardCategory ?? "")) return null;
+  if (!isNumberOrEmpty(profile.landholdingAcres, 100000)) return null;
   if (!isNumberOrEmpty(profile.age, 120) || (typeof profile.age === "number" && !Number.isInteger(profile.age))) return null;
   if (!["", "woman", "man", "other"].includes(profile.gender)) return null;
   if (typeof profile.state !== "string" || profile.state.length > 80 || profile.state !== profile.state.trim()) return null;
