@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import snapshotMetadata from "@/data/smartduke-snapshot-meta.json";
+import { SCHEMES } from "@/lib/catalog";
 import { loadSmartDukeRows } from "@/lib/smartduke-snapshot";
 
 const DATASET = snapshotMetadata.dataset;
@@ -56,9 +57,26 @@ export async function GET() {
   const overall = metadata.body && rowsAvailability === "available" && localIndexAvailability === "available" && freshness === "within_policy" && !updateAvailable
     ? "healthy" : "attention_required";
 
+  const schemeReferences = SCHEMES.filter((scheme) => scheme.recordKind !== "budget-line-item-lead" && scheme.recordKind !== "external-dataset-record");
+  const sourceDates = schemeReferences.map((scheme) => scheme.sourceChecked).filter((value) => /^\d{4}-\d{2}-\d{2}$/.test(value)).sort();
+  const catalogue = {
+    status: "available_with_review_limits",
+    totalBuiltInRecords: SCHEMES.length,
+    sourceLinkedSchemeReferences: schemeReferences.length,
+    rulePrototypesPendingIndependentApproval: schemeReferences.filter((scheme) => scheme.catalogueStatus === "rule-screened").length,
+    catalogueOnlySchemeReferences: schemeReferences.filter((scheme) => scheme.catalogueStatus === "catalogue-only").length,
+    budgetLineItemLeadsNotConfirmedSchemes: SCHEMES.filter((scheme) => scheme.recordKind === "budget-line-item-lead").length,
+    sourceCheckDateRange: sourceDates.length ? { earliest: sourceDates[0], latest: sourceDates[sourceDates.length - 1] } : null,
+    latestSourceCheckAgeDays: sourceDates.length ? Math.max(0, Math.floor((checkedAt.getTime() - new Date(sourceDates[sourceDates.length - 1] + "T00:00:00.000Z").getTime()) / 86_400_000)) : null,
+    publicationStatus: "No scheme versions independently approved and published",
+    preparation: "Local browser-only checklist preparation is available for the 46 source-linked scheme references; it is not a verified eligibility decision or server-persisted application case.",
+    note: "This curated starter catalogue is partial. Source-check dates record JanaSetu source-register review, not a guarantee that every department page or application window remains current. Verify with the linked authority."
+  };
+
   return NextResponse.json({
     checkedAt: checkedAt.toISOString(),
     overall,
+    curatedCatalogue: catalogue,
     sources: [{
       id: "smartduke-scheme-catalogue",
       publisher: "SmartDuke Technologies",

@@ -12,6 +12,10 @@ JanaSetu is an independent, multilingual public-benefits discovery and applicati
 
 > **Important:** JanaSetu is not a government service or eligibility authority. The current scheme checklists are preliminary prototypes awaiting independent review. They are not official eligibility decisions. A preparation draft is not a government application and has not been submitted.
 
+## Public-use release — 12 November 2026
+
+The public browser-local workflow now lets anyone prepare a local checklist for any of the 46 source-linked scheme references, review the source-linked document list and download an unencrypted checklist for offline use. The 4,693-row third-party dataset is opt-in because its 5 July 2026 snapshot is stale and machine-parsed. The 96 Karnataka budget records remain budget leads, not citizen-facing schemes. See [Public-use release notes](docs/public-use-release-2026-11-12.md) for the exact capability matrix and citizen workflow. This does not activate unapproved eligibility rules, server-persisted application cases, cloud uploads or government submissions.
+
 ## What the current release candidate does
 
 - Multilingual citizen experience: English, Hindi, Kannada, Tamil, Telugu and Malayalam.

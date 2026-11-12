@@ -1,7 +1,17 @@
 import { NextResponse } from "next/server";
+import { SCHEMES } from "@/lib/catalog";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+const PUBLIC_CAPABILITIES = {
+  publicSchemeDiscovery: true,
+  sourceLinkedSchemeReferences: SCHEMES.filter((scheme) => scheme.recordKind !== "budget-line-item-lead" && scheme.recordKind !== "external-dataset-record").length,
+  localChecklistPreparation: true,
+  localDocumentStorage: "browser_only_unscanned",
+  cloudDocumentStorage: "disabled_pending_legal_approval",
+  governmentPortalAutomation: "disabled_pending_department_authorization"
+};
 
 const json = (body: unknown, status = 200) =>
   NextResponse.json(body, {
@@ -18,11 +28,7 @@ export async function GET() {
       ready: false,
       status: "misconfigured",
       checks: { supabaseConfiguration: false, databaseReachable: false },
-      capabilities: {
-        publishedSchemes: 0,
-        applicationPreparation: false,
-        governmentPortalAutomation: "disabled_pending_department_authorization"
-      },
+      capabilities: { ...PUBLIC_CAPABILITIES, publishedSchemes: 0, applicationPreparation: true, backendApplicationPreparation: false, persistedApplicationPreparation: false },
       timestamp: new Date().toISOString()
     }, 503);
   }
@@ -41,11 +47,7 @@ export async function GET() {
       ready: false,
       status: "misconfigured",
       checks: { supabaseConfiguration: false, databaseReachable: false },
-      capabilities: {
-        publishedSchemes: 0,
-        applicationPreparation: false,
-        governmentPortalAutomation: "disabled_pending_department_authorization"
-      },
+      capabilities: { ...PUBLIC_CAPABILITIES, publishedSchemes: 0, applicationPreparation: true, backendApplicationPreparation: false, persistedApplicationPreparation: false },
       timestamp: new Date().toISOString()
     }, 503);
   }
@@ -72,11 +74,7 @@ export async function GET() {
         ready: false,
         status: "dependency_unavailable",
         checks: { supabaseConfiguration: true, databaseReachable: false },
-        capabilities: {
-          publishedSchemes: 0,
-          applicationPreparation: false,
-          governmentPortalAutomation: "disabled_pending_department_authorization"
-        },
+        capabilities: { ...PUBLIC_CAPABILITIES, publishedSchemes: 0, applicationPreparation: true, backendApplicationPreparation: false, persistedApplicationPreparation: false },
         timestamp: new Date().toISOString()
       }, 503);
     }
@@ -89,11 +87,7 @@ export async function GET() {
       ready: true,
       status: "ready",
       checks: { supabaseConfiguration: true, databaseReachable: true },
-      capabilities: {
-        publishedSchemes: publishedSchemeAvailable ? "at_least_one" : 0,
-        applicationPreparation: publishedSchemeAvailable,
-        governmentPortalAutomation: "disabled_pending_department_authorization"
-      },
+      capabilities: { ...PUBLIC_CAPABILITIES, publishedSchemes: publishedSchemeAvailable ? "at_least_one" : 0, applicationPreparation: true, backendApplicationPreparation: publishedSchemeAvailable, persistedApplicationPreparation: publishedSchemeAvailable },
       timestamp: new Date().toISOString()
     });
   } catch {
@@ -101,11 +95,7 @@ export async function GET() {
       ready: false,
       status: "dependency_unavailable",
       checks: { supabaseConfiguration: true, databaseReachable: false },
-      capabilities: {
-        publishedSchemes: 0,
-        applicationPreparation: false,
-        governmentPortalAutomation: "disabled_pending_department_authorization"
-      },
+      capabilities: { ...PUBLIC_CAPABILITIES, publishedSchemes: 0, applicationPreparation: true, backendApplicationPreparation: false, persistedApplicationPreparation: false },
       timestamp: new Date().toISOString()
     }, 503);
   }

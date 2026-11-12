@@ -19,7 +19,7 @@ test("synthetic citizen journey prepares a local draft but never claims governme
   await page.locator(".search-box input").fill("PM-KISAN");
   await page.getByRole("button", { name: "View details" }).first().click();
   // The catalogue is source-indexed but its scheme rules and benefits remain explicitly unverified.
-  await expect(page.locator(".scheme-grid")).toContainText("Source indexed · verify rules");
+  await expect(page.locator(".scheme-grid")).toContainText("Rule prototype · independent review pending");
   await expect(page.locator(".scheme-grid")).toContainText("Potential benefit · verify with department");
   await page.getByRole("button", { name: "Prepare local checklist" }).first().click();
 

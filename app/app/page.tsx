@@ -91,6 +91,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     startSituation: "START WITH YOUR SITUATION",
     intakeNote: "Text extraction is a suggestion. Check every field before saving.",
     catalogueEntries: "Catalogue entries",
+    externalDatasetToggle: 'Include the supplementary third-party catalogue (5 July 2026 snapshot; stale and machine-parsed). Keep it off to use the curated source-linked catalogue.', downloadChecklist: 'Download checklist', downloadChecklistWarning: 'This creates an unencrypted text file containing the applicant and scheme details in this draft. Store it securely. Continue?', downloadChecklistReady: 'Checklist downloaded. The file is unencrypted; store it securely.',
     stateSupport: "State/UT selection supported",
     indianLanguages: "English + 5 Indian languages",
     draftApps: "Draft applications",
@@ -209,6 +210,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     startSituation: "अपनी स्थिति से शुरू करें",
     intakeNote: "पाठ से निकली जानकारी केवल सुझाव है। सहेजने से पहले हर फ़ील्ड जाँचें।",
     catalogueEntries: "सूची में प्रविष्टियाँ",
+    externalDatasetToggle: 'पूरक तृतीय-पक्ष सूची शामिल करें (5 जुलाई 2026 का पुराना, मशीन-पार्स किया गया स्नैपशॉट)। स्रोत-संदर्भित सूची के लिए इसे बंद रखें।', downloadChecklist: 'जाँच सूची डाउनलोड करें', downloadChecklistWarning: 'इससे आवेदक और योजना विवरण वाली बिना एन्क्रिप्शन की टेक्स्ट फ़ाइल बनेगी। इसे सुरक्षित रखें। जारी रखें?', downloadChecklistReady: 'जाँच सूची डाउनलोड हुई। फ़ाइल एन्क्रिप्टेड नहीं है; इसे सुरक्षित रखें।',
     stateSupport: "राज्य/केंद्रशासित प्रदेश चयन उपलब्ध",
     indianLanguages: "अंग्रेज़ी + 5 भारतीय भाषाएँ",
     draftApps: "आवेदन के ड्राफ़्ट",
@@ -326,6 +328,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     startSituation: "ನಿಮ್ಮ ಪರಿಸ್ಥಿತಿಯಿಂದ ಪ್ರಾರಂಭಿಸಿ",
     intakeNote: "ಪಠ್ಯದಿಂದ ಪಡೆದ ಮಾಹಿತಿ ಕೇವಲ ಸಲಹೆ. ಉಳಿಸುವ ಮೊದಲು ಪ್ರತಿಯೊಂದು ಕ್ಷೇತ್ರವನ್ನು ಪರಿಶೀಲಿಸಿ.",
     catalogueEntries: "ಪಟ್ಟಿಯ ದಾಖಲೆಗಳು",
+    externalDatasetToggle: 'ಪೂರಕ ಮೂರನೇ-ಪಕ್ಷ ಪಟ್ಟಿಯನ್ನು ಸೇರಿಸಿ (5 ಜುಲೈ 2026ರ ಹಳೆಯ, ಯಂತ್ರದಿಂದ ಸಂಸ್ಕರಿಸಿದ ಸ್ನ್ಯಾಪ್\u200cಶಾಟ್). ಪರಿಶೀಲಿತ ಮೂಲ ಪಟ್ಟಿಗೆ ಇದನ್ನು ಆಫ್\u200cನಲ್ಲಿಡಿ.', downloadChecklist: 'ಪರಿಶೀಲನಾ ಪಟ್ಟಿಯನ್ನು ಡೌನ್\u200cಲೋಡ್ ಮಾಡಿ', downloadChecklistWarning: 'ಈ ಕರಡಿನ ಅರ್ಜಿದಾರ ಮತ್ತು ಯೋಜನೆ ವಿವರಗಳಿರುವ ಎನ್\u200cಕ್ರಿಪ್ಟ್ ಮಾಡದ ಪಠ್ಯ ಕಡತ ರಚಿಸಲಾಗುತ್ತದೆ. ಸುರಕ್ಷಿತವಾಗಿ ಇಡಿ. ಮುಂದುವರೆಯಬೇಕೇ?', downloadChecklistReady: 'ಪರಿಶೀಲನಾ ಪಟ್ಟಿ ಡೌನ್\u200cಲೋಡ್ ಆಯಿತು. ಕಡತ ಎನ್\u200cಕ್ರಿಪ್ಟ್ ಆಗಿಲ್ಲ; ಸುರಕ್ಷಿತವಾಗಿ ಇಡಿ.',
     stateSupport: "ರಾಜ್ಯ/ಕೇಂದ್ರಾಡಳಿತ ಪ್ರದೇಶ ಆಯ್ಕೆ ಲಭ್ಯ",
     indianLanguages: "ಇಂಗ್ಲಿಷ್ + 5 ಭಾರತೀಯ ಭಾಷೆಗಳು",
     draftApps: "ಅರ್ಜಿ ಕರಡುಗಳು",
@@ -443,6 +446,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     startSituation: "உங்கள் சூழ்நிலையிலிருந்து தொடங்குங்கள்",
     intakeNote: "உரையிலிருந்து எடுக்கப்படும் தகவல் ஒரு பரிந்துரை மட்டுமே. சேமிப்பதற்கு முன் ஒவ்வொரு புலத்தையும் சரிபார்க்கவும்.",
     catalogueEntries: "பட்டியல் பதிவுகள்",
+    externalDatasetToggle: 'கூடுதல் மூன்றாம் தரப்பு பட்டியலைச் சேர்க்கவும் (5 ஜூலை 2026 பழைய, இயந்திரம் மூலம் பகுக்கப்பட்ட தரவு). ஆதார இணைப்புள்ள பட்டியலைப் பயன்படுத்த இதை அணைத்துவிடவும்.', downloadChecklist: 'சரிபார்ப்புப் பட்டியலைப் பதிவிறக்கவும்', downloadChecklistWarning: 'இந்த வரைவிலுள்ள விண்ணப்பதாரர் மற்றும் திட்ட விவரங்களுடன் குறியாக்கமற்ற உரைக் கோப்பு உருவாகும். பாதுகாப்பாக வைத்திருங்கள். தொடரவா?', downloadChecklistReady: 'சரிபார்ப்புப் பட்டியல் பதிவிறக்கப்பட்டது. கோப்பு குறியாக்கம் செய்யப்படவில்லை; பாதுகாப்பாக வைத்திருங்கள்.',
     stateSupport: "மாநிலம்/யூனியன் பிரதேசத் தேர்வு ஆதரவு",
     indianLanguages: "ஆங்கிலம் + 5 இந்திய மொழிகள்",
     draftApps: "விண்ணப்ப வரைவு",
@@ -560,6 +564,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     startSituation: "మీ పరిస్థితితో ప్రారంభించండి",
     intakeNote: "వచనం నుంచి తీసిన సమాచారం సూచన మాత్రమే. సేవ్ చేసే ముందు ప్రతి ఫీల్డ్‌ను తనిఖీ చేయండి.",
     catalogueEntries: "కేటలాగ్ నమోదులు",
+    externalDatasetToggle: 'అదనపు మూడవ పక్ష కేటలాగ్\u200cను చేర్చండి (5 జూలై 2026 పాత, యంత్రం ద్వారా పార్స్ చేసిన స్నాప్\u200cషాట్). మూలాధార కేటలాగ్ కోసం దీన్ని ఆఫ్\u200cలో ఉంచండి.', downloadChecklist: 'చెక్\u200cలిస్ట్\u200cను డౌన్\u200cలోడ్ చేయండి', downloadChecklistWarning: 'ఈ డ్రాఫ్ట్\u200cలోని దరఖాస్తుదారు మరియు పథకం వివరాలతో ఎన్\u200cక్రిప్ట్ చేయని టెక్స్ట్ ఫైల్ రూపొందుతుంది. సురక్షితంగా ఉంచండి. కొనసాగించాలా?', downloadChecklistReady: 'చెక్\u200cలిస్ట్ డౌన్\u200cలోడ్ అయింది. ఫైల్ ఎన్\u200cక్రిప్ట్ కాలేదు; సురక్షితంగా ఉంచండి.',
     stateSupport: "రాష్ట్రం/కేంద్రపాలిత ప్రాంతం ఎంపిక",
     indianLanguages: "ఆంగ్లం + 5 భారతీయ భాషలు",
     draftApps: "దరఖాస్తు ముసాయిదాలు",
@@ -731,6 +736,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
     startSituation: "നിങ്ങളുടെ സാഹചര്യത്തിൽ നിന്ന് ആരംഭിക്കുക",
     intakeNote: "ടെക്സ്റ്റിൽ നിന്ന് ലഭിക്കുന്ന വിവരങ്ങൾ നിർദ്ദേശം മാത്രമാണ്. സംരക്ഷിക്കുന്നതിന് മുമ്പ് ഓരോ ഫീൽഡും പരിശോധിക്കുക.",
     catalogueEntries: "കാറ്റലോഗ് രേഖകൾ",
+    externalDatasetToggle: 'അനുബന്ധ മൂന്നാംകക്ഷി പട്ടിക ഉൾപ്പെടുത്തുക (2026 ജൂലൈ 5-ലെ പഴയ, യന്ത്രം പാഴ്സ് ചെയ്ത സ്നാപ്ഷോട്ട്). ഉറവിട-ലിങ്ക് ചെയ്ത പട്ടികയ്ക്കായി ഇത് ഓഫ് നിലയിൽ വയ്ക്കുക.', downloadChecklist: 'ചെക്ക്ലിസ്റ്റ് ഡൗൺലോഡ് ചെയ്യുക', downloadChecklistWarning: 'ഈ ഡ്രാഫ്റ്റിലെ അപേക്ഷകന്റെയും പദ്ധതിയുടെയും വിവരങ്ങളുള്ള എൻക്രിപ്റ്റ് ചെയ്യാത്ത ടെക്സ്റ്റ് ഫയൽ സൃഷ്ടിക്കും. സുരക്ഷിതമായി സൂക്ഷിക്കുക. തുടരണോ?', downloadChecklistReady: 'ചെക്ക്ലിസ്റ്റ് ഡൗൺലോഡ് ചെയ്തു. ഫയൽ എൻക്രിപ്റ്റ് ചെയ്തിട്ടില്ല; സുരക്ഷിതമായി സൂക്ഷിക്കുക.',
     stateSupport: "സംസ്ഥാനം/കേന്ദ്രഭരണ പ്രദേശം തിരഞ്ഞെടുക്കാം",
     indianLanguages: "ഇംഗ്ലീഷ് + 5 ഇന്ത്യൻ ഭാഷകൾ",
     draftApps: "അപേക്ഷാ കരടുകൾ",
@@ -815,7 +821,8 @@ export default function Home() {
   const [expandedScheme, setExpandedScheme] = useState("");
   const [backupBusy, setBackupBusy] = useState(false);
   const [openDataSchemes, setOpenDataSchemes] = useState<(typeof SCHEMES)[number][]>([]);
-  const [openDataTotal, setOpenDataTotal] = useState(4693);
+  const [openDataTotal, setOpenDataTotal] = useState(0);
+  const [includeExternalDataset, setIncludeExternalDataset] = useState(false);
   const [openDataOffset, setOpenDataOffset] = useState(0);
   const [openDataNext, setOpenDataNext] = useState<number | null>(0);
   const [openDataLoading, setOpenDataLoading] = useState(false);
@@ -850,15 +857,15 @@ export default function Home() {
     };
     const local = SCHEMES.filter(matches);
     const names = new Set(local.map((scheme) => scheme.name.trim().toLowerCase()));
-    const external = openDataSchemes.filter((scheme) => {
+    const external = includeExternalDataset ? openDataSchemes.filter((scheme) => {
       const matchesCategory = category === "All categories" || scheme.category.split(",").map((item) => item.trim()).includes(category) || scheme.tags.some((tag) => tag.trim() === category);
       return matchesCategory && !names.has(scheme.name.trim().toLowerCase());
-    });
+    }) : [];
     return [...local, ...external];
-  }, [category, language, query, openDataSchemes]);
+  }, [category, language, query, openDataSchemes, includeExternalDataset]);
 
   useEffect(() => {
-    if (tab !== "discover") return;
+    if (tab !== "discover" || !includeExternalDataset) return;
     const controller = new AbortController();
     const timer = window.setTimeout(async () => {
       setOpenDataLoading(true);
@@ -883,7 +890,7 @@ export default function Home() {
       }
     }, query ? 300 : 0);
     return () => { controller.abort(); window.clearTimeout(timer); };
-  }, [tab, query, category, openDataOffset]);
+  }, [tab, query, category, openDataOffset, includeExternalDataset]);
 
   useEffect(() => {
     const read = (key: string, fallback: any) => {
@@ -1046,6 +1053,39 @@ export default function Home() {
     } finally { setDraftBusy(""); }
   };
 
+  const downloadChecklist = (application: LocalApplication) => {
+    if (!window.confirm(t("downloadChecklistWarning"))) return;
+    const lines = [
+      "JANASETU — LOCAL SCHEME PREPARATION CHECKLIST",
+      "Preparation only. Not an eligibility decision and not submitted to a government portal.",
+      "",
+      "Scheme: " + application.schemeName,
+      "Applicant: " + application.citizenName,
+      "Location: " + application.district + ", " + application.state,
+      "Prepared: " + new Date(application.createdAt).toLocaleString(),
+      "Review status: " + (application.schemeReviewStatus === "approved" ? "Scheme version approved; official eligibility still applies" : "Independent scheme review pending"),
+      "",
+      "PROFILE FIELDS TO VERIFY",
+      ...(application.fields || []).map((field) => field.label + ": " + (field.value || "Not provided")),
+      "",
+      "DOCUMENT CHECKLIST — VERIFY THE CURRENT OFFICIAL LIST",
+      ...(application.documents || []).map((document) => "[ ] " + document),
+      "",
+      "Official information: " + application.sourceUrl,
+      ...(application.applicationUrl ? ["Official application channel: " + application.applicationUrl] : []),
+      "",
+      "Do not send Aadhaar, bank details, OTPs or passwords to JanaSetu. Complete protected identity and submission steps only on the official channel."
+    ];
+    const blob = new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = "JanaSetu-" + application.schemeId.replace(/[^a-z0-9-]/gi, "-") + "-checklist.txt";
+    anchor.click();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    setNotice(t("downloadChecklistReady"));
+  };
+
   const addFollowup = (application: LocalApplication) => {
     const due = new Date(); due.setDate(due.getDate() + 7);
     const task: LocalTask = {
@@ -1130,7 +1170,7 @@ export default function Home() {
       </div>}
       <div className="scheme-actions">
         <button className="text-button" onClick={() => setExpandedScheme(expanded ? "" : scheme.id)}>{expanded ? t("hideDetails") : t("viewDetails")} <ChevronDown size={15}/></button>
-        {assessment && assessment.state !== "not_matched" && <><button className="button button-small button-primary" onClick={() => prepareDraft(scheme.id)} disabled={draftBusy === scheme.id}>{draftBusy === scheme.id ? t("working") : scheme.reviewStatus === "approved" ? t("prepare") : t("prepareLocalChecklist")} <ArrowUpRight size={15}/></button>{scheme.reviewStatus !== "approved" && <p className="source-period">{t("localPrepOnly")}</p>}</>}
+        {scheme.recordKind !== "budget-line-item-lead" && scheme.recordKind !== "external-dataset-record" && (scheme.reviewStatus !== "approved" || assessment?.state !== "not_matched") && <><button className="button button-small button-primary" onClick={() => prepareDraft(scheme.id)} disabled={draftBusy === scheme.id || !profile.state} title={!profile.state ? "Select your State/UT in My profile first" : "Create a private checklist in this browser"}>{draftBusy === scheme.id ? t("working") : t("prepareLocalChecklist")} <ArrowUpRight size={15}/></button><p className="source-period">{t("localPrepOnly")}{!profile.state ? " · Select State/UT first" : ""}</p></>}
       </div>
       {expanded && <div className="scheme-detail">
         <div><strong>{t("screeningConditions")}</strong><ul>{schemeRuleNotes.map((rule) => <li key={rule}>{rule}</li>)}</ul></div>
@@ -1381,12 +1421,13 @@ export default function Home() {
               <div className="search-box"><Search size={17}/><input placeholder={t("search")} value={query} onChange={(e) => { setQuery(e.target.value); setOpenDataOffset(0); }}/>{query && <button onClick={() => setQuery("")}><X size={14}/></button>}</div>
               <label className="filter-select"><span>{t("category")}</span><select value={category} onChange={(e) => { setCategory(e.target.value); setOpenDataOffset(0); }}><option>{t("allCategories")}</option>{Array.from(new Set([...SCHEMES.map((item) => item.category), ...openDataSchemes.flatMap((item) => item.category.split(",").map((category) => category.trim()))])).filter(Boolean).sort().map((item) => <option key={item} value={item}>{categoryLabel(item)}</option>)}</select><ChevronDown size={14}/></label>
             </div>
-            <div className="catalogue-head"><span>{activeResults.length} {t("displayed")} · {openDataTotal.toLocaleString("en-IN")} {t("openDataRows")} · {SCHEMES.filter((item) => item.catalogueStatus === "rule-screened").length} {t("ruleScreenedCount")}</span><span>{t("verifyRules")}</span></div>
-            <div className="source-disclaimer"><CircleAlert size={16}/><p><strong>{t("datasetAttribution")}:</strong> SmartDuke Technologies, Indian Government Schemes Dataset 2026, CC BY 4.0. {t("snapshotDate")}: {new Date(snapshotMetadata.collectionDate + "T00:00:00Z").toLocaleDateString(({ en: "en-IN", hi: "hi-IN", kn: "kn-IN", ta: "ta-IN", te: "te-IN", ml: "ml-IN" } as const)[language], { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })}. {t("datasetMachineParsed")}</p>{openDataFreshness === "stale" && <p>{t("datasetFreshnessWarning")}</p>}</div>
-            {openDataError && <div className="source-disclaimer"><CircleAlert size={16}/><p>{t("catalogueApiUnavailable")}</p></div>}
-            {query && openDataSearchFallback && <div className="source-disclaimer"><CircleAlert size={16}/><p>{t("searchFallback")}</p></div>}
+            <div className="catalogue-head"><span>{activeResults.length} {t("displayed")} · {SCHEMES.filter((item) => item.recordKind !== "budget-line-item-lead" && item.recordKind !== "external-dataset-record").length} source-linked scheme references · {SCHEMES.filter((item) => item.recordKind === "budget-line-item-lead").length} budget leads{includeExternalDataset ? " · " + openDataTotal.toLocaleString("en-IN") + " third-party records" : ""}</span><span>{t("verifyRules")}</span></div>
+            <label className="catalogue-source-toggle"><input type="checkbox" checked={includeExternalDataset} onChange={(event) => { setIncludeExternalDataset(event.target.checked); setOpenDataOffset(0); setOpenDataSchemes([]); setOpenDataTotal(0); setOpenDataNext(0); }}/><span>{t("externalDatasetToggle")}</span></label>
+            {includeExternalDataset && <div className="source-disclaimer"><CircleAlert size={16}/><p><strong>{t("datasetAttribution")}:</strong> SmartDuke Technologies, Indian Government Schemes Dataset 2026, CC BY 4.0. {t("snapshotDate")}: {new Date(snapshotMetadata.collectionDate + "T00:00:00Z").toLocaleDateString(({ en: "en-IN", hi: "hi-IN", kn: "kn-IN", ta: "ta-IN", te: "te-IN", ml: "ml-IN" } as const)[language], { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })}. {t("datasetMachineParsed")}</p>{openDataFreshness === "stale" && <p>{t("datasetFreshnessWarning")}</p>}</div>}
+            {includeExternalDataset && openDataError && <div className="source-disclaimer"><CircleAlert size={16}/><p>{t("catalogueApiUnavailable")}</p></div>}
+            {includeExternalDataset && query && openDataSearchFallback && <div className="source-disclaimer"><CircleAlert size={16}/><p>{t("searchFallback")}</p></div>}
             {activeResults.length ? <div className="scheme-grid">{activeResults.map(renderSchemeCard)}</div> : <div className="empty-state"><Search size={28}/><h3>{t("noSchemes")}</h3><p>{t("tryKeyword")}</p><button className="text-button" onClick={() => { setQuery(""); setCategory("All categories"); }}>{t("clearFilters")}</button></div>}
-            {openDataNext !== null && <div className="catalogue-load-more"><button className="button button-secondary" disabled={openDataLoading} onClick={() => setOpenDataOffset(openDataNext)}>{openDataLoading ? <><span className="spinner"/> {t("loading")}</> : t("next50")}</button><small>{t("datasetPaginated")}</small></div>}
+            {includeExternalDataset && openDataNext !== null && <div className="catalogue-load-more"><button className="button button-secondary" disabled={openDataLoading} onClick={() => setOpenDataOffset(openDataNext)}>{openDataLoading ? <><span className="spinner"/> {t("loading")}</> : t("next50")}</button><small>{t("datasetPaginated")}</small></div>}
             {assessments.length === 0 && <div className="empty-guidance"><CircleAlert size={17}/><span>{t("notPersonalized")}</span></div>}
           </section>}
 
@@ -1423,9 +1464,10 @@ export default function Home() {
                     <span>{field.label}</span><strong>{field.value || t("notProvided")}</strong>
                     <small>{field.source} · {field.status === "provided" ? t("provided") : t("needsInformation")}</small>
                   </div>)}
+                  {application.documents && application.documents.length > 0 && <div className="draft-document-checklist"><strong>Scheme document checklist — verify the current official list</strong><ul>{application.documents.map((document) => <li key={document}>{document}</li>)}</ul></div>}
                   <p className="draft-field-note">{t("draftFieldNote")}</p>
                 </div>}
-                <p className="application-disclaimer"><CircleAlert size={15}/>{t("draftNotSubmittedDisclaimer")}</p><div className="application-actions"><a className="text-button" href={application.sourceUrl} target="_blank" rel="noreferrer">{t("openOfficialSource")} <ArrowUpRight size={14}/></a><button className="button button-small button-outline" onClick={() => addFollowup(application)}><CalendarClock size={14}/> {t("addFollowup")}</button><button className="text-button danger-text" onClick={() => setApplications((current) => current.filter((item) => item.id !== application.id))}>{t("remove")}</button></div></article>)}</div>}
+                <p className="application-disclaimer"><CircleAlert size={15}/>{t("draftNotSubmittedDisclaimer")}</p><div className="application-actions"><a className="text-button" href={application.sourceUrl} target="_blank" rel="noreferrer">{t("openOfficialSource")} <ArrowUpRight size={14}/></a><button className="text-button" onClick={() => downloadChecklist(application)}>{t("downloadChecklist")} <Download size={14}/></button>{application.applicationUrl && <a className="text-button" href={application.applicationUrl} target="_blank" rel="noreferrer">Open official application channel <ArrowUpRight size={14}/></a>}<button className="button button-small button-outline" onClick={() => addFollowup(application)}><CalendarClock size={14}/> {t("addFollowup")}</button><button className="text-button danger-text" onClick={() => setApplications((current) => current.filter((item) => item.id !== application.id))}>{t("remove")}</button></div></article>)}</div>}
             {tasks.length > 0 && <div className="panel followup-panel"><div className="section-heading"><div><div className="eyebrow">{t("followupMemory")}</div><h2>{t("upcomingActions")}</h2></div><span className="trace-count">{tasks.length} {t("reminderPlural")}</span></div>{tasks.map((task) => <div className="task-row" key={task.id}><div className="task-date"><CalendarClock size={17}/></div><div><strong>{task.title}</strong><small>{t("followupDate")}: {shortDate(task.dueAt, language)} · {task.note}</small></div><button className="text-button" onClick={() => setTasks((current) => current.filter((item) => item.id !== task.id))}>{t("done")}</button></div>)}</div>}
           </section>}
 
