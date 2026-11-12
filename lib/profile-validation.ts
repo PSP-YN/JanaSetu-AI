@@ -45,8 +45,8 @@ export function parseCitizenProfile(value: unknown): CitizenProfile | null {
   if (typeof profile.fullName !== "string" || profile.fullName.length > 100) return null;
   const boundedText: (keyof CitizenProfile)[] = ["mobileNumber","emailAddress","addressLine1","addressLine2","villageOrTown","pincode","fatherOrGuardianName","motherName","institutionName","courseName","courseYear"];
   for (const key of boundedText) if (typeof profile[key] !== "string" || String(profile[key]).length > 160) return null;
-  if (profile.mobileNumber && !/^\\+?[0-9]{10,13}$/.test(profile.mobileNumber.replace(/[\\s-]/g,""))) return null;
-  if (profile.emailAddress && !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(profile.emailAddress)) return null;
+  if (profile.mobileNumber && !/^\+?[0-9]{10,13}$/.test(profile.mobileNumber.replace(/[\s-]/g,""))) return null;
+  if (profile.emailAddress && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.emailAddress)) return null;
   if (profile.pincode && !/^[0-9]{6}$/.test(profile.pincode)) return null;
   if (!["","General","OBC","SC","ST","EWS","Other"].includes(profile.socialCategory)) return null;
   if (!["","AAY","PHH","BPL","APL","Other"].includes(profile.rationCardCategory)) return null;
