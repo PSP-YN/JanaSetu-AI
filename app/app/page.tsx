@@ -19,6 +19,7 @@ import { parseBackupApplications, parseBackupAssessments, parseBackupDocuments, 
 import { encryptVault, decryptVault } from "@/lib/encrypted-vault";
 import { restoreEncryptedWorkspace, syncEncryptedWorkspace } from "@/lib/workspace-sync";
 import { saveLocalDocument, getLocalDocuments, deleteLocalDocument, replaceLocalDocuments } from "@/lib/local-document-vault";
+import { buildFormAssistantBackup } from "@/lib/form-assistant-backup";
 import {
   LANGUAGE_OPTIONS, SCHEMES, STATES_AND_UTS,
   type Assessment, type CitizenProfile, type LanguageCode
@@ -1119,6 +1120,24 @@ export default function Home() {
     setProfile((current) => ({ ...current, [key]: value }));
   };
 
+  const exportProfileForFormAssistant = () => {
+    const warning = "This export is a plain-text JSON file containing your personal profile. It is not encrypted. Save it only on a device you control, import it into the JanaSetu Form Assistant extension, and delete the file after import. Continue?";
+    if (!window.confirm(warning)) return;
+    try {
+      const backup = buildFormAssistantBackup(profile, language);
+      const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "JanaSetu-Form-Assistant-Profile.json";
+      link.click();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      setNotice("Profile export created. Import it in the JanaSetu Form Assistant extension, then review every suggested field before filling.");
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : "Profile export failed.");
+    }
+  };
+
 
   const submitIntake = async () => {
     if (!intakeText.trim()) { setNotice(t("noticeDescribeBefore")); return; }
@@ -1478,7 +1497,7 @@ export default function Home() {
                   <Field label="Course / programme"><input value={profile.courseName} onChange={(e) => updateProfile("courseName", e.target.value)}/></Field>
                   <Field label="Current academic year"><input placeholder="e.g. 2026-27 / 2nd year" value={profile.courseYear} onChange={(e) => updateProfile("courseYear", e.target.value)}/></Field>
                 </div>
-                <div className="form-footer"><span><LockKeyhole size={14}/> {t("noAadhaarRequest")}</span><button className="button button-primary" onClick={() => { setNotice(t("saved")); runAssessment(); }}>{t("run")} <ArrowRight size={16}/></button></div>
+                <div className="form-footer"><span><LockKeyhole size={14}/> {t("noAadhaarRequest")}</span><div className="form-footer-actions"><button className="button button-outline" onClick={exportProfileForFormAssistant}>Export for form assistant</button><button className="button button-primary" onClick={() => { setNotice(t("saved")); runAssessment(); }}>{t("run")} <ArrowRight size={16}/></button></div></div>
               </div>
               <aside className="profile-aside">
                 <div className="panel aside-card">
