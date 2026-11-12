@@ -829,6 +829,7 @@ export default function Home() {
   const [expandedApplication, setExpandedApplication] = useState("");
   const [notice, setNotice] = useState("");
   const [hydrated, setHydrated] = useState(false);
+  const [hasLocalLanguage, setHasLocalLanguage] = useState(false);
   const [cloudUserId, setCloudUserId] = useState("");
   const [cloudSavedAt, setCloudSavedAt] = useState("");
   const [cloudError, setCloudError] = useState("");
@@ -922,6 +923,7 @@ export default function Home() {
     };
     const localProfile = parseBackupProfile(read(STORAGE.profile, EMPTY_PROFILE));
     const localLanguage = parseBackupLanguage(read(STORAGE.language, "en"));
+    setHasLocalLanguage(localStorage.getItem(STORAGE.language) !== null);
     const localApplications: LocalApplication[] = invalidateUnapprovedApplications<LocalApplication>(parseBackupApplications(read(STORAGE.applications, []), { trustLocalStorage: true }));
     const localDocuments = parseBackupDocuments(read(STORAGE.documents, []));
     const localTasks = parseBackupTasks(read(STORAGE.tasks, []));
@@ -1015,7 +1017,7 @@ export default function Home() {
         const remoteProfile = parseBackupProfile(remote.profile);
         if (!remoteProfile) throw new Error("The encrypted cloud profile failed validation.");
         mergedProfile = mergeCitizenProfile(profile, remoteProfile);
-        mergedLanguage = localStorage.getItem(STORAGE.language) !== null ? language : parseBackupLanguage(remote.language);
+        mergedLanguage = hasLocalLanguage ? language : parseBackupLanguage(remote.language);
         mergedApplications = mergeWorkspaceRecords(applications, invalidateUnapprovedApplications<LocalApplication>(parseBackupApplications(remote.applications, { trustLocalStorage: true })) as LocalApplication[], item => String(item.id));
         mergedDocuments = mergeWorkspaceRecords(documents, parseBackupDocuments(remote.documents), item => item.id);
         mergedTasks = mergeWorkspaceRecords(tasks, parseBackupTasks(remote.tasks), item => item.id);
@@ -1033,12 +1035,13 @@ export default function Home() {
         assessments: mergedAssessments
       };
       const saved = await syncEncryptedWorkspace(payload, syncPassword, snapshot.revision);
-      setProfile(mergedProfile);
-      setLanguage(mergedLanguage);
-      setApplications(mergedApplications);
-      setDocuments(mergedDocuments);
-      setTasks(mergedTasks);
-      setAssessments(mergedAssessments);
+      // Apply the remote merge without overwriting edits made while the network request was running.
+      setProfile(current => mergeCitizenProfile(current, mergedProfile));
+      setLanguage(current => hasLocalLanguage ? current : mergedLanguage);
+      setApplications(current => mergeWorkspaceRecords(current, mergedApplications, item => String(item.id)));
+      setDocuments(current => mergeWorkspaceRecords(current, mergedDocuments, item => item.id));
+      setTasks(current => mergeWorkspaceRecords(current, mergedTasks, item => item.id));
+      setAssessments(current => mergeWorkspaceRecords(current as unknown as Record<string, unknown>[], mergedAssessments as unknown as Record<string, unknown>[], item => String(item.schemeId)) as unknown as Assessment[]);
       setCloudSyncRevision(saved.revision);
       setCloudSavedAt(saved.updated_at || new Date().toISOString());
       setCloudError("");
