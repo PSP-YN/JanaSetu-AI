@@ -17,6 +17,7 @@ import { localizedSchemeText } from "@/lib/scheme-translations";
 import { invalidateUnapprovedApplications, invalidateUnapprovedAssessments } from "@/lib/assessment-safety";
 import { parseBackupApplications, parseBackupAssessments, parseBackupDocuments, parseBackupLanguage, parseBackupProfile, parseBackupTasks, type DraftField, type LocalApplicationRecord, type LocalDocumentRecord, type LocalTaskRecord } from "@/lib/backup-validation";
 import { encryptVault, decryptVault } from "@/lib/encrypted-vault";
+import { restoreEncryptedWorkspace, syncEncryptedWorkspace } from "@/lib/workspace-sync";
 import { saveLocalDocument, getLocalDocuments, deleteLocalDocument, replaceLocalDocuments } from "@/lib/local-document-vault";
 import {
   LANGUAGE_OPTIONS, SCHEMES, STATES_AND_UTS,
@@ -828,10 +829,19 @@ export default function Home() {
   const [expandedApplication, setExpandedApplication] = useState("");
   const [notice, setNotice] = useState("");
   const [hydrated, setHydrated] = useState(false);
+  const [hasLocalLanguage, setHasLocalLanguage] = useState(false);
   const [cloudUserId, setCloudUserId] = useState("");
-  const [cloudReady, setCloudReady] = useState(false);
   const [cloudSavedAt, setCloudSavedAt] = useState("");
   const [cloudError, setCloudError] = useState("");
+  const [cloudSyncAvailable, setCloudSyncAvailable] = useState(false);
+  const [cloudPolicyVersion, setCloudPolicyVersion] = useState("");
+  const [cloudDraftPolicyVersion, setCloudDraftPolicyVersion] = useState("");
+  const [cloudConsented, setCloudConsented] = useState(false);
+  const [cloudStatusLoaded, setCloudStatusLoaded] = useState(false);
+  const [cloudSyncRevision, setCloudSyncRevision] = useState(0);
+  const [syncPassword, setSyncPassword] = useState("");
+  const [syncConsentChecked, setSyncConsentChecked] = useState(false);
+  const [syncBusy, setSyncBusy] = useState(false);
   const [showMobileNav, setShowMobileNav] = useState(false);
   const [expandedScheme, setExpandedScheme] = useState("");
   const [backupBusy, setBackupBusy] = useState(false);
@@ -913,6 +923,7 @@ export default function Home() {
     };
     const localProfile = parseBackupProfile(read(STORAGE.profile, EMPTY_PROFILE));
     const localLanguage = parseBackupLanguage(read(STORAGE.language, "en"));
+    setHasLocalLanguage(localStorage.getItem(STORAGE.language) !== null);
     const localApplications: LocalApplication[] = invalidateUnapprovedApplications<LocalApplication>(parseBackupApplications(read(STORAGE.applications, []), { trustLocalStorage: true }));
     const localDocuments = parseBackupDocuments(read(STORAGE.documents, []));
     const localTasks = parseBackupTasks(read(STORAGE.tasks, []));
@@ -932,36 +943,20 @@ export default function Home() {
         const authResponse = await fetch("/api/auth", { cache: "no-store" });
         const auth = authResponse.ok ? await authResponse.json() : null;
         if (!active) return;
-        if (!auth?.user?.id) { setCloudReady(true); return; }
+        if (!auth?.user?.id) { setCloudStatusLoaded(true); return; }
         setCloudUserId(String(auth.user.id));
-        const response = await fetch("/api/workspace", { cache: "no-store" });
-        if (!response.ok) throw new Error("Cloud workspace could not be loaded.");
-        const result = await response.json();
-        const remote = result.workspace;
-        if (remote) {
-          // Re-read the local snapshot after the network round-trip so edits made
-          // while authentication/workspace requests were pending are preserved.
-          const latestLocalProfile = parseBackupProfile(read(STORAGE.profile, localProfile || EMPTY_PROFILE)) || localProfile || EMPTY_PROFILE;
-          const latestLocalLanguage = parseBackupLanguage(read(STORAGE.language, localLanguage));
-          const latestLocalApplications = invalidateUnapprovedApplications<LocalApplication>(parseBackupApplications(read(STORAGE.applications, localApplications), { trustLocalStorage: true })) as LocalApplication[];
-          const latestLocalDocuments = parseBackupDocuments(read(STORAGE.documents, localDocuments));
-          const latestLocalTasks = parseBackupTasks(read(STORAGE.tasks, localTasks));
-          const latestLocalAssessments = invalidateUnapprovedAssessments(parseBackupAssessments(read(STORAGE.assessments, localAssessments), { trustLocalStorage: true }));
-          const remoteProfile = parseBackupProfile(remote.profile_data) || EMPTY_PROFILE;
-          const remoteApplications = invalidateUnapprovedApplications<LocalApplication>(parseBackupApplications(remote.application_drafts, { trustLocalStorage: true })) as LocalApplication[];
-          const remoteDocuments = parseBackupDocuments(remote.document_refs);
-          const remoteTasks = parseBackupTasks(remote.reminders);
-          const remoteAssessments = invalidateUnapprovedAssessments(parseBackupAssessments(remote.assessments, { trustLocalStorage: true }));
-          setProfile(mergeCitizenProfile(latestLocalProfile, remoteProfile));
-          setLanguage(localStorage.getItem(STORAGE.language) !== null ? latestLocalLanguage : parseBackupLanguage(remote.preferred_language || "en"));
-          setApplications(mergeWorkspaceRecords(latestLocalApplications, remoteApplications, item => String(item.id)));
-          setDocuments(mergeWorkspaceRecords(latestLocalDocuments, remoteDocuments, item => item.id));
-          setTasks(mergeWorkspaceRecords(latestLocalTasks, remoteTasks, item => item.id));
-          setAssessments(mergeWorkspaceRecords(latestLocalAssessments as unknown as Record<string, unknown>[], remoteAssessments as unknown as Record<string, unknown>[], item => String(item.schemeId)) as unknown as Assessment[]);
-        }
-        if (active) setCloudReady(true);
-      } catch {
-        if (active) { setCloudError("Cloud storage is disabled until privacy review and explicit consent are complete. Your data remains on this device; no cloud overwrite was attempted."); setCloudReady(false); }
+        const response = await fetch("/api/workspace/sync/status", { cache: "no-store" });
+        if (!response.ok) throw new Error("Encrypted sync policy status is unavailable.");
+        const status = await response.json();
+        if (!active) return;
+        setCloudSyncAvailable(status.available === true && typeof status.policy?.version === "string");
+        setCloudPolicyVersion(typeof status.policy?.version === "string" ? status.policy.version : "");
+        setCloudDraftPolicyVersion(typeof status.draft_version === "string" ? status.draft_version : "");
+        setCloudConsented(status.consented === true);
+      } catch (error) {
+        if (active) setCloudError(error instanceof Error ? error.message : "Encrypted sync status is unavailable.");
+      } finally {
+        if (active) setCloudStatusLoaded(true);
       }
     })();
     return () => { active = false; };
@@ -978,30 +973,87 @@ export default function Home() {
   }, [hydrated, profile, language, applications, documents, tasks, assessments]);
 
   useEffect(() => {
-    if (!hydrated || !cloudReady || !cloudUserId) return;
-    const timer = window.setTimeout(async () => {
-      try {
-        const response = await fetch("/api/workspace", {
-          method: "PUT", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ profile_data: profile, preferred_language: language, application_drafts: applications, document_refs: documents, reminders: tasks, assessments })
-        });
-        if (!response.ok) throw new Error("Cloud save failed.");
-        const result = await response.json();
-        setCloudSavedAt(result.updated_at || new Date().toISOString());
-        setCloudError("");
-      } catch {
-        setCloudError("Cloud sync failed. Your latest changes remain in this browser; export a backup before switching devices.");
-      }
-    }, 800);
-    return () => window.clearTimeout(timer);
-  }, [hydrated, cloudReady, cloudUserId, profile, language, applications, documents, tasks, assessments]);
-
-  useEffect(() => {
     if (!notice) return;
     const timer = window.setTimeout(() => setNotice(""), 4200);
     return () => window.clearTimeout(timer);
   }, [notice]);
 
+
+  const syncWorkspaceNow = async () => {
+    if (!cloudUserId) { setCloudError("Sign in to use encrypted cross-device sync."); return; }
+    if (!cloudSyncAvailable || !cloudPolicyVersion) { setCloudError("Cloud sync is disabled until its privacy policy is independently approved."); return; }
+    if (!cloudConsented && !syncConsentChecked) { setCloudError("Review the approved policy and confirm consent before syncing."); return; }
+    if (syncPassword.length < 12) { setCloudError("Use a vault password with at least 12 characters."); return; }
+    setSyncBusy(true);
+    setCloudError("");
+    try {
+      if (!cloudConsented) {
+        const consent = await fetch("/api/consents", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            purpose: "cloud_workspace_sync",
+            policy_version: cloudPolicyVersion,
+            granted: true,
+            scope: { action_type: "workspace_sync" }
+          })
+        });
+        const consentResult = await consent.json().catch(() => ({}));
+        if (!consent.ok) throw new Error(typeof consentResult.error === "string" ? consentResult.error : "Cloud sync consent could not be recorded.");
+        setCloudConsented(true);
+      }
+
+      // Restore first and use compare-and-swap so a stale device cannot overwrite a newer cloud revision.
+      const snapshot = await restoreEncryptedWorkspace(syncPassword);
+      let mergedProfile = profile;
+      let mergedLanguage = language;
+      let mergedApplications = applications;
+      let mergedDocuments = documents;
+      let mergedTasks = tasks;
+      let mergedAssessments = assessments;
+      if (snapshot.payload !== null) {
+        const remote = snapshot.payload as Record<string, unknown>;
+        if (remote.app !== "JanaSetu" || remote.schemaVersion !== 1 || !remote.profile) throw new Error("The encrypted cloud vault has an unsupported workspace format.");
+        const remoteProfile = parseBackupProfile(remote.profile);
+        if (!remoteProfile) throw new Error("The encrypted cloud profile failed validation.");
+        mergedProfile = mergeCitizenProfile(profile, remoteProfile);
+        mergedLanguage = hasLocalLanguage ? language : parseBackupLanguage(remote.language);
+        mergedApplications = mergeWorkspaceRecords(applications, invalidateUnapprovedApplications<LocalApplication>(parseBackupApplications(remote.applications, { trustLocalStorage: true })) as LocalApplication[], item => String(item.id));
+        mergedDocuments = mergeWorkspaceRecords(documents, parseBackupDocuments(remote.documents), item => item.id);
+        mergedTasks = mergeWorkspaceRecords(tasks, parseBackupTasks(remote.tasks), item => item.id);
+        mergedAssessments = mergeWorkspaceRecords(assessments as unknown as Record<string, unknown>[], invalidateUnapprovedAssessments(parseBackupAssessments(remote.assessments, { trustLocalStorage: true })) as unknown as Record<string, unknown>[], item => String(item.schemeId)) as unknown as Assessment[];
+      }
+
+      const payload = {
+        app: "JanaSetu",
+        schemaVersion: 1,
+        profile: mergedProfile,
+        language: mergedLanguage,
+        applications: mergedApplications,
+        documents: mergedDocuments,
+        tasks: mergedTasks,
+        assessments: mergedAssessments
+      };
+      const saved = await syncEncryptedWorkspace(payload, syncPassword, snapshot.revision);
+      // Apply the remote merge without overwriting edits made while the network request was running.
+      setProfile(current => mergeCitizenProfile(current, mergedProfile));
+      setLanguage(current => hasLocalLanguage ? current : mergedLanguage);
+      setApplications(current => mergeWorkspaceRecords(current, mergedApplications, item => String(item.id)));
+      setDocuments(current => mergeWorkspaceRecords(current, mergedDocuments, item => item.id));
+      setTasks(current => mergeWorkspaceRecords(current, mergedTasks, item => item.id));
+      setAssessments(current => mergeWorkspaceRecords(current as unknown as Record<string, unknown>[], mergedAssessments as unknown as Record<string, unknown>[], item => String(item.schemeId)) as unknown as Assessment[]);
+      setCloudSyncRevision(saved.revision);
+      setCloudSavedAt(saved.updated_at || new Date().toISOString());
+      setCloudError("");
+      setSyncConsentChecked(false);
+      setSyncPassword("");
+      setNotice("Encrypted workspace synced. Document file bytes remain on this device; only document references were synchronized.");
+    } catch (error) {
+      setCloudError(error instanceof Error ? error.message : "Encrypted workspace sync failed. Your local data was not deleted.");
+    } finally {
+      setSyncBusy(false);
+    }
+  };
 
   const exportBackup = async () => {
     const password = window.prompt("Create a vault password (at least 12 characters). JanaSetu cannot recover it.");
@@ -1261,9 +1313,19 @@ export default function Home() {
               <div className="date-chip"><CalendarClock size={15}/> {hydrated ? new Date().toLocaleDateString(({ en: "en-IN", hi: "hi-IN", kn: "kn-IN", ta: "ta-IN", te: "te-IN", ml: "ml-IN" } as const)[language], { weekday: "short", day: "numeric", month: "short", timeZone: "Asia/Kolkata" }) : ""}</div>
             </div>
 
-            <section className="cloud-status" aria-live="polite">
-              <span className={cloudUserId && cloudSavedAt && !cloudError ? "cloud-status-dot synced" : "cloud-status-dot"} />
-              <span>{cloudError || (cloudUserId ? (cloudSavedAt ? "Cloud workspace connected · latest save " + new Date(cloudSavedAt).toLocaleTimeString() : "Connecting your secure cloud workspace…") : "Local workspace · cloud sync awaits privacy approval and explicit consent")}</span>
+            <section className="cloud-status encrypted-sync-panel" aria-live="polite">
+              <div className="encrypted-sync-copy">
+                <strong>Encrypted cross-device sync</strong>
+                <p>{!cloudStatusLoaded ? "Checking account and privacy-policy status…" : !cloudUserId ? "Sign in to check whether encrypted sync is available for your account." : !cloudSyncAvailable ? "Disabled pending independent privacy/legal approval. Your workspace stays on this device." : cloudConsented ? "Approved policy accepted. Sync is manual and uses your vault password." : "An approved policy is available. Review it and explicitly opt in before syncing."}</p>
+                {cloudDraftPolicyVersion && !cloudSyncAvailable && <small>Policy draft {cloudDraftPolicyVersion} is inactive and cannot be accepted yet.</small>}
+                {cloudSavedAt && <small>Last encrypted sync: {new Date(cloudSavedAt).toLocaleString()}</small>}
+                {cloudSyncAvailable && <a href="https://github.com/PSP-YN/JanaSetu-AI/blob/main/docs/ENCRYPTED-CROSS-DEVICE-SYNC.md" target="_blank" rel="noreferrer">Read the cloud-sync policy and recovery limitations</a>}
+                {cloudSyncAvailable && !cloudConsented && <label className="sync-consent-check"><input type="checkbox" checked={syncConsentChecked} onChange={event => setSyncConsentChecked(event.target.checked)}/> I have read the approved policy and agree to encrypted workspace synchronization.</label>}
+                {cloudSyncAvailable && <label className="sync-password-label">Vault password<input type="password" autoComplete="off" value={syncPassword} onChange={event => setSyncPassword(event.target.value)} placeholder="At least 12 characters" disabled={syncBusy}/></label>}
+                {cloudSyncAvailable && <button className="button button-primary" onClick={syncWorkspaceNow} disabled={syncBusy || !cloudUserId || (!cloudConsented && !syncConsentChecked) || syncPassword.length < 12}>{syncBusy ? "Syncing encrypted vault…" : cloudConsented ? "Sync this device now" : "Enable encrypted sync"}</button>}
+                {cloudSyncAvailable && cloudSyncRevision > 0 && <small>Cloud revision {cloudSyncRevision}. A newer remote revision blocks stale writes; restore and reconcile before retrying.</small>}
+                {cloudError && <p className="sync-error" role="alert">{cloudError}</p>}
+              </div>
             </section>
             <section className="hero-panel">
               <div className="hero-content">

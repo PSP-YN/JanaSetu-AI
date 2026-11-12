@@ -2,7 +2,7 @@ name: JanaSetu CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, feat/cross-device-pmkisan-assistant]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -170,3 +170,5 @@ jobs:
           test "$draft_status" = "404"
           agent_status=$(curl --silent --output /tmp/janasetu-agent-error.json --write-out "%{http_code}" -X POST http://127.0.0.1:3000/api/agent/run -H "Content-Type: application/json" --data '{"fullName":"'$(printf 'x%.0s' {1..101})'","state":"Karnataka"}')
           test "$agent_status" = "400"
+
+# Full CI validates the scheme adapter contract and encrypted workspace sync boundary.
