@@ -1,34 +1,44 @@
 # JanaSetu AI — 2-minute hackathon demo script
 
 ## Before recording
-- Open the deployed JanaSetu app over HTTPS (Web Crypto requires a secure context).
+- Open the deployed JanaSetu app over HTTPS.
 - Use synthetic profile data and harmless sample PDFs only. Never use real Aadhaar, bank, caste, income or medical documents.
-- Keep the password out of the recording. Use a strong demo-only passphrase of at least 12 characters.
+- Keep passwords and credentials out of the recording.
 - Clear the browser profile before the demo if you want to show a fresh import.
 
 ## Recording flow (about 2 minutes)
 **0:00–0:15 — Problem**
-"Citizens often have to repeat the same information and gather the same evidence across different benefit applications. Sensitive documents should not need to live in another centralised database just to organise an application."
 
-**0:15–0:40 — Discover and prepare**
-"JanaSetu helps a citizen create a profile, explore a source-linked starter catalogue, understand potential eligibility, and prepare a draft. This is preliminary guidance, not an official eligibility decision or government submission."
+"Citizens often have to repeat the same information and gather the same evidence across different benefit applications. They need a clearer way to discover support, understand evidence gaps and prepare the next step without handing sensitive information to another central database."
 
-**0:40–1:15 — Local document vault**
-"Documents are stored in this browser's local IndexedDB. The vault export encrypts the profile, draft records and selected documents in one portable file using AES-256-GCM. The encryption key is derived from a password in the browser; JanaSetu does not receive or store that password."
+**0:15–0:45 — Discover and screen**
 
-Show export, then import the same file. Show that an incorrect password is rejected before importing.
+"JanaSetu brings a multilingual, source-linked catalogue into one citizen workspace. I can describe my situation, review the extracted profile facts and run a preliminary scheme checklist. Each check shows what the citizen stated and which rule note it is compared against. These prototype rules are pending independent review, so the result stays at 'needs verification' and is never presented as an official eligibility decision."
 
-**1:15–1:40 — Security boundary**
-"Local vault encryption is separate from malware scanning. The demo does not claim that a file is virus-free. A file that has not been scanned remains unverified. Optional ClamAV scanning can run locally without a paid hosted worker."
+Show the synthetic profile and the PM-KISAN / PMUY checklist. Point out at least one unknown field.
 
-**1:40–2:00 — Honest scope**
-"JanaSetu is a citizen-side preparation layer. The department remains authoritative. The current catalogue is partial; scheme approvals, legal consent approval and government API authorisations are not being fabricated."
+**0:45–1:15 — Prepare, don't submit**
+
+"Once a pathway is worth exploring, JanaSetu creates a preparation record with the missing evidence and next actions. It is explicitly marked 'Not submitted'. The citizen completes protected identity verification, declarations and final submission on the official department or provider portal."
+
+Show the preparation draft and the official source link. Do not enter personal information into a live government portal.
+
+**1:15–1:40 — Local-first privacy**
+
+"Profile information, checklists and drafts stay in this browser in the current demo. The local vault export is password-encrypted with AES-256-GCM. The encryption key is derived in the browser; JanaSetu does not receive the password. This is local encryption, not a third-party security audit."
+
+Show export/import only if the time allows. Do not demonstrate cloud sync; it remains disabled pending privacy/legal approval.
+
+**1:40–2:00 — Scope and trust**
+
+"JanaSetu is a citizen-side benefits readiness and preparation layer, not a government portal. It currently includes a partial catalogue and four source-linked prototype pathways. Their rule sets are not independently approved. There is no universal portal automation, no government-authorized submission integration and no claim of an official eligibility result. The department remains authoritative."
 
 ## On-screen demo checklist
 1. Use a synthetic citizen profile.
-2. Add a harmless sample PDF.
-3. Export a password-protected .janasetu file.
-4. Show that the file contents are encrypted, not readable JSON.
-5. Import it with the correct password.
-6. Try an incorrect password and show rejection.
-7. State clearly that this proves local encryption/import, not a third-party security audit.
+2. Show source-linked scheme discovery.
+3. Run a preliminary checklist and show 'Needs verification'.
+4. Point out the rule evidence and one unknown field.
+5. Prepare a draft and show 'Not submitted'.
+6. Show the official portal link without entering sensitive data.
+7. If time allows, export a password-encrypted local backup.
+8. State clearly that sync, document upload/scanning and government submission are not part of this demo.
