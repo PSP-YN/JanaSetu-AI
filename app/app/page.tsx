@@ -18,6 +18,7 @@ import { invalidateUnapprovedApplications, invalidateUnapprovedAssessments } fro
 import { parseBackupApplications, parseBackupAssessments, parseBackupDocuments, parseBackupLanguage, parseBackupProfile, parseBackupTasks, type DraftField, type LocalApplicationRecord, type LocalDocumentRecord, type LocalTaskRecord } from "@/lib/backup-validation";
 import { encryptVault, decryptVault } from "@/lib/encrypted-vault";
 import { saveLocalDocument, getLocalDocuments, deleteLocalDocument, replaceLocalDocuments } from "@/lib/local-document-vault";
+import { buildFormAssistantBackup } from "@/lib/form-assistant-backup";
 import {
   LANGUAGE_OPTIONS, SCHEMES, STATES_AND_UTS,
   type Assessment, type CitizenProfile, type LanguageCode
@@ -42,7 +43,10 @@ const EMPTY_PROFILE: CitizenProfile = {
   annualIncome: "", occupation: "", hasCultivableLand: null, pmKisanExcluded: "unknown",
   ownsPuccaHouse: null, previousHousingBenefit: "unknown", householdHasLpg: null,
   poorHouseholdDeclaration: null, isStudent: false, top20Percentile: null,
-  regularUndergraduate: null, otherScholarship: null, diplomaOrDistance: null
+  regularUndergraduate: null, otherScholarship: null, diplomaOrDistance: null,
+  mobileNumber: "", emailAddress: "", addressLine1: "", addressLine2: "", villageOrTown: "",
+  pincode: "", fatherOrGuardianName: "", motherName: "", socialCategory: "",
+  landholdingAcres: "", institutionName: "", courseName: "", courseYear: "", rationCardCategory: ""
 };
 
 
@@ -980,6 +984,24 @@ export default function Home() {
     setProfile((current) => ({ ...current, [key]: value }));
   };
 
+  const exportProfileForFormAssistant = () => {
+    const warning = "This export is a plain-text JSON file containing your personal profile. It is not encrypted. Save it only on a device you control, import it into the JanaSetu Form Assistant extension, and delete the file after import. Continue?";
+    if (!window.confirm(warning)) return;
+    try {
+      const backup = buildFormAssistantBackup(profile, language);
+      const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "JanaSetu-Form-Assistant-Profile.json";
+      link.click();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      setNotice("Profile export created. Import it in the JanaSetu Form Assistant extension, then review every suggested field before filling.");
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : "Profile export failed.");
+    }
+  };
+
 
   const submitIntake = async () => {
     if (!intakeText.trim()) { setNotice(t("noticeDescribeBefore")); return; }
@@ -1314,7 +1336,24 @@ export default function Home() {
                   <Field label={t("scholarship")}><YesNo t={t} value={profile.otherScholarship} onChange={(v) => updateProfile("otherScholarship", v)} unknown/></Field>
                   <Field label={t("distanceCourse")}><YesNo t={t} value={profile.diplomaOrDistance} onChange={(v) => updateProfile("diplomaOrDistance", v)} unknown/></Field>
                 </div>
-                <div className="form-footer"><span><LockKeyhole size={14}/> {t("noAadhaarRequest")}</span><button className="button button-primary" onClick={() => { setNotice(t("saved")); runAssessment(); }}>{t("run")} <ArrowRight size={16}/></button></div>
+                <div className="form-section-title subsection"><span>05</span><div><h2>Application contact & address</h2><p>Enter reusable contact and postal details. These remain in this browser and are not sent to a government portal automatically.</p></div></div>
+                <div className="form-grid">
+                  <Field label="Mobile number"><input type="tel" autoComplete="tel" inputMode="tel" placeholder="10-digit mobile number" value={profile.mobileNumber} onChange={(e) => updateProfile("mobileNumber", e.target.value)}/></Field>
+                  <Field label="Email address"><input type="email" autoComplete="email" placeholder="name@example.com" value={profile.emailAddress} onChange={(e) => updateProfile("emailAddress", e.target.value)}/></Field>
+                  <Field label="Address line 1"><input autoComplete="address-line1" value={profile.addressLine1} onChange={(e) => updateProfile("addressLine1", e.target.value)}/></Field>
+                  <Field label="Address line 2"><input autoComplete="address-line2" value={profile.addressLine2} onChange={(e) => updateProfile("addressLine2", e.target.value)}/></Field>
+                  <Field label="Village / Town / City"><input autoComplete="address-level2" value={profile.villageOrTown} onChange={(e) => updateProfile("villageOrTown", e.target.value)}/></Field>
+                  <Field label="PIN code"><input inputMode="numeric" maxLength={6} autoComplete="postal-code" value={profile.pincode} onChange={(e) => updateProfile("pincode", e.target.value)}/></Field>
+                  <Field label="Father / Guardian name"><input value={profile.fatherOrGuardianName} onChange={(e) => updateProfile("fatherOrGuardianName", e.target.value)}/></Field>
+                  <Field label="Mother name"><input value={profile.motherName} onChange={(e) => updateProfile("motherName", e.target.value)}/></Field>
+                  <Field label="Social category"><Select value={profile.socialCategory ?? ""} onChange={(v) => updateProfile("socialCategory", v as NonNullable<CitizenProfile["socialCategory"]>)}><option value="">Select</option>{["General","OBC","SC","ST","EWS","Other"].map(v=><option key={v}>{v}</option>)}</Select></Field>
+                  <Field label="Ration card category"><Select value={profile.rationCardCategory ?? ""} onChange={(v) => updateProfile("rationCardCategory", v as NonNullable<CitizenProfile["rationCardCategory"]>)}><option value="">Select</option>{["AAY","PHH","BPL","APL","Other"].map(v=><option key={v}>{v}</option>)}</Select></Field>
+                  <Field label="Cultivable land (acres)"><input type="number" min="0" step="0.01" value={profile.landholdingAcres} onChange={(e) => updateProfile("landholdingAcres", e.target.value === "" ? "" : Number(e.target.value))}/></Field>
+                  <Field label="Educational institution"><input value={profile.institutionName} onChange={(e) => updateProfile("institutionName", e.target.value)}/></Field>
+                  <Field label="Course / programme"><input value={profile.courseName} onChange={(e) => updateProfile("courseName", e.target.value)}/></Field>
+                  <Field label="Current academic year"><input placeholder="e.g. 2026-27 / 2nd year" value={profile.courseYear} onChange={(e) => updateProfile("courseYear", e.target.value)}/></Field>
+                </div>
+                <div className="form-footer"><span><LockKeyhole size={14}/> {t("noAadhaarRequest")}</span><div className="form-footer-actions"><button className="button button-outline" onClick={exportProfileForFormAssistant}>Export for form assistant</button><button className="button button-primary" onClick={() => { setNotice(t("saved")); runAssessment(); }}>{t("run")} <ArrowRight size={16}/></button></div></div>
               </div>
               <aside className="profile-aside">
                 <div className="panel aside-card">

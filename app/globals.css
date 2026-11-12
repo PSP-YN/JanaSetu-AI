@@ -1118,3 +1118,9 @@ input, select, textarea { min-height: 44px; }
 .sync-password-label input:focus{outline:2px solid #d6b48f;outline-offset:1px}
 .sync-error{padding:9px 11px;border-radius:7px;background:#fff0ed;color:#923b31!important;font-size:11px!important}
 @media(max-width:600px){.encrypted-sync-panel{padding:13px}.sync-password-label{max-width:none}}
+
+
+/* Profile export actions */
+.form-footer-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+.form-footer-actions .button{white-space:nowrap}
+@media(max-width:640px){.form-footer-actions{width:100%;justify-content:stretch}.form-footer-actions .button{flex:1}}
