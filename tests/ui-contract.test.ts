@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { PROFILE_FORM_COPY } from "../lib/profile-form-copy";
 
 const page = readFileSync(new URL("../app/app/page.tsx", import.meta.url), "utf8");
 
@@ -85,12 +86,15 @@ test("every rendered translation key has an English fallback and every locale ha
   };
   const base = new Map(locales.map(locale => [locale, keysFor(baseSource, locale, false)]));
   const extra = new Map(locales.map(locale => [locale, keysFor(extraSource, locale, true)]));
-  const englishKeys = new Set([...Array.from(base.get("en")!), ...Array.from(extra.get("en")!)]);
+  const englishKeys = new Set([...Array.from(base.get("en")!), ...Array.from(extra.get("en")!), ...Object.keys(PROFILE_FORM_COPY.en)]);
   const renderedKeys = new Set(Array.from(page.matchAll(/\bt\("([A-Za-z][A-Za-z0-9_]*)"\)/g), m => m[1]));
   for (const key of Array.from(renderedKeys)) assert.ok(englishKeys.has(key), `English fallback missing for ${key}`);
   for (const locale of locales) {
     for (const key of Array.from(extra.get("en")!)) {
       assert.ok(extra.get(locale)!.has(key) || base.get(locale)!.has(key), `${locale} has no translated value for ${key}`);
+    }
+    for (const key of Object.keys(PROFILE_FORM_COPY.en)) {
+      assert.ok(PROFILE_FORM_COPY[locale as keyof typeof PROFILE_FORM_COPY][key], `${locale} has no profile-form translation for ${key}`);
     }
   }
 });

@@ -1,6 +1,6 @@
 # JanaSetu production operations runbook
 
-**Last reviewed:** 5 November 2026
+**Last reviewed:** 12 November 2026
 
 ## Canonical deployment
 
@@ -8,8 +8,10 @@
 - GitHub source of truth: https://github.com/PSP-YN/JanaSetu-AI
 - Production branch: `main`
 - Framework/runtime: Next.js 16, Node.js 22
-- Vercel project: `janasetu-ai`
-- Region: Mumbai (`bom1`)
+- Vercel project: `jana-setu-ai` (team/account: `psp-adb0`)
+- Runtime: Node.js 22.x, Mumbai (`bom1`)
+- Required public Supabase configuration: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (the anon key is public client configuration; never expose service-role credentials)
+- Deployment verification: PR preview is built and smoke-tested before merge; after merge, verify the production deployment Git SHA and canonical domain before declaring release complete.
 
 Only the canonical domain above should be shared as the public website. Vercel preview URLs are for review and testing, not alternate public production addresses. A merge to `main` triggers the Git-linked Vercel production deployment. Keep pull-request previews enabled so changes can be tested before release.
 
@@ -48,12 +50,42 @@ Do not close a manually created incident merely because one smoke check passes.
 3. Require the full JanaSetu CI check and Vercel preview checks.
 4. Review the preview on desktop and mobile; inspect console/network errors and the six supported locales.
 5. Review source changes separately from code changes. Third-party catalogue records remain catalogue-only.
-6. Merge only after all checks pass and any human review requirements are satisfied.
+6. Merge only after all branch-protection-required checks pass and required human approvals are satisfied. Optional review-service checks that are not required by branch protection may be skipped only with explicit release-owner authorization; never disable protection or bypass required CI/Vercel checks.
 7. Confirm the production deployment is READY and serves the expected Git SHA.
 8. Verify the canonical domain, avatar, health, schemes, local search, source health, Privacy and Terms.
 
 ## Current operational boundary
 
-The production deployment is a public prototype, not an approved service for real citizen records. User profiles and drafts remain in browser local storage; there are no user accounts, server-side citizen database, authorized government APIs, legal approval, independent penetration-test sign-off or human-approved deterministic scheme rules. Do not add real citizen data or imply official eligibility, application submission or government affiliation.
+JanaSetu is a tested public-benefits navigation and application-preparation product, but it is not an official government service and is not authorized to make eligibility decisions or submit applications. Supabase authentication and consent-gated server APIs exist; the main citizen profile, assessments and drafts remain local-first in the browser unless a separately approved, consented server workflow is used. Do not enter real sensitive identity, bank or credential data into demo workflows. Do not imply government affiliation, official eligibility, approval, or completed submission.
+
+### Automation capability matrix (12 November 2026)
+
+| Capability | Current state | Release boundary |
+|---|---|---|
+| Scheme discovery | Available from the bundled catalogue | The third-party SmartDuke snapshot is stale; catalogue records are not eligibility evidence |
+| Eligibility assessment | Deterministic engine and review workflow implemented | All four initial scheme rule sets remain pending independent source/rule approval; no official decision |
+| Application plan | Authenticated, same-origin, plan-only endpoint | Reads only a currently published independently approved scheme version; does not persist the submitted profile |
+| Application preparation | Local draft and checklist workflow tested | Server persistence requires separate scheme-scoped consent and approved rules |
+| Background automation worker | Queue and consent gates implemented | Internal preparation/reminder actions only; external government adapter execution is disabled |
+| PM-KISAN / PMAY-U 2.0 / PMUY / NSP adapters | Four scheme-keyed registry records | All are `not_requested`; no authorized portal actions |
+| Browser form assistant | MV3 extension import, field preview, field validation and user-selected fill logic tested on synthetic forms | All four live scheme routes are blocked until exact route review and written authorization; no live government form-fill claim |
+| OTP / CAPTCHA / Aadhaar / e-KYC / biometrics / payment | Not automated | Must remain citizen-controlled; no bypass |
+| Document upload | Consent, quarantine and scanner-attestation code paths exist | Production scanner service and deployment verification remain outstanding; do not claim live malware scanning |
+| Final application submission | Not implemented | Citizen submits directly on the official portal; JanaSetu does not click Submit |
+| Cross-device sync | Client-encrypted vault and guarded API/RPC foundations exist | Legal policy inactive; API remains fail-closed; two-device acceptance is outstanding |
+
+The form assistant is intentionally fail-closed. A matching `.gov.in`/`.nic.in` suffix is insufficient: authorization must bind the exact HTTPS origin, path, action, current field contract, department reference and approval timestamp. Never change `not_requested` to `approved` without verifiable authorization and independent testing. Never enable worker execution by bypassing the database policy gate.
+
+### Verified local release checks (12 November 2026)
+
+- `npm run check`: TypeScript passed; 173/173 unit tests passed.
+- `npm run build`: optimized Next.js production build passed.
+- `npx playwright test`: 66/66 browser tests passed, including synthetic extension filling, identity-field safety, blocked PM-KISAN route and six-language/accessibility flows.
+- `python3 tests/test_document_scanner.py`: 10/10 tests passed. These are scanner unit tests, not evidence of a deployed scanner service.
+- `node --check extension/popup.js`, `node --check extension/fill.js`, and extension manifest JSON validation passed.
+- `npm audit --audit-level=high`: zero reported vulnerabilities.
+- Supabase migration reset/lint and linked migration reconciliation passed in the release verification workflow.
+
+These checks establish code/build/test correctness for the exercised paths. They do not replace department authorization, legal review, two-device testing, independent penetration testing, or live government-portal acceptance testing.
 
 The SmartDuke snapshot is stale under the 90-day policy. The latest observed publisher revision is the same as the bundled revision; the publisher's metadata and rows endpoints are available while its search endpoint is unavailable. The local snapshot remains available for discovery and is checked against a SHA-256 manifest before use.

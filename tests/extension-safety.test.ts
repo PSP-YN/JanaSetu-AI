@@ -5,10 +5,15 @@ import { readFileSync } from "node:fs";
 const extension = readFileSync(new URL("../extension/popup.js", import.meta.url), "utf8");
 const popupHtml = readFileSync(new URL("../extension/popup.html", import.meta.url), "utf8");
 
-test("form assistant requires HTTPS government portal domains", () => {
-  assert.match(extension, /portalUrl\.protocol === "https:"/);
-  assert.match(extension, /host\.endsWith\("\.gov\.in"\)/);
-  assert.match(extension, /host\.endsWith\("\.nic\.in"\)/);
+test("form assistant requires an exact independently authorized portal route, not a government-domain suffix", () => {
+  assert.match(extension, /PORTAL_ROUTE_POLICIES/);
+  assert.match(extension, /route\.origin===portalUrl\.origin&&route\.path===portalUrl\.pathname/);
+  assert.match(extension, /accessStatus==="approved"/);
+  assert.match(extension, /allowedActions\.includes\("assist_form_filling"\)/);
+  assert.match(extension, /authorizationReference&&policy\.approvedAt/);
+  assert.doesNotMatch(extension, /host\.endsWith\("\.gov\.in"\)/);
+  assert.doesNotMatch(extension, /host\.endsWith\("\.nic\.in"\)/);
+  assert.match(extension, /accessStatus: "not_requested"/);
 });
 
 test("form assistant has no automatic submission or document upload code", () => {
@@ -38,4 +43,12 @@ test("extension popup translations have six-locale key parity and cover every HT
     ta: "போர்டல் ஸ்கிரிப்டுகள்", te: "పోర్టల్ స్క్రిప్ట్‌లు", ml: "പോർട്ടൽ സ്ക്രിപ്റ്റുകൾ"
   };
   for (const [, locale, block] of localeBlocks) assert.ok(block.includes(portalCaveats[locale]), `${locale} warning must explain that portal scripts may react to field changes`);
+});
+
+test("extension imports the expanded citizen profile but rejects identity and bank identifiers", () => {
+  assert.match(extension, /"mobileNumber","emailAddress","addressLine1","addressLine2","villageOrTown","pincode"/);
+  assert.match(extension, /"fatherOrGuardianName","motherName","socialCategory","landholdingAcres","institutionName","courseName","courseYear","rationCardCategory"/);
+  assert.match(extension, /profile\.mobileNumber/);
+  assert.match(extension, /profile\.pincode/);
+  assert.doesNotMatch(extension, /"aadhaarNumber"|"bankAccountNumber"|"ifscCode"/);
 });

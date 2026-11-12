@@ -55,7 +55,7 @@ The policy draft is documented in [Encrypted cross-device sync](ENCRYPTED-CROSS-
 
 ## All-scheme behavior
 
-The adapter resolver is scheme-specific. A scheme without a reviewed and approved integration remains in manual-navigation mode. The generic browser extension may preview and fill selected non-sensitive matching fields on HTTPS `.gov.in` and `.nic.in` pages, but it does not upload documents or submit forms. Portal scripts may react to field changes; citizens must inspect the page.
+The adapter resolver is scheme-specific. A scheme without a reviewed and approved integration remains in manual-navigation mode. The browser extension can preview and fill selected non-sensitive fields in synthetic tests. Live filling is blocked for all four initial scheme routes because none has exact-route department authorization. A `.gov.in` or `.nic.in` suffix alone is insufficient. The extension does not upload documents or submit forms. Portal scripts may react to field changes; citizens must inspect the page after any future authorized fill.
 
 It is not technically or legally credible to claim automatic application submission for every Indian scheme without:
 - an authoritative, current scheme and portal inventory;

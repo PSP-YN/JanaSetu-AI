@@ -25,16 +25,19 @@ const id = (value: unknown): string | null => typeof value === "string" && /^[A-
 const enumAssessment = (value: unknown): Assessment["state"] =>
   value === "potential_match" || value === "not_matched" || value === "needs_verification" ? value : "needs_verification";
 
-export function parseBackupProfile(value: unknown): CitizenProfile | null {
+export function parseBackupProfile(value: unknown, options: { allowIncompleteContact?: boolean } = {}): CitizenProfile | null {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;
   const input = value as Record<string, unknown>;
   const allowed = new Set([
     "fullName", "age", "gender", "state", "district", "residenceType", "annualIncome", "occupation",
     "hasCultivableLand", "pmKisanExcluded", "ownsPuccaHouse", "previousHousingBenefit", "householdHasLpg",
-    "poorHouseholdDeclaration", "isStudent", "top20Percentile", "regularUndergraduate", "otherScholarship", "diplomaOrDistance"
+    "poorHouseholdDeclaration", "isStudent", "top20Percentile", "regularUndergraduate", "otherScholarship", "diplomaOrDistance",
+    "mobileNumber", "emailAddress", "addressLine1", "addressLine2", "villageOrTown", "pincode",
+    "fatherOrGuardianName", "motherName", "socialCategory", "landholdingAcres", "institutionName",
+    "courseName", "courseYear", "rationCardCategory"
   ]);
   if (Object.keys(input).some((key) => !allowed.has(key))) return null;
-  return parseCitizenProfile(value);
+  return parseCitizenProfile(value, options);
 }
 
 export function parseBackupLanguage(value: unknown): LanguageCode {

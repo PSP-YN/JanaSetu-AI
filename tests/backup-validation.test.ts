@@ -12,6 +12,16 @@ test("backup profile parser rejects extra fields, unknown State/UT and invalid t
   assert.equal(parseBackupProfile(validProfile)?.state, "Karnataka");
 });
 
+test("local profile hydration preserves partial contact edits without weakening strict backup imports", () => {
+  const partial = { ...validProfile, mobileNumber: "987", emailAddress: "citizen@", pincode: "57001" };
+  assert.equal(parseBackupProfile(partial), null);
+  const hydrated = parseBackupProfile(partial, { allowIncompleteContact: true });
+  assert.equal(hydrated?.mobileNumber, "987");
+  assert.equal(hydrated?.emailAddress, "citizen@");
+  assert.equal(hydrated?.pincode, "57001");
+  assert.equal(parseBackupProfile({ ...partial, aadhaar: "1234" }, { allowIncompleteContact: true }), null);
+});
+
 test("backup language falls back safely to English for unknown locale values", () => {
   assert.equal(parseBackupLanguage("kn"), "kn");
   assert.equal(parseBackupLanguage("xx"), "en");

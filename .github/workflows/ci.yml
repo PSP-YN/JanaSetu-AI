@@ -106,6 +106,14 @@ jobs:
           curl --fail --silent http://127.0.0.1:3000/app > /tmp/janasetu-app.html
           grep -q 'GOVERNMENT BENEFITS WORKSPACE' /tmp/janasetu-app.html
 
+          curl --fail --silent --show-error --head http://127.0.0.1:3000/ > /tmp/janasetu-headers.txt
+          grep -qi '^x-content-type-options: nosniff' /tmp/janasetu-headers.txt
+          grep -qi '^x-frame-options: DENY' /tmp/janasetu-headers.txt
+          grep -qi '^referrer-policy: strict-origin-when-cross-origin' /tmp/janasetu-headers.txt
+          grep -qi '^permissions-policy: camera=(), geolocation=(), payment=(), usb=(), microphone=(self)' /tmp/janasetu-headers.txt
+          grep -qi '^strict-transport-security: max-age=31536000; includeSubDomains' /tmp/janasetu-headers.txt
+          grep -qi '^content-security-policy-report-only:' /tmp/janasetu-headers.txt
+
           curl --fail --silent http://127.0.0.1:3000/janasetu-logo.png > /tmp/janasetu-logo.png
           node -e '
             const fs = require("node:fs");

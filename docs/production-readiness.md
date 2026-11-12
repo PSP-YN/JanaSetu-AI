@@ -1,58 +1,115 @@
 # JanaSetu AI — production readiness and release gate
 
-**Assessment date:** 12 November 2026  
-**Release candidate:** [PR #26](https://github.com/PSP-YN/JanaSetu-AI/pull/26)  
-**Release state:** NOT DEPLOYED TO PRODUCTION — protected release is waiting on CI and Vercel build availability.
+**Assessment date:** 12 November 2026
+**Release candidate:** [PR #29](https://github.com/PSP-YN/JanaSetu-AI/pull/29)
+**Initial integration baseline:** 5df3f5ddc8a9fcaddfa0bf8da75cf6bbfa0b8dd9
+**Review-fix implementation commit:** 3f861c7ae9bb3e78948ed00ec62dc4052719fc93.
+**State at assessment:** local verification passed; new-account preview built; production promotion pending merge and live verification.
 
 ## Deployment state
 
-| Environment | URL | Commit | State |
-|---|---|---|---|
-| Production | https://jana-setu-ai.vercel.app | `3b54af4` on `main` | Existing deployment is READY but does not contain the current release candidate |
-| Latest successful preview | https://janasetu-pok0k21pv-pspyn.vercel.app | `7ed3e5b` | READY; earlier preview only, not the latest branch commit |
-| Release candidate | [PR #26](https://github.com/PSP-YN/JanaSetu-AI/pull/26) | `release/janasetu-demo-hardening` | Open; latest commit requires fresh validation |
+| Environment | URL | State |
+|---|---|---|
+| Canonical production | https://jana-setu-ai.vercel.app | Existing production deployment remains active until the merged main commit is promoted and verified |
+| New-account preview | Vercel preview for PR #29 | Build READY; route/API smoke checks passed with temporary preview-only access; temporary bypass revoked |
+| New Vercel project | psp-adb0 / jana-setu-ai | Dedicated Supabase URL and public anon key configured for production, preview and development |
+| GitHub source | https://github.com/PSP-YN/JanaSetu-AI | PR #29 targets protected main |
 
-The latest checked Vercel status is failing with the Hobby build-rate-limit response. The current release candidate cannot receive a new preview build or production build until Vercel permits another build. The previous successful preview is not being promoted as a substitute for the latest code.
+The preview build and required Vercel Preview/CI checks passed for the assessed commit. The optional Octopus Review status was still pending at the time of assessment. No branch protection was disabled. A merge using administrator override is permitted only under the explicit release-owner instruction recorded in the release conversation and only after required CI and Vercel checks remain green. The production domain must not be declared updated until the new deployment is READY and the live domain serves the expected merged Git SHA.
 
-The latest recorded GitHub Actions run for the release branch failed in the unit-test step: 142/144 tests passed. The two failures were stale assertions for the new migration's preservation comment and SQL predicate. Those assertions have since been corrected in commit `324f4960afade7b0c8f41aa95c8b789a2d3ad112`; a fresh complete CI run against the corrected head has not yet been confirmed. Do not describe CI as green until that run completes.
+## Verification completed on the integration branch
 
-## Current release candidate capabilities
+| Check | Result |
+|---|---:|
+| TypeScript | Passed |
+| Unit tests | 173/173 |
+| Next.js production build | Passed |
+| Playwright E2E | 66/66 |
+| Document scanner protocol/unit tests | 10/10 |
+| Extension JavaScript syntax | Passed |
+| Extension manifest JSON | Passed |
+| npm high-severity audit | 0 vulnerabilities |
+| Supabase local migrations | 49/49 applied |
+| Supabase local schema lint | Passed |
+| Linked migration reconciliation/schema lint | Passed |
+| New Vercel preview route/API smoke | Passed |
 
-- Responsive multilingual citizen workspace in English, Hindi, Kannada, Tamil, Telugu and Malayalam.
-- Source-linked scheme discovery, including 42 source-indexed discovery references and 96 Karnataka budget-line discovery leads. Discovery references and budget lines are not necessarily verified schemes or individual benefits.
-- Local profile intake and citizen-reviewed suggested field extraction.
-- Preliminary checklists for four prototype scheme pathways. Pending schemes remain `needs_verification`; no official eligibility decision or rejection is produced.
-- Local application preparation, evidence checklist and official-portal handoff. Drafts remain explicitly **Not submitted**.
-- Browser-local workspace storage and password-encrypted local backup/restore.
-- Experimental browser form assistant that previews proposed field values for citizen approval on supported official domains. It does not upload documents or submit applications.
+These results verify the exercised code paths. They do not establish legal authorization, external portal compatibility, live scanner operation, two-device sync, independent penetration-test completion or high-load capacity.
 
-## Explicitly excluded from this release
+## Current product capabilities
+
+- Multilingual public-benefits discovery and source-linked guidance in English, Hindi, Kannada, Tamil, Telugu and Malayalam.
+- Citizen profile, local assessments, scheme discovery, evidence checklists and application-preparation drafts.
+- Deterministic eligibility engine that requires independently approved, current scheme versions before returning a potential match.
+- Authenticated, same-origin application planning endpoint. It accepts only a scheme slug and citizen profile, reads a currently published independently approved version, and does not persist the submitted profile.
+- Supabase authentication and guarded, purpose-specific server APIs.
+- Consent-gated application preparation, automation-run queue and reminder foundations.
+- Client-side encrypted vault and guarded revision-aware sync API; cloud sync remains inactive.
+- MV3 Form Assistant with import, safe field matching, preview and explicit per-field selection; live scheme routes are blocked.
+
+## Automation: tested behaviour and exact limits
+
+**The automation pipeline is not universal government-portal automation.** It is currently a safety-gated planning and preparation system.
+
+| Workflow | Verified state | Not enabled |
+|---|---|---|
+| Profile validation and plan generation | Unit/API tests; authenticated same-origin request | Persisting the request profile |
+| Scheme eligibility gate | Reads only published, independently approved version | No approved scheme versions currently exist |
+| Application preparation | Local draft/checklist; consent-gated persistence code | No approval/submission claim |
+| Queue/worker | Consent, expiry, idempotency and revocation gates; internal preparation/reminders | External portal execution |
+| PM-KISAN adapter | Exact first-step route observed read-only; adapter registered | Authorization and form filling |
+| PMAY-U 2.0 adapter | Official landing route registered | Verified application form, authorization and form filling |
+| PM Ujjwala adapter | Official landing route registered | Verified application form, authorization and form filling |
+| NSP/CSSS adapter | Official landing route registered | Verified application form, authorization and form filling |
+| Browser extension | Synthetic field preview/fill and safety tests pass | All four live routes are blocked (not_requested) |
+| OTP/CAPTCHA/Aadhaar/e-KYC/biometrics/payment | Citizen-controlled manual handoff | No bypass or automation |
+| Final submission | Citizen submits on official portal | JanaSetu never clicks Submit/Apply |
+
+Live filling requires a verified exact HTTPS origin and path, independently reviewed field contract, written department authorization, permitted action, authorization reference, approval timestamp, citizen consent and scheme-specific acceptance tests. A government-domain suffix is not authorization. Protected identity and challenge controls remain citizen-controlled. A portal may react to dispatched input/change events, so the citizen must inspect the page after any approved fill.
+
+## Data, privacy and security gates
+
+### Scheme catalogue and eligibility
+
+- Four initial scheme rule/source packets remain pending independent review and publication.
+- Zero scheme versions are independently approved and published.
+- The SmartDuke dataset is third-party discovery data and stale under the 90-day policy. It is not eligibility evidence.
+- No automated source refresh may approve a scheme or modify deterministic rules without human review.
 
 ### Cross-device sync
-Cloud sync is not part of the release. The citizen workspace UI/status controls are removed, and the cloud-sync policy remains inactive. The API/migration work is deferred. Do not activate the policy or claim two-device synchronization.
 
-A forward migration was added to preserve profile fields, preferred language, drafts, document references, reminders and assessments if encrypted sync is reconsidered later. Legacy workspace data blocks initial cutover; subsequent vault writes merge only the encrypted-vault key and do not clear the other workspace fields.
+- Client-side PBKDF2-SHA-256 (600,000 iterations) and AES-256-GCM vault encryption are implemented.
+- Authenticated sync API uses guarded RPCs, ownership checks and compare-and-swap revisions.
+- The exact cloud-sync policy is inactive and has no legal approval reference/timestamp.
+- Two-device acceptance, revocation, wrong-password, conflict and deletion tests remain outstanding.
+- Do not activate cloud sync or expose a citizen opt-in until legal/policy approval and explicit consent are recorded.
 
-### Document scanning
-Production document upload and malware scanning are deferred. The private scanner protocol and ClamAV container are testable, but no persistent production scanner identity/worker is provisioned. No live scanning capability is claimed.
+### Documents and malware scanning
 
-### Government portal automation and scheme approval
-There is no universal Indian government application API or common portal workflow. The four seeded integration records remain `not_requested`, with no authorized actions or department authorization references. No scheme rule set has independent publication approval. Portal automation is limited to citizen-controlled field assistance; no government submission action is enabled.
+- Private quarantine, consent checks, scanner attestation protocol and ClamAV worker code exist.
+- Scanner unit tests pass.
+- No persistent production scanner identity/worker is provisioned; no live ClamAV/EICAR acceptance against production storage has been completed.
+- Live document upload/retrieval must remain blocked until legal approval and scanner deployment/verification.
 
-CAPTCHA, OTP, Aadhaar/e-KYC, biometrics, declarations, payment and final submission remain on official department/provider portals under citizen control unless a department explicitly authorizes a lawful delegated API.
+### Operational security
 
-## External release gates
+- No service-role credential is exposed to browser code.
+- Authenticated APIs derive ownership from verified sessions and use caller JWTs/guarded RPCs.
+- Independent penetration test, legal/privacy sign-off, production SMTP lifecycle verification, backup/restore exercise and measured load test remain outstanding.
+- Review the current CSP report-only configuration and complete enforcement rollout after validating application compatibility.
 
-1. **CI:** obtain a complete passing GitHub Actions run on the latest PR #26 head, including unit tests, typecheck, production build, browser/accessibility tests, extension validation, dependency audit and production smoke.
-2. **Vercel:** wait for the Hobby build-rate limit to reset. Obtain a successful required Vercel status for the latest commit. Do not bypass branch protection or promote an older preview. Merge PR #26 to protected `main` only after required checks pass.
-3. **Production:** deploy the merged `main` commit, then verify the live domain, workspace routes, six language routes, manifest, authentication boundary and critical APIs.
-4. **Scheme governance:** independently review official source evidence and rule sets before publishing eligibility decisions.
-5. **Government integrations:** obtain written department/provider authorization and portal-specific acceptance evidence for each exact integration before enabling external actions.
-6. **Authentication operations:** verify production email confirmation, SMTP, redirect allow-list and password recovery with a controlled test account.
-7. **Operational assurance:** complete independent security review, backup/restore and disaster-recovery exercises, monitoring and measured load testing.
+## Remaining release work
 
-## Release decision
+1. Merge PR #29 using the explicitly authorized administrative override only after confirming required CI and Vercel checks remain green; do not change branch-protection settings or delete unmerged branches.
+2. Confirm Vercel automatically deploys the merged main SHA to the new project and that the canonical domain is bound to that deployment.
+3. Verify live canonical routes, six locales, authentication, health/readiness, scheme/source APIs, privacy/terms, manifest and browser console/network errors.
+4. Verify controlled production account email confirmation, recovery, redirects and sign-out.
+5. Obtain independent source/rule/legal approvals before publishing any of the four schemes.
+6. Obtain written department authorization and exact route acceptance before enabling any external portal action.
+7. Provision and test a persistent private document-scanner worker before enabling uploads.
+8. Complete legal approval and two-device acceptance before enabling cloud sync.
+9. Complete independent penetration testing, backup/restore, disaster recovery, accessibility and load testing.
 
-The previous preview passed route and synthetic-workflow smoke checks, but it is not the latest branch commit. The production domain still serves the older `main` commit. PR #26 must pass CI and the required Vercel status before merge and production deployment.
+## Release decision boundary
 
-The release can be presented as a **multilingual, local-first benefits discovery and application-preparation prototype with preliminary, non-authoritative scheme checklists**. Do not present universal government automation, approved eligibility decisions, live cross-device sync, document scanning or submitted applications as current capabilities.
+The current verified build is suitable for a controlled public prototype/beta focused on discovery and application preparation, provided the limitations above are clearly disclosed. It is **not** a fully production-authorized benefits application service. Never claim official eligibility, universal portal automation, live document scanning, active cross-device sync, government affiliation or completed government submissions.

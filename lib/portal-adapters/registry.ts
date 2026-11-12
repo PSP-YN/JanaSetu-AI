@@ -6,6 +6,7 @@ export const portalAdapters: Record<string, PortalAdapterDefinition> = {
   "pm-kisan": {
     schemeSlug: "pm-kisan",
     officialOrigin: "https://pmkisan.gov.in",
+    portalHomePath: "/RegistrationFormupdated.aspx",
     applicationPath: "/RegistrationFormupdated.aspx",
     accessStatus: "not_requested",
     allowedActions: [],
@@ -24,7 +25,8 @@ export const portalAdapters: Record<string, PortalAdapterDefinition> = {
   },
   "pmay-u-2": {
     schemeSlug: "pmay-u-2",
-    officialOrigin: "https://pmay-urban.gov.in",
+    officialOrigin: "https://pmaymis.gov.in",
+    portalHomePath: "/PMAYMIS2_2024/PmayDefault.aspx",
     applicationPath: null,
     accessStatus: "not_requested",
     allowedActions: [],
@@ -36,7 +38,8 @@ export const portalAdapters: Record<string, PortalAdapterDefinition> = {
   },
   "pm-ujjwala": {
     schemeSlug: "pm-ujjwala",
-    officialOrigin: "https://www.pmuy.gov.in",
+    officialOrigin: "https://pmuy.gov.in",
+    portalHomePath: "/Ujjwala2.html",
     applicationPath: null,
     accessStatus: "not_requested",
     allowedActions: [],
@@ -49,6 +52,7 @@ export const portalAdapters: Record<string, PortalAdapterDefinition> = {
   "pm-usp-csss": {
     schemeSlug: "pm-usp-csss",
     officialOrigin: "https://scholarships.gov.in",
+    portalHomePath: "/Students",
     applicationPath: null,
     accessStatus: "not_requested",
     allowedActions: [],

@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { assessApprovedScheme, prepareApplicationDraft, isApprovedRuleSetForPublication, isWithinSchemeEffectivePeriod } from "../lib/eligibility-engine";
+import { assessApprovedScheme, prepareApplicationDraft, getApprovedApplicationRequirements, isApprovedRuleSetForPublication, isWithinSchemeEffectivePeriod } from "../lib/eligibility-engine";
 import type { CitizenProfile } from "../lib/catalog";
 
 const profile: CitizenProfile = {
@@ -68,10 +68,67 @@ test("required missing application fields block the draft",()=>{
   assert.ok(draft.missingFields.includes("Applicant name"));
 });
 
+test("automation requirements come from the published approved application mapping", () => {
+  assert.deepEqual(getApprovedApplicationRequirements(scheme), {
+    requiredFields: [
+      { key: "applicant_name", profileField: "fullName" },
+      { key: "annual_income", profileField: "annualIncome" }
+    ],
+    documents: ["Income certificate"]
+  });
+  assert.equal(getApprovedApplicationRequirements({ ...scheme, verificationStatus: "source_checked" }), null);
+});
+
+test("authentication PIN mapping identifiers remain forbidden while postal identifiers remain allowed", () => {
+  for (const key of ["securitypin", "mpin", "atm_pin", "transactionpin"]) {
+    const unsafe = {
+      ...ruleSet,
+      application: { ...ruleSet.application, fields: [{ key, label: "PIN", profileField: "fullName", required: true, type: "text" as const }] }
+    };
+    assert.equal(isApprovedRuleSetForPublication(unsafe, now), false, key);
+  }
+  const postal = {
+    ...ruleSet,
+    application: { ...ruleSet.application, fields: [{ key: "pincode", label: "Postal PIN code", profileField: "pincode", required: true, type: "text" as const }] }
+  };
+  assert.equal(isApprovedRuleSetForPublication(postal, now), true);
+});
+
 test("unsafe government credentials cannot be mapped from citizen profiles",()=>{
   const unsafe={...ruleSet,application:{...ruleSet.application,fields:[{key:"aadhaar_number",label:"Aadhaar",profileField:"fullName",required:true,type:"text"}]}};
   const result=assessApprovedScheme(profile,{...scheme,ruleSet:unsafe},now);
   assert.equal(result.state,"needs_verification");
+});
+
+
+test("approved scheme mappings can use extended profile fields without treating postal PIN codes as authentication PINs", () => {
+  const extendedRuleSet = {
+    ...ruleSet,
+    rules: [
+      ...ruleSet.rules,
+      { key: "postal_code", label: "Applicant PIN code", profileField: "pincode", operator: "eq", expected: "570001", evidence, reviewStatus: "approved" as const }
+    ],
+    application: {
+      fields: [
+        ...ruleSet.application.fields,
+        { key: "postal_code", label: "PIN code", profileField: "pincode", required: true, type: "text" as const, maxLength: 6 }
+      ],
+      documents: []
+    }
+  };
+  const citizen = { ...profile, pincode: "570001" };
+  const approved = { ...scheme, ruleSet: extendedRuleSet };
+  const result = assessApprovedScheme(citizen, approved, now);
+  assert.equal(result.state, "potential_match");
+  const draft = prepareApplicationDraft(citizen, approved, result);
+  assert.equal(draft.status, "ready_for_citizen_review");
+  assert.equal(draft.fields[draft.fields.length - 1]?.value, "570001");
+
+  const unsafeSecurityPinRuleSet = {
+    ...extendedRuleSet,
+    rules: [...extendedRuleSet.rules, { key: "security_pin", label: "Security PIN", profileField: "pincode", operator: "eq", expected: "570001", evidence, reviewStatus: "approved" as const }]
+  };
+  assert.equal(isApprovedRuleSetForPublication(unsafeSecurityPinRuleSet, now), false);
 });
 
 test("date-only scheme end dates remain valid throughout the Indian calendar day",()=>{

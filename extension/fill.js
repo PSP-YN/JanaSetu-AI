@@ -15,6 +15,8 @@ function fillProfileInPage(profile,approvedFields){
   };
   const aliases={
     fullName:["name","full name","applicant name","applicant full name","name of applicant","beneficiary name","beneficiary full name","name of beneficiary","पूरा नाम","ಹೆಸರು","பெயர்","పేరు","പേര്"],
+    mobileNumber:["mobile number","mobile no","phone number","contact number","registered mobile","मोबाइल नंबर","ಮೊಬೈಲ್ ಸಂಖ್ಯೆ","கைபேசி எண்","మొబైల్ నంబర్","മൊബൈൽ നമ്പർ"],
+    emailAddress:["email address","email id","e mail","ईमेल पता","ಇಮೇಲ್ ವಿಳಾಸ","மின்னஞ்சல் முகவரி","ఇమెయిల్ చిరునామా","ഇമെയിൽ വിലാസം"],
     age:["age","उम्र","ವಯಸ್ಸು","வயது","వయస్సు","പ്രായം"],
     state:["state","union territory","राज्य","ರಾಜ್ಯ","மாநிலம்","రాష్ట్రం","സംസ്ഥാനം"],
     district:["district","जिला","ಜಿಲ್ಲೆ","மாவட்டம்","జిల్లా","ജില്ല"],
@@ -32,9 +34,28 @@ function fillProfileInPage(profile,approvedFields){
     top20Percentile:["80th percentile","top 20 percentile","board percentile","80वाँ प्रतिशतक","80ನೇ ಪರ್ಸೆಂಟೈಲ್","80வது சதவீதம்","80వ శాతం","80-ാം പെർസെന്റൈൽ"],
     regularUndergraduate:["regular undergraduate","regular ug course","undergraduate course","नियमित स्नातक","ನಿಯಮಿತ ಪದವಿ","வழக்கமான இளங்கலை","రెగ్యులర్ అండర్ గ్రాడ్యుయేట్","സാധാരണ ബിരുദ"],
     otherScholarship:["other scholarship","fee reimbursement","अन्य छात्रवृत्ति","ಇತರ ವಿದ್ಯಾರ್ಥಿವೇತನ","மற்ற உதவித்தொகை","ఇతర స్కాలర్‌షిప్","മറ്റൊരു സ്കോളർഷിപ്പ്"],
-    diplomaOrDistance:["diploma or distance","distance correspondence course","डिप्लोमा या दूरस्थ","ಡಿಪ್ಲೊಮಾ ಅಥವಾ ದೂರಶಿಕ್ಷಣ","தொலைநிலை படிப்பு","దూరవిద్య","ദൂരവിദ്യാഭ്യാസ"]
+    diplomaOrDistance:["diploma or distance","distance correspondence course","डिप्लोमा या दूरस्थ","ಡಿಪ್ಲೊಮಾ ಅಥವಾ ದೂರಶಿಕ್ಷಣ","தொலைநிலை படிப்பு","దూరవిద్య","ദൂരവിദ്യാഭ്യാസ"],
+    addressLine1:["address line 1","house number and street","street address","residential address","present address","permanent address","पता","ವಿಳಾಸ","முகவரி","చిరునామా","വിലാസം"],
+    addressLine2:["address line 2","landmark","locality","area or locality","मोहल्ला","ಸ್ಥಳ","வட்டாரம்","ప్రాంతం","പ്രദേശം"],
+    villageOrTown:["village","town","city","village town city","गाँव","गांव","शहर","ಗ್ರಾಮ","ಪಟ್ಟಣ","நகரம்","கிராமம்","పట్టణం","గ్రామం","നഗരം","ഗ്രാമം"],
+    pincode:["pin code","pincode","postal code","zip code","डाक कोड","ಪಿನ್ ಕೋಡ್","அஞ்சல் குறியீடு","పిన్ కోడ్","പിൻകോഡ്"],
+    fatherOrGuardianName:["father name","father or guardian name","guardian name","पिता का नाम","ತಂದೆಯ ಹೆಸರು","தந்தை பெயர்","తండ్రి పేరు","പിതാവിന്റെ പേര്"],
+    motherName:["mother name","माता का नाम","ತಾಯಿಯ ಹೆಸರು","தாயின் பெயர்","తల్లి పేరు","മാതാവിന്റെ പേര്"],
+    socialCategory:["social category","caste category","community category","reservation category","सामाजिक श्रेणी","ಸಾಮಾಜಿಕ ವರ್ಗ","சமூகப் பிரிவு","సామాజిక వర్గం","സാമൂഹിക വിഭാഗം"],
+    landholdingAcres:["land holding acres","landholding acres","extent of cultivable land","land area acres","भूमि का क्षेत्रफल","ಜಮೀನಿನ ವಿಸ್ತೀರ್ಣ","நிலத்தின் பரப்பளவு","భూమి విస్తీర్ణం","ഭൂമിയുടെ വിസ്തീർണം"],
+    institutionName:["institution name","college name","school name","educational institution","संस्थान का नाम","ಸಂಸ್ಥೆಯ ಹೆಸರು","நிறுவனத்தின் பெயர்","సంస్థ పేరు","സ്ഥാപനത്തിന്റെ പേര്"],
+    courseName:["course name","programme name","program name","degree name","पाठ्यक्रम का नाम","ಕೋರ್ಸ್ ಹೆಸರು","பாடநெறி பெயர்","కోర్సు పేరు","കോഴ്‌സിന്റെ പേര്"],
+    courseYear:["year of study","current academic year","study year","course year","अध्ययन वर्ष","ಅಧ್ಯಯನ ವರ್ಷ","படிப்பு ஆண்டு","చదువు సంవత్సరం","പഠന വർഷം"],
+    rationCardCategory:["ration card category","ration card type","ration card classification","राशन कार्ड श्रेणी","ಪಡಿತರ ಚೀಟಿ ವರ್ಗ","குடும்ப அட்டை வகை","రేషన్ కార్డు వర్గం","റേഷൻ കാർഡ് വിഭാഗം"]
   };
-  const isSensitive=(text)=>/(?:^| )(?:aadhaar|aadhar|uidai|pan|bank|account|ifsc|otp|captcha|password|passcode|pin|mobile|phone|email|identity|document|upload|file)(?: |$)/.test(norm(text));
+  const isSensitive=(parts)=>{
+    const normalizedParts=(Array.isArray(parts)?parts:[parts]).map(norm);
+    const protectedTerm=/(?:^| )(?:aadhaar|aadhar|uidai|pan|bank|account|ifsc|otp|captcha|password|passcode|identity|document|upload|file|security pin|securitypin|mpin|atm pin|atm_pin|transaction pin|transaction_pin|debit pin|credit pin|login pin)(?: |$)/;
+    if(normalizedParts.some(part=>protectedTerm.test(part)))return true;
+    const postalTerm=/(?:postal pin|pin code|pincode|postal code|zip code)/;
+    const ambiguousPin=/(?:^| )pin(?: |$)/;
+    return normalizedParts.some(part=>ambiguousPin.test(part)&&!postalTerm.test(part));
+  };
   const profileValue=(key)=>{
     let value=profile[key];
     if(key==="gender")value=profile.gender==="woman"?"Female":profile.gender==="man"?"Male":profile.gender==="other"?"Other":"";
@@ -73,8 +94,7 @@ function fillProfileInPage(profile,approvedFields){
       if(group.some(item=>item.checked))continue;
       const legend=element.closest("fieldset")?.querySelector("legend")?.innerText||"";
       const parts=[...fieldParts(element),norm(legend)];
-      const allText=parts.join(" ");
-      if(isSensitive(allText))continue;
+      if(isSensitive(parts))continue;
       const key=Object.keys(aliases).find(name=>aliases[name].some(alias=>matchesAlias(parts,alias)));
       if(!key)continue;
       const value=profileValue(key);if(!value)continue;
@@ -87,14 +107,14 @@ function fillProfileInPage(profile,approvedFields){
       continue;
     }
     if(element.type==="checkbox"||element.type==="file"||element.type==="password")continue;
-    const parts=fieldParts(element);const joined=parts.join(" ");
-    if(isSensitive(joined))continue;
+    const parts=fieldParts(element);
+    if(isSensitive(parts))continue;
     const key=Object.keys(aliases).find(name=>aliases[name].some(alias=>matchesAlias(parts,alias)));
     if(!key)continue;
     const duplicates=controls.filter(candidate=>{
       if(candidate.type==="radio"||candidate.type==="checkbox"||candidate.type==="file")return false;
       const candidateParts=fieldParts(candidate);
-      return !isSensitive(candidateParts.join(" "))&&aliases[key].some(alias=>matchesAlias(candidateParts,alias));
+      return !isSensitive(candidateParts)&&aliases[key].some(alias=>matchesAlias(candidateParts,alias));
     });
     if(duplicates.length>1)continue;
     const value=profileValue(key);if(!value)continue;
