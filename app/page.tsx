@@ -19,7 +19,7 @@ const steps = [
 ];
 const features = [
   { icon: SearchCheck, title: "Discover relevant support", body: "Explore a growing catalogue of central and state-level benefit programmes." },
-  { icon: BadgeCheck, title: "Understand eligibility", body: "Review rule-based screening with the criteria and evidence that shaped the result." },
+  { icon: BadgeCheck, title: "Review preliminary screening", body: "Inspect prototype rule checks, evidence gaps and official sources. Unreviewed rules remain marked for verification." },
   { icon: FileCheck2, title: "Get application-ready", body: "Build a document checklist and organise information before visiting an official portal." },
   { icon: Workflow, title: "Keep every next step clear", body: "A transparent workflow helps you distinguish preparation, portal activity and confirmed submission." }
 ];
@@ -30,7 +30,7 @@ export default function HomePage() {
     <header className="site-header">
       <div className="site-header-inner">
         <Link className="brand" href="/"><img src="/janasetu-mark.svg" alt="" /><span>JanaSetu<span className="brand-ai"> AI</span><small>Your bridge to public benefits</small></span></Link>
-        <nav className="desktop-nav" aria-label="Main navigation"><a href="#how-it-works">How it works</a><a href="#principles">Our principles</a><a href="#coverage">Coverage</a><Link href="/schemes">Verified scheme guides</Link></nav>
+        <nav className="desktop-nav" aria-label="Main navigation"><a href="#how-it-works">How it works</a><a href="#principles">Our principles</a><a href="#coverage">Coverage</a><Link href="/schemes">Published scheme guides</Link></nav>
         <nav className="language-nav" aria-label="Choose language"><Link href="/hi" hrefLang="hi-IN">हिन्दी</Link><Link href="/kn" hrefLang="kn-IN">ಕನ್ನಡ</Link><Link href="/te" hrefLang="te-IN">తెలుగు</Link><Link href="/ta" hrefLang="ta-IN">தமிழ்</Link><Link href="/ml" hrefLang="ml-IN">മലയാളം</Link></nav><div className="header-actions"><Link className="header-text-link" href="/app">Open workspace <ArrowUpRight size={15}/></Link><Link className="button-primary header-cta" href="/app">Get started <ArrowRight size={16}/></Link></div>
       </div>
     </header>
@@ -66,6 +66,6 @@ export default function HomePage() {
         {"@type":"Question","name":"How current and complete is the scheme catalogue?","acceptedAnswer":{"@type":"Answer","text":"The catalogue combines distinct source classes, including source-linked built-in records and discovery-only external data. Coverage is not exhaustive and records may require manual verification. Always check current eligibility, deadlines and application routes with the official source."}}
       ]}
     ]})}} />
-    <footer className="site-footer"><div className="footer-main"><Link className="brand footer-brand" href="/"><img src="/janasetu-mark.svg" alt=""/><span>JanaSetu<span className="brand-ai"> AI</span><small>Your bridge to public benefits</small></span></Link><p>Independent public-benefits navigation and preparation support.</p><div className="footer-links"><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link><Link href="/schemes">Verified scheme guides</Link><Link href="/app">Workspace</Link></div><nav className="footer-languages" aria-label="Choose language"><Link href="/">English</Link><Link href="/hi">हिन्दी</Link><Link href="/kn">ಕನ್ನಡ</Link><Link href="/te">తెలుగు</Link><Link href="/ta">தமிழ்</Link><Link href="/ml">മലയാളം</Link></nav></div><div className="footer-bottom"><span>© {new Date().getFullYear()} JanaSetu AI</span><span>JanaSetu is not a government website or department. Scheme decisions are made by the relevant authorities.</span></div></footer>
+    <footer className="site-footer"><div className="footer-main"><Link className="brand footer-brand" href="/"><img src="/janasetu-mark.svg" alt=""/><span>JanaSetu<span className="brand-ai"> AI</span><small>Your bridge to public benefits</small></span></Link><p>Independent public-benefits navigation and preparation support.</p><div className="footer-links"><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link><Link href="/schemes">Published scheme guides</Link><Link href="/app">Workspace</Link></div><nav className="footer-languages" aria-label="Choose language"><Link href="/">English</Link><Link href="/hi">हिन्दी</Link><Link href="/kn">ಕನ್ನಡ</Link><Link href="/te">తెలుగు</Link><Link href="/ta">தமிழ்</Link><Link href="/ml">മലയാളം</Link></nav></div><div className="footer-bottom"><span>© {new Date().getFullYear()} JanaSetu AI</span><span>JanaSetu is not a government website or department. Scheme decisions are made by the relevant authorities.</span></div></footer>
   </main>;
 }
