@@ -39,12 +39,12 @@ Citizens across India's States and Union Territories, including students, farmer
 Next.js, React, TypeScript, Supabase, PostgreSQL, browser Web Crypto API, IndexedDB, Vercel, Playwright and ClamAV tooling. Do not describe external LLM inference as an implemented dependency in the current prototype.
 
 ## Links
-- **GitHub repository (submission branch):** https://github.com/PSP-YN/JanaSetu-AI/tree/backend/harden-supabase-access
-- **Live demo — citizen workspace:** https://janasetu-qfjrr4m63-pspyn.vercel.app/app
-- **Live demo — landing page:** https://janasetu-qfjrr4m63-pspyn.vercel.app/
-- **Pitch deck — interactive six-slide deck:** https://htmlpreview.github.io/?https://github.com/PSP-YN/JanaSetu-AI/blob/backend/harden-supabase-access/public/pitch-deck.html
-- **Demo video — direct MP4:** https://raw.githubusercontent.com/PSP-YN/JanaSetu-AI/backend/harden-supabase-access/submission/JanaSetu_AI_Demo.mp4
-- **Demo video — GitHub preview:** https://github.com/PSP-YN/JanaSetu-AI/blob/backend/harden-supabase-access/submission/JanaSetu_AI_Demo.mp4
+- **GitHub repository:** https://github.com/PSP-YN/JanaSetu-AI
+- **Live demo — citizen workspace:** https://jana-setu-ai.vercel.app/app
+- **Live demo — landing page:** https://jana-setu-ai.vercel.app/
+- **Pitch deck — interactive six-slide deck:** https://htmlpreview.github.io/?https://github.com/PSP-YN/JanaSetu-AI/blob/main/public/pitch-deck.html
+- **Demo video — direct MP4:** https://raw.githubusercontent.com/PSP-YN/JanaSetu-AI/main/submission/JanaSetu_AI_Demo.mp4
+- **Demo video — GitHub preview:** https://github.com/PSP-YN/JanaSetu-AI/blob/main/submission/JanaSetu_AI_Demo.mp4
 
 ## Team fields
 - **Team name:** [Enter the exact team name registered for AgentX]

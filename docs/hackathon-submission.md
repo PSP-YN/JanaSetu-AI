@@ -10,11 +10,11 @@
 
 ## Submission links
 
-- **GitHub (submission branch):** https://github.com/PSP-YN/JanaSetu-AI/tree/backend/harden-supabase-access
-- **Live demo:** https://janasetu-qfjrr4m63-pspyn.vercel.app/app
-- **Landing page:** https://janasetu-qfjrr4m63-pspyn.vercel.app/
-- **Interactive six-slide pitch deck:** https://htmlpreview.github.io/?https://github.com/PSP-YN/JanaSetu-AI/blob/backend/harden-supabase-access/public/pitch-deck.html
-- **Demo video (MP4):** https://raw.githubusercontent.com/PSP-YN/JanaSetu-AI/backend/harden-supabase-access/submission/JanaSetu_AI_Demo.mp4
+- **GitHub repository:** https://github.com/PSP-YN/JanaSetu-AI
+- **Live demo:** https://jana-setu-ai.vercel.app/app
+- **Landing page:** https://jana-setu-ai.vercel.app/
+- **Interactive six-slide pitch deck:** https://htmlpreview.github.io/?https://github.com/PSP-YN/JanaSetu-AI/blob/main/public/pitch-deck.html
+- **Demo video (MP4):** https://raw.githubusercontent.com/PSP-YN/JanaSetu-AI/main/submission/JanaSetu_AI_Demo.mp4
 
 Full copy-ready form values and the detailed project description are in [submission/AGENTX_SUBMISSION_FIELDS.md](../submission/AGENTX_SUBMISSION_FIELDS.md).
 
@@ -42,4 +42,4 @@ The 1 minute 47 second MP4 is a browser recording of the live preview with synth
 
 ## Local verification
 
-The current branch is `backend/harden-supabase-access`. The feature branch has not been merged into `main`; the Vercel link above is a preview deployment. Do not promote the production domain as part of the hackathon submission.
+The submission implementation is consolidated into protected `main` and deployed at `https://jana-setu-ai.vercel.app`. The demo recording was captured against the earlier preview environment; the canonical production deployment is now live. The public site remains a controlled prototype/beta: no scheme is independently approved or published, and government portal automation, document scanning and cross-device sync remain gated.
