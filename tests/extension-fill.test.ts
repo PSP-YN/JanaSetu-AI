@@ -14,7 +14,7 @@ type TestElement={
  getClientRects:()=>object[];dispatchEvent:(event:Event)=>void;
 };
 type ApprovedField={index:number;fingerprint:string};
-type PreviewField={index:number;fingerprint:string;value:string;valid:boolean;reason:string};
+type PreviewField={index:number;key:string;fingerprint:string;value:string;valid:boolean;reason:string};
 type FillResult={preview:PreviewField[];filled:number};
 type FillContext=vm.Context&{fillProfileInPage:(profile:Record<string,unknown>,approved?:ApprovedField[])=>FillResult};
 
