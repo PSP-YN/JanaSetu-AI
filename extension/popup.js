@@ -100,8 +100,8 @@ function isValidProfile(profile) {
   if (!["yes","no","unknown"].includes(profile.pmKisanExcluded) || !["yes","no","unknown"].includes(profile.previousHousingBenefit)) return false;
   const textFields = ["mobileNumber","emailAddress","addressLine1","addressLine2","villageOrTown","pincode","fatherOrGuardianName","motherName","institutionName","courseName","courseYear"];
   for (const key of textFields) if (profile[key] !== undefined && (typeof profile[key] !== "string" || profile[key].length > 160)) return false;
-  if (profile.mobileNumber && !/^\\+?[0-9]{10,13}$/.test(profile.mobileNumber.replace(/[\\s-]/g,""))) return false;
-  if (profile.emailAddress && !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(profile.emailAddress)) return false;
+  if (profile.mobileNumber && !/^\+?[0-9]{10,13}$/.test(profile.mobileNumber.replace(/[\s-]/g,""))) return false;
+  if (profile.emailAddress && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.emailAddress)) return false;
   if (profile.pincode && !/^[0-9]{6}$/.test(profile.pincode)) return false;
   if (profile.socialCategory !== undefined && !["","General","OBC","SC","ST","EWS","Other"].includes(profile.socialCategory)) return false;
   if (profile.rationCardCategory !== undefined && !["","AAY","PHH","BPL","APL","Other"].includes(profile.rationCardCategory)) return false;
