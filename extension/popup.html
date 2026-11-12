@@ -16,7 +16,7 @@
     button.secondary{background:white;color:#7c2d12}
     #status{font-size:12px;margin-top:10px;min-height:18px}
     .preview-list{max-height:240px;overflow:auto;margin-top:8px}.preview-note{padding:8px;border-radius:7px;background:#f5eadf}.preview-row{display:flex;align-items:flex-start;gap:8px;padding:9px;border-top:1px solid #eadfd5;background:white}.preview-row input{margin-top:3px;flex:0 0 auto}.preview-row span{display:flex;flex-direction:column;gap:4px;min-width:0}.preview-row strong{font-size:11px}.preview-row small{font-size:11px;color:#775c48;overflow-wrap:anywhere}button:disabled{opacity:.45;cursor:not-allowed}
-    .notice{background:#fff0e2;border:1px solid #e8b48b;border-radius:8px;padding:10px;font-size:11px;line-height:1.4;color:#59351d}
+    .verify-row{display:flex;gap:8px;align-items:flex-start;font-weight:500;line-height:1.45}.verify-row input{margin-top:2px;flex:0 0 auto}.notice{background:#fff0e2;border:1px solid #e8b48b;border-radius:8px;padding:10px;font-size:11px;line-height:1.4;color:#59351d}
   </style>
 </head>
 <body>
@@ -25,6 +25,8 @@
   <label for="backup" data-i18n="backupLabel">Select JanaSetu backup (.json)</label>
   <input id="backup" type="file" accept=".json,application/json">
   <button id="save" data-i18n="importBtn">Import reviewed profile</button>
+  <div class="notice"><strong>Active page URL:</strong> <span id="active-site">Not checked yet</span></div>
+  <label class="verify-row"><input id="verify-portal" type="checkbox"> <span data-i18n="verifyPortalLabel">I verified this exact address against the official JanaSetu link.</span></label>
   <button id="fill" class="secondary" data-i18n="fillBtn">Preview matching fields</button>
   <div id="preview" class="preview-list" aria-label="Fields awaiting your approval"></div>
   <button id="apply" disabled data-i18n="applyBtn">Fill selected fields</button>

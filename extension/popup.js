@@ -7,7 +7,8 @@ const COPY = {
     warning: "Preview the matching fields and select each value you approve. The extension never submits forms or uploads documents. Portal scripts may react to field changes; check every filled field before continuing.",
     chooseBackup: "Choose a JanaSetu JSON backup first.", invalidBackup: "Invalid JanaSetu backup.",
     imported: "Profile imported into extension storage on this device.", importFailed: "Import failed.", profileFirst: "Import a profile first.",
-    openPortal: "Open an official government portal tab first.", blockedDomain: "This exact portal route has not yet been independently verified and authorized for autofill. Complete the application manually on the official portal.",
+    openPortal: "Open the official portal from JanaSetu first.", blockedDomain: "Open an HTTPS government portal ending in .gov.in or .nic.in, verify its exact URL against JanaSetu, and check the confirmation box.",
+    verifyPortalLabel: 'I checked this exact website address against the official link in JanaSetu. I understand this is user-directed field assistance, not a government-authorized integration.',
     fillOk: "Filled {count} matching field(s). Review every value, then submit yourself on the official portal. JanaSetu does not submit it.", noFields: "No matching fields found. Portal forms vary; fill them manually.", fillFail: "Could not fill this tab. Check extension permissions and try again."
   },
   hi: {
@@ -17,7 +18,8 @@ const COPY = {
     warning: "मिलते-जुलते फ़ील्ड देखें और हर स्वीकृत मान चुनें। यह एक्सटेंशन फ़ॉर्म जमा या दस्तावेज़ अपलोड नहीं करता। पोर्टल की स्क्रिप्ट फ़ील्ड बदलने पर प्रतिक्रिया दे सकती हैं; आगे बढ़ने से पहले भरे गए सभी फ़ील्ड जाँचें।",
     chooseBackup: "पहले JanaSetu JSON बैकअप चुनें।", invalidBackup: "JanaSetu बैकअप मान्य नहीं है।",
     imported: "प्रोफ़ाइल इस डिवाइस के एक्सटेंशन स्टोरेज में आयात की गई।", importFailed: "आयात विफल हुआ।", profileFirst: "पहले प्रोफ़ाइल आयात करें।",
-    openPortal: "पहले सरकारी पोर्टल का टैब खोलें।", blockedDomain: "इस सटीक पोर्टल मार्ग की ऑटोफ़िल के लिए अभी स्वतंत्र जाँच और अनुमति नहीं हुई है। आधिकारिक पोर्टल पर आवेदन स्वयं भरें।",
+    openPortal: "पहले JanaSetu से आधिकारिक पोर्टल खोलें।", blockedDomain: "HTTPS सरकारी पोर्टल खोलें जिसका पता .gov.in या .nic.in पर समाप्त हो, उसका पूरा URL JanaSetu से मिलाएँ और पुष्टि चेकबॉक्स चुनें।",
+    verifyPortalLabel: 'मैंने इस वेबसाइट पते को JanaSetu के आधिकारिक लिंक से मिलाया है। यह उपयोगकर्ता-निर्देशित फ़ील्ड सहायता है, सरकारी-अधिकृत एकीकरण नहीं।',
     fillOk: "{count} मिलते-जुलते फ़ील्ड भरे गए। हर मान जाँचें और आधिकारिक पोर्टल पर स्वयं जमा करें। JanaSetu आवेदन जमा नहीं करता।", noFields: "कोई मिलान फ़ील्ड नहीं मिला। पोर्टल फ़ॉर्म अलग होते हैं; जानकारी स्वयं भरें।", fillFail: "इस टैब को भर नहीं सके। एक्सटेंशन अनुमतियाँ जाँचकर पुनः प्रयास करें।"
   },
   kn: {
@@ -27,7 +29,8 @@ const COPY = {
     warning: "ಹೊಂದಾಣಿಕೆಯ ಕ್ಷೇತ್ರಗಳನ್ನು ಪೂರ್ವವೀಕ್ಷಿಸಿ ಮತ್ತು ನೀವು ಅನುಮೋದಿಸುವ ಪ್ರತಿಯೊಂದು ಮೌಲ್ಯವನ್ನೂ ಆಯ್ಕೆಮಾಡಿ. ವಿಸ್ತರಣೆ ಫಾರ್ಮ್ ಸಲ್ಲಿಸುವುದಿಲ್ಲ ಅಥವಾ ದಾಖಲೆಗಳನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡುವುದಿಲ್ಲ. ಪೋರ್ಟಲ್ ಸ್ಕ್ರಿಪ್ಟ್‌ಗಳು ಕ್ಷೇತ್ರ ಬದಲಾವಣೆಗಳಿಗೆ ಪ್ರತಿಕ್ರಿಯಿಸಬಹುದು; ಮುಂದುವರಿಯುವ ಮೊದಲು ತುಂಬಿದ ಎಲ್ಲ ಕ್ಷೇತ್ರಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.",
     chooseBackup: "ಮೊದಲು JanaSetu JSON ಬ್ಯಾಕಪ್ ಆಯ್ಕೆಮಾಡಿ.", invalidBackup: "JanaSetu ಬ್ಯಾಕಪ್ ಮಾನ್ಯವಾಗಿಲ್ಲ.",
     imported: "ಪ್ರೊಫೈಲ್ ಈ ಸಾಧನದ ವಿಸ್ತರಣೆ ಸಂಗ್ರಹಣೆಗೆ ಆಮದು ಮಾಡಲಾಗಿದೆ.", importFailed: "ಆಮದು ವಿಫಲವಾಗಿದೆ.", profileFirst: "ಮೊದಲು ಪ್ರೊಫೈಲ್ ಆಮದು ಮಾಡಿ.",
-    openPortal: "ಮೊದಲು ಅಧಿಕೃತ ಸರ್ಕಾರಿ ಪೋರ್ಟಲ್ ಟ್ಯಾಬ್ ತೆರೆಯಿರಿ.", blockedDomain: "ಈ ನಿರ್ದಿಷ್ಟ ಪೋರ್ಟಲ್ ಮಾರ್ಗವನ್ನು ಸ್ವಯಂ-ಭರ್ತಿಗೆ ಇನ್ನೂ ಸ್ವತಂತ್ರವಾಗಿ ಪರಿಶೀಲಿಸಿ ಅನುಮೋದಿಸಿಲ್ಲ. ಅಧಿಕೃತ ಪೋರ್ಟಲ್‌ನಲ್ಲಿ ಅರ್ಜಿಯನ್ನು ಕೈಯಾರೆ ಭರ್ತಿ ಮಾಡಿ.",
+    openPortal: "ಮೊದಲು JanaSetu ನಿಂದ ಅಧಿಕೃತ ಪೋರ್ಟಲ್ ತೆರೆಯಿರಿ.", blockedDomain: ".gov.in ಅಥವಾ .nic.in ನಲ್ಲಿ ಕೊನೆಗೊಳ್ಳುವ HTTPS ಸರ್ಕಾರಿ ಪೋರ್ಟಲ್ ತೆರೆಯಿರಿ, ಸಂಪೂರ್ಣ URL ಅನ್ನು JanaSetu ಅಧಿಕೃತ ಲಿಂಕ್‌ನೊಂದಿಗೆ ಪರಿಶೀಲಿಸಿ ಮತ್ತು ದೃಢೀಕರಣ ಚೆಕ್‌ಬಾಕ್ಸ್ ಆಯ್ಕೆಮಾಡಿ.",
+    verifyPortalLabel: 'ಈ ವೆಬ್\u200cಸೈಟ್ ವಿಳಾಸವನ್ನು JanaSetu ಅಧಿಕೃತ ಲಿಂಕ್\u200cನೊಂದಿಗೆ ಪರಿಶೀಲಿಸಿದ್ದೇನೆ. ಇದು ಬಳಕೆದಾರ-ನಿರ್ದೇಶಿತ ಕ್ಷೇತ್ರ ಸಹಾಯ ಮಾತ್ರ, ಸರ್ಕಾರಿ-ಅನುಮೋದಿತ ಏಕೀಕರಣವಲ್ಲ.',
     fillOk: "{count} ಹೊಂದಾಣಿಕೆಯ ಕ್ಷೇತ್ರಗಳನ್ನು ತುಂಬಲಾಗಿದೆ. ಪ್ರತಿಯೊಂದು ಮೌಲ್ಯ ಪರಿಶೀಲಿಸಿ, ಅಧಿಕೃತ ಪೋರ್ಟಲ್‌ನಲ್ಲಿ ನೀವೇ ಸಲ್ಲಿಸಿ. JanaSetu ಸಲ್ಲಿಸುವುದಿಲ್ಲ.", noFields: "ಹೊಂದಾಣಿಕೆಯ ಕ್ಷೇತ್ರಗಳು ಕಂಡುಬಂದಿಲ್ಲ. ಪೋರ್ಟಲ್ ಫಾರ್ಮ್‌ಗಳು ಬದಲಾಗುತ್ತವೆ; ಕೈಯಾರೆ ತುಂಬಿ.", fillFail: "ಈ ಟ್ಯಾಬ್ ತುಂಬಲಾಗಲಿಲ್ಲ. ವಿಸ್ತರಣೆ ಅನುಮತಿಗಳನ್ನು ಪರಿಶೀಲಿಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ."
   },
   ta: {
@@ -37,7 +40,8 @@ const COPY = {
     warning: "பொருந்தும் புலங்களை முன்னோட்டம் பார்த்து, நீங்கள் ஒப்புதல் அளிக்கும் மதிப்புகளைத் தேர்ந்தெடுக்கவும். இந்த நீட்டிப்பு படிவங்களைச் சமர்ப்பிக்கவோ ஆவணங்களைப் பதிவேற்றவோ செய்யாது. போர்டல் ஸ்கிரிப்டுகள் புல மாற்றங்களுக்கு பதிலளிக்கலாம்; தொடர்வதற்கு முன் நிரப்பிய அனைத்துப் புலங்களையும் சரிபார்க்கவும்.",
     chooseBackup: "முதலில் JanaSetu JSON காப்புப்பிரதியைத் தேர்ந்தெடுக்கவும்.", invalidBackup: "JanaSetu காப்புப்பிரதி செல்லுபடியாகாது.",
     imported: "சுயவிவரம் இந்தச் சாதனத்தின் நீட்டிப்பு சேமிப்பகத்தில் இறக்குமதி செய்யப்பட்டது.", importFailed: "இறக்குமதி தோல்வியடைந்தது.", profileFirst: "முதலில் சுயவிவரத்தை இறக்குமதி செய்யவும்.",
-    openPortal: "முதலில் அதிகாரப்பூர்வ அரசு தாவலைத் திறக்கவும்.", blockedDomain: "இந்தத் துல்லியமான போர்டல் பாதை தானியங்கி நிரப்பலுக்காக இன்னும் சுயாதீனமாகச் சரிபார்க்கப்பட்டு அங்கீகரிக்கப்படவில்லை. அதிகாரப்பூர்வ தளத்தில் விண்ணப்பத்தை கைமுறையாக நிரப்பவும்.",
+    openPortal: "முதலில் JanaSetu-இலிருந்து அதிகாரப்பூர்வ போர்டலைத் திறக்கவும்.", blockedDomain: ".gov.in அல்லது .nic.in என முடியும் HTTPS அரசு போர்டலைத் திறந்து, முழு URL-ஐ JanaSetu அதிகாரப்பூர்வ இணைப்புடன் சரிபார்த்து உறுதிப்படுத்தல் பெட்டியைத் தேர்ந்தெடுக்கவும்.",
+    verifyPortalLabel: 'இந்த இணையதள முகவரியை JanaSetu அதிகாரப்பூர்வ இணைப்புடன் சரிபார்த்தேன். இது பயனர் வழிநடத்தும் புல உதவி மட்டுமே; அரசு அங்கீகரித்த ஒருங்கிணைப்பு அல்ல.',
     fillOk: "{count} பொருந்தும் புலங்கள் நிரப்பப்பட்டன. ஒவ்வொரு மதிப்பையும் சரிபார்த்து அதிகாரப்பூர்வ தளத்தில் நீங்களே சமர்ப்பிக்கவும். JanaSetu சமர்ப்பிக்காது.", noFields: "பொருந்தும் புலங்கள் இல்லை. தளப் படிவங்கள் மாறுபடும்; கைமுறையாக நிரப்பவும்.", fillFail: "இந்தத் தாவலை நிரப்ப முடியவில்லை. நீட்டிப்பு அனுமதிகளைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்."
   },
   te: {
@@ -47,7 +51,8 @@ const COPY = {
     warning: "సరిపోలే ఫీల్డ్‌లను ప్రివ్యూ చేసి, మీరు ఆమోదించిన విలువలను మాత్రమే ఎంచుకోండి. ఈ ఎక్స్‌టెన్షన్ ఫారమ్‌లను సమర్పించదు లేదా పత్రాలను అప్‌లోడ్ చేయదు. పోర్టల్ స్క్రిప్ట్‌లు ఫీల్డ్ మార్పులకు స్పందించవచ్చు; కొనసాగించే ముందు నింపిన ప్రతి ఫీల్డ్‌ను తనిఖీ చేయండి.",
     chooseBackup: "ముందుగా JanaSetu JSON బ్యాకప్ ఎంచుకోండి.", invalidBackup: "JanaSetu బ్యాకప్ చెల్లదు.",
     imported: "ప్రొఫైల్ ఈ పరికరంలోని ఎక్స్‌టెన్షన్ నిల్వలో దిగుమతి చేయబడింది.", importFailed: "దిగుమతి విఫలమైంది.", profileFirst: "ముందుగా ప్రొఫైల్‌ను దిగుమతి చేయండి.",
-    openPortal: "ముందుగా అధికారిక ప్రభుత్వ పోర్టల్ ట్యాబ్‌ను తెరవండి.", blockedDomain: "ఈ ఖచ్చితమైన పోర్టల్ మార్గం ఆటోఫిల్ కోసం ఇంకా స్వతంత్రంగా ధృవీకరించబడలేదు, అనుమతి పొందలేదు. అధికారిక పోర్టల్‌లో దరఖాస్తును చేతితో పూరించండి.",
+    openPortal: "ముందుగా JanaSetu నుంచి అధికారిక పోర్టల్‌ను తెరవండి.", blockedDomain: ".gov.in లేదా .nic.in తో ముగిసే HTTPS ప్రభుత్వ పోర్టల్‌ను తెరిచి, పూర్తి URL ను JanaSetu అధికారిక లింక్‌తో సరిపోల్చి నిర్ధారణ చెక్‌బాక్స్‌ను ఎంచుకోండి.",
+    verifyPortalLabel: 'ఈ వెబ్\u200cసైట్ చిరునామాను JanaSetu అధికారిక లింక్\u200cతో తనిఖీ చేశాను. ఇది వినియోగదారు-నిర్దేశిత ఫీల్డ్ సహాయం మాత్రమే, ప్రభుత్వ-అధికారిక సమీకరణ కాదు.',
     fillOk: "{count} సరిపోలే ఫీల్డ్‌లు నింపబడ్డాయి. ప్రతి విలువను తనిఖీ చేసి అధికారిక పోర్టల్‌లో మీరే సమర్పించండి. JanaSetu సమర్పించదు.", noFields: "సరిపోలే ఫీల్డ్‌లు కనబడలేదు. పోర్టల్ ఫారమ్‌లు వేరుగా ఉంటాయి; చేతితో నింపండి.", fillFail: "ఈ ట్యాబ్‌ను నింపలేకపోయాం. ఎక్స్‌టెన్షన్ అనుమతులను తనిఖీ చేసి మళ్లీ ప్రయత్నించండి."
   },
   ml: {
@@ -57,7 +62,8 @@ const COPY = {
     warning: "പൊരുത്തമുള്ള ഫീൽഡുകൾ പ്രിവ്യൂ ചെയ്ത് നിങ്ങൾ അംഗീകരിക്കുന്ന മൂല്യങ്ങൾ മാത്രം തിരഞ്ഞെടുക്കുക. ഈ എക്സ്റ്റൻഷൻ ഫോമുകൾ സമർപ്പിക്കുകയോ രേഖകൾ അപ്‌ലോഡ് ചെയ്യുകയോ ഇല്ല. പോർട്ടൽ സ്ക്രിപ്റ്റുകൾ ഫീൽഡ് മാറ്റങ്ങളോട് പ്രതികരിക്കാം; തുടരുന്നതിന് മുമ്പ് പൂരിപ്പിച്ച എല്ലാ ഫീൽഡുകളും പരിശോധിക്കുക.",
     chooseBackup: "ആദ്യം JanaSetu JSON ബാക്കപ്പ് തിരഞ്ഞെടുക്കുക.", invalidBackup: "JanaSetu ബാക്കപ്പ് സാധുവല്ല.",
     imported: "പ്രൊഫൈൽ ഈ ഉപകരണത്തിലെ എക്സ്റ്റൻഷൻ സംഭരണത്തിലേക്ക് ഇറക്കുമതി ചെയ്തു.", importFailed: "ഇറക്കുമതി പരാജയപ്പെട്ടു.", profileFirst: "ആദ്യം പ്രൊഫൈൽ ഇറക്കുമതി ചെയ്യുക.",
-    openPortal: "ആദ്യം ഔദ്യോഗിക സർക്കാർ പോർട്ടൽ ടാബ് തുറക്കുക.", blockedDomain: "ഈ കൃത്യമായ പോർട്ടൽ പാത ഓട്ടോഫില്ലിനായി ഇതുവരെ സ്വതന്ത്രമായി പരിശോധിച്ച് അംഗീകരിച്ചിട്ടില്ല. ഔദ്യോഗിക പോർട്ടലിൽ അപേക്ഷ കൈകൊണ്ട് പൂരിപ്പിക്കുക.",
+    openPortal: "ആദ്യം JanaSetu-യിൽ നിന്ന് ഔദ്യോഗിക പോർട്ടൽ തുറക്കുക.", blockedDomain: ".gov.in അല്ലെങ്കിൽ .nic.in-ൽ അവസാനിക്കുന്ന HTTPS സർക്കാർ പോർട്ടൽ തുറന്ന്, പൂർണ്ണ URL JanaSetu ഔദ്യോഗിക ലിങ്കുമായി പരിശോധിച്ച് സ്ഥിരീകരണ ചെക്ക്ബോക്സ് തിരഞ്ഞെടുക്കുക.",
+    verifyPortalLabel: 'ഈ വെബ്സൈറ്റ് വിലാസം JanaSetu ഔദ്യോഗിക ലിങ്കുമായി പരിശോധിച്ചു. ഇത് ഉപയോക്താവ് നിർദ്ദേശിക്കുന്ന ഫീൽഡ് സഹായം മാത്രമാണ്, സർക്കാർ അംഗീകരിച്ച സംയോജനം അല്ല.',
     fillOk: "{count} പൊരുത്തമുള്ള ഫീൽഡുകൾ പൂരിപ്പിച്ചു. ഓരോ മൂല്യവും പരിശോധിച്ച് ഔദ്യോഗിക പോർട്ടലിൽ നിങ്ങൾ തന്നെ സമർപ്പിക്കുക. JanaSetu സമർപ്പിക്കില്ല.", noFields: "പൊരുത്തമുള്ള ഫീൽഡുകളൊന്നും കണ്ടെത്തിയില്ല. പോർട്ടൽ ഫോമുകൾ വ്യത്യസ്തമാണ്; കൈകൊണ്ട് പൂരിപ്പിക്കുക.", fillFail: "ഈ ടാബ് പൂരിപ്പിക്കാൻ കഴിഞ്ഞില്ല. എക്സ്റ്റൻഷൻ അനുമതികൾ പരിശോധിച്ച് വീണ്ടും ശ്രമിക്കുക."
   }
 };
@@ -183,24 +189,22 @@ function getApprovedFields(){
     return field?{index:field.index,fingerprint:field.fingerprint}:null;
   }).filter(Boolean);
 }
-// Exact-route policy mirrors the server-side adapter registry. A host suffix alone
-// is never sufficient. Keep every route disabled until independent review and
-// written department authorization cover this exact origin, path and action.
-const PORTAL_ROUTE_POLICIES = [
-  { origin: "https://pmkisan.gov.in", path: "/RegistrationFormupdated.aspx", accessStatus: "not_requested", allowedActions: [], authorizationReference: null, approvedAt: null },
-  { origin: "https://pmaymis.gov.in", path: null, accessStatus: "not_requested", allowedActions: [], authorizationReference: null, approvedAt: null },
-  { origin: "https://pmuy.gov.in", path: null, accessStatus: "not_requested", allowedActions: [], authorizationReference: null, approvedAt: null },
-  { origin: "https://scholarships.gov.in", path: null, accessStatus: "not_requested", allowedActions: [], authorizationReference: null, approvedAt: null }
-];
-async function getApprovedPortalTab(){
+// Citizen-directed browser assistance. The citizen verifies the exact HTTPS
+// address against JanaSetu's official source link for every preview/fill session.
+// This is not a department-authorized integration and does not certify the page.
+const verifyPortalCheckbox=document.getElementById("verify-portal");
+const activeSiteEl=document.getElementById("active-site");
+async function getCitizenConfirmedPortalTab(){
   const [tab]=await chrome.tabs.query({active:true,currentWindow:true});
   if(!tab?.id||!tab.url){say("openPortal");return null;}
   let portalUrl;
   try{portalUrl=new URL(tab.url);}catch{say("blockedDomain");return null;}
-  const policy=PORTAL_ROUTE_POLICIES.find(route=>route.origin===portalUrl.origin&&route.path===portalUrl.pathname);
-  const approved=portalUrl.protocol==="https:"&&policy?.accessStatus==="approved"&&
-    policy.allowedActions.includes("assist_form_filling")&&Boolean(policy.authorizationReference&&policy.approvedAt);
-  if(!approved){say("blockedDomain");return null;}
+  const host=portalUrl.hostname.toLowerCase();
+  const governmentHost=host==="gov.in"||host.endsWith(".gov.in")||host==="nic.in"||host.endsWith(".nic.in");
+  if(portalUrl.protocol!=="https:"||!governmentHost){say("blockedDomain");return null;}
+  if(activeSiteEl.textContent&&activeSiteEl.textContent!==portalUrl.href)verifyPortalCheckbox.checked=false;
+  activeSiteEl.textContent=portalUrl.href;
+  if(!verifyPortalCheckbox.checked){say("blockedDomain");return null;}
   return tab;
 }
 document.getElementById("fill").addEventListener("click",async()=>{
@@ -210,7 +214,7 @@ document.getElementById("fill").addEventListener("click",async()=>{
     setLanguage(language||currentLanguage);
     if(!profile){say("profileFirst");return;}
     if(!isValidProfile(profile)){say("invalidBackup");return;}
-    const tab=await getApprovedPortalTab();if(!tab)return;
+    const tab=await getCitizenConfirmedPortalTab();if(!tab)return;
     const normalizedProfile={...profile,occupation:normalizeOccupation(profile.occupation)};
     const result=await chrome.scripting.executeScript({target:{tabId:tab.id},func:fillProfileInPage,args:[normalizedProfile]});
     const fields=result?.[0]?.result?.preview||[];
@@ -224,8 +228,8 @@ applyButton.addEventListener("click",async()=>{
     await popupReady;
     const selected=getApprovedFields();
     if(!selected.length){say("noSelection");return;}
-    const tab=await getApprovedPortalTab();if(!tab)return;
-    if(tab.id!==pendingTabId||tab.url!==pendingUrl){clearPreview();say("stalePreview");return;}
+    const tab=await getCitizenConfirmedPortalTab();if(!tab)return;
+    if(tab.id!==pendingTabId||tab.url!==pendingUrl||!verifyPortalCheckbox.checked){clearPreview();say("stalePreview");return;}
     const result=await chrome.scripting.executeScript({target:{tabId:tab.id},func:fillProfileInPage,args:[pendingProfile,selected]});
     const filled=result?.[0]?.result?.filled??0;
     const stale=result?.[0]?.result?.stale??0;
