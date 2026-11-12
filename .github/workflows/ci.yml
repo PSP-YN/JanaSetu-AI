@@ -2,7 +2,7 @@ name: JanaSetu CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, feat/cross-device-pmkisan-assistant]
   pull_request:
     branches: [main]
   workflow_dispatch:
