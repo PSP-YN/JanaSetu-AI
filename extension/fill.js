@@ -32,7 +32,19 @@ function fillProfileInPage(profile,approvedFields){
     top20Percentile:["80th percentile","top 20 percentile","board percentile","80वाँ प्रतिशतक","80ನೇ ಪರ್ಸೆಂಟೈಲ್","80வது சதவீதம்","80వ శాతం","80-ാം പെർസെന്റൈൽ"],
     regularUndergraduate:["regular undergraduate","regular ug course","undergraduate course","नियमित स्नातक","ನಿಯಮಿತ ಪದವಿ","வழக்கமான இளங்கலை","రెగ్యులర్ అండర్ గ్రాడ్యుయేట్","സാധാരണ ബിരുദ"],
     otherScholarship:["other scholarship","fee reimbursement","अन्य छात्रवृत्ति","ಇತರ ವಿದ್ಯಾರ್ಥಿವೇತನ","மற்ற உதவித்தொகை","ఇతర స్కాలర్‌షిప్","മറ്റൊരു സ്കോളർഷിപ്പ്"],
-    diplomaOrDistance:["diploma or distance","distance correspondence course","डिप्लोमा या दूरस्थ","ಡಿಪ್ಲೊಮಾ ಅಥವಾ ದೂರಶಿಕ್ಷಣ","தொலைநிலை படிப்பு","దూరవిద్య","ദൂരവിദ്യാഭ്യാസ"]
+    diplomaOrDistance:["diploma or distance","distance correspondence course","डिप्लोमा या दूरस्थ","ಡಿಪ್ಲೊಮಾ ಅಥವಾ ದೂರಶಿಕ್ಷಣ","தொலைநிலை படிப்பு","దూరవిద్య","ദൂരവിദ്യാഭ്യാസ"],
+    addressLine1:["address line 1","house number and street","street address","residential address","present address","permanent address","पता","ವಿಳಾಸ","முகவரி","చిరునామా","വിലാസം"],
+    addressLine2:["address line 2","landmark","locality","area or locality","मोहल्ला","ಸ್ಥಳ","வட்டாரம்","ప్రాంతం","പ്രദേശം"],
+    villageOrTown:["village","town","city","village town city","गाँव","गांव","शहर","ಗ್ರಾಮ","ಪಟ್ಟಣ","நகரம்","கிராமம்","పట్టణం","గ్రామం","നഗരം","ഗ്രാമം"],
+    pincode:["pin code","pincode","postal code","zip code","डाक कोड","ಪಿನ್ ಕೋಡ್","அஞ்சல் குறியீடு","పిన్ కోడ్","പിൻകോഡ്"],
+    fatherOrGuardianName:["father name","father or guardian name","guardian name","पिता का नाम","ತಂದೆಯ ಹೆಸರು","தந்தை பெயர்","తండ్రి పేరు","പിതാവിന്റെ പേര്"],
+    motherName:["mother name","माता का नाम","ತಾಯಿಯ ಹೆಸರು","தாயின் பெயர்","తల్లి పేరు","മാതാവിന്റെ പേര്"],
+    socialCategory:["social category","caste category","community category","reservation category","सामाजिक श्रेणी","ಸಾಮಾಜಿಕ ವರ್ಗ","சமூகப் பிரிவு","సామాజిక వర్గం","സാമൂഹിക വിഭാഗം"],
+    landholdingAcres:["land holding acres","landholding acres","extent of cultivable land","land area acres","भूमि का क्षेत्रफल","ಜಮೀನಿನ ವಿಸ್ತೀರ್ಣ","நிலத்தின் பரப்பளவு","భూమి విస్తీర్ణం","ഭൂമിയുടെ വിസ്തീർണം"],
+    institutionName:["institution name","college name","school name","educational institution","संस्थान का नाम","ಸಂಸ್ಥೆಯ ಹೆಸರು","நிறுவனத்தின் பெயர்","సంస్థ పేరు","സ്ഥാപനത്തിന്റെ പേര്"],
+    courseName:["course name","programme name","program name","degree name","पाठ्यक्रम का नाम","ಕೋರ್ಸ್ ಹೆಸರು","பாடநெறி பெயர்","కోర్సు పేరు","കോഴ്‌സിന്റെ പേര്"],
+    courseYear:["year of study","current academic year","study year","course year","अध्ययन वर्ष","ಅಧ್ಯಯನ ವರ್ಷ","படிப்பு ஆண்டு","చదువు సంవత్సరం","പഠന വർഷം"],
+    rationCardCategory:["ration card category","ration card type","ration card classification","राशन कार्ड श्रेणी","ಪಡಿತರ ಚೀಟಿ ವರ್ಗ","குடும்ப அட்டை வகை","రేషన్ కార్డు వర్గం","റേഷൻ കാർഡ് വിഭാഗം"]
   };
   const isSensitive=(text)=>/(?:^| )(?:aadhaar|aadhar|uidai|pan|bank|account|ifsc|otp|captcha|password|passcode|pin|mobile|phone|email|identity|document|upload|file)(?: |$)/.test(norm(text));
   const profileValue=(key)=>{
