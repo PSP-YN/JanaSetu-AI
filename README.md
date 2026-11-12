@@ -2,56 +2,48 @@
 
 **Understand what you may qualify for. Prepare what comes next.**
 
-JanaSetu is an independent, multilingual public-benefits navigation and application-preparation platform. It helps citizens discover source-linked scheme information, review preliminary eligibility conditions, organise evidence and prepare application information while keeping official departments authoritative for eligibility and decisions.
+JanaSetu is an independent, multilingual public-benefits discovery and application-preparation workspace. It helps citizens explore source-linked scheme information, compare their circumstances against preliminary checklist rules, identify missing evidence and prepare the next step while official departments remain authoritative.
 
-- Public website: https://jana-setu-ai.vercel.app
-- Citizen workspace: `/app`
-- Privacy notice: `/privacy`
-- Terms and limitations: `/terms`
+- Live website: https://jana-setu-ai.vercel.app
+- Citizen workspace: https://jana-setu-ai.vercel.app/app
 - Repository: https://github.com/PSP-YN/JanaSetu-AI
+- Privacy: https://jana-setu-ai.vercel.app/privacy
+- Terms: https://jana-setu-ai.vercel.app/terms
 
-> **Important:** JanaSetu is not a government service or eligibility authority. A preliminary assessment is not an eligibility decision. A prepared draft is not an application submission. Government portal automation is disabled unless a specific integration is formally authorized, independently reviewed, implemented and tested. Citizens remain responsible for protected verification and final submission.
+> **Important:** JanaSetu is not a government service or eligibility authority. The current scheme checklists are preliminary prototypes awaiting independent review. They are not official eligibility decisions. A preparation draft is not a government application and has not been submitted.
 
-## Current capability and release boundaries
+## What the current release candidate does
 
-- Multilingual citizen experience: English, Hindi, Kannada, Tamil, Telugu and Malayalam.
-- Scheme discovery and source-linked guidance, with separate labels for deterministic rule prototypes, catalogue-only records and third-party discovery data.
-- Preliminary screening that treats unknown facts as unknown and directs citizens to official sources.
-- Local application preparation, document checklists and versioned local backup/restore.
-- Experimental browser form assistant: HTTPS `.gov.in` and `.nic.in` only; citizen previews and approves each suggested field. It does not upload documents or submit forms.
-- Authenticated Supabase account and private citizen-workspace foundation.
-- Client-side AES-256-GCM vault encryption and revision-aware sync API. Cloud sync is **fail-closed** until its exact consent policy has qualified privacy/legal approval and a citizen grants it.
-- Scheme adapter registry and guarded automation queue. Current database records include four scheme integrations, all `not_requested`; no external government submission is enabled.
+- Multilingual citizen workspace: English, Hindi, Kannada, Tamil, Telugu and Malayalam.
+- Source-linked scheme discovery, including a partial catalogue and clearly labelled discovery references.
+- Local profile intake and suggested field extraction, with citizen review before saving.
+- Preliminary checklist comparisons that preserve unknown answers and display **Needs verification** for pending schemes.
+- Local application-preparation drafts, evidence checklists and official-source handoff.
+- Browser-local workspace data and password-encrypted local backup/restore.
+- Experimental browser form assistant for supported official domains: previews suggested field values for citizen approval; it does not upload documents or submit applications.
 
-JanaSetu does not collect Aadhaar numbers, bank account numbers, OTPs, passwords or CAPTCHA answers as part of the general profile. Do not put these values into JanaSetu or upload identity documents unless a separately reviewed and lawful feature explicitly requires them.
+## What is intentionally not in this release
 
-## Cross-device encrypted workspace sync
+- **No universal government-portal automation.** Government portals use different workflows and protected verification. The browser assistant is a citizen-controlled form-filling aid only; no department-authorized submission integration is active.
+- **No approved scheme eligibility decisions.** The four prototype pathways remain pending independent source, rule and legal review. All results remain preliminary and require verification.
+- **No cross-device cloud sync.** The workspace is local-first. Cloud sync is deferred and its consent policy remains inactive.
+- **No document upload or production malware scanning.** Scanning is deferred; uploaded identity documents are not part of the demo.
+- **No automated CAPTCHA, OTP, Aadhaar/e-KYC, biometrics, legal declarations, payments or final submission.** Complete protected steps on the official department/provider portal.
 
-See [Encrypted cross-device sync](docs/ENCRYPTED-CROSS-DEVICE-SYNC.md).
+## Privacy and safety
 
-The browser encrypts the complete workspace before transmission using PBKDF2-SHA-256 (600,000 iterations) and AES-256-GCM. The server receives and stores only the encrypted envelope. The vault password is never sent to JanaSetu. A revision number prevents stale devices from silently overwriting newer data; a conflict requires restore and reconciliation.
+The current demo stores profile information, checklists and drafts in the browser. Browser storage is not the same as encrypted local storage. A separately exported backup can be password-encrypted; keep the password safe because JanaSetu cannot recover it. Do not enter Aadhaar numbers, bank-account numbers, OTPs, passwords or CAPTCHA answers into the general profile.
 
-Sync currently returns a consent-policy error because no active, legally reviewed cloud-sync policy exists. This is intentional. The code and database RPCs are implemented, but production use must wait for independent review and a citizen's opt-in. Keep a local encrypted export as a backup.
+## Hackathon demo flow
 
-## Government application automation
+1. Open the citizen workspace and select a supported language.
+2. Use synthetic profile details only.
+3. Review extracted profile facts before saving.
+4. Run the preliminary scheme checklist and show the **Needs verification** status.
+5. Prepare a local draft and show **Not submitted**.
+6. Open the official source link without entering personal information.
 
-See:
-- [Portal adapter and integration access plan](docs/government-integration-access-plan.md)
-- [Portal test matrix](docs/portal-test-matrix.md)
-- [Scheme review workflow](docs/scheme-review-workflow.md)
-- [Production readiness](docs/production-readiness.md)
-
-There is no universal Indian government application API or common portal form. Each scheme may use a different department, portal, identity flow, CAPTCHA/OTP process, document requirements and submission receipt. JanaSetu therefore resolves automation per scheme and exact authorized portal. Unregistered, unapproved or untested schemes fall back to official manual navigation and preparation. It never guesses selectors or claims a submission without a verified receipt.
-
-Final submission is enabled only when all of the following are true:
-1. The scheme rules and source are independently reviewed and published.
-2. The department has authorized the exact integration and actions.
-3. The portal adapter matches the verified origin, route and form contract.
-4. The citizen has granted the relevant purpose-specific consent.
-5. The citizen has reviewed the exact values, files, declarations and destination.
-6. The portal returns a verifiable receipt or reference after the citizen-approved action.
-
-CAPTCHA, OTP, Aadhaar/e-KYC, biometric verification, legal declarations, payment and final submit remain citizen-controlled unless a department provides a lawful delegated API and expressly authorizes its use.
+The demo demonstrates discovery, preliminary screening, evidence-gap identification and application preparation—not official approval or government submission.
 
 ## Development
 
@@ -73,24 +65,23 @@ npm run build
 npm run test:e2e
 ```
 
-Do not put Supabase service-role or secret keys in `NEXT_PUBLIC_*` variables. Never commit `.env.local`.
+Never put Supabase service-role or secret keys in `NEXT_PUBLIC_*` variables. Never commit `.env.local`.
 
-## Architecture, operations and governance
+## Governance and architecture
 
 - [Architecture](docs/architecture.md)
-- [Target production architecture](docs/target-production-architecture.md)
-- [Citizen data and automation policy](docs/citizen-data-and-automation-policy.md)
-- [Security threat model](docs/security-threat-model.md)
-- [Security assessment](docs/security-assessment.md)
-- [Privacy impact assessment draft](docs/privacy-impact-assessment.md)
+- [Government integration access plan](docs/government-integration-access-plan.md)
+- [Scheme review workflow](docs/scheme-review-workflow.md)
 - [Source verification and freshness](docs/source-verification-and-freshness.md)
 - [Scheme catalogue coverage](docs/scheme-catalogue-coverage.md)
-- [Production operations runbook](docs/operations-runbook.md)
-- [Release gate evidence](docs/release-gate-evidence.md)
+- [Security threat model](docs/security-threat-model.md)
+- [Privacy impact assessment draft](docs/privacy-impact-assessment.md)
+- [Production readiness and release gates](docs/production-readiness.md)
+- [Hackathon demo script](docs/hackathon-demo-script.md)
 
-## Contributing and governance
+## Contributing
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) and [SECURITY.md](SECURITY.md). All scheme data, policy changes and government integrations require review; CI passing does not constitute legal approval, government authorization or independent scheme verification.
+Read [CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) and [SECURITY.md](SECURITY.md). Scheme data and government integrations require independent review and written authorization. A green CI build does not constitute legal approval, government authorization or official scheme verification.
 
 ## License
 
