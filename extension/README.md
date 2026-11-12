@@ -4,7 +4,7 @@ The extension is a user-triggered, field-by-field form-filling helper for Chromi
 
 ## Install on Chrome or Brave
 
-1. Download the repository ZIP from [JanaSetu-AI](https://github.com/PSP-YN/JanaSetu-AI/archive/refs/heads/integration/janasetu-production-readiness.zip) and extract it.
+1. Download the repository ZIP from [JanaSetu-AI](https://github.com/PSP-YN/JanaSetu-AI/archive/refs/heads/main.zip) and extract it.
 2. Open `chrome://extensions` in Chrome or `brave://extensions` in Brave.
 3. Enable **Developer mode**.
 4. Select **Load unpacked**.

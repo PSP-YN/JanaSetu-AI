@@ -23,7 +23,7 @@ Its core innovation is the **Benefit Readiness Graph**: an inspectable chain con
 
 The current implementation combines a Next.js and React interface, TypeScript services and deterministic rule evaluation, Supabase/PostgreSQL integration where configured, browser-local storage, IndexedDB document handling, Web Crypto encrypted vault export/import, and automated testing. It is designed around privacy boundaries and citizen approval: preliminary screening is not an official eligibility decision, preparation drafts are not government submissions, and external government actions require the responsible authority's official channel and authorization.
 
-**Current prototype scope:** the public preview is working; the scheme catalogue contains 142 references, with four rule-screened prototype scheme records still pending independent review. The prototype does not claim complete India-wide verified scheme coverage, government approval, live department API integration, production cloud document scanning, DPDP certification, or automatic application submission. The responsible department remains the final decision-maker.
+**Current prototype scope:** the public prototype/beta is deployed at the canonical production URL; the scheme catalogue contains 142 references, with four rule-screened prototype scheme records still pending independent review. The prototype does not claim complete India-wide verified scheme coverage, government approval, live department API integration, production cloud document scanning, DPDP certification, or automatic application submission. The responsible department remains the final decision-maker.
 
 ## Innovation / uniqueness
 - Benefit Readiness Graph linking official rule → source/review state → citizen fact → evidence status → missing information → next action.
@@ -39,12 +39,12 @@ Citizens across India's States and Union Territories, including students, farmer
 Next.js, React, TypeScript, Supabase, PostgreSQL, browser Web Crypto API, IndexedDB, Vercel, Playwright and ClamAV tooling. Do not describe external LLM inference as an implemented dependency in the current prototype.
 
 ## Links
-- **GitHub repository (submission branch):** https://github.com/PSP-YN/JanaSetu-AI/tree/backend/harden-supabase-access
-- **Live demo — citizen workspace:** https://janasetu-qfjrr4m63-pspyn.vercel.app/app
-- **Live demo — landing page:** https://janasetu-qfjrr4m63-pspyn.vercel.app/
-- **Pitch deck — interactive six-slide deck:** https://htmlpreview.github.io/?https://github.com/PSP-YN/JanaSetu-AI/blob/backend/harden-supabase-access/public/pitch-deck.html
-- **Demo video — direct MP4:** https://raw.githubusercontent.com/PSP-YN/JanaSetu-AI/backend/harden-supabase-access/submission/JanaSetu_AI_Demo.mp4
-- **Demo video — GitHub preview:** https://github.com/PSP-YN/JanaSetu-AI/blob/backend/harden-supabase-access/submission/JanaSetu_AI_Demo.mp4
+- **GitHub repository (main):** https://github.com/PSP-YN/JanaSetu-AI
+- **Live demo — citizen workspace:** https://jana-setu-ai.vercel.app/app
+- **Live demo — landing page:** https://jana-setu-ai.vercel.app/
+- **Pitch deck — interactive six-slide deck:** https://htmlpreview.github.io/?https://github.com/PSP-YN/JanaSetu-AI/blob/main/public/pitch-deck.html
+- **Demo video — direct MP4:** https://raw.githubusercontent.com/PSP-YN/JanaSetu-AI/main/submission/JanaSetu_AI_Demo.mp4
+- **Demo video — GitHub preview:** https://github.com/PSP-YN/JanaSetu-AI/blob/main/submission/JanaSetu_AI_Demo.mp4
 
 ## Team fields
 - **Team name:** [Enter the exact team name registered for AgentX]

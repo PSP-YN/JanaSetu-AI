@@ -9,10 +9,10 @@
 - [Project submission summary](../docs/hackathon-submission.md)
 
 ## Final public links
-- GitHub repository (submission branch): https://github.com/PSP-YN/JanaSetu-AI/tree/backend/harden-supabase-access
-- Live citizen workspace: https://janasetu-qfjrr4m63-pspyn.vercel.app/app
-- Interactive six-slide pitch deck: https://htmlpreview.github.io/?https://github.com/PSP-YN/JanaSetu-AI/blob/backend/harden-supabase-access/public/pitch-deck.html
-- Demo video: https://raw.githubusercontent.com/PSP-YN/JanaSetu-AI/backend/harden-supabase-access/submission/JanaSetu_AI_Demo.mp4
+- GitHub repository (main): https://github.com/PSP-YN/JanaSetu-AI
+- Live citizen workspace: https://jana-setu-ai.vercel.app/app
+- Interactive six-slide pitch deck: https://htmlpreview.github.io/?https://github.com/PSP-YN/JanaSetu-AI/blob/main/public/pitch-deck.html
+- Demo video: https://raw.githubusercontent.com/PSP-YN/JanaSetu-AI/main/submission/JanaSetu_AI_Demo.mp4
 
 ## Included deliverables
 - JanaSetu_AI_Demo.mp4 — 1080p H.264/AAC demo with narration and captions
@@ -28,4 +28,4 @@ The demo uses synthetic citizen information. It shows the public landing page, c
 The voice-over is generated locally with Piper en_GB-alba-medium. It is synthetic narration, not a cloned voice.
 
 ## Accuracy boundaries
-The catalogue contains 142 references and four rule-screened prototype records pending independent review. The prototype is not a government service, does not make official eligibility decisions, and does not submit applications. Cloud document scanning and authorized government integrations are not active in this preview.
+The catalogue contains 142 references and four rule-screened prototype records pending independent review. The prototype is not a government service, does not make official eligibility decisions, and does not submit applications. Cloud document scanning and authorized government integrations are not active in the current release.
