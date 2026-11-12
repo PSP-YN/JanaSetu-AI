@@ -85,3 +85,26 @@ test("unmatched labels are left unchanged", async ({ page }) => {
   expect(result.filled).toBe(0);
   await expect(page.locator("input")).toHaveValue("");
 });
+
+test("extension field assistance never triggers the portal form submit action", async ({ page }) => {
+  await page.setContent(`
+    <form id="official-form">
+      <label>Applicant name <input name="applicantName"></label>
+      <button type="submit">Submit application</button>
+    </form>
+    <output id="submit-count">0</output>
+  `);
+  await page.evaluate(() => {
+    const form = document.querySelector("#official-form")!;
+    const output = document.querySelector("#submit-count")!;
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+      output.textContent = String(Number(output.textContent) + 1);
+    });
+  });
+  await page.addScriptTag({ path: path.join(process.cwd(), "extension/fill.js") });
+  const result = await fillWithCitizenApproval(page, profile);
+  expect(result.filled).toBe(1);
+  await expect(page.locator("#submit-count")).toHaveText("0");
+  await expect(page.getByRole("button", { name: "Submit application" })).toBeVisible();
+});
