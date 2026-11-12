@@ -61,3 +61,10 @@ Unknown, unapproved or untested schemes must use official navigation and manual 
 ## Release boundary
 
 JanaSetu's current release is a multilingual, local-first benefits discovery and application-preparation prototype with preliminary, non-authoritative scheme checklists. It is not a government service, eligibility authority, universal portal automation platform, cloud-sync service or production document-scanning service.
+
+
+## Application automation planner and expanded citizen profile — feature branch
+
+The feature branch adds a signed-in plan-only endpoint at `POST /api/automation/plan`, a dashboard view, four explicit scheme workflows and optional profile fields for contact, address, household, agriculture and education details. The server validates the submitted profile, derives preliminary eligibility from the currently published independently approved scheme version and does not persist the profile. Because the four seeded scheme integrations remain unauthorized and the current scheme versions remain pending independent approval, the planner produces verification/manual-handoff plans rather than enabling government portal form execution.
+
+The browser extension can import a separately exported profile JSON and preview matching fields for citizen approval. The export is plaintext and is not a replacement for the password-encrypted local vault. OTP, CAPTCHA, Aadhaar/e-KYC, biometrics, declarations, payments, document uploads and final submission remain citizen-controlled.
