@@ -65,7 +65,10 @@ const EMPTY_PROFILE: CitizenProfile = {
   annualIncome: "", occupation: "", hasCultivableLand: null, pmKisanExcluded: "unknown",
   ownsPuccaHouse: null, previousHousingBenefit: "unknown", householdHasLpg: null,
   poorHouseholdDeclaration: null, isStudent: false, top20Percentile: null,
-  regularUndergraduate: null, otherScholarship: null, diplomaOrDistance: null
+  regularUndergraduate: null, otherScholarship: null, diplomaOrDistance: null,
+  mobileNumber: "", emailAddress: "", addressLine1: "", addressLine2: "", villageOrTown: "",
+  pincode: "", fatherOrGuardianName: "", motherName: "", socialCategory: "",
+  landholdingAcres: "", institutionName: "", courseName: "", courseYear: "", rationCardCategory: ""
 };
 
 
