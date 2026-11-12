@@ -20,14 +20,17 @@ The public browser-local workflow now lets anyone prepare a local checklist for 
 
 - Multilingual citizen experience: English, Hindi, Kannada, Tamil, Telugu and Malayalam.
 - Scheme discovery and source-linked guidance, with separate labels for deterministic rule prototypes, catalogue-only records and third-party discovery data.
-- Preliminary screening that treats unknown facts as unknown and directs citizens to official sources.
+- Multilingual intake in English, Hindi, Kannada, Tamil, Telugu and Malayalam. Text extraction is local; voice input uses the browser speech-recognition service where supported and falls back to typing.
+- A visible local tool-dispatch trace: `search_scheme_catalog`, `evaluate_scheme_rules`, `build_document_checklist` and `prepare_form_filling`. The rule engine preserves unknown facts and shows preliminary match signals without turning pending rules into official eligibility decisions.
+- Per-scheme document checklists and a citizen-review prefill bundle. Checklist items remain citizen-to-verify; form values are not represented as a certified government form mapping.
 - Local application preparation, document checklists and versioned local backup/restore.
 - Expanded citizen profile for contact, address, household, agriculture and education details; a separate, citizen-triggered profile-only JSON export supports the browser assistant. That export is plaintext, not an encrypted backup.
 - Signed-in application planner in the Applications & automation dashboard. It checks published scheme rules, identifies missing profile information and documents, and produces a plan without persisting the submitted profile.
-- Browser Form Assistant: imports a citizen-confirmed profile export and previews selected fields. Live portal filling is blocked unless an exact route has independent review and department authorization; none of the four initial scheme routes is currently authorized. It never uploads documents or submits applications.
+- Citizen-directed Browser Form Assistant: opens a government page after the citizen verifies the exact HTTPS URL, previews visible matching fields, and fills only fields the citizen individually approves. This is not a department-authorized API integration or a certified scheme-specific form adapter. It never uploads documents, bypasses protected checks or clicks Next, Apply, Save or Submit.
 - Authenticated Supabase account and private citizen-workspace foundation.
 - Client-side AES-256-GCM vault encryption and revision-aware sync API. Cloud sync is **fail-closed** until its exact consent policy has qualified privacy/legal approval and a citizen grants it.
-- Scheme adapter registry and guarded automation queue. Current database records include four scheme integrations, all `not_requested`; no external government submission is enabled.
+- Follow-up tracking: reminders are stored in the browser and survive reloads on that device. Cross-device reminder sync remains disabled until the reminder consent policy and an approved application case are available.
+- Scheme adapter registry and guarded automation queue. Current database records include four scheme integrations, all `not_requested`; no external government API integration or submission is enabled.
 
 ## What is intentionally not in this release
 
@@ -43,14 +46,16 @@ The current demo stores profile information, checklists and drafts in the browse
 
 ## Hackathon demo flow
 
-1. Open the citizen workspace and select a supported language.
-2. Use synthetic profile details only.
-3. Review extracted profile facts before saving.
-4. Run the preliminary scheme checklist and show the **Needs verification** status.
-5. Prepare a local draft and show **Not submitted**.
-6. Open the official source link without entering personal information.
+1. Open the citizen workspace and select Hindi or Kannada (or another supported language).
+2. Use the text box or the browser voice-input control with synthetic profile details only; review the extracted transcript and every suggested field.
+3. Run the benefit assessment and show the four executed tool calls in the trace.
+4. Inspect preliminary rule signals, matched/unknown checks and the independent-review disclaimer.
+5. Open the generated document checklist and verify the source link.
+6. Inspect the safe form-prefill bundle, then use the Browser Form Assistant on a test page to preview and individually approve safe fields.
+7. Show the explicit human-confirmation boundary: no OTP/CAPTCHA/e-KYC, upload, Apply or Submit action is automated.
+8. Add a follow-up reminder and show that it survives a browser reload on the same device.
 
-The demo demonstrates discovery, preliminary screening, evidence-gap identification and application preparation—not official approval or government submission.
+The demo demonstrates a working citizen-side workflow for the four rule-screened prototype schemes. Their rules remain pending independent review, so the workflow does not claim official eligibility. The other catalogue-only records are not eligibility-scored. Government authorization, official scheme approval and final submission are external dependencies, not software toggles.
 
 ## Development
 

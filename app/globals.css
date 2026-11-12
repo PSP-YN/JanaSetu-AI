@@ -1276,3 +1276,64 @@ button:disabled,
     grid-template-columns: 1fr;
   }
 }
+
+/* Citizen workflow tool output and voice intake */
+.voice-privacy-note {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.55;
+}
+.agent-workflow-output {
+  margin-top: 18px;
+}
+.agent-checklist-item {
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+.agent-checklist-item h3 {
+  margin: 0 0 6px;
+  color: var(--forest-dark);
+  font-size: 15px;
+}
+.agent-checklist-item p,
+.agent-checklist-item li {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.agent-checklist-item ul {
+  display: grid;
+  gap: 6px;
+  padding-left: 18px;
+}
+.agent-checklist-item li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.agent-checklist-item li small {
+  flex: 0 0 auto;
+  color: var(--clay);
+}
+.agent-checklist-item a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--forest-dark);
+  font-size: 12px;
+  font-weight: 650;
+}
+.agent-checklist-item details {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.agent-checklist-item summary {
+  cursor: pointer;
+  color: var(--forest-dark);
+  font-size: 12px;
+  font-weight: 650;
+}

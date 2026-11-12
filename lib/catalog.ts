@@ -74,6 +74,8 @@ export interface Assessment {
   /** Approval state at the time of evaluation; legacy assessments without this must be re-run. */
   schemeReviewStatusAtAssessment?: "pending" | "approved";
   state: AssessmentState;
+  /** Preliminary rule signal shown only with the independent-review disclaimer. */
+  preliminaryState?: AssessmentState;
   headline: string;
   explanation: string;
   checks: RuleCheck[];

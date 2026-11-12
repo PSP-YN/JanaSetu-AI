@@ -37,9 +37,13 @@ test("six locales define the primary workspace shell translations", () => {
   }
 });
 
-test("the workspace has no browser-provider speech control or speech-recognition dependency", () => {
-  assert.doesNotMatch(page, /SpeechRecognition|webkitSpeechRecognition|startVoiceInput|noticeVoice|noticeListening|t\("speak"\)|>\s*Speak\s*</i);
-  assert.doesNotMatch(page, /browser speech recognition|browser voice recognition|browser voice service/i);
+test("the workspace provides progressive-enhancement voice intake in the selected Indian language", () => {
+  assert.match(page, /SpeechRecognition\?: SpeechRecognitionConstructor/);
+  assert.match(page, /webkitSpeechRecognition\?: SpeechRecognitionConstructor/);
+  assert.match(page, /recognition\.lang = \(\{ en: "en-IN", hi: "hi-IN", kn: "kn-IN", ta: "ta-IN", te: "te-IN", ml: "ml-IN" \}/);
+  assert.match(page, /Voice input is not supported in this browser/);
+  assert.match(page, /speak: "Speak"/);
+  assert.match(page, /startVoiceInput/);
 });
 
 test("main UI extension guidance discloses portal-side field-change reactions in all six locales", () => {
