@@ -106,12 +106,12 @@ test("custom portal patterns require manual entry",()=>{
 
 test("extension previews additional reviewed profile fields while keeping phone and email fields blocked",()=>{
  const pin=input({name:"postal_code",id:"postal-code",label:"PIN code"});
- const college=input({name:"institution_name",id:"institution-name",label:"Institution name"});
+ const town=input({name:"city",id:"village-town",label:"Village / Town / City"});
  const phone=input({name:"mobile_number",id:"mobile-number",label:"Mobile number"});
  const email=input({name:"email",id:"email",label:"Email address"});
- const result=runFill([pin,college,phone,email],profile);
+ const result=runFill([pin,town,phone,email],profile);
  assert.equal(result.preview.length,2);
- assert.deepEqual(result.preview.map(item=>item.value),["570001","Synthetic College"]);
+ assert.deepEqual(result.preview.map(item=>item.value),["570001","Mysuru"]);
  assert.equal(phone.value,"");
  assert.equal(email.value,"");
 });
