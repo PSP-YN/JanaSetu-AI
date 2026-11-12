@@ -1,17 +1,17 @@
 # JanaSetu AI backend implementation status
 
 **Updated:** 12 November 2026
-**Merged PRs:** [#29](https://github.com/PSP-YN/JanaSetu-AI/pull/29), #18, #19, #15
-**Production main commit:** `d8928e8fc891a76f692cf4ba12e8d213d9d2b876`
+**Merged PRs:** [#29](https://github.com/PSP-YN/JanaSetu-AI/pull/29), #18, #19, #15, #30
+**Application code baseline commit:** `d8928e8fc891a76f692cf4ba12e8d213d9d2b876`
 **Review-fix implementation commit:** `3f861c7ae9bb3e78948ed00ec62dc4052719fc93`
 **Supabase project:** JanaSetu-AI · Mumbai (ap-south-1) · `qjiuclkhvxbnojdysmmp`
 **Vercel project:** `psp-adb0 / jana-setu-ai` · canonical domain `jana-setu-ai.vercel.app`
 
 ## Current release state
 
-The merged main branch includes the citizen workspace, application planner, consent-gated automation foundation, exact-route portal registry, encrypted vault foundation and the latest safe release baseline. Follow-up review fixes make the planner use approved application mappings, discard stale responses, preserve partial local profile edits, localize the new profile/export workflow in six languages, and keep OTP/authentication PIN identifiers blocked. Local verification passed: 173 unit tests, TypeScript, production build, 66 Playwright tests, 10 scanner tests, extension syntax/manifest validation, Supabase local migration/lint checks and npm high-severity audit. The production deployment built from main commit `d8928e8fc891a76f692cf4ba12e8d213d9d2b876` is READY and the canonical domain/browser smoke tests passed after the Next.js and icon-library dependency updates. See `docs/production-readiness.md` and `docs/operations-runbook.md` for the authoritative capability matrix and release evidence.
+The merged main branch includes the citizen workspace, application planner, consent-gated automation foundation, exact-route portal registry, encrypted vault foundation and the latest safe release baseline. Follow-up review fixes make the planner use approved application mappings, discard stale responses, preserve partial local profile edits, localize the new profile/export workflow in six languages, and keep OTP/authentication PIN identifiers blocked. Local verification passed: 173 unit tests, TypeScript, production build, 66 Playwright tests, 10 scanner tests, extension syntax/manifest validation, Supabase local migration/lint checks and npm high-severity audit. The production application code baseline was built and verified after the Next.js and icon-library dependency updates. Subsequent documentation-only main updates also deployed successfully; the canonical domain and browser smoke checks passed. See `docs/production-readiness.md` and `docs/operations-runbook.md` for the authoritative capability matrix and release evidence.
 
-PR #29 is merged to protected `main`; maintenance PRs #18 (pinned GitHub Actions), #19 (Playwright) and #15 (Next.js 16.4.5 / lucide-react 1.70.0) also merged after required CI and Vercel checks passed. PRs #22, #24, #25, #27 and #28 were closed as superseded; their heads are preserved by dated archive tags. The active `backend/harden-supabase-access` remote branch is retained temporarily because the original local checkout contains uncommitted user work. No branch-protection bypass was used.
+PR #29 is merged to protected `main`; maintenance PRs #18 (pinned GitHub Actions), #19 (Playwright) and #15 (Next.js 16.4.5 / lucide-react 1.70.0) also merged after required CI and Vercel checks passed. Documentation PR #30 is merged. Superseded PRs #22, #24, #25, #27 and #28 were closed; their heads are preserved by dated archive tags. The remote branch list is consolidated to `main` only. The original local checkout retains its uncommitted changes and submission assets on a local-only branch. No branch-protection bypass was used.
 
 **Historical note:** Sections below are dated implementation records. Statements describing earlier PRs, earlier deployment states, last-write-wins sync, or earlier release blockers are historical and are superseded by the current release state above and the dated updates at the end of this document.
 

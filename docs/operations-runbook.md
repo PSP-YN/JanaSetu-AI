@@ -7,17 +7,17 @@
 - Public production URL: https://jana-setu-ai.vercel.app
 - GitHub source of truth: https://github.com/PSP-YN/JanaSetu-AI
 - Production branch: `main`
-- Current main commit: `d8928e8fc891a76f692cf4ba12e8d213d9d2b876`
-- Current production deployment: `dpl_AtvjwMvehUtGwYgt9XXbpjRs2ie8` (READY; Mumbai `bom1`)
+- Application code baseline: `d8928e8fc891a76f692cf4ba12e8d213d9d2b876` (PR #29 plus dependency updates)
+- Latest main deployment: READY; canonical alias verified on 12 November 2026 (deployment ID and runtime details are available in the Vercel project)
 - Canonical domain binding: verified on the new Vercel project; live route/API and browser smoke checks passed 12 November 2026
-- Framework/runtime: Next.js 16, Node.js 22
+- Framework/runtime: Next.js 16.4.5, Node.js 22; lucide-react 1.70.0
 - Vercel project: `jana-setu-ai` (team/account: `psp-adb0`)
 - Runtime: Node.js 22.x, Mumbai (`bom1`)
 - Required public Supabase configuration: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (the publishable/anon key is public client configuration; never expose service-role credentials)
 - Workstation `.env.local`: both expected variables are present; URL host matches the dedicated `qjiuclkhvxbnojdysmmp.supabase.co` project and `/auth/v1/health` returned HTTP 200. Secret values are not recorded in this runbook.
 - Vercel environment: both variables are configured for production, preview and development, with no Vercel-reported security issues.
-- Local Vercel CLI account: still authenticated as the old `pspyn` profile; `.vercel/project.json` now points to the new `psp-adb0` project. Reauthenticate the CLI to the new account before running local Vercel CLI deploy/inspect commands; the Git-linked deployment through the new Vercel project is already working.
-- Deployment verification: PR preview is built and smoke-tested before merge; after merge, verify the production deployment Git SHA and canonical domain before declaring release complete. Current production SHA and deployment ID are recorded above.
+- Local Vercel CLI: authenticated as `vvce25cse0402-7357`; `vercel teams ls` confirms the `psp-adb0` team and `vercel project inspect jana-setu-ai --scope psp-adb0` resolves the correct project. `.vercel/project.json` points to the new project.
+- Deployment verification: PR preview is built and smoke-tested before merge; after merge, verify the canonical domain resolves to a READY production deployment. Use the Vercel project dashboard/API for the current deployment ID and Git SHA.
 
 Only the canonical domain above should be shared as the public website. Vercel preview URLs are for review and testing, not alternate public production addresses. A merge to `main` triggers the Git-linked Vercel production deployment. Keep pull-request previews enabled so changes can be tested before release.
 
