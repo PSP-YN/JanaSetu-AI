@@ -392,8 +392,8 @@ test("encrypted sync refuses to overwrite a pre-existing plaintext workspace dur
   const sql = read("supabase/migrations/20261112030000_preserve_workspace_fields_on_encrypted_sync.sql");
   const route = read("app/api/workspace/sync/route.ts");
   assert.match(sql, /legacy_workspace_data_present/);
-  assert.match(sql, /coalesce\\(profile_data, '\\{\\}'::jsonb\\) = '\\{\\}'::jsonb/);
-  assert.match(sql, /coalesce\\(application_drafts, '\\[\\]'::jsonb\\) = '\\[\\]'::jsonb/);
+  assert.match(sql, /coalesce\(profile_data, '\{\}'::jsonb\) = '\{\}'::jsonb/);
+  assert.match(sql, /coalesce\(application_drafts, '\[\]'::jsonb\) = '\[\]'::jsonb/);
   assert.match(route, /legacy_workspace_data_present/);
   assert.match(route, /It was not changed/);
 });
