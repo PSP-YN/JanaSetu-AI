@@ -77,8 +77,11 @@ export async function POST(request: NextRequest) {
       availableDocuments: [],
       portalSnapshot: null
     });
+    const adapter = getPortalAdapter(slug);
+    const officialPortalUrl = adapter?.portalHomePath ? new URL(adapter.portalHomePath, adapter.officialOrigin).toString() : adapter?.officialOrigin ?? null;
     return json({
       scheme: { slug, name: approved?.scheme.name ?? scheme?.name ?? slug },
+      officialPortalUrl,
       assessment: assessment ?? { state: "needs_verification", headline: "Scheme not independently published", explanation: "The scheme has no currently published, independently approved version. No eligibility decision was made." },
       plan,
       execution: { mode: "plan_only", portalLogin: false, documentUpload: false, finalSubmission: false, identityChallengeBypass: false },
