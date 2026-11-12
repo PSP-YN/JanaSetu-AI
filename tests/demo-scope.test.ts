@@ -14,6 +14,8 @@ test("demo UI distinguishes four pending rule prototypes from catalogue-only ref
   assert.match(page, /recordKind === "budget-line-item-lead"/);
   assert.match(page, /budgetLeadStatus:/);
   assert.match(page, /budgetLineItemLeads:/);
+  assert.match(page, /budgetAllocationLabel:/);
+  assert.match(page, /recordKind === "budget-line-item-lead" \? t\("budgetAllocationLabel"\)/);
   assert.match(page, /preliminaryDisclaimer:/);
   assert.match(page, /t\("preliminaryDisclaimer"\)/);
   assert.match(landing, /Published scheme guides/);
