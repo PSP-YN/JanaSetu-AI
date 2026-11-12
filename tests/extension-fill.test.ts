@@ -71,9 +71,13 @@ test("extension does not overwrite a value entered after preview",()=>{
 
 test("extension refuses sensitive portal fields",()=>{
  const bank=input({name:"bank_account_number",id:"bank-account",label:"Bank account number"});
- const result=runFill([bank],profile);
+ const otp=input({name:"otp",id:"otp",label:"One-time password OTP"});
+ const aadhaar=input({name:"aadhaar",id:"aadhaar",label:"Aadhaar number"});
+ const result=runFill([bank,otp,aadhaar],profile);
  assert.equal(result.preview.length,0);
  assert.equal(bank.value,"");
+ assert.equal(otp.value,"");
+ assert.equal(aadhaar.value,"");
 });
 
 test("extension avoids ambiguous duplicate applicant fields",()=>{
@@ -104,16 +108,21 @@ test("custom portal patterns require manual entry",()=>{
  assert.match(preview[0].reason,/manual validation/i);
 });
 
-test("extension previews additional reviewed profile fields while keeping phone and email fields blocked",()=>{
+test("extension previews contact fields and requires explicit citizen selection before filling",()=>{
  const pin=input({name:"postal_code",id:"postal-code",label:"PIN code"});
  const town=input({name:"city",id:"village-town",label:"Village / Town / City"});
- const phone=input({name:"mobile_number",id:"mobile-number",label:"Mobile number"});
- const email=input({name:"email",id:"email",label:"Email address"});
+ const phone=input({type:"tel",name:"mobile_number",id:"mobile-number",label:"Mobile number"});
+ const email=input({type:"email",name:"email",id:"email",label:"Email address"});
  const result=runFill([pin,town,phone,email],profile);
- assert.equal(result.preview.length,2);
- assert.equal(JSON.stringify(result.preview.map(item=>item.value)),JSON.stringify(["570001","Mysuru"]));
+ assert.equal(result.preview.length,4);
+ assert.equal(JSON.stringify(result.preview.map(item=>item.value)),JSON.stringify(["570001","Mysuru","9876543210","citizen@example.test"]));
  assert.equal(phone.value,"");
  assert.equal(email.value,"");
+ const approved=result.preview.map(item=>({index:item.index,fingerprint:item.fingerprint}));
+ const filled=runFill([pin,town,phone,email],profile,approved);
+ assert.equal(filled.filled,4);
+ assert.equal(phone.value,"9876543210");
+ assert.equal(email.value,"citizen@example.test");
 });
 
 test("extension treats postal PIN as a fillable address field but blocks security PINs",()=>{
