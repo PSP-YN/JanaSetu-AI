@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { buildApplicationAutomationPlan } from "../lib/automation-engine";
 import { getPortalAdapter } from "../lib/portal-adapters/registry";
+import type { PortalAdapterDefinition } from "../lib/portal-adapters/types";
 
 const completeInput = {
   schemeSlug: "pm-kisan",
@@ -60,10 +61,10 @@ test("PM-KISAN adapter stays blocked while department authorization is absent", 
 test("protected verification and declaration gates block filling even on an authorized fixture", () => {
   const adapter = getPortalAdapter("pm-kisan");
   assert.ok(adapter);
-  const authorized = {
+  const authorized: PortalAdapterDefinition = {
     ...adapter,
-    accessStatus: "approved" as const,
-    allowedActions: ["inspect", "assist_form_filling"] as const,
+    accessStatus: "approved",
+    allowedActions: ["inspect", "assist_form_filling"],
     authorizationReference: "synthetic-test-authorization",
     approvedAt: "2026-11-12T00:00:00.000Z",
     citizenGatedControls: []
