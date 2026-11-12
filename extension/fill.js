@@ -46,7 +46,11 @@ function fillProfileInPage(profile,approvedFields){
     courseYear:["year of study","current academic year","study year","course year","अध्ययन वर्ष","ಅಧ್ಯಯನ ವರ್ಷ","படிப்பு ஆண்டு","చదువు సంవత్సరం","പഠന വർഷം"],
     rationCardCategory:["ration card category","ration card type","ration card classification","राशन कार्ड श्रेणी","ಪಡಿತರ ಚೀಟಿ ವರ್ಗ","குடும்ப அட்டை வகை","రేషన్ కార్డు వర్గం","റേഷൻ കാർഡ് വിഭാഗം"]
   };
-  const isSensitive=(text)=>/(?:^| )(?:aadhaar|aadhar|uidai|pan|bank|account|ifsc|otp|captcha|password|passcode|pin|mobile|phone|email|identity|document|upload|file)(?: |$)/.test(norm(text));
+  const isSensitive=(text)=>{
+    const normalized=norm(text);
+    if(/(?:postal pin|pin code|pincode|postal code|zip code)/.test(normalized))return false;
+    return /(?:^| )(?:aadhaar|aadhar|uidai|pan|bank|account|ifsc|otp|captcha|password|passcode|pin|mobile|phone|email|identity|document|upload|file)(?: |$)/.test(normalized);
+  };
   const profileValue=(key)=>{
     let value=profile[key];
     if(key==="gender")value=profile.gender==="woman"?"Female":profile.gender==="man"?"Male":profile.gender==="other"?"Other":"";
