@@ -17,6 +17,12 @@ JanaSetu separates a shared citizen application workflow from scheme-specific po
 9. Record a submitted state only after a verifiable official receipt or acknowledgement is captured.
 10. Track status only through a verified, permitted API or citizen-provided official status evidence.
 
+## Planner API and profile flow
+
+The signed-in Applications & automation dashboard reads the citizen's browser-local profile and calls `POST /api/automation/plan`. The API validates the profile, loads the current published scheme version using the authenticated Supabase session, derives the preliminary assessment server-side and returns a plan-only response. It does not persist the submitted profile, create an application case or execute a portal action. The profile-only export for the browser extension is a separate plaintext JSON file created only after the citizen confirms the warning.
+
+The four seeded schemes currently have no independently approved versions or department-authorized portal actions. Their planner output therefore remains a preparation/manual-handoff plan; no production government form autofill is enabled by these adapter records.
+
 ## Adapter contract
 
 Every adapter is keyed by an exact scheme slug and must declare:

@@ -79,3 +79,11 @@ The application preparation endpoint returns `awaiting_citizen_review`; the citi
 ### CI
 
 GitHub Actions run #627 (commit `4d7800c6139bfdf83ca3f03d9cc54d220b139355`) completed successfully. Its required test, type, security and production-smoke job passed, including the ClamAV image build, scheme-review guardrails, consent/automation checks, browser tests, dependency audit and production route smoke tests. This is branch CI evidence, not a production deployment or a live Supabase Storage scanner test.
+
+
+## Repository cleanup update — 12 November 2026
+
+- Removed the redundant root-level image copy and the duplicate `public/profile-avatar.png` asset; the CI-checked `public/janasetu-logo.png` and SVG brand mark are retained.
+- Removed the paid ClamAV Render Blueprint manifest. The scanner worker source, Dockerfile, Compose file and protocol tests remain for controlled local/future authorized use; no paid worker or cloud document-upload capability is activated.
+- Consolidated HTTP security headers into `next.config.ts`; `vercel.json` now contains only framework and Mumbai-region settings. CI smoke tests verify the emitted security headers.
+- Updated the extension and product documentation for the plaintext profile-only export, planner API and current manual-handoff boundaries.
