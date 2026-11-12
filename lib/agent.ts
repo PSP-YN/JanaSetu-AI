@@ -129,6 +129,6 @@ export function runBenefitsAgent(profile: CitizenProfile) {
     assessments,
     schemes: selected,
     trace,
-    note: "Prototype screening only. Deterministic eligibility rules currently cover four Central scheme records. Other records are source pointers and are not automatically eligibility-assessed. Official authorities make final eligibility decisions."
+    note: "Prototype screening only. Preliminary checklists cover four Central scheme records, all pending independent review. Pending rules always return needs_verification and never assert eligibility or rejection. Other records are source pointers and are not automatically screened. Official authorities make final eligibility decisions."
   };
 }
