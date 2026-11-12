@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 
 const documents = [
@@ -26,6 +26,8 @@ export default function PMKisanPreparationPage() {
   const [files, setFiles] = useState<Record<string, string>>({});
   const [ready, setReady] = useState<string[]>([]);
   const count = useMemo(() => ready.length, [ready]);
+  useEffect(() => { try { const saved = JSON.parse(localStorage.getItem("janasetu.pm-kisan.ready.v1") || "[]"); if (Array.isArray(saved)) setReady(saved.filter((id): id is string => documents.some(doc => doc.id === id))); } catch {} }, []);
+  useEffect(() => { try { localStorage.setItem("janasetu.pm-kisan.ready.v1", JSON.stringify(ready)); } catch {} }, [ready]);
   function choose(id: string, file?: File) {
     if (!file) return;
     setFiles(previous => ({ ...previous, [id]: file.name }));
