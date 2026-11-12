@@ -7,9 +7,9 @@ test("demo UI distinguishes four pending rule prototypes from catalogue-only ref
   const page = readFileSync("app/app/page.tsx", "utf8");
   const landing = readFileSync("app/page.tsx", "utf8");
   assert.equal(SCHEMES.filter((item) => item.catalogueStatus === "rule-screened").length, 4);
-  assert.equal(SCHEMES.filter((item) => item.catalogueStatus === "catalogue-only").length, 42);
+  assert.equal(SCHEMES.filter((item) => item.catalogueStatus === "catalogue-only" && item.recordKind !== "budget-line-item-lead").length, 42);
   assert.equal(SCHEMES.filter((item) => item.recordKind === "budget-line-item-lead").length, 96);
-  assert.match(page, /catalogueStatus === "catalogue-only"\)\.length/);
+  assert.match(page, /catalogueStatus === "catalogue-only" && item\.recordKind !== "budget-line-item-lead"\)\.length/);
   assert.match(page, /remainderRequireVerification:"source-indexed records"/);
   assert.match(page, /recordKind === "budget-line-item-lead"/);
   assert.match(page, /budgetLeadStatus:/);
