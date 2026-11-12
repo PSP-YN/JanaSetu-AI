@@ -5,6 +5,9 @@
 - Browser-side encryption uses PBKDF2-SHA-256 (600,000 iterations) and AES-256-GCM.
 - The vault password never leaves the browser. Each encryption uses a random 16-byte salt and 12-byte IV.
 - The API accepts only a strict versioned encrypted envelope, rejects plaintext payloads, enforces an 8 MiB request limit, authenticates the Supabase session, checks same-origin writes, and returns `Cache-Control: private, no-store`.
+- The old `/api/workspace` plaintext GET/PUT endpoints are retired with HTTP 410. The workspace UI no longer auto-saves cloud data; sync is a manual citizen action after sign-in, policy approval and explicit opt-in.
+- The UI restores the latest encrypted revision, decrypts locally, merges the workspace, then writes with the restored revision. If another device wins the race, the server returns 409 and the client must restore/reconcile again.
+- Document file bytes are not included in cloud sync. Only document references/metadata are included; file bytes remain in the device-local document vault.
 - Database reads/writes use guarded RPCs, not direct table REST access. The RPC checks `auth.uid()`, active cloud-sync consent and the envelope schema. The table remains protected by RLS and direct browser writes remain revoked.
 - A monotonic revision implements compare-and-swap. If another device has saved a newer revision, the API returns HTTP 409; it does not silently overwrite. The user must restore the latest snapshot, reconcile their local changes and retry.
 - Cloud storage contains only `profile_data.encrypted_workspace_v1`. Structured plaintext workspace columns are reset to empty values by the encrypted-sync RPC.
