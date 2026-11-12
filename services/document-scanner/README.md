@@ -11,7 +11,7 @@ Dedicated Python worker with a local ClamAV 1.4.6 daemon for the private `citize
 6. Abandoned claims become retryable after 15 minutes. Transient scanner errors have a one-minute backoff. Each object is attempted at most five times; failures never become clean by default.
 
 ## Deployment
-Build this directory as a private persistent Docker background worker. The image pins the official ClamAV 1.4.6 Debian 13 base image by digest; do not downgrade to the distribution's older ClamAV package. ClamAV's deployment guidance recommends 4 GB RAM, so the Render Blueprint uses the 2 CPU / 4 GB `2c-4g` plan rather than the previous 2 GB plan. The included Compose file mounts a persistent ClamAV signature volume, keeps the daemon bound to loopback, uses a read-only root filesystem, drops all Linux capabilities except the minimum startup capabilities (`CHOWN`, `SETUID`, `SETGID`), and exposes no scanner port. Do not deploy it as a request/response serverless function.
+The worker is not deployed to production. This repository intentionally has no hosted-service blueprint: a reliable ClamAV daemon requires a persistent host with substantial memory and signature storage, which is outside the current free-only operating budget. Do not provision a paid worker or substitute a 512 MiB free instance. The image pins the official ClamAV 1.4.6 Debian 13 base image by digest; do not downgrade to the distribution's older ClamAV package. The included Compose file mounts a persistent ClamAV signature volume, keeps the daemon bound to loopback, uses a read-only root filesystem, drops all Linux capabilities except the minimum startup capabilities (`CHOWN`, `SETUID`, `SETGID`), and exposes no scanner port. This worker is not a serverless request/response function.
 
 Required secrets in `.env`:
 - `SUPABASE_URL`: dedicated JanaSetu Supabase project URL.
@@ -30,7 +30,7 @@ Do not use CareerOS, a service-role key, a citizen's account or a shared adminis
 7. Verify citizens cannot read quarantined/rejected objects, the scanner cannot read clean objects unless separately claimed, and citizens can download clean objects only while consent is active.
 8. Measure memory, throughput and queue age before scaling. ClamAV signature databases are memory-intensive; a 512 MiB free container is not assumed sufficient.
 
-The Render `2c-4g` compute plan is currently listed at US$85/month and the 1 GB persistent disk at US$0.25/month, before taxes. Do not approve the Blueprint until the account owner has reviewed this recurring cost. The worker is not activated by this source change. No scanner identity, legal approval or worker host has been provisioned. Citizen uploads remain blocked until the document-storage policy is legally approved. Do not create real citizen document records during initial validation.
+No scanner identity, legal approval or worker host has been provisioned. Citizen uploads remain blocked until the document-storage policy is legally approved and a suitable scanner host is separately authorized.
 
 
 ### Consent revocation and cleanup
