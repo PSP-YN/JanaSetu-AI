@@ -1,5 +1,7 @@
 import type { PortalAdapterDefinition } from "./types";
 
+// Only PM-KISAN's first-step route has a read-only observed form contract.
+// Other entries deliberately contain landing URLs only, not invented form paths.
 export const portalAdapters: Record<string, PortalAdapterDefinition> = {
   "pm-kisan": {
     schemeSlug: "pm-kisan",
@@ -23,7 +25,7 @@ export const portalAdapters: Record<string, PortalAdapterDefinition> = {
   "pmay-u-2": {
     schemeSlug: "pmay-u-2",
     officialOrigin: "https://pmay-urban.gov.in",
-    applicationPath: "/",
+    applicationPath: null,
     accessStatus: "not_requested",
     allowedActions: [],
     authorizationReference: null,
@@ -35,7 +37,7 @@ export const portalAdapters: Record<string, PortalAdapterDefinition> = {
   "pm-ujjwala": {
     schemeSlug: "pm-ujjwala",
     officialOrigin: "https://www.pmuy.gov.in",
-    applicationPath: "/ujjwala2.html",
+    applicationPath: null,
     accessStatus: "not_requested",
     allowedActions: [],
     authorizationReference: null,
@@ -47,7 +49,7 @@ export const portalAdapters: Record<string, PortalAdapterDefinition> = {
   "pm-usp-csss": {
     schemeSlug: "pm-usp-csss",
     officialOrigin: "https://scholarships.gov.in",
-    applicationPath: "/",
+    applicationPath: null,
     accessStatus: "not_requested",
     allowedActions: [],
     authorizationReference: null,
