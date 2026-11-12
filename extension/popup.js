@@ -86,7 +86,7 @@ const MAX_BACKUP_BYTES = 5 * 1024 * 1024;
 const STATES_AND_UTS = ["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal","Andaman and Nicobar Islands","Chandigarh","Dadra and Nagar Haveli and Daman and Diu","Delhi","Jammu and Kashmir","Ladakh","Lakshadweep","Puducherry"];
 function isValidProfile(profile) {
   if (!profile || typeof profile !== "object" || Array.isArray(profile)) return false;
-  const allowed = ["fullName","age","gender","state","district","residenceType","annualIncome","occupation","hasCultivableLand","pmKisanExcluded","ownsPuccaHouse","previousHousingBenefit","householdHasLpg","poorHouseholdDeclaration","isStudent","top20Percentile","regularUndergraduate","otherScholarship","diplomaOrDistance"];
+  const allowed = ["fullName","age","gender","state","district","residenceType","annualIncome","occupation","hasCultivableLand","pmKisanExcluded","ownsPuccaHouse","previousHousingBenefit","householdHasLpg","poorHouseholdDeclaration","isStudent","top20Percentile","regularUndergraduate","otherScholarship","diplomaOrDistance","mobileNumber","emailAddress","addressLine1","addressLine2","villageOrTown","pincode","fatherOrGuardianName","motherName","socialCategory","landholdingAcres","institutionName","courseName","courseYear","rationCardCategory"];
   if (Object.keys(profile).some((key) => !allowed.includes(key))) return false;
   if (typeof profile.fullName !== "string" || profile.fullName.length > 100) return false;
   if (!(profile.age === "" || (Number.isInteger(profile.age) && profile.age >= 0 && profile.age <= 120))) return false;
@@ -98,6 +98,14 @@ function isValidProfile(profile) {
   if (normalizeOccupation(profile.occupation) === null) return false;
   for (const key of ["hasCultivableLand","ownsPuccaHouse","householdHasLpg","poorHouseholdDeclaration","top20Percentile","regularUndergraduate","otherScholarship","diplomaOrDistance"]) if (profile[key] !== null && typeof profile[key] !== "boolean") return false;
   if (!["yes","no","unknown"].includes(profile.pmKisanExcluded) || !["yes","no","unknown"].includes(profile.previousHousingBenefit)) return false;
+  const textFields = ["mobileNumber","emailAddress","addressLine1","addressLine2","villageOrTown","pincode","fatherOrGuardianName","motherName","institutionName","courseName","courseYear"];
+  for (const key of textFields) if (profile[key] !== undefined && (typeof profile[key] !== "string" || profile[key].length > 160)) return false;
+  if (profile.mobileNumber && !/^\\+?[0-9]{10,13}$/.test(profile.mobileNumber.replace(/[\\s-]/g,""))) return false;
+  if (profile.emailAddress && !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(profile.emailAddress)) return false;
+  if (profile.pincode && !/^[0-9]{6}$/.test(profile.pincode)) return false;
+  if (profile.socialCategory !== undefined && !["","General","OBC","SC","ST","EWS","Other"].includes(profile.socialCategory)) return false;
+  if (profile.rationCardCategory !== undefined && !["","AAY","PHH","BPL","APL","Other"].includes(profile.rationCardCategory)) return false;
+  if (profile.landholdingAcres !== undefined && !(profile.landholdingAcres === "" || (typeof profile.landholdingAcres === "number" && Number.isFinite(profile.landholdingAcres) && profile.landholdingAcres >= 0 && profile.landholdingAcres <= 100000))) return false;
   return typeof profile.isStudent === "boolean";
 }
 
