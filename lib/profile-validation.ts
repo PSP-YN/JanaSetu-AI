@@ -48,8 +48,8 @@ export function parseCitizenProfile(value: unknown): CitizenProfile | null {
   if (profile.mobileNumber && !/^\+?[0-9]{10,13}$/.test(profile.mobileNumber.replace(/[\s-]/g,""))) return null;
   if (profile.emailAddress && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.emailAddress)) return null;
   if (profile.pincode && !/^[0-9]{6}$/.test(profile.pincode)) return null;
-  if (!["","General","OBC","SC","ST","EWS","Other"].includes(profile.socialCategory)) return null;
-  if (!["","AAY","PHH","BPL","APL","Other"].includes(profile.rationCardCategory)) return null;
+  if (!["","General","OBC","SC","ST","EWS","Other"].includes(profile.socialCategory ?? "")) return null;
+  if (!["","AAY","PHH","BPL","APL","Other"].includes(profile.rationCardCategory ?? "")) return null;
   if (!isNumberOrEmpty(profile.landholdingAcres, 100000)) return null;
   if (!isNumberOrEmpty(profile.age, 120) || (typeof profile.age === "number" && !Number.isInteger(profile.age))) return null;
   if (!["", "woman", "man", "other"].includes(profile.gender)) return null;
