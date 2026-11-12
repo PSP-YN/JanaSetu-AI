@@ -74,6 +74,31 @@ test("unsafe government credentials cannot be mapped from citizen profiles",()=>
   assert.equal(result.state,"needs_verification");
 });
 
+
+test("approved scheme mappings can use extended profile fields without treating postal PIN codes as authentication PINs", () => {
+  const extendedRuleSet = {
+    ...ruleSet,
+    rules: [
+      ...ruleSet.rules,
+      { key: "postal_code", label: "Applicant PIN code", profileField: "pincode", operator: "eq", expected: "570001", evidence, reviewStatus: "approved" as const }
+    ],
+    application: {
+      fields: [
+        ...ruleSet.application.fields,
+        { key: "postal_code", label: "PIN code", profileField: "pincode", required: true, type: "text" as const, maxLength: 6 }
+      ],
+      documents: []
+    }
+  };
+  const citizen = { ...profile, pincode: "570001" };
+  const approved = { ...scheme, ruleSet: extendedRuleSet };
+  const result = assessApprovedScheme(citizen, approved, now);
+  assert.equal(result.state, "potential_match");
+  const draft = prepareApplicationDraft(citizen, approved, result);
+  assert.equal(draft.status, "ready_for_citizen_review");
+  assert.equal(draft.fields.at(-1)?.value, "570001");
+});
+
 test("date-only scheme end dates remain valid throughout the Indian calendar day",()=>{
   const sameDay={...scheme,effectiveFrom:"2026-11-11",effectiveTo:"2026-11-11"};
   const result=assessApprovedScheme(profile,sameDay,now);
