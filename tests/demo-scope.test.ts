@@ -10,6 +10,8 @@ test("demo UI distinguishes four pending rule prototypes from catalogue-only ref
   assert.equal(SCHEMES.filter((item) => item.catalogueStatus === "catalogue-only").length, 138);
   assert.match(page, /catalogueStatus === "catalogue-only"\)\.length/);
   assert.match(page, /remainderRequireVerification:"catalogue-only records"/);
+  assert.match(page, /preliminaryDisclaimer:/);
+  assert.match(page, /t\("preliminaryDisclaimer"\)/);
   assert.match(landing, /Published scheme guides/);
   assert.doesNotMatch(landing, /Verified scheme guides/);
   assert.match(landing, /Review preliminary screening/);
