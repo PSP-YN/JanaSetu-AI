@@ -17,7 +17,7 @@ The extension is a user-triggered, field-by-field form-filling helper for Chromi
 2. In the profile form, select **Export for form assistant** and confirm the warning. This creates a plaintext JSON profile export; it is not encrypted and is not a replacement for your encrypted `.janasetu` backup.
 3. Open the extension popup and import `JanaSetu-Form-Assistant-Profile.json`. Keep the file private and delete it after import.
 4. Navigate to the exact official government portal page over HTTPS.
-5. Click **Preview matching fields**. The extension inspects only visible, empty controls on HTTPS `.gov.in` and `.nic.in` hosts.
+5. Click **Preview matching fields** only on an exact portal route that has been independently reviewed and explicitly authorized for form assistance. A `.gov.in` or `.nic.in` suffix by itself is not sufficient.
 6. Review the suggested label and value for every field. Invalid length/range fields and custom-pattern fields are disabled for manual entry.
 7. Select only the individual fields you approve, then click **Fill selected fields**.
 8. Re-check every filled value on the portal. Complete OTP, CAPTCHA, identity proofing, document upload and any other required steps yourself. Submit only through the official portal after your final review.
@@ -28,11 +28,11 @@ The extension is a user-triggered, field-by-field form-filling helper for Chromi
 - The citizen explicitly imports the backup, previews matches, selects individual fields and clicks Fill.
 - Preview does not change the page. Fill re-scans the current page and checks the field fingerprint and empty state again to avoid stale previews and overwriting values typed after preview.
 - It validates exact select/radio option matches, text maximum length and numeric minimum/maximum/step. A portal-defined custom `pattern` is not executed as an arbitrary regular expression; the field is disabled for manual entry.
-- It only attempts to fill visible form controls. It never clicks Apply/Submit, invokes form submission, uploads files, or bypasses OTP, CAPTCHA, consent, payment, identity proofing or other checks.
+- It only attempts to fill visible form controls on an exact route whose authorization policy is active. It never treats every government domain as supported. It never clicks Apply/Submit, invokes form submission, uploads files, or bypasses OTP, CAPTCHA, consent, payment, identity proofing or other checks.
 - Imported profile data is stored in the extension's local Chrome storage on that browser profile. Remove it by clearing the extension's local data or uninstalling the extension.
 - Label matching remains heuristic. A field may be missed or mapped incorrectly. Treat all filled values as a draft and verify them yourself.
 - Do not import Aadhaar numbers, bank credentials, OTPs, passwords, PINs or sensitive documents. The current profile schema does not ask for them.
-- This extension has not been broadly tested against all government portals. Portal-specific tests and citizen review are required before real use.
+- Current activation state: the four initial scheme adapters remain `not_requested` and none has an authorized form-filling action. The extension therefore blocks live portal filling until an exact route, field contract, department authorization and citizen-consent scope are approved and tested. It remains available for profile import and local review.
 
 ## Permission rationale
 
