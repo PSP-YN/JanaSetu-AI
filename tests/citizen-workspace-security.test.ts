@@ -379,3 +379,13 @@ test("scanner retry logic recovers stale claims and backs off scan errors", () =
   assert.match(sql, /scan_attempts<5/);
   assert.match(sql, /scanner_user_id=v_user/);
 });
+
+test("encrypted sync refuses to overwrite a pre-existing plaintext workspace during cutover", () => {
+  const sql = read("supabase/migrations/20261112023616_preserve_legacy_workspace_data.sql");
+  const route = read("app/api/workspace/sync/route.ts");
+  assert.match(sql, /legacy_workspace_data_present/);
+  assert.match(sql, /profile_data.*<>.*\{\}/);
+  assert.match(sql, /application_drafts.*<>.*\[\]/);
+  assert.match(route, /legacy_workspace_data_present/);
+  assert.match(route, /It was not changed/);
+});
