@@ -16,6 +16,10 @@ JanaSetu is an independent, multilingual public-benefits discovery and applicati
 
 The public browser-local workflow now lets anyone prepare a local checklist for any of the 46 source-linked scheme references, review the source-linked document list and download an unencrypted checklist for offline use. The 4,693-row third-party dataset is opt-in because its 5 July 2026 snapshot is stale and machine-parsed. The 96 Karnataka budget records remain budget leads, not citizen-facing schemes. See [Public-use release notes](docs/public-use-release-2026-11-12.md) for the exact capability matrix and citizen workflow. This does not activate unapproved eligibility rules, server-persisted application cases, cloud uploads or government submissions.
 
+## Public website UI/UX update — 13 November 2026
+
+The public landing page now presents the current catalogue coverage explicitly, distinguishes preliminary rule prototypes from catalogue-only references and budget-derived leads, explains the citizen-control boundary, and discloses that official grievance registration/status tracking is not yet available. The trust-principles navigation target is live, the workspace call-to-action is clearer, and the footer uses aligned desktop columns with a responsive mobile stack, and regional-language landing pages wrap safely on narrow screens. See [Public website UI/UX update](docs/public-ui-ux-2026-11-13.md) for the change record and responsive/accessibility verification plan. These changes do not change scheme approval or government integration status.
+
 ## What the current release candidate does
 
 - Multilingual citizen experience: English, Hindi, Kannada, Tamil, Telugu and Malayalam.
