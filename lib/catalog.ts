@@ -22,20 +22,20 @@ export interface CitizenProfile {
   regularUndergraduate: boolean | null;
   otherScholarship: boolean | null;
   diplomaOrDistance: boolean | null;
-  mobileNumber: string;
-  emailAddress: string;
-  addressLine1: string;
-  addressLine2: string;
-  villageOrTown: string;
-  pincode: string;
-  fatherOrGuardianName: string;
-  motherName: string;
-  socialCategory: "General" | "OBC" | "SC" | "ST" | "EWS" | "Other" | "";
-  landholdingAcres: number | "";
-  institutionName: string;
-  courseName: string;
-  courseYear: string;
-  rationCardCategory: "AAY" | "PHH" | "BPL" | "APL" | "Other" | "";
+  mobileNumber?: string;
+  emailAddress?: string;
+  addressLine1?: string;
+  addressLine2?: string;
+  villageOrTown?: string;
+  pincode?: string;
+  fatherOrGuardianName?: string;
+  motherName?: string;
+  socialCategory?: "General" | "OBC" | "SC" | "ST" | "EWS" | "Other" | "";
+  landholdingAcres?: number | "";
+  institutionName?: string;
+  courseName?: string;
+  courseYear?: string;
+  rationCardCategory?: "AAY" | "PHH" | "BPL" | "APL" | "Other" | "";
 }
 
 export interface Scheme {
