@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { fillWithCitizenApproval } from "./extension-approval";
 
 const emptyProfile = {
   fullName: "", age: "", state: "", district: "", gender: "man",
@@ -26,7 +27,7 @@ test("extension does not confuse Male with Female or count an unmatched select a
   `);
   await page.addScriptTag({ path: "extension/fill.js" });
 
-  const result = await page.evaluate((profile) => (window as any).fillProfileInPage(profile), emptyProfile);
+  const result = await fillWithCitizenApproval(page,emptyProfile);
 
   expect(result.filled).toBe(1);
   await expect(page.locator("#gender")).toHaveValue("male");
@@ -44,7 +45,7 @@ test("extension skips a select when multiple options have the same exact label",
   `);
   await page.addScriptTag({ path: "extension/fill.js" });
 
-  const result = await page.evaluate(() => (window as any).fillProfileInPage({
+  const result = await fillWithCitizenApproval(page, {
     ...{},
     fullName: "", age: "", state: "Karnataka", district: "", gender: "",
     annualIncome: "", occupation: "", residenceType: "",
@@ -52,7 +53,7 @@ test("extension skips a select when multiple options have the same exact label",
     previousHousingBenefit: "unknown", householdHasLpg: null,
     poorHouseholdDeclaration: null, isStudent: false, top20Percentile: null,
     regularUndergraduate: null, otherScholarship: null, diplomaOrDistance: null
-  }));
+  });
 
   expect(result.filled).toBe(0);
   await expect(page.locator("#state")).toHaveValue("");

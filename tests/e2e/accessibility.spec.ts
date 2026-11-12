@@ -1,7 +1,8 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { fillWithCitizenApproval } from "./extension-approval";
 
-for (const route of ["/", "/app", "/privacy", "/terms"]) {
+for (const route of ["/", "/app", "/auth", "/app/automation", "/app/pm-kisan", "/app/review", "/schemes", "/privacy", "/terms"]) {
   test(`axe WCAG 2.1 AA critical/serious scan: ${route}`, async ({ page }) => {
     await page.goto(route);
     await expect(page.locator("body")).toBeVisible();
@@ -88,14 +89,14 @@ test("extension synthetic form fills unique safe fields and skips sensitive or a
       <input id="hidden" type="hidden" name="age">
     </form>`);
   await page.addScriptTag({ path: "extension/fill.js" });
-  const result = await page.evaluate(() => (window as any).fillProfileInPage({
+  const result = await fillWithCitizenApproval(page, {
     fullName: "Synthetic Citizen", age: 34, state: "Karnataka", district: "Mysuru", gender: "woman",
     annualIncome: 150000, occupation: "Farmer", residenceType: "urban",
     hasCultivableLand: true, pmKisanExcluded: "no", ownsPuccaHouse: false,
     previousHousingBenefit: "no", householdHasLpg: false, poorHouseholdDeclaration: true,
     isStudent: false, top20Percentile: null, regularUndergraduate: null,
     otherScholarship: null, diplomaOrDistance: null
-  }));
+  });
   expect(result.filled).toBe(1);
   await expect(page.locator("#applicant")).toHaveValue("Synthetic Citizen");
   await expect(page.locator("#aadhaar")).toHaveValue("");
@@ -118,17 +119,68 @@ test("mobile navigation opens, changes sections and closes", async ({ page }) =>
 test("extension synthetic select mapping only chooses an exact matching option", async ({ page }) => {
   await page.setContent('<label for="state">State</label><select id="state" name="state"><option value="">Choose</option><option value="Karnataka">Karnataka</option><option value="Kerala">Kerala</option></select>');
   await page.addScriptTag({ path: "extension/fill.js" });
-  const result = await page.evaluate(() => (window as any).fillProfileInPage({
+  const result = await fillWithCitizenApproval(page, {
     state: "Karnataka", fullName: "", age: "", gender: "", district: "",
     residenceType: "", annualIncome: "", occupation: "", hasCultivableLand: null,
     pmKisanExcluded: "unknown", ownsPuccaHouse: null, previousHousingBenefit: "unknown",
     householdHasLpg: null, poorHouseholdDeclaration: null, isStudent: false,
     top20Percentile: null, regularUndergraduate: null, otherScholarship: null, diplomaOrDistance: null
-  }));
+  });
   expect(result.filled).toBe(1);
   await expect(page.locator("#state")).toHaveValue("Karnataka");
 });
 
+
+test("landing page and workspace share the same warm brand color and do not overflow common viewports", async ({ page }) => {
+  for (const width of [320, 360, 390, 430, 768, 800, 820, 1024, 1366]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const route of ["/", "/app"]) {
+      await page.goto(route);
+      const metrics = await page.evaluate(() => ({
+        viewport: document.documentElement.clientWidth,
+        document: document.documentElement.scrollWidth,
+        body: document.body.scrollWidth,
+        primary: getComputedStyle(document.querySelector(".button-primary")!).backgroundColor
+      }));
+      expect(metrics.document, `${route} horizontal overflow at ${width}px`).toBeLessThanOrEqual(metrics.viewport + 1);
+      expect(metrics.body, `${route} body overflow at ${width}px`).toBeLessThanOrEqual(metrics.viewport + 1);
+      expect(metrics.primary, `${route} primary brand color at ${width}px`).toBe("rgb(169, 68, 11)");
+    }
+  }
+});
+
+test("mobile citizen journey can save a profile, discover schemes and add a local document", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/app");
+  await page.getByRole("button", { name: "Open navigation" }).click();
+  await page.getByRole("button", { name: "My profile" }).click();
+  await expect(page.locator(".sidebar")).not.toHaveClass(/sidebar-open/);
+
+  const fields = page.locator(".form-grid").first().locator(".field");
+  await fields.nth(0).locator("input").fill("Synthetic Mobile Citizen");
+  await fields.nth(1).locator("input").fill("34");
+  await fields.nth(2).locator("select").selectOption("woman");
+  await fields.nth(3).locator("select").selectOption({ label: "Karnataka" });
+  await fields.nth(4).locator("input").fill("Mysuru");
+  await fields.nth(6).locator("input").fill("150000");
+  await fields.nth(7).locator("select").selectOption("Farmer");
+  await page.locator(".form-footer .button-primary").click();
+  await expect(page.locator(".search-box input")).toBeVisible();
+  await expect(page.locator(".toast")).toContainText("Assessment completed locally");
+
+  await page.getByRole("button", { name: "Open navigation" }).click();
+  await page.getByRole("button", { name: "Find benefits" }).click();
+  await page.locator(".search-box input").fill("PM-KISAN");
+  await expect(page.locator(".scheme-grid")).toBeVisible();
+
+  await page.getByRole("button", { name: "Open navigation" }).click();
+  await page.getByRole("button", { name: "Documents" }).click();
+  await page.locator('input[type="file"]').nth(1).setInputFiles({
+    name: "synthetic-demo.pdf", mimeType: "application/pdf", buffer: Buffer.from("%PDF-1.7\n% synthetic test file\n")
+  });
+  await expect(page.locator(".document-row")).toContainText("synthetic-demo.pdf");
+  await expect(page.locator(".toast")).toContainText("saved on this device only");
+});
 
 test("mobile viewport homepage has no serious or critical axe violations", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
@@ -214,10 +266,58 @@ test("hero focus outline and primary button text remain high-contrast", async ({
   expect(await primaryButton.evaluate((element) => getComputedStyle(element).color)).toBe("rgb(255, 255, 255)");
 });
 
+test("citizen workspace keeps account access compact and removes the secondary automation shortcut", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/app");
+  await expect(page.locator(".account-bar")).not.toContainText("Applications & automation");
+  await expect(page.locator(".account-bar a")).toHaveCount(1);
+});
+
 test("uploaded JanaSetu brand mark loads and citizen avatar uses a safe initials fallback", async ({ page }) => {
   await page.goto("/app");
   const mark = page.locator(".brand-mark img");
-  await expect(mark).toHaveAttribute("src", "/janasetu-logo.png");
+  await expect(mark).toHaveAttribute("src", "/janasetu-mark.svg");
   await expect.poll(() => mark.evaluate((node) => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
   await expect(page.locator(".avatar-fallback")).toBeVisible();
+});
+
+
+test("PM-KISAN preparation clearly distinguishes documents to keep ready from official upload requirements", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/app/pm-kisan");
+  await expect(page.getByRole("heading", { name: /Prepare your farmer registration with confidence/i })).toBeVisible();
+  await expect(page.locator(".pmkisan-doc")).toHaveCount(5);
+  await expect(page.locator(".pmkisan-alert")).toContainText("does not display a general document-upload section");
+  await expect(page.locator(".pmkisan-primary")).toHaveAttribute("href", "https://pmkisan.gov.in/RegistrationFormupdated.aspx");
+  await page.locator('.pmkisan-file input[type="file"]').first().setInputFiles({
+    name: "synthetic-land-record.pdf",
+    mimeType: "application/pdf",
+    buffer: Buffer.from("%PDF-1.7 synthetic test")
+  });
+  await expect(page.locator(".pmkisan-doc").first()).toContainText("synthetic-land-record.pdf");
+  await expect(page.locator(".pmkisan-section-head").first()).toContainText("Files selected here stay in this browser and are not sent to JanaSetu or any server.");
+  await page.locator(".pmkisan-doc").first().getByRole("button", { name: "Mark as ready" }).click();
+  await expect(page.locator(".pmkisan-progress")).toContainText("1 / 5");
+  await page.reload();
+  await expect(page.locator(".pmkisan-progress")).toContainText("1 / 5");
+  const widths = await page.evaluate(() => ({ viewport: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth }));
+  expect(widths.scroll).toBeLessThanOrEqual(widths.viewport + 1);
+});
+
+test("PM-KISAN form guide never asks JanaSetu to collect Aadhaar, OTP or bank credentials", async ({ page }) => {
+  await page.goto("/app/pm-kisan");
+  await expect(page.locator(".pmkisan-field")).toHaveCount(8);
+  await expect(page.locator(".pmkisan-disclaimer")).toContainText("does not authenticate Aadhaar");
+  await expect(page.locator(".pmkisan-alert")).toContainText("first step displays Aadhaar, mobile, State, CAPTCHA and consent");
+});
+
+
+test("JanaSetu exposes a valid installable web app manifest", async ({ request }) => {
+  const response = await request.get("/manifest.webmanifest");
+  expect(response.ok()).toBeTruthy();
+  const manifest = await response.json();
+  expect(manifest.name).toContain("JanaSetu AI");
+  expect(manifest.start_url).toBe("/app");
+  expect(manifest.display).toBe("standalone");
+  expect(manifest.icons.length).toBeGreaterThan(0);
 });

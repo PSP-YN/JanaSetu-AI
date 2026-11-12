@@ -2,7 +2,7 @@ name: JanaSetu CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, feat/cross-device-pmkisan-assistant]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -46,6 +46,12 @@ jobs:
       - name: Validate database RLS and citizen automation guardrails
         run: python scripts/validate_database_migration.py
 
+      - name: Test private document scanner protocol and fail-closed validation
+        run: python -m unittest discover -s tests -p 'test_*.py' -v
+
+      - name: Build the private ClamAV scanner container
+        run: docker build --pull --tag janasetu-document-scanner:test services/document-scanner
+
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
 
@@ -56,7 +62,10 @@ jobs:
         run: npm run typecheck
 
       - name: Install Chromium for browser tests
-        run: npx playwright install --with-deps chromium
+        # GitHub-hosted Ubuntu runners already include the browser system libraries.
+        # Avoid apt-based --with-deps here: transient runner DNS/mirror failures
+        # otherwise prevent browser tests from running at all.
+        run: npx playwright install chromium
 
       - name: Build production app and run browser accessibility tests
         run: npm run test:e2e
@@ -107,6 +116,13 @@ jobs:
           curl --fail --silent http://127.0.0.1:3000/hero-citizen.svg | grep -q '<svg'
           curl --fail --silent http://127.0.0.1:3000/robots.txt | grep -q 'Sitemap:'
           curl --fail --silent http://127.0.0.1:3000/sitemap.xml | grep -q 'jana-setu-ai.vercel.app'
+          for locale in hi kn te ta ml; do
+            curl --fail --silent "http://127.0.0.1:3000/$locale" > "/tmp/janasetu-$locale.html"
+            grep -q 'FAQPage' "/tmp/janasetu-$locale.html"
+          done
+          curl --fail --silent http://127.0.0.1:3000/llms.txt | grep -qi 'not a government website'
+          curl --fail --silent http://127.0.0.1:3000/llms-full.txt | grep -qi 'official government source'
+          curl --fail --silent http://127.0.0.1:3000/sitemap.xml | grep -q '/hi'
           curl --fail --silent http://127.0.0.1:3000/opengraph-image > /tmp/janasetu-og.png
           node -e 'const fs=require("node:fs");const b=fs.readFileSync("/tmp/janasetu-og.png");if(b.length<100||!b.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])))throw new Error("Open Graph image is not a valid PNG")'
 
@@ -154,3 +170,5 @@ jobs:
           test "$draft_status" = "404"
           agent_status=$(curl --silent --output /tmp/janasetu-agent-error.json --write-out "%{http_code}" -X POST http://127.0.0.1:3000/api/agent/run -H "Content-Type: application/json" --data '{"fullName":"'$(printf 'x%.0s' {1..101})'","state":"Karnataka"}')
           test "$agent_status" = "400"
+
+# Full CI validates the scheme adapter contract and encrypted workspace sync boundary.

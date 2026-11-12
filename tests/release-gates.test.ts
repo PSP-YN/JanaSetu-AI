@@ -22,8 +22,9 @@ test("all built-in deterministic schemes remain pending human approval", () => {
     assert.equal(scheme.reviewStatus, "pending", scheme.id + " must remain pending");
     const result = evaluateScheme(scheme, syntheticProfile);
     assert.equal(result.state, "needs_verification");
-    assert.equal(result.checks.length, 0, "unapproved rule conditions must not be evaluated");
-    assert.match(result.headline, /Human review pending/);
+    assert.ok(result.checks.length > 0, "pending schemes may show source-note checklist comparisons");
+    assert.match(result.headline, /Preliminary screen/);
+    assert.equal(result.state, "needs_verification", "pending schemes never produce an eligibility result");
   }
 });
 

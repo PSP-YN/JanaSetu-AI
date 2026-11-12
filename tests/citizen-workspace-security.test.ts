@@ -1,0 +1,404 @@
+test("encrypted sync refuses legacy cutover and preserves every existing workspace field", () => {
+  const sql = read("supabase/migrations/20261112030000_preserve_workspace_fields_on_encrypted_sync.sql");
+  const route = read("app/api/workspace/sync/route.ts");
+  assert.match(sql, /legacy_workspace_data_present/);
+  assert.match(sql, /coalesce\(profile_data, '\{\}'::jsonb\) = '\{\}'::jsonb/);
+  assert.match(sql, /never reset profile, language, drafts, files, reminders or assessments/);
+  assert.doesNotMatch(sql, /set profile_data = jsonb_build_object/);
+  assert.doesNotMatch(sql, /application_drafts = '\[\]'::jsonb/);
+  assert.match(route, /legacy_workspace_data_present/);
+  assert.match(route, /It was not changed/);
+});import test from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+
+const read = (path: string) => readFileSync(path, "utf8");
+
+test("citizen workspace is tenant-isolated by auth.uid()", () => {
+  const sql = read("supabase/migrations/20261109131533_add_authenticated_citizen_workspace.sql");
+  assert.match(sql, /enable row level security/i);
+  assert.ok(sql.includes("auth.uid()) = user_id"));
+  const privacy = read("supabase/migrations/20261109135140_gate_cloud_storage_on_approved_consent.sql");
+  assert.match(privacy, /revoke all on public\.citizen_workspaces from public,anon,authenticated/i);
+});
+
+test("legacy plaintext workspace API is retired and encrypted API derives identity from verified session", () => {
+  const legacy = read("app/api/workspace/route.ts");
+  const route = read("app/api/workspace/sync/route.ts");
+  const session = read("lib/supabase/rest.ts");
+  assert.match(legacy, /status: 410/);
+  assert.match(legacy, /Plaintext workspace sync has been retired/);
+  assert.match(route, /getVerifiedSupabaseSession\(\)/);
+  assert.match(route, /get_encrypted_workspace/);
+  assert.match(route, /put_encrypted_workspace/);
+  assert.match(route, /Cross-origin request blocked/);
+  assert.match(session, /httpOnly:\s*true/);
+  assert.match(session, /secure:\s*process\.env\.NODE_ENV\s*===\s*"production"/);
+  assert.match(session, /grant_type=refresh_token/);
+});
+
+test("browser authentication never receives a service-role credential", () => {
+  const auth = read("app/api/auth/route.ts");
+  const workspace = read("app/api/workspace/route.ts");
+  assert.doesNotMatch(auth + workspace, /SUPABASE_SERVICE_ROLE_KEY|service_role/i);
+  assert.match(auth, /auth\/v1\/user/);
+  assert.match(auth, /Cross-origin request blocked/);
+  assert.match(auth, /janasetu_auth_state/);
+  assert.match(auth, /timingSafeEqual/);
+  assert.match(auth, /finally \{ await clearSupabaseSession\(\); \}/);
+  const callback = read("app/auth/callback/page.tsx");
+  assert.match(callback, /action:"establish",access_token,refresh_token,state/);
+});
+
+test("cloud workspace sync stays out of the citizen UI until privacy/legal approval",()=>{
+  const page=read("app/app/page.tsx");
+  const helper=read("lib/workspace-sync.ts");
+  assert.match(page,/Local-first workspace/);
+  assert.match(page,/password-encrypted vault/);
+  assert.doesNotMatch(page,/restoreEncryptedWorkspace|syncEncryptedWorkspace|syncConsentChecked|syncWorkspaceNow/);
+  assert.doesNotMatch(page,/Encrypted cross-device sync|\/api\/workspace\/sync\/status/);
+  assert.doesNotMatch(page,/fetch\("\/api\/workspace"/);
+  assert.match(helper,/expectedRevision/);
+  assert.match(helper,/expected_revision/);
+  assert.match(helper,/decryptVault/);
+});
+
+test("final database invariants preserve consent policy, action scope, idempotency and serialized reviews",()=>{
+  const sql=read("supabase/migrations/20261111161048_restore_consent_and_review_invariants.sql");
+  assert.match(sql,/cloud_workspace_sync/);
+  assert.match(sql,/consent_policy_versions/);
+  assert.match(sql,/p\.active=true/);
+  assert.match(sql,/p\.legal_review_reference is not null/);
+  assert.match(sql,/consent_scope_mismatch/);
+  assert.match(sql,/has_active_citizen_consent/);
+  assert.match(sql,/idempotency_key_reused/);
+  assert.match(sql,/v_existing_snapshot is distinct from p_profile_snapshot/);
+  assert.match(sql,/for update/);
+  assert.match(sql,/application_preparation_approved/);
+  assert.match(sql,/application_prepared/);
+  assert.match(sql,/No production-approved worker adapter/);
+  const rls = read("supabase/migrations/20261111161139_enable_private_schema_rls_defense_in_depth.sql");
+  assert.match(rls,/private\.application_preparations enable row level security/);
+  assert.match(rls,/private\.citizen_documents enable row level security/);
+  assert.match(rls,/private\.consent_policy_versions enable row level security/);
+  assert.match(rls,/private\.document_scanner_roles enable row level security/);
+  assert.match(rls,/private\.scheme_reviewer_roles enable row level security/);
+});
+
+test("encrypted workspace API rejects plaintext, malformed and oversized payloads", () => {
+  const route = read("app/api/workspace/sync/route.ts");
+  assert.match(route, /MAX_BYTES = 8 \* 1024 \* 1024/);
+  assert.match(route, /validEnvelope/);
+  assert.match(route, /expected_revision/);
+  assert.match(route, /Request body must be valid JSON/);
+  assert.match(route, /Cross-origin request blocked/);
+  assert.match(route, /workspace_revision_conflict/);
+});
+
+test("automation requests require independent scheme approval and purpose consent", () => {
+  const sql = read("supabase/migrations/20261109134258_add_consent_gated_automation_queue.sql");
+  assert.match(sql, /independently_approved/);
+  assert.match(sql, /source_accuracy/);
+  assert.match(sql, /eligibility_rule_accuracy/);
+  assert.match(sql, /valid_purpose_specific_consent_required/);
+  assert.match(sql, /requires_human_confirmation/);
+  assert.match(sql, /government_adapter_not_authorized/);
+});
+
+test("background worker only executes internal preparation and reminders", () => {
+  const sql = read("supabase/migrations/20261109134258_add_consent_gated_automation_queue.sql");
+  assert.match(sql, /pgmq\.create\('janasetu_automation'\)/);
+  assert.match(sql, /cron\.schedule\('janasetu-automation-worker'/);
+  assert.match(sql, /v_run\.action_type = 'prepare_documents'/);
+  assert.match(sql, /v_run\.action_type = 'schedule_reminder'/);
+  assert.match(sql, /government_adapter_execution_not_enabled/);
+  assert.match(sql, /revoke all on function public\.process_automation_queue\(integer\) from public, anon, authenticated, service_role/i);
+});
+
+test("citizen application APIs use the signed-in caller token", () => {
+  const apps = read("app/api/applications/route.ts");
+  const consents = read("app/api/consents/route.ts");
+  const runs = read("app/api/automation/runs/route.ts");
+  const confirm = read("app/api/automation/confirm/route.ts");
+  const reminders = read("app/api/reminders/route.ts");
+  for (const route of [apps,consents,runs,confirm]) {
+    assert.match(route, /getVerifiedSupabaseSession\(\)/);
+    assert.match(route, /Cross-origin request blocked/);
+    assert.doesNotMatch(route, /SUPABASE_SERVICE_ROLE_KEY/);
+  }
+  assert.match(reminders, /getVerifiedSupabaseSession\(\)/);
+  assert.doesNotMatch(reminders, /SUPABASE_SERVICE_ROLE_KEY/);
+});
+
+test("revoked consent cannot authorize a later automation run", () => {
+  const consent = read("supabase/migrations/20261109135846_restore_guarded_consent_capture.sql");
+  const confirm = read("supabase/migrations/20261109134847_restore_expiry_and_scope_check.sql");
+  assert.match(consent, /update public\.citizen_consents set revoked_at = now\(\)/);
+  assert.match(consent, /consent_scope_mismatch/);
+  assert.match(confirm, /consent_scope_mismatch/);
+  assert.match(confirm, /return p_run_id/);
+});
+
+test("cloud sync remains fail-closed until its exact policy is legally approved and citizen consent is recorded", () => {
+  const sql = read("supabase/migrations/20261112022221_add_revisioned_encrypted_workspace_sync.sql");
+  const policy = read("supabase/migrations/20261112022458_register_cloud_sync_policy_draft.sql");
+  const route = read("app/api/workspace/sync/route.ts");
+  const status = read("app/api/workspace/sync/status/route.ts");
+  assert.match(sql, /has_active_citizen_consent/);
+  assert.match(sql, /profile_storage_consent_required/);
+  assert.match(policy, /active/);
+  assert.match(policy, /false/);
+  assert.match(route, /sync_consent_unavailable/);
+  assert.match(status, /get_workspace_sync_status/);
+});
+
+test("consent and reminder writes cannot bypass guarded RPCs", () => {
+  const sql = read("supabase/migrations/20261109135345_restrict_direct_citizen_mutations.sql");
+  assert.match(sql, /revoke insert, update, delete, truncate on public\.citizen_consents/);
+  assert.match(sql, /revoke insert, update, delete, truncate on public\.profiles/);
+  assert.match(sql, /revoke insert, update, delete, truncate on public\.citizen_reminders/);
+});
+
+test("application case persistence requires separate scheme-scoped profile consent", () => {
+  const sql = read("supabase/migrations/20261109135647_separate_cloud_and_case_consent.sql");
+  const route = read("app/api/applications/route.ts");
+  assert.match(sql, /p_consent_id uuid/);
+  assert.match(sql, /purpose = 'profile_storage'/);
+  assert.match(sql, /create_application_case/);
+  assert.match(sql, /consent_scope_mismatch/);
+  assert.match(route, /consent_id/);
+  assert.match(route, /p_consent_id/);
+});
+
+test("cloud synchronization uses its own consent purpose", () => {
+  const sql = read("supabase/migrations/20261109135647_separate_cloud_and_case_consent.sql");
+  assert.match(sql, /cloud_workspace_sync/);
+  assert.match(sql, /has_active_citizen_consent\(v_user,'cloud_workspace_sync',null\)/);
+});
+
+test("consent capture validates exact purpose scope and legal approval", () => {
+  const sql = read("supabase/migrations/20261109135846_restore_guarded_consent_capture.sql");
+  assert.match(sql, /cloud_workspace_sync/);
+  assert.match(sql, /consent_policy_not_approved/);
+  assert.match(sql, /consent_scope_mismatch/);
+  assert.match(sql, /update public\.citizen_consents set revoked_at = now\(\)/);
+  assert.match(sql, /create_application_case/);
+  assert.match(sql, /workspace_sync/);
+});
+
+test("source refresh seeds schemes as pending and never self-approves them", () => {
+  const sql = read("supabase/migrations/20261109140729_seed_four_source_checked_schemes.sql");
+  assert.match(sql, /publication_status='review_pending'/);
+  assert.match(sql, /'source_checked'/);
+  assert.match(sql, /pm-kisan/);
+  assert.match(sql, /pmay-u-2/);
+  assert.match(sql, /pm-ujjwala/);
+  assert.match(sql, /pm-usp-csss/);
+  assert.doesNotMatch(sql, /insert into public\.scheme_approvals/i);
+});
+
+test("scheme publication requires independent source, rule, legal and publisher roles", () => {
+  const sql = read("supabase/migrations/20261109140923_add_independent_scheme_review_workflow.sql");
+  const separation = read("supabase/migrations/20261109141005_enforce_reviewer_independence.sql");
+  assert.match(sql, /source_reviewer/);
+  assert.match(sql, /rules_reviewer/);
+  assert.match(sql, /legal_reviewer/);
+  assert.match(sql, /scheme_publisher/);
+  assert.match(sql, /approval_type = 'legal_review'/);
+  assert.match(sql, /independently_approved/);
+  assert.match(separation, /reviewer_role_separation_violation/);
+  assert.match(separation, /publisher_must_be_independent/);
+});
+
+test("review endpoints use verified caller sessions and no service-role secret", () => {
+  const queue = read("app/api/review/queue/route.ts");
+  const decision = read("app/api/review/decision/route.ts");
+  const publish = read("app/api/review/publish/route.ts");
+  assert.match(queue, /getVerifiedSupabaseSession/);
+  for (const route of [decision,publish]) {
+    assert.match(route, /getVerifiedSupabaseSession/);
+    assert.match(route, /Cross-origin request blocked/);
+  }
+  for (const route of [queue,decision,publish]) assert.doesNotMatch(route,/SUPABASE_SERVICE_ROLE_KEY/);
+});
+
+test("citizen document upload is purpose-consent gated and quarantined until scan attestation", () => {
+  const upload = read("supabase/migrations/20261110180702_add_consent_gated_document_quarantine.sql");
+  const policies = read("supabase/migrations/20261110180724_fix_document_storage_policy_permissions.sql");
+  const route = read("app/api/documents/route.ts");
+  assert.match(upload, /purpose='document_storage'/);
+  assert.match(upload, /consent_policy_not_approved/);
+  assert.match(upload, /scan_status='quarantined'/);
+  assert.match(upload, /scan_status='clean'/);
+  assert.match(upload, /document_scanner_roles/);
+  assert.match(policies, /can_upload_citizen_document/);
+  assert.match(policies, /can_read_citizen_document/);
+  assert.match(route, /getVerifiedSupabaseSession/);
+  assert.match(route, /downloadable:false/);
+  assert.match(route, /Maximum document size is 12 MB/);
+  assert.doesNotMatch(route, /SUPABASE_SERVICE_ROLE_KEY/);
+});
+
+
+test("document scanner claims are leased and quarantine reads are restricted", () => {
+  const sql = read("supabase/migrations/20261110185200_add_leased_clamav_document_scanner.sql");
+  const worker = read("services/document-scanner/worker.py");
+  const compose = read("services/document-scanner/docker-compose.yml");
+  assert.match(sql, /for update skip locked/i);
+  assert.match(sql, /scanner_lease_until/);
+  assert.match(sql, /scan_attempts < 5/);
+  assert.match(sql, /scanner_role_required/);
+  assert.match(sql, /document_scan_lease_invalid/);
+  assert.match(sql, /private\.can_read_citizen_document/);
+  assert.match(worker, /storage\/v1\/object\/authenticated/);
+  assert.match(worker, /zINSTREAM/);
+  assert.match(worker, /48 \* 60 \* 60/);
+  assert.doesNotMatch(worker, /SUPABASE_SERVICE_ROLE_KEY|VirusTotal/);
+  assert.doesNotMatch(compose, /ports:/);
+});
+
+
+test("clean document retrieval is owner- and consent-checked before streaming", () => {
+  const sql = read("supabase/migrations/20261110185906_secure_clean_document_retrieval.sql");
+  const route = read("app/api/documents/route.ts");
+  assert.match(sql, /scan_status='clean'/);
+  assert.match(sql, /document_storage/);
+  assert.match(sql, /revoked_at is null/);
+  assert.match(sql, /legal_review_reference is not null/);
+  assert.match(route, /get_citizen_document_download/);
+  assert.match(route, /storage\/v1\/object\/authenticated/);
+  assert.match(route, /Content-Disposition/);
+  assert.match(route, /Cache-Control.*no-store/);
+  assert.match(route, /X-Content-Type-Options/);
+  assert.match(route, /bytes\.byteLength!==size/);
+  assert.doesNotMatch(route, /SUPABASE_SERVICE_ROLE_KEY/);
+});
+
+
+test("eligibility assessment reads only the published scheme version and requires verified rules", () => {
+  const route = read("app/api/eligibility/assess/route.ts");
+  const engine = read("lib/eligibility-engine.ts");
+  assert.match(route, /getVerifiedSupabaseSession/);
+  assert.match(route, /publication_status.*eq\.published/);
+  assert.match(route, /scheme_versions/);
+  assert.match(route, /assessApprovedScheme/);
+  assert.doesNotMatch(route, /SUPABASE_SERVICE_ROLE_KEY/);
+  assert.match(engine, /independently_approved/);
+  assert.match(engine, /sourceCheckedAt/);
+  assert.match(engine, /90 \* 86400000/);
+  assert.match(engine, /requiresCitizenConfirmation/);
+  assert.match(engine, /not_submitted/);
+});
+
+test("application preparation is persisted only after consent and remains unsubmitted", () => {
+  const sql = read("supabase/migrations/20261110190604_persist_citizen_application_preparations.sql");
+  const hardening = read("supabase/migrations/20261110190708_harden_application_preparation_consent_and_payload.sql");
+  const route = read("app/api/applications/prepare/route.ts");
+  const confirm = read("app/api/applications/prepare/confirm/route.ts");
+  assert.match(sql, /profile_storage/);
+  assert.match(sql, /awaiting_citizen_review/);
+  assert.match(sql, /citizen_approved/);
+  assert.match(hardening, /requiresCitizenConfirmation/);
+  assert.match(hardening, /profile_storage_consent_required/);
+  assert.match(hardening, /scheme_not_published_or_approved/);
+  assert.match(route, /create_application_case/);
+  assert.match(route, /save_application_preparation/);
+  assert.match(route, /potential_match/);
+  assert.match(route, /not_submitted/);
+  assert.match(confirm, /confirm_application_preparation/);
+  assert.match(confirm, /not a government submission/);
+  assert.doesNotMatch(route + confirm, /SUPABASE_SERVICE_ROLE_KEY/);
+});
+
+
+test("consent revocation invalidates prior grants for the same user and purpose", () => {
+  const sql = read("supabase/migrations/20261110193050_make_consent_revocation_invalidate_prior_grants.sql");
+  assert.match(sql, /if not p_granted then[\s\S]*update public\.citizen_consents/);
+  assert.match(sql, /revoked_at=coalesce\(revoked_at,now\(\)\)/);
+  assert.match(sql, /r\.granted=false and r\.captured_at>c\.captured_at/);
+  assert.match(sql, /grant execute on function public\.record_citizen_consent/);
+});
+
+test("government portal integration records default to no authorised API actions", () => {
+  const sql = read("supabase/migrations/20261110193008_seed_portal_only_integration_registry.sql");
+  assert.match(sql, /'not_requested'/);
+  assert.match(sql, /array\[\]::text\[\]/);
+  assert.match(sql, /authorization_reference/);
+  assert.match(sql, /approved_at/);
+});
+
+
+test("document scanning uses atomic claims, scanner-only object reads and bounded retries", () => {
+  const sql = read("supabase/migrations/20261111125606_add_atomic_clamav_scan_claims.sql");
+  assert.match(sql, /for update skip locked/i);
+  assert.match(sql, /scan_attempts<5/);
+  assert.match(sql, /scanner_user_id=v_user/);
+  assert.match(sql, /document_not_claimed_by_scanner/);
+  assert.match(sql, /scanner_read_quarantined_citizen_documents/);
+  assert.match(sql, /private\.can_scan_citizen_document/);
+  assert.match(sql, /scan_status='clean'/);
+  assert.match(sql, /document_storage_consent_inactive/);
+});
+
+test("document scanner worker never uses service-role credentials and checks file integrity", () => {
+  const worker = read("services/document-scanner/worker.py");
+  const docker = read("services/document-scanner/Dockerfile");
+  assert.match(worker, /SCANNER_EMAIL/);
+  assert.match(worker, /SCANNER_PASSWORD/);
+  assert.match(worker, /claim_next_document_scan/);
+  assert.match(worker, /clamd_version/);
+  assert.match(worker, /scan_bytes/);
+  assert.match(worker, /validate_file/);
+  assert.match(worker, /expected_size/);
+  assert.match(worker, /MAX_DOCUMENT_BYTES/);
+  assert.doesNotMatch(worker, /SERVICE_ROLE|service_role|SUPABASE_SERVICE_ROLE_KEY/i);
+  assert.match(docker, /clamav/);
+});
+
+test("clean document retrieval requires caller ownership, active consent and safe response headers", () => {
+  const sql = read("supabase/migrations/20261111125606_add_atomic_clamav_scan_claims.sql");
+  const route = read("app/api/documents/[documentId]/route.ts");
+  assert.match(sql, /user_id=v_user and scan_status='clean'/);
+  assert.match(sql, /has_active_citizen_consent\(v_user,'document_storage'/);
+  assert.match(route, /getVerifiedSupabaseSession\(\)/);
+  assert.match(route, /get_clean_citizen_document/);
+  assert.match(route, /metadata\.object_name/);
+  assert.match(route, /Content-Disposition/);
+  assert.match(route, /X-Content-Type-Options/);
+  assert.match(route, /private, no-store/);
+  assert.doesNotMatch(route, /SUPABASE_SERVICE_ROLE_KEY/);
+});
+
+
+test("legacy scanner batch API is removed and scanner read predicate is owner-clean only", () => {
+  const sql = read("supabase/migrations/20261111125926_harden_scanner_least_privilege.sql");
+  assert.match(sql, /drop function if exists public\.claim_document_scan_batch/);
+  assert.match(sql, /d\.user_id=auth\.uid\(\)/);
+  assert.match(sql, /d\.scan_status='clean'/);
+  assert.doesNotMatch(sql, /or exists\(select 1 from private\.document_scanner_roles/);
+  assert.match(sql, /get_citizen_document_download/);
+});
+
+
+test("scanner retry logic recovers stale claims and backs off scan errors", () => {
+  const sql = read("supabase/migrations/20261111130024_backoff_scanner_retries.sql");
+  assert.match(sql, /updated_at<now\(\)-interval '15 minutes'/);
+  assert.match(sql, /updated_at<now\(\)-interval '1 minute'/);
+  assert.match(sql, /scan_attempts<5/);
+  assert.match(sql, /scanner_user_id=v_user/);
+});
+
+test("encrypted sync refuses to overwrite a pre-existing plaintext workspace during cutover", () => {
+  const sql = read("supabase/migrations/20261112030000_preserve_workspace_fields_on_encrypted_sync.sql");
+  const route = read("app/api/workspace/sync/route.ts");
+  assert.match(sql, /legacy_workspace_data_present/);
+  assert.match(sql, /coalesce\(profile_data, '\{\}'::jsonb\) = '\{\}'::jsonb/);
+  assert.match(sql, /coalesce\(application_drafts, '\[\]'::jsonb\) = '\[\]'::jsonb/);
+  assert.match(route, /legacy_workspace_data_present/);
+  assert.match(route, /It was not changed/);
+});
+
+test("future postgres functions do not inherit PUBLIC EXECUTE", () => {
+  const migration = read("supabase/migrations/20261112025319_revoke_global_default_function_execute.sql");
+  assert.match(migration, /ALTER DEFAULT PRIVILEGES FOR ROLE postgres REVOKE EXECUTE ON FUNCTIONS FROM PUBLIC/i);
+});

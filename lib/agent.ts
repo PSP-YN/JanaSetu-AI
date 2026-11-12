@@ -26,23 +26,9 @@ function aggregate(checks: RuleCheck[], mustVerify = false): "potential_match" |
 }
 
 export function evaluateScheme(scheme: Scheme, profile: CitizenProfile): Assessment {
-  // Fail closed: deterministic screening is disabled until two-person human
-  // source/rule approval is recorded in the catalogue. Missing means pending.
-  if (scheme.reviewStatus !== "approved") {
-    return {
-      schemeId: scheme.id,
-      schemeReviewStatusAtAssessment: "pending",
-      state: "needs_verification",
-      headline: "Human review pending",
-      explanation: "This scheme's source and deterministic rules have not received recorded human approval. JanaSetu will not calculate or imply eligibility until that review is completed.",
-      checks: [],
-      nextActions: [
-        "Review the current official notification and amendments.",
-        "Obtain independent reviewer approval for the source and every rule.",
-        "Use the official department portal for authoritative eligibility confirmation."
-      ]
-    };
-  }
+  // Pending schemes may show a transparent checklist against the prototype's
+  // source notes, but they can never produce a match/rejection result.
+  const independentlyApproved = scheme.reviewStatus === "approved";
   let checks: RuleCheck[] = [];
   let nextActions: string[] = [];
   let mustVerify = false;
@@ -87,19 +73,23 @@ export function evaluateScheme(scheme: Scheme, profile: CitizenProfile): Assessm
     nextActions = ["Check the current academic-year scheme notice and application window on the National Scholarship Portal.", "Confirm the Board percentile list and institution/course eligibility.", "Check current renewal and fresh-application conditions before applying."];
   }
 
-  const state = aggregate(checks, mustVerify);
-  const headline =
-    state === "potential_match" ? "Potential match — verify with the department" :
-    state === "not_matched" ? "One or more screening conditions are not met" :
-    "More evidence or official verification is required";
+  const evaluatedState = aggregate(checks, mustVerify);
+  const state = independentlyApproved ? evaluatedState : "needs_verification";
+  const headline = !independentlyApproved
+    ? "Preliminary screen — independent review pending"
+    : state === "potential_match" ? "Potential match — verify with the department"
+    : state === "not_matched" ? "One or more screening conditions are not met"
+    : "More evidence or official verification is required";
 
-  const explanation = state === "not_matched"
-    ? "At least one declared profile answer conflicts with a screening condition. This is not an official rejection."
-    : state === "potential_match"
-      ? "The supplied profile matches the screening conditions represented in this prototype. Final eligibility remains with the responsible authority."
-      : "The screening found a possible pathway, but missing facts, complex rules or current-year verification prevent a reliable conclusion.";
+  const explanation = !independentlyApproved
+    ? "These checklist comparisons use limited prototype rules linked to official source notes. The scheme rules have not received independent approval, important conditions may be omitted, and this is not an eligibility decision or rejection."
+    : state === "not_matched"
+      ? "At least one declared profile answer conflicts with a screening condition. This is not an official rejection."
+      : state === "potential_match"
+        ? "The supplied profile matches the screening conditions represented in this prototype. Final eligibility remains with the responsible authority."
+        : "The screening found a possible pathway, but missing facts, complex rules or current-year verification prevent a reliable conclusion.";
 
-  return { schemeId: scheme.id, schemeReviewStatusAtAssessment: "approved", state, headline, explanation, checks, nextActions };
+  return { schemeId: scheme.id, schemeReviewStatusAtAssessment: independentlyApproved ? "approved" : "pending", state, headline, explanation, checks, nextActions };
 }
 
 function relevantSchemes(profile: CitizenProfile): Scheme[] {
@@ -126,9 +116,9 @@ export function runBenefitsAgent(profile: CitizenProfile) {
   const selected = relevantSchemes(profile);
   addTrace("Scheme agent", "search_scheme_catalog", "Retrieved " + selected.length + " relevant record(s) for deterministic screening; the wider catalogue contains source-indexed entries not automatically eligibility-scored.");
   const assessments = selected.map((scheme) => evaluateScheme(scheme, profile));
-  addTrace("Eligibility agent", "evaluate_scheme_rules", "Checked scheme approval status first; pending rules were blocked and no eligibility conditions were evaluated.");
+  addTrace("Eligibility agent", "evaluate_scheme_rules", "Compared profile facts with the prototype checklist; pending schemes remain needs-verification and never produce a match/rejection result.");
   const linkedEvidence = assessments.reduce((total, assessment) => total + assessment.checks.length, 0);
-  addTrace("Evidence agent", "link_rules_to_evidence", "Created " + linkedEvidence + " rule-to-profile evidence links; pending schemes expose no rule checks.");
+  addTrace("Evidence agent", "link_rules_to_evidence", "Created " + linkedEvidence + " rule-to-profile checklist links with source notes; pending status is preserved.");
   const actionCount = assessments.reduce((total, assessment) => total + assessment.nextActions.length, 0);
   addTrace("Workflow agent", "generate_next_actions", "Generated " + actionCount + " review and document actions; no external application was submitted.");
 
@@ -139,6 +129,6 @@ export function runBenefitsAgent(profile: CitizenProfile) {
     assessments,
     schemes: selected,
     trace,
-    note: "Prototype screening only. Deterministic eligibility rules currently cover four Central scheme records. Other records are source pointers and are not automatically eligibility-assessed. Official authorities make final eligibility decisions."
+    note: "Prototype screening only. Preliminary checklists cover four Central scheme records, all pending independent review. Pending rules always return needs_verification and never assert eligibility or rejection. Other records are source pointers and are not automatically screened. Official authorities make final eligibility decisions."
   };
 }

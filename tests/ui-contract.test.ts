@@ -28,12 +28,17 @@ test("the visible hero renders translated dictionary values, not raw translation
 });
 
 test("six locales define the primary workspace shell translations", () => {
-  const required = ["skip", "workspace", "independent", "localFirst", "backup", "restore", "ecosystem", "prepLayer", "ecosystemText", "startSituation", "intakeNote", "speak", "gettingStarted", "createStep", "assessmentStep", "prepareStep", "profileCompleteness", "trustTitle", "unknown", "sourceRules", "humanApproval", "curated", "passport", "privacyBoundary", "intelligence", "execution", "agentActions"];
+  const required = ["skip", "workspace", "independent", "localFirst", "backup", "restore", "ecosystem", "prepLayer", "ecosystemText", "startSituation", "intakeNote", "intakeDescription", "gettingStarted", "createStep", "assessmentStep", "prepareStep", "profileCompleteness", "trustTitle", "unknown", "sourceRules", "humanApproval", "curated", "passport", "privacyBoundary", "intelligence", "execution", "agentActions"];
   const localeBlocks = Array.from(page.matchAll(/^  (en|hi|kn|ta|te|ml): \{([\s\S]*?)^  \},?$/gm));
   assert.equal(localeBlocks.length, 6);
   for (const [, locale, block] of localeBlocks) {
     for (const key of required) assert.match(block, new RegExp("\\b" + key + "\\s*:"), locale + " missing " + key);
   }
+});
+
+test("the workspace has no browser-provider speech control or speech-recognition dependency", () => {
+  assert.doesNotMatch(page, /SpeechRecognition|webkitSpeechRecognition|startVoiceInput|noticeVoice|noticeListening|t\("speak"\)|>\s*Speak\s*</i);
+  assert.doesNotMatch(page, /browser speech recognition|browser voice recognition|browser voice service/i);
 });
 
 test("main UI extension guidance discloses portal-side field-change reactions in all six locales", () => {

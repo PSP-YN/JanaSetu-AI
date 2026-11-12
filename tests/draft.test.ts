@@ -17,7 +17,9 @@ test("pending scheme draft explicitly labels scheme approval as pending", () => 
   assert.equal(draft.schemeReviewStatus, "pending");
   assert.match(draft.status, /Scheme review pending/);
   assert.equal(assessment.schemeReviewStatusAtAssessment, "pending");
-  assert.equal(assessment.checks.length, 0);
+  assert.ok(assessment.checks.length > 0);
+  assert.match(assessment.headline, /Preliminary screen/);
+  assert.equal(assessment.state, "needs_verification");
 });
 
 test("approved scheme with unknown profile facts is not mislabeled as source approval pending", () => {

@@ -1,152 +1,58 @@
-# Production readiness — current release assessment
+# JanaSetu AI — production readiness and release gate
 
-## Current public-site release scope (9 November 2026)
-The public root route is now a standalone landing page. The prior citizen workspace is retained at `/app` and marked `noindex`. Privacy and terms remain at their existing same-origin routes. This is a landing-page and information-architecture release, not a certification that the citizen application is production-ready.
+**Assessment date:** 12 November 2026  
+**Release candidate:** [PR #26](https://github.com/PSP-YN/JanaSetu-AI/pull/26)  
+**Release state:** NOT DEPLOYED TO PRODUCTION — protected release is waiting on CI and Vercel build availability.
 
-### Implemented in this release candidate
-- Responsive public landing page with a custom vector hero illustration and JanaSetu brand asset.
-- Clear independent-service disclosure and no unsupported government affiliation, eligibility, coverage, or application-submission claims.
-- Same-origin route to the existing workspace at `/app`.
-- Canonical metadata, Open Graph/Twitter metadata, generated PNG Open Graph image, robots.txt, sitemap.xml and semantic FAQ content.
-- CI smoke tests for the landing page, workspace, branding assets, SEO endpoints, existing API contracts and legal pages.
-- Production monitor updated to check the new public route structure.
-- Removed the sample household fixture and sample-profile action from the workspace.
-- Citizen avatar now uses citizen initials or a generic icon; the uploaded image is used as the JanaSetu brand asset.
+## Deployment state
 
-### Local verification evidence
-- `npm run check`: passed (TypeScript plus 60 unit tests).
-- `npm run build`: passed.
-- `npm run test:e2e`: passed (40 Playwright tests; includes axe scans for landing, workspace, privacy and terms).
-- Local production smoke test: passed for `/`, `/app`, logo, hero illustration, robots, sitemap, generated PNG Open Graph image, health API, privacy and terms.
-- `npm audit --omit=dev --audit-level=high`: 0 production dependency vulnerabilities.
-- `git diff --check`: passed.
+| Environment | URL | Commit | State |
+|---|---|---|---|
+| Production | https://jana-setu-ai.vercel.app | `3b54af4` on `main` | Existing deployment is READY but does not contain the current release candidate |
+| Latest successful preview | https://janasetu-pok0k21pv-pspyn.vercel.app | `7ed3e5b` | READY; earlier preview only, not the latest branch commit |
+| Release candidate | [PR #26](https://github.com/PSP-YN/JanaSetu-AI/pull/26) | `release/janasetu-demo-hardening` | Open; latest commit requires fresh validation |
 
-## Still not production-ready for citizen application operations
-- No JanaSetu-owned citizen authentication, database, or cross-device persistence.
-- Citizen profile, assessments, drafts, documents metadata and reminders remain browser-local.
-- Document file bytes are not securely uploaded, malware scanned, OCR processed or stored.
-- The current catalogue remains partial and includes distinct catalogue-only and budget-lead classes. External machine-parsed discovery snapshot freshness is independently monitored but does not establish eligibility.
-- No universal government portal submission integration or official status synchronization.
-- No independently completed legal review, privacy impact assessment sign-off, penetration test, disaster-recovery drill or load test demonstrating high-concurrency capacity.
+The latest checked Vercel status is failing with the Hobby build-rate-limit response. The current release candidate cannot receive a new preview build or production build until Vercel permits another build. The previous successful preview is not being promoted as a substitute for the latest code.
 
-## Release gate
-A landing-page release may be deployed independently after pull-request CI, preview review and production smoke checks pass. The full citizen application must not be represented as an end-to-end government application service until the outstanding backend, data verification, security, legal and authorized integration gates are implemented and independently verified.
+The latest recorded GitHub Actions run for the release branch failed in the unit-test step: 142/144 tests passed. The two failures were stale assertions for the new migration's preservation comment and SQL predicate. Those assertions have since been corrected in commit `324f4960afade7b0c8f41aa95c8b789a2d3ad112`; a fresh complete CI run against the corrected head has not yet been confirmed. Do not describe CI as green until that run completes.
 
----
+## Current release candidate capabilities
 
-## Previous detailed production assessment
+- Responsive multilingual citizen workspace in English, Hindi, Kannada, Tamil, Telugu and Malayalam.
+- Source-linked scheme discovery, including 42 source-indexed discovery references and 96 Karnataka budget-line discovery leads. Discovery references and budget lines are not necessarily verified schemes or individual benefits.
+- Local profile intake and citizen-reviewed suggested field extraction.
+- Preliminary checklists for four prototype scheme pathways. Pending schemes remain `needs_verification`; no official eligibility decision or rejection is produced.
+- Local application preparation, evidence checklist and official-portal handoff. Drafts remain explicitly **Not submitted**.
+- Browser-local workspace storage and password-encrypted local backup/restore.
+- Experimental browser form assistant that previews proposed field values for citizen approval on supported official domains. It does not upload documents or submit applications.
 
-# Production readiness assessment
+## Explicitly excluded from this release
 
-**Status: deployed prototype — not production-ready for real citizen records. Updated 5 November 2026.**
+### Cross-device sync
+Cloud sync is not part of the release. The citizen workspace UI/status controls are removed, and the cloud-sync policy remains inactive. The API/migration work is deferred. Do not activate the policy or claim two-device synchronization.
 
-This assessment is intentionally strict. A successful Next.js build and public deployment do not establish operational, security, privacy or legal readiness.
+A forward migration was added to preserve profile fields, preferred language, drafts, document references, reminders and assessments if encrypted sync is reconsidered later. Legacy workspace data blocks initial cutover; subsequent vault writes merge only the encrypted-vault key and do not clear the other workspace fields.
 
-## Changes delivered in the 2–3 November 2026 hardening pass
+### Document scanning
+Production document upload and malware scanning are deferred. The private scanner protocol and ClamAV container are testable, but no persistent production scanner identity/worker is provisioned. No live scanning capability is claimed.
 
-- Fixed hero copy for all six configured interface locales and synchronized the document `lang` attribute.
-- Improved hero typography for Indic scripts and added keyboard skip navigation/focus treatment.
-- Added source-age/availability reporting for the third-party dataset. The 5 July 2026 snapshot is 121 days old on 3 November 2026 and exceeds the 90-day freshness policy; the monitor must report attention required.
-- Added source-governance register and official-source spot-check notes. PM-USP AY 2026–27 window dates were inconsistent across official NSP search pages; treat the current application window as uncertain.
-- Restricted the extension to HTTPS `.gov.in` and `.nic.in` hosts, with explicit click-to-fill and no direct form-submission API calls. Portal scripts may react to dispatched field-change events.
-- Published prototype privacy and terms notices with six-locale page content. Translations are unreviewed drafts; these notices are not legal approval or a DPDP compliance certification.
-- Added white-box locale/extension safety tests and black-box HTTP checks for API validation, policy pages and source-monitor contract.
+### Government portal automation and scheme approval
+There is no universal Indian government application API or common portal workflow. The four seeded integration records remain `not_requested`, with no authorized actions or department authorization references. No scheme rule set has independent publication approval. Portal automation is limited to citizen-controlled field assistance; no government submission action is enabled.
 
-- Expanded main-workspace UI localization, counts, dates, status copy and notifications across English, Hindi, Kannada, Tamil, Telugu and Malayalam. Privacy/Terms pages, convenience scheme summaries and extension popup now have six-locale content; fluent-speaker and qualified legal review remain outstanding.
-- Added `package-lock.json` and switched CI to `npm ci` for reproducible installs.
-- Added a complete local full-text index over all 4,693 bundled SmartDuke rows. The upstream `/search` endpoint remains unavailable, but keyword and category filtering now search the entire local snapshot rather than the displayed page; the UI explicitly discloses the stale snapshot and fallback mode.
+CAPTCHA, OTP, Aadhaar/e-KYC, biometrics, declarations, payment and final submission remain on official department/provider portals under citizen control unless a department explicitly authorizes a lawful delegated API.
 
-## Verification evidence and remaining gaps
+## External release gates
 
-Local verification on 4 November 2026 passed: 59 unit tests, 36 Playwright tests against a freshly built production-mode local server, TypeScript, extension syntax/Manifest V3 validation, locale key-parity checks, production dependency audit (0 vulnerabilities), Next.js production build and local production smoke tests. PR #6 was squash-merged to main as `493d0c2414cfd1028b8f9887644355f6deb03dcc`; GitHub Actions run `41691385168` passed. The Vercel production deployment is READY and passed live HTTP plus six-locale browser/accessibility checks.
+1. **CI:** obtain a complete passing GitHub Actions run on the latest PR #26 head, including unit tests, typecheck, production build, browser/accessibility tests, extension validation, dependency audit and production smoke.
+2. **Vercel:** wait for the Hobby build-rate limit to reset. Obtain a successful required Vercel status for the latest commit. Do not bypass branch protection or promote an older preview. Merge PR #26 to protected `main` only after required checks pass.
+3. **Production:** deploy the merged `main` commit, then verify the live domain, workspace routes, six language routes, manifest, authentication boundary and critical APIs.
+4. **Scheme governance:** independently review official source evidence and rule sets before publishing eligibility decisions.
+5. **Government integrations:** obtain written department/provider authorization and portal-specific acceptance evidence for each exact integration before enabling external actions.
+6. **Authentication operations:** verify production email confirmation, SMTP, redirect allow-list and password recovery with a controlled test account.
+7. **Operational assurance:** complete independent security review, backup/restore and disaster-recovery exercises, monitoring and measured load testing.
 
-Not yet demonstrated:
-- Fluent-speaker review of the implemented six-locale workspace, legal pages, convenience scheme translations and extension popup. Official source records remain source-authoritative and may remain in their original language.
-- Manual keyboard, screen-reader, contrast, zoom and mobile review; axe scans currently cover critical/serious violations on main, privacy and terms pages.
-- Portal-by-portal extension mapping accuracy on representative official application forms.
-- Full review of every imported scheme record or independent approval of all four deterministic rules.
-- Penetration test, privacy impact assessment, qualified legal review, incident response and operational monitoring.
-- Real-world load, resilience, backup/restore and disaster-recovery exercises.
+## Release decision
 
-## Working today
+The previous preview passed route and synthetic-workflow smoke checks, but it is not the latest branch commit. The production domain still serves the older `main` commit. PR #26 must pass CI and the required Vercel status before merge and production deployment.
 
-- Public Next.js application deployed on Vercel.
-- CI runs unit tests, TypeScript checks, production dependency audit, production build and HTTP smoke checks.
-- Four built-in deterministic scheme rules, all fail-closed pending independent human source/rule approval; they must not be treated as approved eligibility decisions.
-- Source links and source-period labels on catalogue records.
-- Multilingual text intake patterns and optional browser speech recognition.
-- Browser-local profile, assessment, draft, document metadata and reminder records; backup restore validates imported data and forces assessments to be rerun.
-- Human review marker; JanaSetu makes no direct form-submission API calls. The experimental extension dispatches field-change events, which portal scripts may react to; check the page after filling.
-- No Aadhaar or bank-account fields requested by the prototype.
-
-## Current Vercel deployment observations — 3 November 2026
-
-- Production domain [`https://jana-setu-ai.vercel.app`](https://jana-setu-ai.vercel.app) is live on main commit `493d0c2414cfd1028b8f9887644355f6deb03dcc`; Vercel deployment `dpl_3GR7ZgPtByT2QpSTVnyhWiiC9vdX` is READY.
-- Live smoke on the prior production release: `/`, `/api/health`, `/api/schemes` (142 records), `/api/sources/health`, `/api/schemes/open-data?q=farmer`, `/privacy` and `/terms` returned HTTP 200. The new branch adds a full-index search smoke test and updated provenance counts.
-- Source monitor remains `attention_required`: publisher metadata and `/rows` are reachable, upstream `/search` is unavailable, and the 5 July 2026 third-party snapshot is stale. The application searches the complete local 4,693-row index and displays a stale-snapshot/fallback warning; it is not a current official catalogue.
-- Production browser checks passed for English, Hindi, Kannada, Tamil, Telugu and Malayalam across home, Privacy and Terms: **18/18**; critical/serious axe violations: **0**; browser page errors: **0**.
-- The production deployment was automatically created by merging [PR #6](https://github.com/PSP-YN/JanaSetu-AI/pull/6). PRs #4 and #5 were closed as superseded; their stale branches were deleted.
-- `main` requires the CI workflow, Vercel and Vercel Preview Comments checks; it requires conversation resolution and blocks force-pushes and deletion.
-
-## Automated operations and canonical deployment — 5 November 2026
-
-- Canonical public production domain: [https://jana-setu-ai.vercel.app](https://jana-setu-ai.vercel.app). The Vercel project is Git-linked to this repository; merges to `main` produce the production deployment. Pull requests retain preview deployments for review.
-- Production deployment on `main` commit `ef2e079bfeb08605c60fca6f7e9f6e15a6186d99` is READY. Live checks returned HTTP 200 for the home page, avatar PNG, health, scheme catalogue, source-health, Privacy and Terms routes.
-- CI passed on the production commit: 60 unit tests, 36 Playwright tests, type-check, production build, extension checks and production dependency audit (0 vulnerabilities). The avatar has a dedicated browser test and will also be covered by the production smoke test.
-- A daily GitHub Actions workflow checks the upstream SmartDuke revision. A changed snapshot is validated, audited and submitted as a draft PR; CI must pass and a human must review it before merging.
-- An hourly production monitor checks the canonical site, API health, catalogue counts, local snapshot integrity/row count and avatar asset. It opens one tracked GitHub issue on a sustained failure and closes that alert after recovery.
-- Dependabot checks npm and GitHub Actions dependencies weekly. Updates still pass repository CI and Vercel preview checks before merging.
-- The bundled SmartDuke snapshot remains 123 days old as of 5 November 2026. Metadata and rows endpoints are available, but publisher search is unavailable and no newer revision exists. This is a data freshness warning, not a service outage.
-- The Vercel project currently has no project-specific environment variables configured. The prototype has no authenticated citizen accounts, persistent server database or authorized government API integration.
-
-Operational details and recovery instructions: [Production operations runbook](operations-runbook.md).
-
-## Blocking requirements before real citizen use
-
-### Identity, authorization and data
-- Add authentication and session management with secure account recovery.
-- Replace browser-only persistence with a reviewed database design, encryption at rest, tenant isolation and row-level authorization.
-- Define data minimization, purpose limitation, consent, retention, export and deletion workflows.
-- Threat-model local storage, XSS, CSRF, session fixation, IDOR and malicious document uploads.
-- Never store Aadhaar, bank credentials or sensitive identity documents unless a separately reviewed lawful requirement and secure integration exist.
-
-### Scheme-data governance
-- Establish an accountable scheme-domain review process.
-- Version every rule with official source, effective date, last checked date, jurisdiction, amendments and reviewer.
-- Add automated source-change detection with manual approval before rule updates.
-- Build state/UT packs incrementally; do not infer State coverage from profile geography.
-- Add rule test fixtures for boundary values, exclusions, conflicting facts and outdated notices.
-- Show stale-source warnings and stop screening when a critical source cannot be verified.
-
-### Document processing
-- Implement private upload storage, malware scanning, file-type/size controls and OCR with confidence scores.
-- Require citizen confirmation of extracted facts; do not treat OCR output as verified evidence.
-- Support document deletion, access logs and expiring signed URLs.
-- Complete a DPIA/privacy review before processing real documents.
-
-### Reliability and security
-- Add browser-based end-to-end tests for core journeys and accessibility checks.
-- Add rate limiting, request-size limits, bot protection, structured redacted logs and error monitoring.
-- Add backup/restore tests, incident response, dependency update automation and vulnerability remediation SLAs.
-- Keep `main` branch protection enabled: require the CI workflow, Vercel and Vercel Preview Comments checks; require conversation resolution; block force-pushes and branch deletion.
-- Add staging/production separation and rollback runbooks.
-- Complete an independent penetration test and privacy/security review.
-
-### Integrations and human operations
-- Obtain documented permission and API access before integrating DigiLocker, Bhashini, myScheme or departmental systems.
-- Maintain official application destinations and never simulate a successful submission.
-- Build assisted-worker roles, consent capture and audit trails before partner pilots.
-- Define a human escalation and correction path for uncertain or disputed rules.
-
-## Release gates
-
-| Gate | Required evidence |
-|---|---|
-| Prototype demo | CI green, synthetic-data test, visible disclaimer |
-| Controlled pilot | Security review, authenticated accounts, consent, retention/deletion, reviewed scheme packs, support owner |
-| Public launch | Pen-test, privacy/legal review, incident response, monitoring, backups, accessible UX, source-update operations |
-| Government integration | Written authorization, documented API contract, audit and human approval |
-
-## Current operational boundary
-
-Profiles and drafts are stored in browser local storage. Assessment and draft requests send relevant fields to the app server for processing; the current handlers do not intentionally persist citizen records in a server database. Optional browser speech recognition may use a browser-vendor speech service. Do not enter real sensitive data in the public prototype.
+The release can be presented as a **multilingual, local-first benefits discovery and application-preparation prototype with preliminary, non-authoritative scheme checklists**. Do not present universal government automation, approved eligibility decisions, live cross-device sync, document scanning or submitted applications as current capabilities.

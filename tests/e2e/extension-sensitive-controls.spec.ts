@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { fillWithCitizenApproval } from "./extension-approval";
 
 test("extension leaves account-holder names and file inputs untouched", async ({ page }) => {
   await page.setContent(`
@@ -11,14 +12,14 @@ test("extension leaves account-holder names and file inputs untouched", async ({
   `);
   await page.addScriptTag({ path: "extension/fill.js" });
 
-  const result = await page.evaluate(() => (window as any).fillProfileInPage({
+  const result = await fillWithCitizenApproval(page, {
     fullName: "Synthetic Citizen", age: "", state: "Karnataka", district: "", gender: "",
     annualIncome: "", occupation: "", residenceType: "",
     hasCultivableLand: null, pmKisanExcluded: "unknown", ownsPuccaHouse: null,
     previousHousingBenefit: "unknown", householdHasLpg: null,
     poorHouseholdDeclaration: null, isStudent: false, top20Percentile: null,
     regularUndergraduate: null, otherScholarship: null, diplomaOrDistance: null
-  }));
+  });
 
   expect(result.filled).toBe(1);
   await expect(page.locator("#applicant")).toHaveValue("Synthetic Citizen");

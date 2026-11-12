@@ -1,0 +1,27 @@
+1
+00:00:00,250 --> 00:00:15,640
+Across India, finding a government scheme is only the beginning. Citizens still need to interpret eligibility rules, connect those rules to their circumstances, identify missing evidence, prepare documents and understand what to do next.
+
+2
+00:00:15,760 --> 00:00:28,886
+JanaSetu AI is an AI and machine-learning themed, multilingual benefits-readiness platform. Its agent-style workflow connects scheme discovery, structured eligibility checks, evidence gaps and citizen-controlled application preparation in one workspace.
+
+3
+00:00:29,006 --> 00:00:49,375
+A citizen can explore source-linked scheme information, create a profile, and inspect preliminary conditions. The system distinguishes matched, not-matched and unknown facts. It does not guess when information is missing. Each potential pathway must still be checked against the responsible department and current official rules.
+
+4
+00:00:49,495 --> 00:01:06,696
+The Benefit Readiness Graph is the core innovation. It connects scheme conditions to their sources, citizen-stated facts, evidence status and the next preparation action. This makes the journey inspectable rather than hiding the reasoning inside a chatbot response.
+
+5
+00:01:06,816 --> 00:01:24,921
+The prototype supports six interface languages. It includes a starter catalogue and four rule-screened scheme prototypes that are still pending independent review. Citizens can prepare a local checklist and draft, manage follow-ups, and export a portable encrypted vault using AES-256-GCM.
+
+6
+00:01:25,041 --> 00:01:42,694
+Trust boundaries are explicit. A preliminary screen is not an official eligibility decision. A draft is not a submitted application. Cloud document scanning and government integrations are not enabled in this preview. The responsible department remains the final authority.
+
+7
+00:01:42,814 --> 00:01:46,723
+JanaSetu AI: from fragmented scheme information to clearer, evidence-aware benefit readiness.

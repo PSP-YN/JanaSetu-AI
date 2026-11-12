@@ -32,8 +32,9 @@ test("all four rule screens stay blocked until human source approval", () => {
     assert.equal(scheme.reviewStatus, "pending");
     const result = evaluateScheme(scheme, base);
     assert.equal(result.state, "needs_verification");
-    assert.equal(result.checks.length, 0);
-    assert.match(result.headline, /Human review pending/);
+    assert.ok(result.checks.length > 0);
+    assert.match(result.headline, /Preliminary screen/);
+    assert.match(result.explanation, /not an eligibility decision or rejection/);
   }
 });
 
@@ -63,8 +64,9 @@ test("missing catalogue metadata cannot bypass human approval", () => {
   const scheme = { ...SCHEMES.find((s) => s.id === "pm-ujjwala")!, catalogueStatus: undefined, reviewStatus: undefined };
   const result = evaluateScheme(scheme, base);
   assert.equal(result.state, "needs_verification");
-  assert.equal(result.checks.length, 0);
-  assert.match(result.headline, /Human review pending/);
+  assert.ok(result.checks.length > 0);
+  assert.match(result.headline, /Preliminary screen/);
+  assert.match(result.explanation, /not an eligibility decision or rejection/);
 });
 test("agent returns an inspectable multi-step tool trace", () => {
   const result = runBenefitsAgent(base);
