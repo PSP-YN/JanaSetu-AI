@@ -7,11 +7,17 @@
 - Public production URL: https://jana-setu-ai.vercel.app
 - GitHub source of truth: https://github.com/PSP-YN/JanaSetu-AI
 - Production branch: `main`
+- Current main commit: `d8928e8fc891a76f692cf4ba12e8d213d9d2b876`
+- Current production deployment: `dpl_AtvjwMvehUtGwYgt9XXbpjRs2ie8` (READY; Mumbai `bom1`)
+- Canonical domain binding: verified on the new Vercel project; live route/API and browser smoke checks passed 12 November 2026
 - Framework/runtime: Next.js 16, Node.js 22
 - Vercel project: `jana-setu-ai` (team/account: `psp-adb0`)
 - Runtime: Node.js 22.x, Mumbai (`bom1`)
-- Required public Supabase configuration: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (the anon key is public client configuration; never expose service-role credentials)
-- Deployment verification: PR preview is built and smoke-tested before merge; after merge, verify the production deployment Git SHA and canonical domain before declaring release complete.
+- Required public Supabase configuration: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (the publishable/anon key is public client configuration; never expose service-role credentials)
+- Workstation `.env.local`: both expected variables are present; URL host matches the dedicated `qjiuclkhvxbnojdysmmp.supabase.co` project and `/auth/v1/health` returned HTTP 200. Secret values are not recorded in this runbook.
+- Vercel environment: both variables are configured for production, preview and development, with no Vercel-reported security issues.
+- Local Vercel CLI account: still authenticated as the old `pspyn` profile; `.vercel/project.json` now points to the new `psp-adb0` project. Reauthenticate the CLI to the new account before running local Vercel CLI deploy/inspect commands; the Git-linked deployment through the new Vercel project is already working.
+- Deployment verification: PR preview is built and smoke-tested before merge; after merge, verify the production deployment Git SHA and canonical domain before declaring release complete. Current production SHA and deployment ID are recorded above.
 
 Only the canonical domain above should be shared as the public website. Vercel preview URLs are for review and testing, not alternate public production addresses. A merge to `main` triggers the Git-linked Vercel production deployment. Keep pull-request previews enabled so changes can be tested before release.
 
