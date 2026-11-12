@@ -15,6 +15,8 @@ function fillProfileInPage(profile,approvedFields){
   };
   const aliases={
     fullName:["name","full name","applicant name","applicant full name","name of applicant","beneficiary name","beneficiary full name","name of beneficiary","पूरा नाम","ಹೆಸರು","பெயர்","పేరు","പേര്"],
+    mobileNumber:["mobile number","mobile no","phone number","contact number","registered mobile","मोबाइल नंबर","ಮೊಬೈಲ್ ಸಂಖ್ಯೆ","கைபேசி எண்","మొబైల్ నంబర్","മൊബൈൽ നമ്പർ"],
+    emailAddress:["email address","email id","e mail","ईमेल पता","ಇಮೇಲ್ ವಿಳಾಸ","மின்னஞ்சல் முகவரி","ఇమెయిల్ చిరునామా","ഇമെയിൽ വിലാസം"],
     age:["age","उम्र","ವಯಸ್ಸು","வயது","వయస్సు","പ്രായം"],
     state:["state","union territory","राज्य","ರಾಜ್ಯ","மாநிலம்","రాష్ట్రం","സംസ്ഥാനം"],
     district:["district","जिला","ಜಿಲ್ಲೆ","மாவட்டம்","జిల్లా","ജില്ല"],
@@ -49,7 +51,7 @@ function fillProfileInPage(profile,approvedFields){
   const isSensitive=(text)=>{
     const normalized=norm(text);
     if(/(?:postal pin|pin code|pincode|postal code|zip code)/.test(normalized))return false;
-    return /(?:^| )(?:aadhaar|aadhar|uidai|pan|bank|account|ifsc|otp|captcha|password|passcode|pin|mobile|phone|email|identity|document|upload|file)(?: |$)/.test(normalized);
+    return /(?:^| )(?:aadhaar|aadhar|uidai|pan|bank|account|ifsc|otp|captcha|password|passcode|pin|identity|document|upload|file)(?: |$)/.test(normalized);
   };
   const profileValue=(key)=>{
     let value=profile[key];
