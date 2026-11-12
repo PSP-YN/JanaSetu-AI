@@ -86,8 +86,40 @@ test("all four seeded scheme adapters fail closed without department authorizati
     assert.deepEqual(adapter.allowedActions, [], slug);
     assert.equal(adapter.authorizationReference, null, slug);
     assert.equal(adapter.approvedAt, null, slug);
-    assert.equal(adapter.applicationPath === null, slug !== "pm-kisan", slug + " route must not be guessed");
+    assert.equal(adapter.applicationPath === null, slug === "pm-ujjwala", slug + " entry route must be evidence-backed");
   }
+});
+
+test("PMAY-U official eligibility entry route is recognized but never enabled for automation", () => {
+  const adapter = getPortalAdapter("pmay-u-2");
+  assert.ok(adapter);
+  const result = inspectAdapter(adapter, {
+    origin: adapter.officialOrigin,
+    pathname: "/PMAYMIS2_2024/PMAY_SURVEY/EligiblityCheck.aspx",
+    controls: [],
+    fileUploadCount: 0,
+    captchaPresent: false,
+    otpPresent: false
+  });
+  assert.equal(result.matched, true);
+  assert.equal(result.canAssistFormFilling, false);
+  assert.equal(result.canSubmitApplication, false);
+});
+
+test("NSP scholarship login route is recognized but remains citizen-controlled", () => {
+  const adapter = getPortalAdapter("pm-usp-csss");
+  assert.ok(adapter);
+  const result = inspectAdapter(adapter, {
+    origin: adapter.officialOrigin,
+    pathname: "/ApplicationForm/",
+    controls: [],
+    fileUploadCount: 0,
+    captchaPresent: false,
+    otpPresent: false
+  });
+  assert.equal(result.matched, true);
+  assert.equal(result.canAssistFormFilling, false);
+  assert.equal(result.canSubmitApplication, false);
 });
 
 test("PMAY-U, Ujjwala and NSP landing pages are not treated as application forms", () => {
