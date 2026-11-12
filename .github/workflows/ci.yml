@@ -2,7 +2,7 @@ name: JanaSetu CI
 
 on:
   push:
-    branches: [main, feat/cross-device-pmkisan-assistant]
+    branches: [main, feat/automation-profile-cleanup]
   pull_request:
     branches: [main]
   workflow_dispatch:
