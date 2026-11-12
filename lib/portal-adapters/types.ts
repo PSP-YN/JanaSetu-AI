@@ -13,6 +13,7 @@ export type PortalSnapshot = {
 export type PortalAdapterDefinition = {
   schemeSlug: string;
   officialOrigin: string;
+  portalHomePath?: string;
   applicationPath: string | null;
   accessStatus: IntegrationAccess;
   allowedActions: PortalAction[];
