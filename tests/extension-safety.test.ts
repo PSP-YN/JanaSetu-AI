@@ -39,3 +39,11 @@ test("extension popup translations have six-locale key parity and cover every HT
   };
   for (const [, locale, block] of localeBlocks) assert.ok(block.includes(portalCaveats[locale]), `${locale} warning must explain that portal scripts may react to field changes`);
 });
+
+test("extension imports the expanded citizen profile but rejects identity and bank identifiers", () => {
+  assert.match(extension, /"mobileNumber","emailAddress","addressLine1","addressLine2","villageOrTown","pincode"/);
+  assert.match(extension, /"fatherOrGuardianName","motherName","socialCategory","landholdingAcres","institutionName","courseName","courseYear","rationCardCategory"/);
+  assert.match(extension, /profile\.mobileNumber/);
+  assert.match(extension, /profile\.pincode/);
+  assert.doesNotMatch(extension, /"aadhaarNumber"|"bankAccountNumber"|"ifscCode"/);
+});

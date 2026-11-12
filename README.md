@@ -14,13 +14,16 @@ JanaSetu is an independent, multilingual public-benefits discovery and applicati
 
 ## What the current release candidate does
 
-- Multilingual citizen workspace: English, Hindi, Kannada, Tamil, Telugu and Malayalam.
-- Source-linked scheme discovery, including a partial catalogue and clearly labelled discovery references.
-- Local profile intake and suggested field extraction, with citizen review before saving.
-- Preliminary checklist comparisons that preserve unknown answers and display **Needs verification** for pending schemes.
-- Local application-preparation drafts, evidence checklists and official-source handoff.
-- Browser-local workspace data and password-encrypted local backup/restore.
-- Experimental browser form assistant for supported official domains: previews suggested field values for citizen approval; it does not upload documents or submit applications.
+- Multilingual citizen experience: English, Hindi, Kannada, Tamil, Telugu and Malayalam.
+- Scheme discovery and source-linked guidance, with separate labels for deterministic rule prototypes, catalogue-only records and third-party discovery data.
+- Preliminary screening that treats unknown facts as unknown and directs citizens to official sources.
+- Local application preparation, document checklists and versioned local backup/restore.
+- Expanded citizen profile for contact, address, household, agriculture and education details; a separate, citizen-triggered profile-only JSON export supports the browser assistant. That export is plaintext, not an encrypted backup.
+- Signed-in application planner in the Applications & automation dashboard. It checks published scheme rules, identifies missing profile information and documents, and produces a plan without persisting the submitted profile.
+- Experimental browser form assistant: HTTPS `.gov.in` and `.nic.in` only; citizens preview and approve each suggested field. Matching is heuristic and portal-specific; it does not upload documents or submit forms.
+- Authenticated Supabase account and private citizen-workspace foundation.
+- Client-side AES-256-GCM vault encryption and revision-aware sync API. Cloud sync is **fail-closed** until its exact consent policy has qualified privacy/legal approval and a citizen grants it.
+- Scheme adapter registry and guarded automation queue. Current database records include four scheme integrations, all `not_requested`; no external government submission is enabled.
 
 ## What is intentionally not in this release
 

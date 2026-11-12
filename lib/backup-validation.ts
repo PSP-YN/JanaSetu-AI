@@ -31,7 +31,10 @@ export function parseBackupProfile(value: unknown): CitizenProfile | null {
   const allowed = new Set([
     "fullName", "age", "gender", "state", "district", "residenceType", "annualIncome", "occupation",
     "hasCultivableLand", "pmKisanExcluded", "ownsPuccaHouse", "previousHousingBenefit", "householdHasLpg",
-    "poorHouseholdDeclaration", "isStudent", "top20Percentile", "regularUndergraduate", "otherScholarship", "diplomaOrDistance"
+    "poorHouseholdDeclaration", "isStudent", "top20Percentile", "regularUndergraduate", "otherScholarship", "diplomaOrDistance",
+    "mobileNumber", "emailAddress", "addressLine1", "addressLine2", "villageOrTown", "pincode",
+    "fatherOrGuardianName", "motherName", "socialCategory", "landholdingAcres", "institutionName",
+    "courseName", "courseYear", "rationCardCategory"
   ]);
   if (Object.keys(input).some((key) => !allowed.has(key))) return null;
   return parseCitizenProfile(value);
