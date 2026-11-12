@@ -97,6 +97,12 @@ test("approved scheme mappings can use extended profile fields without treating 
   const draft = prepareApplicationDraft(citizen, approved, result);
   assert.equal(draft.status, "ready_for_citizen_review");
   assert.equal(draft.fields[draft.fields.length - 1]?.value, "570001");
+
+  const unsafeSecurityPinRuleSet = {
+    ...extendedRuleSet,
+    rules: [...extendedRuleSet.rules, { key: "security_pin", label: "Security PIN", profileField: "pincode", operator: "eq", expected: "570001", evidence, reviewStatus: "approved" as const }]
+  };
+  assert.equal(isApprovedRuleSetForPublication(unsafeSecurityPinRuleSet, now), false);
 });
 
 test("date-only scheme end dates remain valid throughout the Indian calendar day",()=>{

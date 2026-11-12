@@ -44,7 +44,7 @@ const PROFILE_FIELDS = new Set<ProfileField>([
   "fatherOrGuardianName","motherName","socialCategory","landholdingAcres","institutionName",
   "courseName","courseYear","rationCardCategory"
 ]);
-const FORBIDDEN = /(aadhaar|aadhar|bank|account_number|ifsc|otp|password|biometric|pin)/i;
+const FORBIDDEN = /(aadhaar|aadhar|bank|account_number|ifsc|otp|password|biometric|(?:^|[^a-z0-9])pin(?:$|[^a-z0-9]))/i;
 const OPERATORS = new Set<Operator>(["eq","neq","gt","gte","lt","lte","in","not_in","is_true","is_false"]);
 const isRecord = (value: unknown): value is Record<string, unknown> => !!value && typeof value === "object" && !Array.isArray(value);
 const isScalar = (value: unknown): value is Scalar => typeof value === "string" || typeof value === "number" && Number.isFinite(value) || typeof value === "boolean";

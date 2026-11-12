@@ -104,16 +104,20 @@ test("custom portal patterns require manual entry",()=>{
  assert.match(preview[0].reason,/manual validation/i);
 });
 
-test("extension previews additional reviewed profile fields while keeping phone and email fields blocked",()=>{
+test("extension previews citizen-approved contact fields but blocks OTP and security PIN fields",()=>{
  const pin=input({name:"postal_code",id:"postal-code",label:"PIN code"});
  const town=input({name:"city",id:"village-town",label:"Village / Town / City"});
  const phone=input({name:"mobile_number",id:"mobile-number",label:"Mobile number"});
  const email=input({name:"email",id:"email",label:"Email address"});
- const result=runFill([pin,town,phone,email],profile);
- assert.equal(result.preview.length,2);
- assert.equal(JSON.stringify(result.preview.map(item=>item.value)),JSON.stringify(["570001","Mysuru"]));
+ const otp=input({name:"otp",id:"otp",label:"OTP"});
+ const security=input({name:"security_pin",id:"security-pin",label:"Security PIN"});
+ const result=runFill([pin,town,phone,email,otp,security],profile);
+ assert.equal(result.preview.length,4);
+ assert.equal(JSON.stringify(result.preview.map(item=>item.value)),JSON.stringify(["570001","Mysuru","9876543210","citizen@example.test"]));
  assert.equal(phone.value,"");
  assert.equal(email.value,"");
+ assert.equal(otp.value,"");
+ assert.equal(security.value,"");
 });
 
 test("extension treats postal PIN as a fillable address field but blocks security PINs",()=>{
