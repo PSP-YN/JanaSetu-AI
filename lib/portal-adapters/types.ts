@@ -13,7 +13,7 @@ export type PortalSnapshot = {
 export type PortalAdapterDefinition = {
   schemeSlug: string;
   officialOrigin: string;
-  applicationPath: string;
+  applicationPath: string | null;
   accessStatus: IntegrationAccess;
   allowedActions: PortalAction[];
   authorizationReference: string | null;
@@ -38,7 +38,7 @@ export type AdapterInspection = {
 export function inspectAdapter(adapter: PortalAdapterDefinition, snapshot: PortalSnapshot): AdapterInspection {
   let origin = "";
   try { origin = new URL(snapshot.origin).origin; } catch { /* invalid origin */ }
-  const matched = origin === adapter.officialOrigin && snapshot.pathname === adapter.applicationPath;
+  const matched = adapter.applicationPath !== null && origin === adapter.officialOrigin && snapshot.pathname === adapter.applicationPath;
   const required = Object.keys(adapter.selectors);
   const missingControls = required.filter((key) => !snapshot.controls.includes(adapter.selectors[key]));
   const approved = adapter.accessStatus === "approved" && Boolean(adapter.authorizationReference && adapter.approvedAt);
