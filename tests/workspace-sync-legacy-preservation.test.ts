@@ -13,7 +13,7 @@ test("encrypted workspace sync cannot overwrite legacy citizen workspace fields"
   assert.match(sql, /coalesce\(document_refs, '\[\]'::jsonb\) = '\[\]'::jsonb/);
   assert.match(sql, /coalesce\(reminders, '\[\]'::jsonb\) = '\[\]'::jsonb/);
   assert.match(sql, /coalesce\(assessments, '\[\]'::jsonb\) = '\[\]'::jsonb/);
-  assert.match(sql, /profile_data\) - 'encrypted_workspace_v1'\) = '\{\}'::jsonb/);
+  assert.match(sql, /\\(coalesce\\(profile_data, '\\{\\}'::jsonb\\) - 'encrypted_workspace_v1'\\) = '\\{\\}'::jsonb/);
   assert.doesNotMatch(sql, /set preferred_language\s*=/i);
   assert.doesNotMatch(sql, /set application_drafts\s*=/i);
   assert.doesNotMatch(sql, /set document_refs\s*=/i);
