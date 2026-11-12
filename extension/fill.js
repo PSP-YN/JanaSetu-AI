@@ -77,8 +77,8 @@ function fillProfileInPage(profile,approvedFields){
         if(Math.abs((number-base)/Number(step)-Math.round((number-base)/Number(step)))>1e-8)return {valid:false,reason:"Value does not match the portal step constraint."};
       }
     }
-    if(element.type==="email"&&value&&!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(value))return {valid:false,reason:"Value is not a valid email address."};
-    if(element.type==="tel"&&value&&!/^\\+?[0-9]{10,13}$/.test(value.replace(/[\\s-]/g,"")))return {valid:false,reason:"Value is not a valid phone number."};
+    if(element.type==="email"&&value&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))return {valid:false,reason:"Value is not a valid email address."};
+    if(element.type==="tel"&&value&&!/^\+?[0-9]{10,13}$/.test(value.replace(/[\s-]/g,"")))return {valid:false,reason:"Value is not a valid phone number."};
     if(element.getAttribute("pattern"))return {valid:false,reason:"The portal has a custom format rule that needs manual validation."};
     return {valid:true,reason:""};
   };
