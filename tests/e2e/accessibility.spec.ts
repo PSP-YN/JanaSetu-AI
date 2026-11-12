@@ -298,6 +298,8 @@ test("PM-KISAN preparation clearly distinguishes documents to keep ready from of
   await expect(page.locator(".pmkisan-doc").first()).toContainText("not sent to JanaSetu or any server");
   await page.locator(".pmkisan-doc").first().getByRole("button", { name: "Mark as ready" }).click();
   await expect(page.locator(".pmkisan-progress")).toContainText("1 / 5");
+  await page.reload();
+  await expect(page.locator(".pmkisan-progress")).toContainText("1 / 5");
   const widths = await page.evaluate(() => ({ viewport: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth }));
   expect(widths.scroll).toBeLessThanOrEqual(widths.viewport + 1);
 });
@@ -307,4 +309,15 @@ test("PM-KISAN form guide never asks JanaSetu to collect Aadhaar, OTP or bank cr
   await expect(page.locator(".pmkisan-field")).toHaveCount(8);
   await expect(page.locator(".pmkisan-disclaimer")).toContainText("does not authenticate Aadhaar");
   await expect(page.locator(".pmkisan-alert")).toContainText("first step displays Aadhaar, mobile, State, CAPTCHA and consent");
+});
+
+
+test("JanaSetu exposes a valid installable web app manifest", async ({ request }) => {
+  const response = await request.get("/manifest.webmanifest");
+  expect(response.ok()).toBeTruthy();
+  const manifest = await response.json();
+  expect(manifest.name).toContain("JanaSetu AI");
+  expect(manifest.start_url).toBe("/app");
+  expect(manifest.display).toBe("standalone");
+  expect(manifest.icons.length).toBeGreaterThan(0);
 });
