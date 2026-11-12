@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { fillWithCitizenApproval } from "./extension-approval";
 
-for (const route of ["/", "/app", "/auth", "/app/automation", "/app/review", "/schemes", "/privacy", "/terms"]) {
+for (const route of ["/", "/app", "/auth", "/app/automation", "/app/pm-kisan", "/app/review", "/schemes", "/privacy", "/terms"]) {
   test(`axe WCAG 2.1 AA critical/serious scan: ${route}`, async ({ page }) => {
     await page.goto(route);
     await expect(page.locator("body")).toBeVisible();
@@ -279,4 +279,32 @@ test("uploaded JanaSetu brand mark loads and citizen avatar uses a safe initials
   await expect(mark).toHaveAttribute("src", "/janasetu-mark.svg");
   await expect.poll(() => mark.evaluate((node) => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
   await expect(page.locator(".avatar-fallback")).toBeVisible();
+});
+
+
+test("PM-KISAN preparation clearly distinguishes documents to keep ready from official upload requirements", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/app/pm-kisan");
+  await expect(page.getByRole("heading", { name: /Prepare your farmer registration with confidence/i })).toBeVisible();
+  await expect(page.locator(".pmkisan-doc")).toHaveCount(5);
+  await expect(page.locator(".pmkisan-alert")).toContainText("does not display a general document-upload section");
+  await expect(page.locator(".pmkisan-primary")).toHaveAttribute("href", "https://pmkisan.gov.in/RegistrationFormupdated.aspx");
+  await page.locator('.pmkisan-file input[type="file"]').first().setInputFiles({
+    name: "synthetic-land-record.pdf",
+    mimeType: "application/pdf",
+    buffer: Buffer.from("%PDF-1.7 synthetic test")
+  });
+  await expect(page.locator(".pmkisan-doc").first()).toContainText("synthetic-land-record.pdf");
+  await expect(page.locator(".pmkisan-doc").first()).toContainText("not sent to JanaSetu or any server");
+  await page.locator(".pmkisan-doc").first().getByRole("button", { name: "Mark as ready" }).click();
+  await expect(page.locator(".pmkisan-progress")).toContainText("1 / 5");
+  const widths = await page.evaluate(() => ({ viewport: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth }));
+  expect(widths.scroll).toBeLessThanOrEqual(widths.viewport + 1);
+});
+
+test("PM-KISAN form guide never asks JanaSetu to collect Aadhaar, OTP or bank credentials", async ({ page }) => {
+  await page.goto("/app/pm-kisan");
+  await expect(page.locator(".pmkisan-field")).toHaveCount(8);
+  await expect(page.locator(".pmkisan-disclaimer")).toContainText("does not authenticate Aadhaar");
+  await expect(page.locator(".pmkisan-alert")).toContainText("first step displays Aadhaar, mobile, State, CAPTCHA and consent");
 });
