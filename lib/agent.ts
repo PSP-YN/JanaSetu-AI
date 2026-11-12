@@ -73,6 +73,7 @@ export function evaluateScheme(scheme: Scheme, profile: CitizenProfile): Assessm
     nextActions = ["Check the current academic-year scheme notice and application window on the National Scholarship Portal.", "Confirm the Board percentile list and institution/course eligibility.", "Check current renewal and fresh-application conditions before applying."];
   }
 
+  const preliminaryState = aggregate(checks, false);
   const evaluatedState = aggregate(checks, mustVerify);
   const state = independentlyApproved ? evaluatedState : "needs_verification";
   const headline = !independentlyApproved
@@ -89,7 +90,7 @@ export function evaluateScheme(scheme: Scheme, profile: CitizenProfile): Assessm
         ? "The supplied profile matches the screening conditions represented in this prototype. Final eligibility remains with the responsible authority."
         : "The screening found a possible pathway, but missing facts, complex rules or current-year verification prevent a reliable conclusion.";
 
-  return { schemeId: scheme.id, schemeReviewStatusAtAssessment: independentlyApproved ? "approved" : "pending", state, headline, explanation, checks, nextActions };
+  return { schemeId: scheme.id, schemeReviewStatusAtAssessment: independentlyApproved ? "approved" : "pending", state, preliminaryState, headline, explanation, checks, nextActions };
 }
 
 function relevantSchemes(profile: CitizenProfile): Scheme[] {
@@ -102,33 +103,110 @@ function relevantSchemes(profile: CitizenProfile): Scheme[] {
   return SCHEMES.filter((scheme) => terms.has(scheme.id));
 }
 
+type AgentToolName = "search_scheme_catalog" | "evaluate_scheme_rules" | "build_document_checklist" | "prepare_form_filling";
+
+type SafeFormField = { key: string; label: string; value: string; source: "citizen_profile"; status: "provided" | "missing"; requiresCitizenReview: true };
+
+const SAFE_FORM_FIELDS: Array<{ key: keyof CitizenProfile; label: string }> = [
+  { key: "fullName", label: "Applicant full name" }, { key: "age", label: "Age" },
+  { key: "gender", label: "Gender" }, { key: "state", label: "State / Union Territory" },
+  { key: "district", label: "District" }, { key: "residenceType", label: "Area of residence" },
+  { key: "annualIncome", label: "Annual household income" }, { key: "occupation", label: "Occupation" },
+  { key: "hasCultivableLand", label: "Cultivable land recorded" }, { key: "ownsPuccaHouse", label: "Owns a pucca house" },
+  { key: "previousHousingBenefit", label: "Previous government housing benefit" },
+  { key: "householdHasLpg", label: "Household has LPG connection" },
+  { key: "poorHouseholdDeclaration", label: "Poor-household declaration available" },
+  { key: "isStudent", label: "Currently a student" }, { key: "top20Percentile", label: "Above 80th percentile" },
+  { key: "regularUndergraduate", label: "Regular undergraduate course" },
+  { key: "otherScholarship", label: "Other scholarship or fee reimbursement" },
+  { key: "diplomaOrDistance", label: "Diploma or distance course" },
+  { key: "socialCategory", label: "Social category" }, { key: "addressLine1", label: "Address line 1" },
+  { key: "addressLine2", label: "Address line 2" }, { key: "villageOrTown", label: "Village / Town" },
+  { key: "pincode", label: "PIN code" }, { key: "institutionName", label: "Institution name" },
+  { key: "courseName", label: "Course name" }, { key: "courseYear", label: "Course year" },
+  { key: "landholdingAcres", label: "Landholding in acres" }, { key: "rationCardCategory", label: "Ration card category" }
+];
+
+function safeProfileValue(value: unknown): string {
+  if (value === null || value === undefined || value === "") return "";
+  if (typeof value === "boolean") return value ? "Yes" : "No";
+  if (typeof value === "number") return String(value);
+  if (value === "woman") return "Female";
+  if (value === "man") return "Male";
+  if (value === "unknown") return "Not sure";
+  return String(value);
+}
+
+/** A small allow-listed tool dispatcher. Each tool below performs the work it records in the trace. */
+function executeAgentTool(name: AgentToolName, args: Record<string, unknown>): unknown {
+  if (name === "search_scheme_catalog") {
+    return relevantSchemes(args.profile as CitizenProfile);
+  }
+  if (name === "evaluate_scheme_rules") {
+    const schemes = args.schemes as Scheme[];
+    const profile = args.profile as CitizenProfile;
+    return schemes.map((scheme) => evaluateScheme(scheme, profile));
+  }
+  if (name === "build_document_checklist") {
+    return (args.schemes as Scheme[]).map((scheme) => ({
+      schemeId: scheme.id,
+      schemeName: scheme.name,
+      sourceUrl: scheme.sourceUrl,
+      reviewStatus: scheme.reviewStatus ?? "pending",
+      items: scheme.documents.map((label, index) => ({ id: scheme.id + "-document-" + index, label, status: "citizen_to_verify" as const })),
+      note: "Checklist items are source-linked preparation prompts. The citizen must verify the current official list and document validity."
+    }));
+  }
+  const profile = args.profile as CitizenProfile;
+  return (args.schemes as Scheme[]).map((scheme) => {
+    const fields: SafeFormField[] = SAFE_FORM_FIELDS.map(({ key, label }) => {
+      const value = safeProfileValue(profile[key]);
+      return { key, label, value, source: "citizen_profile", status: value ? "provided" : "missing", requiresCitizenReview: true };
+    });
+    return {
+      schemeId: scheme.id,
+      schemeName: scheme.name,
+      mode: "citizen_reviewed_prefill_bundle",
+      fields,
+      sensitiveFieldsExcluded: ["Aadhaar", "PAN", "bank account", "IFSC", "OTP", "CAPTCHA", "password", "biometrics"],
+      requiresHumanConfirmation: true,
+      mayOpenOfficialPortal: true,
+      mayFillOnlyAfterCitizenApproval: true,
+      mayUploadDocuments: false,
+      maySubmit: false,
+      note: "These are profile values, not a certified portal field map. The browser helper separately matches visible fields and requires per-field citizen approval before filling."
+    };
+  });
+}
+
 export function runBenefitsAgent(profile: CitizenProfile) {
   const trace: TraceItem[] = [];
   const start = Date.now();
-  const addTrace = (agent: string, tool: string, detail: string) => trace.push({
-    id: String(trace.length + 1).padStart(2, "0"),
-    agent, tool, detail, status: "completed",
-    durationMs: Math.max(2, Math.round((Date.now() - start) / (trace.length + 1)))
-  });
+  const call = <T,>(agent: string, tool: AgentToolName, detail: string, args: Record<string, unknown>): T => {
+    const result = executeAgentTool(tool, args) as T;
+    trace.push({
+      id: String(trace.length + 1).padStart(2, "0"), agent, tool, detail,
+      status: "completed", durationMs: Math.max(1, Date.now() - start)
+    });
+    return result;
+  };
 
-  // Planner selects domain tools from the citizen's profile; no LLM is used to invent legal rules.
-  addTrace("Planner agent", "plan_benefit_search", "Selected scheme domains using the citizen's stated profile and location.");
-  const selected = relevantSchemes(profile);
-  addTrace("Scheme agent", "search_scheme_catalog", "Retrieved " + selected.length + " relevant record(s) for deterministic screening; the wider catalogue contains source-indexed entries not automatically eligibility-scored.");
-  const assessments = selected.map((scheme) => evaluateScheme(scheme, profile));
-  addTrace("Eligibility agent", "evaluate_scheme_rules", "Compared profile facts with the prototype checklist; pending schemes remain needs-verification and never produce a match/rejection result.");
+  const selected = call<Scheme[]>("Planner agent", "search_scheme_catalog", "Executed profile-based scheme catalogue retrieval.", { profile });
+  const assessments = call<Assessment[]>("Eligibility agent", "evaluate_scheme_rules", "Executed deterministic checks against each scheme's rule-screened profile fields; unapproved rules never produce a match/rejection result.", { schemes: selected, profile });
+  const documentChecklists = call<Array<{ schemeId: string; schemeName: string; sourceUrl: string; reviewStatus: string; items: Array<{ id: string; label: string; status: "citizen_to_verify" }>; note: string }>>("Evidence agent", "build_document_checklist", "Generated source-linked document checklist items for every selected scheme.", { schemes: selected });
+  const formFillPlans = call<Array<{ schemeId: string; schemeName: string; mode: string; fields: SafeFormField[]; sensitiveFieldsExcluded: string[]; requiresHumanConfirmation: true; mayOpenOfficialPortal: true; mayFillOnlyAfterCitizenApproval: true; mayUploadDocuments: false; maySubmit: false; note: string }>>("Form assistant", "prepare_form_filling", "Executed safe profile-to-prefill mapping; no portal action or submission was performed.", { schemes: selected, profile });
+
   const linkedEvidence = assessments.reduce((total, assessment) => total + assessment.checks.length, 0);
-  addTrace("Evidence agent", "link_rules_to_evidence", "Created " + linkedEvidence + " rule-to-profile checklist links with source notes; pending status is preserved.");
-  const actionCount = assessments.reduce((total, assessment) => total + assessment.nextActions.length, 0);
-  addTrace("Workflow agent", "generate_next_actions", "Generated " + actionCount + " review and document actions; no external application was submitted.");
-
   return {
     generatedAt: new Date().toISOString(),
     profileRegion: profile.state || "India",
     selectedCount: selected.length,
     assessments,
     schemes: selected,
+    documentChecklists,
+    formFillPlans,
+    humanConfirmation: { required: true, stage: "before_portal_field_filling_and_before_any_submission", submissionPerformed: false },
     trace,
-    note: "Prototype screening only. Preliminary checklists cover four Central scheme records, all pending independent review. Pending rules always return needs_verification and never assert eligibility or rejection. Other records are source pointers and are not automatically screened. Official authorities make final eligibility decisions."
+    note: "Four rule-screened Central scheme prototypes are available for preliminary screening. All remain pending independent review, so results are not official eligibility decisions. Catalogue-only records are not eligibility-scored. Form values are prepared for citizen review; no portal is submitted to. " + linkedEvidence + " rule checks were executed."
   };
 }

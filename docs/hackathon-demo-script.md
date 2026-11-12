@@ -2,43 +2,55 @@
 
 ## Before recording
 - Open the deployed JanaSetu app over HTTPS.
-- Use synthetic profile data and harmless sample PDFs only. Never use real Aadhaar, bank, caste, income or medical documents.
+- Use synthetic profile data and harmless sample files only. Never use real Aadhaar, bank, caste, income or medical documents.
 - Keep passwords and credentials out of the recording.
-- Clear the browser profile before the demo if you want to show a fresh import.
+- For voice input, allow microphone access in a browser that supports SpeechRecognition. The browser speech service produces the transcript; JanaSetu receives the transcript only. Keep text input available as fallback.
+- For portal filling, use the extension's synthetic form test fixture or a non-submitting test page. Do not submit a real government application.
 
 ## Recording flow (about 2 minutes)
 **0:00–0:15 — Problem**
 
-"Citizens often have to repeat the same information and gather the same evidence across different benefit applications. They need a clearer way to discover support, understand evidence gaps and prepare the next step without handing sensitive information to another central database."
+"Eligible citizens can miss support because scheme information is fragmented and applications are difficult to prepare. JanaSetu brings discovery, evidence checks, document preparation, form assistance and follow-ups into one citizen-controlled workflow."
 
-**0:15–0:45 — Discover and screen**
+**0:15–0:35 — Hindi/Kannada voice or text intake**
 
-"JanaSetu brings a multilingual, source-linked catalogue into one citizen workspace. I can describe my situation, review the extracted profile facts and run a preliminary scheme checklist. Each check shows what the citizen stated and which rule note it is compared against. These prototype rules are pending independent review, so the result stays at 'needs verification' and is never presented as an official eligibility decision."
+"A citizen can describe their situation in Hindi or a supported regional language by typing or using browser voice input. JanaSetu extracts suggested profile facts. The citizen reviews and corrects every field before using it."
 
-Show the synthetic profile and the PM-KISAN / PMUY checklist. Point out at least one unknown field.
+Show a synthetic Kannada or Hindi sentence and the extracted profile fields. Point out that voice transcription depends on browser support and microphone permission.
 
-**0:45–1:15 — Prepare, don't submit**
+**0:35–1:00 — Actual tool calls and eligibility checks**
 
-"Once a pathway is worth exploring, JanaSetu creates a preparation record with the missing evidence and next actions. It is explicitly marked 'Not submitted'. The citizen completes protected identity verification, declarations and final submission on the official department or provider portal."
+"The local agent dispatcher calls four tools: scheme catalogue search, eligibility rule evaluation, document checklist generation and safe form-prefill preparation. The trace shows the tools that ran. The four current rule prototypes remain pending independent review, so results are preliminary and do not become official eligibility decisions."
 
-Show the preparation draft and the official source link. Do not enter personal information into a live government portal.
+Show the execution trace and one possible-match signal plus an unknown or conflicting condition. Point to the review disclaimer.
 
-**1:15–1:40 — Local-first privacy**
+**1:00–1:25 — Documents and form preparation**
 
-"Profile information, checklists and drafts stay in this browser in the current demo. The local vault export is password-encrypted with AES-256-GCM. The encryption key is derived in the browser; JanaSetu does not receive the password. This is local encryption, not a third-party security audit."
+"JanaSetu builds a scheme-specific document checklist and a profile-to-prefill bundle. The browser helper then previews visible matching fields on a citizen-verified government page. The citizen approves each safe field before it is filled. This is citizen-directed assistance, not a department-authorized API adapter."
 
-Show export/import only if the time allows. Do not demonstrate cloud sync; it remains disabled pending privacy/legal approval.
+Show checklist source links and the synthetic extension preview/approval. Do not enter real citizen data into a live portal.
 
-**1:40–2:00 — Scope and trust**
+**1:25–1:45 — Human confirmation and follow-ups**
 
-"JanaSetu is a citizen-side benefits readiness and preparation layer, not a government portal. It currently includes a partial catalogue and four source-linked prototype pathways. Their rule sets are not independently approved. There is no universal portal automation, no government-authorized submission integration and no claim of an official eligibility result. The department remains authoritative."
+"The assistant stops after filling. It never clicks Next, Apply, Save or Submit, and it does not handle OTP, CAPTCHA, Aadhaar/e-KYC, biometrics, payment or document upload. The citizen remains in control of every protected step. Follow-up reminders are stored locally in this browser and survive reloads on this device."
+
+Show the reminder in the follow-up list and the explicit no-submit boundary.
+
+**1:45–2:00 — Scope and trust**
+
+"JanaSetu currently screens four curated rule prototypes; all await independent review. Its wider catalogue is discovery-only, and the third-party snapshot is stale. There are zero independently approved published schemes and no department-authorized API integrations. This is a working citizen-side preparation workflow—not an official eligibility authority or submission agent."
 
 ## On-screen demo checklist
-1. Use a synthetic citizen profile.
-2. Show source-linked scheme discovery.
-3. Run a preliminary checklist and show 'Needs verification'.
-4. Point out the rule evidence and one unknown field.
-5. Prepare a draft and show 'Not submitted'.
-6. Show the official portal link without entering sensitive data.
-7. If time allows, export a password-encrypted local backup.
-8. State clearly that sync, document upload/scanning and government submission are not part of this demo.
+1. Select Hindi or Kannada.
+2. Enter a synthetic situation by voice or text.
+3. Review extracted facts.
+4. Run assessment and show all four tool calls.
+5. Show preliminary rule evidence and independent-review status.
+6. Show document checklist and official source link.
+7. Show safe form-prefill bundle and individual field approval in the extension fixture.
+8. Show that no final portal action is automated.
+9. Create a follow-up reminder.
+
+## Capability boundary
+- **Working in this release:** local multilingual text intake; browser voice transcription where supported; deterministic preliminary rule checks for four prototype schemes; source-note document checklists; safe profile prefill bundle; citizen-approved field filling in the browser extension; local browser reminders.
+- **Not represented as complete:** official eligibility decisions; independent scheme-rule approval; all-India eligibility scoring for the catalogue-only records; certified portal-specific field maps; department API authorization; cross-device reminder sync; cloud document uploads; automated identity verification; final application submission.

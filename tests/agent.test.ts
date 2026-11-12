@@ -122,3 +122,40 @@ test("Karnataka budget leads remain catalogue-only and carry official budget pro
   assert.ok(leads.every((scheme) => scheme.sourceUrl.startsWith("https://finance.karnataka.gov.in/")));
   assert.ok(leads.every((scheme) => scheme.ruleNotes.some((note) => note.includes("not human-reviewed"))));
 });
+
+
+test("agent executes eligibility, document checklist and safe form-fill tools with a human gate", () => {
+  const result = runBenefitsAgent(base);
+  const names = result.trace.map((item) => item.tool);
+  assert.deepEqual(names, ["search_scheme_catalog", "evaluate_scheme_rules", "build_document_checklist", "prepare_form_filling"]);
+  assert.ok(result.documentChecklists.length > 0);
+  assert.ok(result.documentChecklists.every((item) => item.items.every((doc) => doc.status === "citizen_to_verify")));
+  assert.ok(result.formFillPlans.every((plan) => plan.requiresHumanConfirmation && plan.mayFillOnlyAfterCitizenApproval && plan.maySubmit === false));
+  assert.ok(result.formFillPlans.every((plan) => plan.fields.every((field) => field.requiresCitizenReview)));
+  assert.deepEqual(result.humanConfirmation, { required: true, stage: "before_portal_field_filling_and_before_any_submission", submissionPerformed: false });
+  assert.ok(result.formFillPlans.every((plan) => plan.fields.every((field) => !/aadhaar|pan|bank|otp|captcha|password/i.test(field.key + " " + field.label))));
+});
+
+
+test("regional-language intake extracts supported profile facts in Kannada, Telugu and Malayalam", () => {
+  const kannada = parseCitizenMessage("ನಾನು 34 ವರ್ಷದ ಮಹಿಳಾ ರೈತ, ಕರ್ನಾಟಕದಲ್ಲಿ ವಾಸಿಸುತ್ತೇನೆ, ವಾರ್ಷಿಕ ಆದಾಯ 1.5 ಲಕ್ಷ");
+  assert.equal(kannada.updates.age, 34);
+  assert.equal(kannada.updates.gender, "woman");
+  assert.equal(kannada.updates.occupation, "Farmer");
+  assert.equal(kannada.updates.state, "Karnataka");
+  assert.equal(kannada.updates.annualIncome, 150000);
+
+  const telugu = parseCitizenMessage("నేను 32 ఏళ్ల మహిళా రైతు, ఆంధ్రప్రదేశ్, వార్షిక ఆదాయం 2 లక్షలు");
+  assert.equal(telugu.updates.age, 32);
+  assert.equal(telugu.updates.gender, "woman");
+  assert.equal(telugu.updates.occupation, "Farmer");
+  assert.equal(telugu.updates.state, "Andhra Pradesh");
+  assert.equal(telugu.updates.annualIncome, 200000);
+
+  const malayalam = parseCitizenMessage("ഞാൻ 30 വയസ്സുള്ള വനിതാ കർഷക, കേരളം, വാർഷിക വരുമാനം 1.2 ലക്ഷം");
+  assert.equal(malayalam.updates.age, 30);
+  assert.equal(malayalam.updates.gender, "woman");
+  assert.equal(malayalam.updates.occupation, "Farmer");
+  assert.equal(malayalam.updates.state, "Kerala");
+  assert.equal(malayalam.updates.annualIncome, 120000);
+});

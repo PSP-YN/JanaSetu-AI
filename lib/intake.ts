@@ -55,6 +55,11 @@ function parseIncome(text: string): number | undefined {
     const value = Number(lakhMatch[1].replace(/,/g, ""));
     if (Number.isFinite(value) && value >= 0 && value <= 1000) return Math.round(value * 100000);
   }
+  const malayalamLakhMatch = text.match(/([0-9][0-9,]*(?:\.[0-9]+)?)\s*ലക്ഷ/u);
+  if (malayalamLakhMatch) {
+    const value = Number(malayalamLakhMatch[1].replace(/,/g, ""));
+    if (Number.isFinite(value) && value >= 0 && value <= 1000) return Math.round(value * 100000);
+  }
   const amountMatch = text.match(/(?:annual\s+(?:household\s+)?income|yearly\s+income|वार्षिक\s*आय|सालाना\s*आय|வருட\s*வருமானம்|ವಾರ್ಷಿಕ\s*ಆದಾಯ|వార్షిక\s*ఆదాయం|വാർഷിക\s*വരുമാനം)[^0-9]{0,24}([0-9][0-9,]{2,})/i);
   if (amountMatch) {
     const value = Number(amountMatch[1].replace(/,/g, ""));
@@ -69,7 +74,7 @@ export function parseCitizenMessage(message: string): IntakeResult {
   const recognizedFields: string[] = [];
   const followUpQuestions: string[] = [];
 
-  const ageMatch = text.match(/(?:^|\D)(\d{1,3})\s*(?:years?\s*old|years?|yrs?|साल|वर्ष|வயது|ವಯಸ್ಸು|సంవత్సరాలు|వయసు|വയസ്സ്)/i);
+  const ageMatch = text.match(/(?:^|\D)(\d{1,3})\s*(?:years?\s*old|years?|yrs?|साल|वर्ष|வயது|வயசு|வயதான|ವಯಸ್ಸು|ವರ್ಷ(?:ದ)?|సంవత్సరాలు|ఏళ్ల|వయసు|వయస్సు|വയസ്സ്|വയസ്സുള്ള)/i);
   if (ageMatch) {
     const age = Number(ageMatch[1]);
     if (age >= 0 && age <= 120) { updates.age = age; recognizedFields.push("Age"); }
@@ -82,13 +87,13 @@ export function parseCitizenMessage(message: string): IntakeResult {
     Object.entries(STATE_ALIASES).find(([, aliases]) => aliases.some((alias) => text.includes(alias.toLowerCase())))?.[0];
   if (state) { updates.state = state; recognizedFields.push("State / Union Territory"); }
 
-  if (has(text, ["woman", "female", "महिला", "स्त्री", "பெண்", "ಮಹಿಳೆ", "స్త్రీ", "സ്ത്രീ", "பெண்மணி"])) {
+  if (has(text, ["woman", "female", "महिला", "स्त्री", "பெண்", "ಮಹಿಳೆ", "ಮಹಿಳಾ", "స్త్రీ", "സ്ത്രീ", "பெண்மணி", "మహిళ", "വനിത"])) {
     updates.gender = "woman"; recognizedFields.push("Gender");
   } else if (has(text, ["man", "male", "पुरुष", "ஆண்", "ಪುರುಷ", "పురుషుడు", "പുരുഷൻ"])) {
     updates.gender = "man"; recognizedFields.push("Gender");
   }
 
-  if (has(text, ["farmer", "agriculture", "किसान", "कृषक", "விவசாயி", "ರೈತ", "రైతు", "കർഷകൻ"])) {
+  if (has(text, ["farmer", "agriculture", "किसान", "कृषक", "விவசாயி", "ರೈತ", "రైతు", "കർഷകൻ", "കർഷക"])) {
     updates.occupation = "Farmer"; recognizedFields.push("Occupation");
   } else if (has(text, ["student", "विद्यार्थी", "छात्र", "மாணவர்", "ವಿದ್ಯಾರ್ಥಿ", "విద్యార్థి", "വിദ്യാർത്ഥി"])) {
     updates.occupation = "Student"; updates.isStudent = true; recognizedFields.push("Occupation", "Student status");
