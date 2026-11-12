@@ -67,8 +67,7 @@ export async function PUT(request: NextRequest) {
     const session = await getVerifiedSupabaseSession();
     if (!session) return json({ error: "Sign in required." }, 401);
     if (!(await hasSyncConsent(session))) return json({ error: "Encrypted cross-device sync is disabled until its privacy-reviewed consent policy is approved and you opt in.", code: "sync_consent_unavailable" }, 403);
-    const current = await loadWorkspace(session);
-    const profileData = { ...(current?.profile_data ?? {}), encrypted_workspace_v1: body.vault };
+    const profileData = { encrypted_workspace_v1: body.vault };
     const response = await fetch(session.url + "/rest/v1/citizen_workspaces?on_conflict=user_id", {
       method: "POST",
       headers: {
