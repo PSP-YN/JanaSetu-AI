@@ -1042,3 +1042,63 @@ input, select, textarea { min-height: 44px; }
   .site-shell .footer-main>p{max-width:100%}
   .site-shell .footer-links{gap:14px}
 }
+
+
+/* PM-KISAN preparation guide — responsive, high-contrast and touch-friendly */
+.pmkisan-page{max-width:1120px;margin:0 auto;padding:28px 24px 56px;color:#27251f}
+.pmkisan-top{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:28px}
+.pmkisan-top a,.pmkisan-sources a{color:#8e431d;text-decoration:none;font-weight:700}
+.pmkisan-top span,.pmkisan-kicker,.pmkisan-section-head>div>span{font-size:10px;letter-spacing:.13em;font-weight:800;color:#a65a2b}
+.pmkisan-hero{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:24px;align-items:center;padding:30px;border:1px solid #ead9c8;border-radius:18px;background:#fff5e9}
+.pmkisan-hero h1{font-size:clamp(30px,4vw,46px);line-height:1.08;letter-spacing:-.04em;color:#713716;margin:12px 0}
+.pmkisan-hero p{max-width:650px;color:#594331;line-height:1.7;margin:0}
+.pmkisan-trust{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.pmkisan-trust span{padding:8px 11px;border:1px solid #e8d3bf;border-radius:999px;background:#fffaf4;color:#71421f;font-size:11px;font-weight:700}
+.pmkisan-progress{padding:18px;border:1px solid #e8d5c2;border-radius:14px;background:#fff}
+.pmkisan-progress>span,.pmkisan-progress small{display:block;color:#594331;font-size:11px}
+.pmkisan-progress strong{display:block;font-size:32px;color:#773c1a;margin:6px 0 10px}
+.pmkisan-progress-track{height:8px;background:#f1e7dd;border-radius:99px;overflow:hidden}
+.pmkisan-progress-track i{display:block;height:100%;background:#b65b21;border-radius:99px;transition:width .2s}
+.pmkisan-progress small{margin-top:9px}
+.pmkisan-alert{margin:18px 0;padding:16px 18px;border:1px solid #e6c79f;border-left:4px solid #b65b21;border-radius:12px;background:#fff7e9}
+.pmkisan-alert strong{color:#794018;font-size:13px}
+.pmkisan-alert p{margin:7px 0 0;color:#594331;font-size:12px;line-height:1.7}
+.pmkisan-section{margin-top:30px}
+.pmkisan-section-head{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:15px}
+.pmkisan-section-head h2{font-size:23px;color:#352d26;margin:6px 0}
+.pmkisan-section-head p{margin:0;color:#594331;font-size:12px;line-height:1.6}
+.pmkisan-count{white-space:nowrap;padding:8px 10px;background:#f8eee4;border-radius:9px;color:#82431e;font-size:11px;font-weight:800}
+.pmkisan-doc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.pmkisan-doc{min-width:0;padding:18px;border:1px solid #e8dfd6;border-radius:13px;background:#fff}
+.pmkisan-doc.is-ready{border-color:#b9d6bd;background:#f8fcf7}
+.pmkisan-doc-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.pmkisan-doc-number{font-size:11px;color:#a75b2d;font-weight:800}
+.pmkisan-doc-state{font-size:9px;letter-spacing:.1em;color:#594331;font-weight:800}
+.pmkisan-doc.is-ready .pmkisan-doc-state{color:#2d7040}
+.pmkisan-doc h3{font-size:15px;margin:12px 0 6px;color:#342c25}
+.pmkisan-doc>p{font-size:12px;line-height:1.65;color:#594331;margin:0}
+.pmkisan-doc>small{display:block;color:#82431e;font-size:10px;margin:12px 0}
+.pmkisan-file{display:flex;flex-direction:column;gap:7px;margin:12px 0;padding:12px;border:1px dashed #c99c78;border-radius:9px;background:#fffaf4;color:#713716;font-size:11px;font-weight:700}
+.pmkisan-file input{width:100%;max-width:100%;font-size:11px;color:#594331}
+.pmkisan-upload-note{padding:9px 10px!important;border-radius:7px;background:#fff5e9;color:#713716!important;font-size:10px!important}
+.pmkisan-doc button{min-height:42px;margin-top:10px;padding:9px 13px;border:1px solid #d7b89d;border-radius:8px;background:#fffaf4;color:#84451f;font-size:11px;font-weight:800;cursor:pointer}
+.pmkisan-doc.is-ready button{border-color:#a9c9af;background:#eaf5eb;color:#285d35}
+.pmkisan-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.pmkisan-field{display:block;min-width:0;padding:14px;border:1px solid #e8dfd6;border-radius:11px;background:#fff}
+.pmkisan-field>span{display:flex;align-items:center;gap:8px;color:#39322b;font-size:12px;font-weight:800}
+.pmkisan-field>span b{color:#a75b2d;font-size:10px}
+.pmkisan-field input{width:100%;height:44px;margin:10px 0 7px;padding:0 12px;border:1px solid #e4d9ce;border-radius:8px;background:#faf7f3;color:#594331;font:inherit;font-size:12px}
+.pmkisan-field input:disabled{opacity:1;cursor:not-allowed}
+.pmkisan-field small{display:block;color:#594331;font-size:10px;line-height:1.5}
+.pmkisan-flow{padding:22px;border:1px solid #e8dfd6;border-radius:15px;background:#fff}
+.pmkisan-flow ol{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;list-style:none;padding:0;margin:18px 0}
+.pmkisan-flow li{padding:14px;border:1px solid #eee4da;border-radius:10px;background:#fdfaf6}
+.pmkisan-flow li b{display:block;color:#753b1c;font-size:12px;margin-bottom:5px}
+.pmkisan-flow li span{display:block;color:#594331;font-size:11px;line-height:1.6}
+.pmkisan-primary{display:inline-flex;min-height:46px;align-items:center;justify-content:center;padding:0 18px;border-radius:9px;background:#a94f1b;color:#fff!important;text-decoration:none;font-size:12px;font-weight:800}
+.pmkisan-primary:focus-visible,.pmkisan-doc button:focus-visible,.pmkisan-file input:focus-visible{outline:3px solid #d97706;outline-offset:3px}
+.pmkisan-disclaimer{font-size:11px;line-height:1.7;color:#594331;margin:12px 0 0}
+.pmkisan-sources{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:24px;padding:16px 0;border-top:1px solid #e9dfd6}
+.pmkisan-sources strong{width:100%;font-size:11px;color:#594331}
+.pmkisan-sources a{font-size:11px}
+@media(max-width:700px){.pmkisan-page{padding:18px 14px 40px}.pmkisan-top{align-items:flex-start;flex-direction:column;margin-bottom:18px}.pmkisan-hero{grid-template-columns:1fr;padding:20px}.pmkisan-doc-grid,.pmkisan-fields,.pmkisan-flow ol{grid-template-columns:1fr}.pmkisan-section-head{align-items:flex-start;flex-direction:column}.pmkisan-count{white-space:normal}.pmkisan-primary{width:100%;text-align:center}.pmkisan-file input{font-size:10px}}
