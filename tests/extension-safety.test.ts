@@ -5,10 +5,15 @@ import { readFileSync } from "node:fs";
 const extension = readFileSync(new URL("../extension/popup.js", import.meta.url), "utf8");
 const popupHtml = readFileSync(new URL("../extension/popup.html", import.meta.url), "utf8");
 
-test("form assistant requires HTTPS government portal domains", () => {
-  assert.match(extension, /portalUrl\.protocol === "https:"/);
-  assert.match(extension, /host\.endsWith\("\.gov\.in"\)/);
-  assert.match(extension, /host\.endsWith\("\.nic\.in"\)/);
+test("form assistant requires an exact independently authorized portal route, not a government-domain suffix", () => {
+  assert.match(extension, /PORTAL_ROUTE_POLICIES/);
+  assert.match(extension, /route\\.origin===portalUrl\\.origin&&route\\.path===portalUrl\\.pathname/);
+  assert.match(extension, /accessStatus==="approved"/);
+  assert.match(extension, /allowedActions\\.includes\\("assist_form_filling"\\)/);
+  assert.match(extension, /authorizationReference&&policy\\.approvedAt/);
+  assert.doesNotMatch(extension, /host\\.endsWith\\("\\.gov\\.in"\\)/);
+  assert.doesNotMatch(extension, /host\\.endsWith\\("\\.nic\\.in"\\)/);
+  assert.match(extension, /accessStatus: "not_requested"/);
 });
 
 test("form assistant has no automatic submission or document upload code", () => {
