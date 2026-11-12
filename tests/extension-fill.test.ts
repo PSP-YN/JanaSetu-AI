@@ -111,7 +111,7 @@ test("extension previews additional reviewed profile fields while keeping phone 
  const email=input({name:"email",id:"email",label:"Email address"});
  const result=runFill([pin,town,phone,email],profile);
  assert.equal(result.preview.length,2);
- assert.deepEqual(result.preview.map(item=>item.value),["570001","Mysuru"]);
+ assert.equal(JSON.stringify(result.preview.map(item=>item.value)),JSON.stringify(["570001","Mysuru"]));
  assert.equal(phone.value,"");
  assert.equal(email.value,"");
 });
