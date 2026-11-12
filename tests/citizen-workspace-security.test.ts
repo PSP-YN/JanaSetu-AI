@@ -3,7 +3,7 @@ test("encrypted sync refuses legacy cutover and preserves every existing workspa
   const route = read("app/api/workspace/sync/route.ts");
   assert.match(sql, /legacy_workspace_data_present/);
   assert.match(sql, /coalesce\(profile_data, '\{\}'::jsonb\) = '\{\}'::jsonb/);
-  assert.match(sql, /Do not reset profile, language, drafts, files, reminders or assessments/);
+  assert.match(sql, /never reset profile, language, drafts, files, reminders or assessments/);
   assert.doesNotMatch(sql, /set profile_data = jsonb_build_object/);
   assert.doesNotMatch(sql, /application_drafts = '\[\]'::jsonb/);
   assert.match(route, /legacy_workspace_data_present/);
@@ -392,8 +392,8 @@ test("encrypted sync refuses to overwrite a pre-existing plaintext workspace dur
   const sql = read("supabase/migrations/20261112030000_preserve_workspace_fields_on_encrypted_sync.sql");
   const route = read("app/api/workspace/sync/route.ts");
   assert.match(sql, /legacy_workspace_data_present/);
-  assert.match(sql, /profile_data.*<>.*\{\}/);
-  assert.match(sql, /application_drafts.*<>.*\[\]/);
+  assert.match(sql, /coalesce\\(profile_data, '\\{\\}'::jsonb\\) = '\\{\\}'::jsonb/);
+  assert.match(sql, /coalesce\\(application_drafts, '\\[\\]'::jsonb\\) = '\\[\\]'::jsonb/);
   assert.match(route, /legacy_workspace_data_present/);
   assert.match(route, /It was not changed/);
 });
