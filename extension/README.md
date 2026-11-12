@@ -14,8 +14,8 @@ The extension is a user-triggered, field-by-field form-filling helper for Chromi
 ## Use it
 
 1. Open JanaSetu and complete only the profile fields you are comfortable using.
-2. Export your JanaSetu JSON backup and keep it private; it contains personal profile information.
-3. Open the extension popup and import that backup.
+2. In My profile, select **Export for form assistant** and confirm the warning. This creates a plaintext JSON profile export; it is not encrypted and is not a replacement for your encrypted `.janasetu` backup.
+3. Open the extension popup and import `JanaSetu-Form-Assistant-Profile.json`. Keep the file private and delete it after import.
 4. Navigate to the exact official government portal page over HTTPS.
 5. Click **Preview matching fields**. The extension inspects only visible, empty controls on HTTPS `.gov.in` and `.nic.in` hosts.
 6. Review the suggested label and value for every field. Invalid length/range fields and custom-pattern fields are disabled for manual entry.
