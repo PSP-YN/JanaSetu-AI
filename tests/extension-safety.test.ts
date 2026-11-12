@@ -9,10 +9,10 @@ test("form assistant requires an exact independently authorized portal route, no
   assert.match(extension, /PORTAL_ROUTE_POLICIES/);
   assert.match(extension, /route\.origin===portalUrl\.origin&&route\.path===portalUrl\.pathname/);
   assert.match(extension, /accessStatus==="approved"/);
-  assert.match(extension, /allowedActions\.includes\\("assist_form_filling"\\)/);
+  assert.match(extension, /allowedActions\.includes\("assist_form_filling"\)/);
   assert.match(extension, /authorizationReference&&policy\.approvedAt/);
-  assert.doesNotMatch(extension, /host\.endsWith\\("\.gov\.in"\\)/);
-  assert.doesNotMatch(extension, /host\.endsWith\\("\.nic\.in"\\)/);
+  assert.doesNotMatch(extension, /host\.endsWith\("\.gov\.in"\)/);
+  assert.doesNotMatch(extension, /host\.endsWith\("\.nic\.in"\)/);
   assert.match(extension, /accessStatus: "not_requested"/);
 });
 
