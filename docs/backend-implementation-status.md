@@ -1,15 +1,17 @@
 # JanaSetu AI backend implementation status
 
 **Updated:** 12 November 2026
-**Current release candidate:** [PR #29](https://github.com/PSP-YN/JanaSetu-AI/pull/29) · initial integration baseline `5df3f5ddc8a9fcaddfa0bf8da75cf6bbfa0b8dd9` · review-fix implementation commit `3f861c7ae9bb3e78948ed00ec62dc4052719fc93`
+**Merged PRs:** [#29](https://github.com/PSP-YN/JanaSetu-AI/pull/29), #18, #19, #15
+**Production main commit:** `d8928e8fc891a76f692cf4ba12e8d213d9d2b876`
+**Review-fix implementation commit:** `3f861c7ae9bb3e78948ed00ec62dc4052719fc93`
 **Supabase project:** JanaSetu-AI · Mumbai (ap-south-1) · `qjiuclkhvxbnojdysmmp`
 **Vercel project:** `psp-adb0 / jana-setu-ai` · canonical domain `jana-setu-ai.vercel.app`
 
 ## Current release state
 
-The integration branch includes the current citizen workspace, application planner, consent-gated automation foundation, exact-route portal registry, encrypted vault foundation, and the latest safe release baseline. Follow-up review fixes now make the planner use approved application mappings, discard stale responses, preserve partial local profile edits, localize the new profile/export workflow in six languages, and keep OTP/authentication PIN identifiers blocked. Local verification passed: 173 unit tests, TypeScript, production build, 66 Playwright tests, 10 scanner tests, extension syntax/manifest validation, Supabase local migration/lint checks and npm high-severity audit. The new-account Vercel preview for the initial integration baseline built successfully; the follow-up fixes require a fresh preview before production promotion. See `docs/production-readiness.md` and `docs/operations-runbook.md` for the authoritative capability matrix and release evidence.
+The merged main branch includes the citizen workspace, application planner, consent-gated automation foundation, exact-route portal registry, encrypted vault foundation and the latest safe release baseline. Follow-up review fixes make the planner use approved application mappings, discard stale responses, preserve partial local profile edits, localize the new profile/export workflow in six languages, and keep OTP/authentication PIN identifiers blocked. Local verification passed: 173 unit tests, TypeScript, production build, 66 Playwright tests, 10 scanner tests, extension syntax/manifest validation, Supabase local migration/lint checks and npm high-severity audit. The production deployment built from main commit `d8928e8fc891a76f692cf4ba12e8d213d9d2b876` is READY and the canonical domain/browser smoke tests passed after the Next.js and icon-library dependency updates. See `docs/production-readiness.md` and `docs/operations-runbook.md` for the authoritative capability matrix and release evidence.
 
-At the time of this status update, PR #29 is awaiting merge to protected `main`. Required CI and Vercel checks passed; an optional Octopus Review status remained pending and the release owner explicitly authorized proceeding without waiting for it. Do not weaken branch protection or delete unmerged branches. Production is not complete until the merged main SHA is deployed and verified on the canonical domain.
+PR #29 is merged to protected `main`; maintenance PRs #18 (pinned GitHub Actions), #19 (Playwright) and #15 (Next.js 16.4.5 / lucide-react 1.70.0) also merged after required CI and Vercel checks passed. PRs #22, #24, #25, #27 and #28 were closed as superseded; their heads are preserved by dated archive tags. The active `backend/harden-supabase-access` remote branch is retained temporarily because the original local checkout contains uncommitted user work. No branch-protection bypass was used.
 
 **Historical note:** Sections below are dated implementation records. Statements describing earlier PRs, earlier deployment states, last-write-wins sync, or earlier release blockers are historical and are superseded by the current release state above and the dated updates at the end of this document.
 
@@ -55,16 +57,14 @@ Unknown, unapproved or untested schemes must use official navigation and manual 
 
 ## Remaining production operations
 
-1. Merge PR #29 after the branch-protection-required CI and new-account Vercel checks are green; the release owner authorized skipping the optional Octopus Review status. Do not disable branch protection or bypass required checks.
-2. Verify the merged main SHA is deployed by the new Vercel project and serves the canonical domain.
-3. Verify controlled production account lifecycle, SMTP delivery, redirect allow-list and password recovery.
-4. Obtain independent scheme-source/rule approval and written department authorization before external integrations.
-5. Provision and test the private scanner service before enabling uploads; complete legal approval and two-device tests before enabling sync.
-6. Complete independent security review, backup/restore and disaster-recovery exercises, monitoring, accessibility and load testing.
+1. Verify controlled production account lifecycle, SMTP delivery, redirect allow-list and password recovery with a dedicated test account.
+2. Obtain independent scheme-source/rule approval and written department authorization before external integrations.
+3. Provision and test the private scanner service before enabling uploads; complete legal approval and two-device tests before enabling sync.
+4. Complete independent security review, backup/restore and disaster-recovery exercises, monitoring, accessibility and load testing.
 
 ## Release boundary
 
-The application is a tested public prototype/beta for discovery and application preparation, not an officially authorized government benefits service. Local code/build tests and a successful preview do not certify live portal automation, official eligibility, document scanning, cross-device sync or final application submission. Production release is complete only after the merged main SHA is deployed and verified on the canonical domain.
+The current main build is deployed and smoke-tested on the canonical domain as a controlled public prototype/beta for discovery and application preparation. It is not an officially authorized government benefits service. Deployment and code tests do not certify live portal automation, official eligibility, document scanning, cross-device sync or final application submission.
 
 
 ## Authenticated cloud workspace implementation — 9 November 2026

@@ -1,23 +1,22 @@
 # JanaSetu AI — production readiness and release gate
 
 **Assessment date:** 12 November 2026
-**Release candidate:** [PR #29](https://github.com/PSP-YN/JanaSetu-AI/pull/29)
-**Initial integration baseline:** 5df3f5ddc8a9fcaddfa0bf8da75cf6bbfa0b8dd9
-**Review-fix implementation commit:** 3f861c7ae9bb3e78948ed00ec62dc4052719fc93.
-**State at assessment:** local verification passed; new-account preview built; production promotion pending merge and live verification.
+**Merged release:** PR #29 plus CI/action, Playwright and production dependency updates (#18, #19, #15).
+**Production main SHA:** `d8928e8fc891a76f692cf4ba12e8d213d9d2b876`.
+**Release state:** merged to protected main; refreshed production deployment READY; canonical-domain smoke and browser checks passed.
 
 ## Deployment state
 
 | Environment | URL | State |
 |---|---|---|
-| Canonical production | https://jana-setu-ai.vercel.app | Existing production deployment remains active until the merged main commit is promoted and verified |
-| New-account preview | Vercel preview for PR #29 | Build READY; route/API smoke checks passed with temporary preview-only access; temporary bypass revoked |
-| New Vercel project | psp-adb0 / jana-setu-ai | Dedicated Supabase URL and public anon key configured for production, preview and development |
-| GitHub source | https://github.com/PSP-YN/JanaSetu-AI | PR #29 targets protected main |
+| Canonical production | https://jana-setu-ai.vercel.app | READY · deployment `dpl_AtvjwMvehUtGwYgt9XXbpjRs2ie8` · main SHA `d8928e8fc891a76f692cf4ba12e8d213d9d2b876` · alias verified |
+| New-account preview | https://jana-setu-grubsq4ns-psp-adb0.vercel.app | READY · deployment dpl_w6L5tdjRaXcC8MwdaF6HLseXUcmu · preview bypass revoked |
+| New Vercel project | psp-adb0 / jana-setu-ai | Supabase URL and public anon key configured for production, preview and development |
+| GitHub source | https://github.com/PSP-YN/JanaSetu-AI | PR #29 and dependency/CI PRs #18, #19, #15 merged · current main `d8928e8fc891a76f692cf4ba12e8d213d9d2b876` |
 
-The preview build and required Vercel Preview/CI checks passed for the assessed commit. The optional Octopus Review status was still pending at the time of assessment. No branch protection was disabled. A merge using administrator override is permitted only under the explicit release-owner instruction recorded in the release conversation and only after required CI and Vercel checks remain green. The production domain must not be declared updated until the new deployment is READY and the live domain serves the expected merged Git SHA.
+PR #29 merged normally after all required CI and Vercel checks passed and all seven CodeRabbit review threads were resolved. Maintenance PRs #18, #19 and #15 also passed required checks and merged. Octopus Review was skipped where it was not required by branch protection. No administrator merge override was used and branch protection was not disabled. The canonical domain serves the READY deployment built from main SHA `d8928e8fc891a76f692cf4ba12e8d213d9d2b876`.
 
-## Verification completed on the integration branch
+## Verification completed for the merged release
 
 | Check | Result |
 |---|---:|
@@ -32,7 +31,10 @@ The preview build and required Vercel Preview/CI checks passed for the assessed 
 | Supabase local migrations | 49/49 applied |
 | Supabase local schema lint | Passed |
 | Linked migration reconciliation/schema lint | Passed |
-| New Vercel preview route/API smoke | Passed |
+| New Vercel production route/API smoke | 18 endpoints returned HTTP 200 |
+| Live browser smoke | 9 routes returned HTTP 200; Kannada profile/export and automation disclosures verified; zero console errors |
+| Supabase Auth readiness | Production `/api/ready` returned ready with database connectivity; local `.env.local` Auth health returned HTTP 200 |
+| Automation security boundary | Cross-origin POST blocked (403); same-origin unauthenticated planner blocked (401); no published schemes |
 
 These results verify the exercised code paths. They do not establish legal authorization, external portal compatibility, live scanner operation, two-device sync, independent penetration-test completion or high-load capacity.
 
@@ -100,15 +102,12 @@ Live filling requires a verified exact HTTPS origin and path, independently revi
 
 ## Remaining release work
 
-1. Merge PR #29 using the explicitly authorized administrative override only after confirming required CI and Vercel checks remain green; do not change branch-protection settings or delete unmerged branches.
-2. Confirm Vercel automatically deploys the merged main SHA to the new project and that the canonical domain is bound to that deployment.
-3. Verify live canonical routes, six locales, authentication, health/readiness, scheme/source APIs, privacy/terms, manifest and browser console/network errors.
-4. Verify controlled production account email confirmation, recovery, redirects and sign-out.
-5. Obtain independent source/rule/legal approvals before publishing any of the four schemes.
-6. Obtain written department authorization and exact route acceptance before enabling any external portal action.
-7. Provision and test a persistent private document-scanner worker before enabling uploads.
-8. Complete legal approval and two-device acceptance before enabling cloud sync.
-9. Complete independent penetration testing, backup/restore, disaster recovery, accessibility and load testing.
+1. Verify controlled production account email confirmation, recovery, redirects and sign-out with a dedicated test account.
+2. Obtain independent source/rule/legal approvals before publishing any of the four schemes.
+3. Obtain written department authorization and exact route acceptance before enabling any external portal action.
+4. Provision and test a persistent private document-scanner worker before enabling uploads.
+5. Complete legal approval and two-device acceptance before enabling cloud sync.
+6. Complete independent penetration testing, backup/restore, disaster recovery, deeper accessibility testing and measured load testing.
 
 ## Release decision boundary
 
