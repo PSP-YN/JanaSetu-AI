@@ -52,7 +52,6 @@ test("extension imports the reviewed profile and fills only after address and fi
     name: "janSetu-backup.json", mimeType: "application/json",
     buffer: Buffer.from(JSON.stringify({ app: "JanaSetu", schemaVersion: 1, profile: syntheticProfile, language: "kn" }))
   });
-  await page.locator("#save").click();
   await expect(page.locator("#status")).toContainText("ಪ್ರೊಫೈಲ್");
   await expect(page.locator("#fill")).toContainText("ಪೂರ್ವವೀಕ್ಷಿಸಿ");
 
@@ -131,8 +130,7 @@ test("extension rejects unsupported occupations during profile import", async ({
     name: "unsupported-occupation.json", mimeType: "application/json",
     buffer: Buffer.from(JSON.stringify({ app: "JanaSetu", schemaVersion: 1, language: "en", profile: { ...syntheticProfile, occupation: "Government Employee" } }))
   });
-  await page.locator("#save").click();
-  await expect(page.locator("#status")).toContainText("Import failed");
+  await expect(page.locator("#status")).toContainText("Profile incomplete or has unsupported fields");
   expect(await page.evaluate(() => (window as any).__popupStorage.profile)).toBeUndefined();
 });
 
@@ -153,8 +151,7 @@ test("extension rejects malformed profile backups before storing citizen data", 
     name: "tampered-backup.json", mimeType: "application/json",
     buffer: Buffer.from(JSON.stringify({ app: "JanaSetu", schemaVersion: 1, language: "en", profile: { ...syntheticProfile, aadhaar: "123456789012" } }))
   });
-  await page.locator("#save").click();
-  await expect(page.locator("#status")).toContainText("Import failed");
+  await expect(page.locator("#status")).toContainText("Profile incomplete or has unsupported fields");
   const profile = await page.evaluate(() => (window as any).__popupStorage.profile);
   expect(profile).toBeUndefined();
 });
