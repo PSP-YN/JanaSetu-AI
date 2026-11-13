@@ -197,12 +197,12 @@ test("primary navigation, profile labels and occupation values stay localized/ca
   await page.goto("/app");
   const selector = page.locator(".language-control select");
   const expected = [
-    { code: "en", nav: ["Overview", "Find benefits", "My profile", "Documents", "My applications", "How it works"], name: "Full name", occupation: "Occupation" },
-    { code: "hi", nav: ["अवलोकन", "लाभ खोजें", "मेरी प्रोफ़ाइल", "दस्तावेज़", "मेरे आवेदन", "यह कैसे काम करता है"], name: "पूरा नाम", occupation: "व्यवसाय" },
-    { code: "kn", nav: ["ಅವಲೋಕನ", "ಸೌಲಭ್ಯಗಳನ್ನು ಹುಡುಕಿ", "ನನ್ನ ಪ್ರೊಫೈಲ್", "ದಾಖಲೆಗಳು", "ನನ್ನ ಅರ್ಜಿಗಳು", "ಇದು ಹೇಗೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ"], name: "ಪೂರ್ಣ ಹೆಸರು", occupation: "ಉದ್ಯೋಗ" },
-    { code: "ta", nav: ["கண்ணோட்டம்", "நலத்திட்டங்களைத் தேடு", "எனது சுயவிவரம்", "ஆவணங்கள்", "எனது விண்ணப்பங்கள்", "இது எவ்வாறு செயல்படுகிறது"], name: "முழுப் பெயர்", occupation: "தொழில்" },
-    { code: "te", nav: ["అవలోకనం", "ప్రయోజనాలను కనుగొనండి", "నా ప్రొఫైల్", "పత్రాలు", "నా దరఖాస్తులు", "ఇది ఎలా పనిచేస్తుంది"], name: "పూర్తి పేరు", occupation: "వృత్తి" },
-    { code: "ml", nav: ["അവലോകനം", "ആനുകൂല്യങ്ങൾ കണ്ടെത്തുക", "എന്റെ പ്രൊഫൈൽ", "രേഖകൾ", "എന്റെ അപേക്ഷകൾ", "ഇത് എങ്ങനെ പ്രവർത്തിക്കുന്നു"], name: "പൂർണ്ണ പേര് (ഐച്ഛികം)", occupation: "തൊഴിൽ" }
+    { code: "en", nav: ["Overview", "Find benefits", "My profile", "Documents", "My applications", "How it works", "Applications & automation"], name: "Full name", occupation: "Occupation" },
+    { code: "hi", nav: ["अवलोकन", "लाभ खोजें", "मेरी प्रोफ़ाइल", "दस्तावेज़", "मेरे आवेदन", "यह कैसे काम करता है", "आवेदन और स्वचालन"], name: "पूरा नाम", occupation: "व्यवसाय" },
+    { code: "kn", nav: ["ಅವಲೋಕನ", "ಸೌಲಭ್ಯಗಳನ್ನು ಹುಡುಕಿ", "ನನ್ನ ಪ್ರೊಫೈಲ್", "ದಾಖಲೆಗಳು", "ನನ್ನ ಅರ್ಜಿಗಳು", "ಇದು ಹೇಗೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ", "ಅರ್ಜಿಗಳು ಮತ್ತು ಸ್ವಯಂಚಾಲನೆ"], name: "ಪೂರ್ಣ ಹೆಸರು", occupation: "ಉದ್ಯೋಗ" },
+    { code: "ta", nav: ["கண்ணோட்டம்", "நலத்திட்டங்களைத் தேடு", "எனது சுயவிவரம்", "ஆவணங்கள்", "எனது விண்ணப்பங்கள்", "இது எவ்வாறு செயல்படுகிறது", "விண்ணப்பங்கள் மற்றும் தானியக்கம்"], name: "முழுப் பெயர்", occupation: "தொழில்" },
+    { code: "te", nav: ["అవలోకనం", "ప్రయోజనాలను కనుగొనండి", "నా ప్రొఫైల్", "పత్రాలు", "నా దరఖాస్తులు", "ఇది ఎలా పనిచేస్తుంది", "దరఖాస్తులు & ఆటోమేషన్"], name: "పూర్తి పేరు", occupation: "వృత్తి" },
+    { code: "ml", nav: ["അവലോകനം", "ആനുകൂല്യങ്ങൾ കണ്ടെത്തുക", "എന്റെ പ്രൊഫൈൽ", "രേഖകൾ", "എന്റെ അപേക്ഷകൾ", "ഇത് എങ്ങനെ പ്രവർത്തിക്കുന്നു", "അപേക്ഷകളും ഓട്ടോമേഷനും"], name: "പൂർണ്ണ പേര് (ഐച്ഛികം)", occupation: "തൊഴിൽ" }
   ];
   for (const locale of expected) {
     await selector.selectOption(locale.code);
@@ -357,7 +357,7 @@ test("application workspace explains citizen-directed portal field assistance an
   await expect(assistant).toContainText("approve each safe field");
   await expect(assistant).toContainText("not a government-authorized integration");
   await expect(assistant).toContainText("never uploads documents");
-  await expect(assistant.getByRole("link", { name: "Get the form assistant" })).toHaveAttribute("href", "https://github.com/PSP-YN/JanaSetu-AI/tree/main/extension");
+  await expect(page.locator(".portal-assistant-start").getByRole("link", { name: "Download extension ZIP" })).toHaveAttribute("href", "/downloads/JanaSetu-Form-Assistant.zip");
 });
 
 

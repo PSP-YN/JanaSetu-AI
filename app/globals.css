@@ -1207,6 +1207,25 @@ button:disabled,
 }
 
 
+.portal-assistant-start .automation-plan-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+.portal-assistant-start .automation-plan-controls .automation-text-link {
+  margin: 0;
+}
+.intake-actions > div {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+@media (max-width: 900px) {
+  .intake-actions > div {
+    justify-content: flex-start;
+  }
+}
 .portal-assistant-heading {
   display: flex;
   align-items: flex-start;

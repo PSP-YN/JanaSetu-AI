@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { buildFormAssistantBackup } from "@/lib/form-assistant-backup";
+import type { LanguageCode } from "@/lib/catalog";
 
 type Scheme={id:string;slug:string;name:string;category:string;current_version_id:string|null};
 type Case={id:string;scheme_version_id:string;status:string;created_at:string;external_reference:string|null};
@@ -30,6 +32,7 @@ export default function AutomationCenterPage(){
   const [planSlug,setPlanSlug]=useState("pm-kisan");
   const [planBusy,setPlanBusy]=useState(false);
   const [planResult,setPlanResult]=useState<PlanResult|null>(null);
+  const [profileExportStatus,setProfileExportStatus]=useState("");
   const planRequestId=useRef(0);
   const refresh=useCallback(async()=>{
     setBusy(true);setError("");
@@ -74,6 +77,29 @@ export default function AutomationCenterPage(){
     }catch(e){if(requestId===planRequestId.current)setError(e instanceof Error?e.message:"Could not generate an automation plan.");}
     finally{if(requestId===planRequestId.current)setPlanBusy(false);}
   };
+  const downloadFormAssistantProfile=()=>{
+    try{
+      const rawProfile=localStorage.getItem("janSetu.profile.v1");
+      if(!rawProfile){
+        setProfileExportStatus("Complete My profile first. Opening the profile editor…");
+        window.location.assign("/app?tab=profile");
+        return;
+      }
+      const profile=JSON.parse(rawProfile);
+      const rawLanguage=localStorage.getItem("janSetu.language.v1");
+      const language=(rawLanguage?JSON.parse(rawLanguage):"en") as LanguageCode;
+      if(!window.confirm("This creates a plaintext JSON file containing your profile details for import into the browser extension. It is not encrypted. Keep it private and delete it after import. Continue?"))return;
+      const backup=buildFormAssistantBackup(profile,language);
+      const blob=new Blob([JSON.stringify(backup,null,2)],{type:"application/json"});
+      const url=URL.createObjectURL(blob);
+      const link=document.createElement("a");
+      link.href=url;link.download="JanaSetu-Form-Assistant-Profile.json";link.click();
+      window.setTimeout(()=>URL.revokeObjectURL(url),1000);
+      setProfileExportStatus("Profile export created. Import this JSON in the JanaSetu Form Assistant extension.");
+    }catch(error){
+      setProfileExportStatus(error instanceof Error?error.message:"Could not export the reviewed profile.");
+    }
+  };
   const confirmPreparation=async(caseId:string)=>{
     setConfirming(caseId);setError("");
     try{
@@ -87,6 +113,26 @@ export default function AutomationCenterPage(){
   return <main className="automation-center">
     <header className="automation-heading"><div><p className="automation-eyebrow">JANASETU AI · APPLICATION AUTOMATION</p><h1>Applications & automation</h1><p>Prepare an application, authorize each action, and track what actually happened.</p></div><button className="button-primary" onClick={()=>void refresh()} disabled={busy}>{busy?"Refreshing…":"Refresh status"}</button></header>
     {error&&<p className="auth-error" role="alert">{error}</p>}
+    <section className="automation-panel portal-assistant-start" aria-labelledby="autofill-start-title">
+      <span className="automation-tag">Start here · citizen-controlled autofill</span>
+      <h2 id="autofill-start-title">Start portal autofill in four steps</h2>
+      <p>Autofill starts from this page. Prepare your profile here, install the browser helper once, then open the official portal and approve each suggested field yourself.</p>
+      <ol className="portal-assistant-steps">
+        <li><strong>Complete My profile</strong><span>Use the same browser and JanaSetu website where your profile is saved.</span></li>
+        <li><strong>Download your profile</strong><span>Export a profile-only JSON file. It contains personal data in plaintext.</span></li>
+        <li><strong>Install the extension</strong><span>Download the repository ZIP, extract it, open brave://extensions or chrome://extensions, enable Developer mode, then choose Load unpacked and select the extension folder.</span></li>
+        <li><strong>Open the portal and fill</strong><span>Open the official scheme link, click the JanaSetu extension icon, import the JSON once, verify the exact URL, preview fields, select only correct values, and click Fill selected fields.</span></li>
+      </ol>
+      <div className="automation-plan-controls">
+        <button className="button-primary" type="button" onClick={downloadFormAssistantProfile}>Download reviewed profile for autofill</button>
+        <a className="button-primary automation-link" href="/downloads/JanaSetu-Form-Assistant.zip" target="_blank" rel="noreferrer">Download extension ZIP</a>
+        <Link className="automation-text-link" href="/app?tab=profile">Open My profile →</Link>
+      </div>
+      {profileExportStatus&&<p role="status" className="automation-requirements-note">{profileExportStatus}</p>}
+      <p><strong>Example official destination:</strong> <a href="https://pmkisan.gov.in/RegistrationFormupdated.aspx" target="_blank" rel="noreferrer">PM-KISAN new farmer registration</a>. That form requests Aadhaar and CAPTCHA; JanaSetu will not fill either. Only safe matching fields such as mobile number or state may be suggested.</p>
+      <p className="portal-assistant-boundary">The helper only fills individually approved, visible, non-sensitive fields on a citizen-verified HTTPS .gov.in or .nic.in page. It never clicks Next, Apply, Save or Submit, uploads documents, or handles OTP, CAPTCHA, Aadhaar or e-KYC.</p>
+    </section>
+
     {!user?<section className="automation-panel"><h2>Sign in to view your application activity</h2><p>Citizen applications, consent records and automation history are private to the signed-in account.</p><Link className="button-primary automation-link" href="/auth?next=/app/automation">Sign in / Create account</Link></section>:<section className="automation-user">Signed in as <strong>{user.email||"Citizen account"}</strong></section>}
     {user&&<section className="automation-panel">
       <h2>Reusable application automation planner</h2>
@@ -128,7 +174,7 @@ export default function AutomationCenterPage(){
       </div>
     </section>
     <section className="automation-panel portal-assistant-panel">
-      <div className="portal-assistant-heading"><div><span className="automation-tag">Citizen-controlled browser helper</span><h2>JanaSetu Form Assistant</h2><p>Import a citizen-reviewed profile, preview matching fields, and approve individual values before filling. You can open the official portal, verify its address, then preview and approve each safe field before filling it locally. This is citizen-directed assistance, not a government-authorized integration.</p></div><a className="button-primary automation-link" href="https://github.com/PSP-YN/JanaSetu-AI/tree/main/extension" target="_blank" rel="noreferrer">Get the form assistant</a></div>
+      <div className="portal-assistant-heading"><div><span className="automation-tag">Citizen-controlled browser helper</span><h2>JanaSetu Form Assistant</h2><p>Import a citizen-reviewed profile, preview matching fields, and approve individual values before filling. You can open the official portal, verify its address, then preview and approve each safe field before filling it locally. This is citizen-directed assistance, not a government-authorized integration.</p></div></div>
       <ol className="portal-assistant-steps"><li><strong>Import</strong><span>Export a profile-only JSON file after reviewing the plaintext-export warning.</span></li><li><strong>Preview</strong><span>Verify the exact HTTPS address against JanaSetu’s official source link; only .gov.in and .nic.in pages are supported.</span></li><li><strong>Approve and fill</strong><span>Only visible, unambiguous, non-sensitive fields are suggested. You approve each value before it is filled.</span></li><li><strong>You take over</strong><span>JanaSetu stops after filling. Review the form and handle OTP, CAPTCHA, identity checks, documents and any final submission yourself.</span></li></ol>
       <p className="portal-assistant-boundary">The extension never uploads documents, handles credentials, fills Aadhaar/OTP/CAPTCHA/security fields, bypasses portal controls, or clicks Next, Apply, Save or Submit. This is citizen-directed browser assistance, not a department-authorized API integration.</p>
     </section>
