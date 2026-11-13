@@ -92,12 +92,18 @@ test("regional-language landing pages fit narrow phone viewports without horizon
         body: document.body.scrollWidth,
         header: document.querySelector(".localized-header")!.getBoundingClientRect().toJSON(),
         brand: document.querySelector(".localized-header .brand")!.getBoundingClientRect().toJSON(),
+        logo: document.querySelector(".localized-header .brand img")!.getBoundingClientRect().toJSON(),
+        hero: document.querySelector(".localized-hero")!.getBoundingClientRect().toJSON(),
         cta: document.querySelector(".localized-header > .button-primary")!.getBoundingClientRect().toJSON()
       }));
       expect(metrics.document, `${route} document overflow at ${width}px`).toBeLessThanOrEqual(metrics.viewport + 1);
       expect(metrics.body, `${route} body overflow at ${width}px`).toBeLessThanOrEqual(metrics.viewport + 1);
       expect(metrics.brand.left, `${route} brand left overflow at ${width}px`).toBeGreaterThanOrEqual(-1);
       expect(metrics.brand.right, `${route} brand right overflow at ${width}px`).toBeLessThanOrEqual(metrics.viewport + 1);
+      expect(metrics.logo.width, `${route} logo width at ${width}px`).toBeLessThanOrEqual(48);
+      expect(metrics.logo.height, `${route} logo height at ${width}px`).toBeLessThanOrEqual(48);
+      expect(metrics.header.height, `${route} header height at ${width}px`).toBeLessThan(180);
+      expect(metrics.hero.top, `${route} hero must follow the header at ${width}px`).toBeGreaterThanOrEqual(metrics.header.bottom - 1);
       expect(metrics.cta.right, `${route} CTA right overflow at ${width}px`).toBeLessThanOrEqual(metrics.viewport + 1);
     }
   }
