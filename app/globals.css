@@ -1415,3 +1415,79 @@ button:disabled,
   .localized-trust strong{min-width:0;overflow-wrap:anywhere;word-break:normal}
   .localized-steps h3,.localized-faq summary{overflow-wrap:anywhere}
 }
+
+
+/* Keep translated landing headers independent from the workspace's generic .brand styles. */
+.localized-landing,
+.localized-landing * { box-sizing: border-box; }
+.localized-landing { width: 100%; overflow-x: clip; }
+.localized-header { min-width: 0; }
+.localized-header .brand {
+  display: inline-flex;
+  flex: 0 1 auto;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+  max-width: 100%;
+  padding: 0;
+  white-space: normal;
+}
+.localized-header .brand img {
+  display: block;
+  flex: 0 0 43px;
+  width: 43px;
+  height: 43px;
+  object-fit: contain;
+}
+.localized-header .brand > span {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+.localized-header .brand small {
+  display: block;
+  max-width: 320px;
+  line-height: 1.35;
+  white-space: normal;
+}
+.localized-header nav { flex: 0 1 auto; min-width: 0; }
+.localized-header nav a { min-width: 0; white-space: normal; overflow-wrap: anywhere; }
+.localized-hero h1,
+.localized-hero > p,
+.localized-how h2,
+.localized-faq h2,
+.localized-how > div > p,
+.localized-faq > div > p,
+.localized-steps h3,
+.localized-steps p,
+.localized-faq summary,
+.localized-faq details p,
+.localized-disclaimer p { overflow-wrap: anywhere; }
+.localized-trust > div,
+.localized-trust strong,
+.localized-disclaimer,
+.localized-footer { min-width: 0; }
+.localized-trust strong { overflow-wrap: anywhere; }
+.localized-footer { flex-wrap: wrap; }
+@media (max-width: 1050px) {
+  .localized-header { flex-wrap: wrap; gap: 12px; }
+  .localized-header nav {
+    order: 3;
+    flex: 1 0 100%;
+    justify-content: flex-start;
+    width: 100%;
+  }
+}
+@media (max-width: 600px) {
+  .localized-header .brand { flex: 1 1 145px; gap: 7px; font-size: 17px; }
+  .localized-header .brand img { flex-basis: 36px; width: 36px; height: 36px; }
+  .localized-header .brand small { display: none; }
+  .localized-header > .button-primary { max-width: 100%; }
+  .localized-hero { padding: 56px 18px 46px; }
+  .localized-trust { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .localized-how,
+  .localized-faq { grid-template-columns: minmax(0, 1fr); }
+  .localized-disclaimer { margin-left: 12px; margin-right: 12px; padding: 15px; }
+}
