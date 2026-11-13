@@ -38,25 +38,24 @@ The entry point is **Workspace → Applications & automation → Start portal au
    - Open brave://extensions or chrome://extensions.
    - Enable Developer mode.
    - Choose **Load unpacked** and select the repository's extension/ directory.
-4. **Open the official portal.**
-   - Open the official portal from the relevant scheme guide or use the PM-KISAN example link on the automation page.
+4. **Open the Karnataka SSP portal.**
+   - For the demo, open https://ssp.postmatric.karnataka.gov.in/CA/ (SSP Post-Matric · Create Account).
    - Check the address bar yourself. The extension only operates on supported HTTPS .gov.in and .nic.in hosts.
-   - Click the JanaSetu Form Assistant toolbar icon.
-   - Import the JSON once, preview suggested fields, select only values you have checked, and click **Fill selected fields**.
-   - Review every populated field on the portal yourself.
+   - Click the JanaSetu Form Assistant toolbar icon, import the JSON once, verify the exact URL, preview suggested fields, select only values you have checked, and click **Fill selected fields**.
+   - The current SSP first page exposes “Enter Student Aadhaar number” and a “Click to proceed” button. Enter the number in the extension popup’s one-time SSP field, preview it and approve that field. The value is not saved. The citizen clicks “Click to proceed” manually.
+   - Review every populated field on the portal yourself. On later steps, refresh the preview after the portal changes.
 
 ### Safety boundaries
 
-- The helper fills only visible, unambiguous, non-sensitive fields that match its allowlist and the imported profile.
-- It does not handle Aadhaar, OTP, CAPTCHA, authentication/security PINs, bank credentials, e-KYC or identity verification.
-- It does not upload documents or click Next, Apply, Save, Submit, Confirm or other final/forward navigation controls.
+- The helper fills visible fields that match the citizen-reviewed profile. For the Karnataka SSP demo only, the citizen may enter the Aadhaar number directly in the extension popup for the current session and approve that field individually; it is not stored in My profile, the JSON export or extension storage.
+- It does not verify Aadhaar/e-KYC or identity. OTP, CAPTCHA, passwords, bank details, consent/declaration checkboxes and security PINs remain human-only.
+- It does not upload documents or click Proceed, Verify, Next, Apply, Save, Submit, Confirm or other portal buttons.
 - It does not decide eligibility and does not submit an application.
-- PM-KISAN's new farmer registration page asks for Aadhaar and CAPTCHA. The helper intentionally leaves those controls untouched; the example link is for showing where the citizen starts, not for automating identity verification.
-- The extension is a generic, citizen-directed browser helper. It is not an official government integration, and universal portal coverage is not enabled.
+- The extension is a generic, citizen-directed browser helper. It is not an official government integration or a certified SSP adapter.
 
 ## Verification
 
-- TypeScript and 177 unit tests.
+- TypeScript and 178 unit tests.
 - Production build.
 - E2E checks cover browser speech fallback, on-device recorder-to-worker flow, profile JSON download, extension field preview/fill safety and blocked sensitive controls.
 - A real browser-worker smoke test ran the quantized Whisper base model against local synthetic speech fixtures for English, Hindi, Kannada, Tamil, Telugu and Malayalam. This confirms worker/model execution and language-option wiring, not production transcription accuracy for every accent or recording environment.

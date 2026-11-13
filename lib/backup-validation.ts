@@ -32,6 +32,7 @@ export function parseBackupProfile(value: unknown, options: { allowIncompleteCon
     "fullName", "age", "gender", "state", "district", "residenceType", "annualIncome", "occupation",
     "hasCultivableLand", "pmKisanExcluded", "ownsPuccaHouse", "previousHousingBenefit", "householdHasLpg",
     "poorHouseholdDeclaration", "isStudent", "top20Percentile", "regularUndergraduate", "otherScholarship", "diplomaOrDistance",
+    "dateOfBirth", "sslcRegistrationNumber", "casteCertificateRdNumber", "incomeCertificateRdNumber", "universityRegistrationNumber", "taluk", "assemblyConstituency",
     "mobileNumber", "emailAddress", "addressLine1", "addressLine2", "villageOrTown", "pincode",
     "fatherOrGuardianName", "motherName", "socialCategory", "landholdingAcres", "institutionName",
     "courseName", "courseYear", "rationCardCategory"

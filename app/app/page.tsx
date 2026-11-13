@@ -56,6 +56,7 @@ const EMPTY_PROFILE: CitizenProfile = {
   ownsPuccaHouse: null, previousHousingBenefit: "unknown", householdHasLpg: null,
   poorHouseholdDeclaration: null, isStudent: false, top20Percentile: null,
   regularUndergraduate: null, otherScholarship: null, diplomaOrDistance: null,
+  dateOfBirth: "", sslcRegistrationNumber: "", casteCertificateRdNumber: "", incomeCertificateRdNumber: "", universityRegistrationNumber: "", taluk: "", assemblyConstituency: "",
   mobileNumber: "", emailAddress: "", addressLine1: "", addressLine2: "", villageOrTown: "",
   pincode: "", fatherOrGuardianName: "", motherName: "", socialCategory: "",
   landholdingAcres: "", institutionName: "", courseName: "", courseYear: "", rationCardCategory: ""
@@ -1609,6 +1610,7 @@ export default function Home() {
                 </div>
                 <div className="form-section-title subsection"><span>05</span><div><h2>{t("contactSectionTitle")}</h2><p>{t("contactSectionText")}</p></div></div>
                 <div className="form-grid">
+                  <Field label={profileFormText(language, "dateOfBirthLabel") || "Date of birth"}><input type="date" value={profile.dateOfBirth ?? ""} onChange={(e) => updateProfile("dateOfBirth", e.target.value)}/></Field>
                   <Field label={t("mobileNumberLabel")}><input type="tel" autoComplete="tel" inputMode="tel" maxLength={14} placeholder={t("mobileNumberPlaceholder")} value={profile.mobileNumber} onChange={(e) => updateProfile("mobileNumber", e.target.value)}/></Field>
                   <Field label={t("emailAddressLabel")}><input type="email" autoComplete="email" maxLength={160} placeholder={t("emailAddressPlaceholder")} value={profile.emailAddress} onChange={(e) => updateProfile("emailAddress", e.target.value)}/></Field>
                   <Field label={t("addressLine1Label")}><input autoComplete="address-line1" value={profile.addressLine1} onChange={(e) => updateProfile("addressLine1", e.target.value)}/></Field>
@@ -1623,6 +1625,12 @@ export default function Home() {
                   <Field label={t("institutionNameLabel")}><input value={profile.institutionName} onChange={(e) => updateProfile("institutionName", e.target.value)}/></Field>
                   <Field label={t("courseNameLabel")}><input value={profile.courseName} onChange={(e) => updateProfile("courseName", e.target.value)}/></Field>
                   <Field label={t("courseYearLabel")}><input placeholder={t("courseYearPlaceholder")} value={profile.courseYear} onChange={(e) => updateProfile("courseYear", e.target.value)}/></Field>
+                  <Field label={profileFormText(language, "sslcRegistrationNumberLabel") || "SSLC registration number"}><input value={profile.sslcRegistrationNumber ?? ""} onChange={(e) => updateProfile("sslcRegistrationNumber", e.target.value)}/></Field>
+                  <Field label={profileFormText(language, "casteCertificateRdNumberLabel") || "Caste certificate RD number"}><input value={profile.casteCertificateRdNumber ?? ""} onChange={(e) => updateProfile("casteCertificateRdNumber", e.target.value)}/></Field>
+                  <Field label={profileFormText(language, "incomeCertificateRdNumberLabel") || "Income certificate RD number"}><input value={profile.incomeCertificateRdNumber ?? ""} onChange={(e) => updateProfile("incomeCertificateRdNumber", e.target.value)}/></Field>
+                  <Field label={profileFormText(language, "universityRegistrationNumberLabel") || "University / college registration number"}><input value={profile.universityRegistrationNumber ?? ""} onChange={(e) => updateProfile("universityRegistrationNumber", e.target.value)}/></Field>
+                  <Field label={profileFormText(language, "talukLabel") || "Taluk"}><input value={profile.taluk ?? ""} onChange={(e) => updateProfile("taluk", e.target.value)}/></Field>
+                  <Field label={profileFormText(language, "assemblyConstituencyLabel") || "Assembly constituency"}><input value={profile.assemblyConstituency ?? ""} onChange={(e) => updateProfile("assemblyConstituency", e.target.value)}/></Field>
                 </div>
                 <div className="form-footer"><span><LockKeyhole size={14}/> {t("noAadhaarRequest")}</span><div className="form-footer-actions"><button className="button button-outline" onClick={exportProfileForFormAssistant}>{t("exportFormAssistant")}</button><button className="button button-primary" onClick={() => { setNotice(t("saved")); runAssessment(); }}>{t("run")} <ArrowRight size={16}/></button></div></div>
               </div>

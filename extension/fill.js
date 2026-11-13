@@ -1,9 +1,13 @@
-function fillProfileInPage(profile,approvedFields){
+function fillProfileInPage(profile,approvedFields,sessionValues={}){
   const norm=(value)=>String(value??"").toLowerCase().replace(/[^a-z0-9\p{L}\p{N}]+/gu," ").trim();
   const hasAlias=(text,alias)=>(" "+norm(text)+" ").includes(" "+norm(alias)+" ");
   const fieldParts=(element)=>[
     element.labels?[...element.labels].map(label=>label.innerText).join(" "):"",
-    element.name||"",element.id||"",element.getAttribute("placeholder")||"",element.getAttribute("aria-label")||""
+    element.name||"",element.id||"",element.getAttribute("placeholder")||"",element.getAttribute("aria-label")||"",
+    element.getAttribute("title")||"",
+    element.getAttribute("aria-labelledby")?document.getElementById(element.getAttribute("aria-labelledby"))?.innerText||"":"",
+    element.closest("tr")?.innerText||"",
+    element.closest(".form-group,.form-row,fieldset")?.innerText||""
   ].map(norm).filter(Boolean);
   const relatedPersonName=/(?:^| )(?:father|mother|spouse|husband|wife|guardian|parent|son|daughter|brother|sister|father in law|mother in law)(?: |$)/;
   const applicantNameAliases=new Set(["applicant name","applicant full name","name of applicant","beneficiary name","beneficiary full name","name of beneficiary"]);
@@ -14,7 +18,15 @@ function fillProfileInPage(profile,approvedFields){
     return parts.some(part=>hasAlias(part,alias));
   };
   const aliases={
-    fullName:["name","full name","applicant name","applicant full name","name of applicant","beneficiary name","beneficiary full name","name of beneficiary","पूरा नाम","ಹೆಸರು","பெயர்","పేరు","പേര്"],
+    aadhaarNumber:["aadhaar number","aadhar number","uid number","uidai number","आधार संख्या","ಆಧಾರ್ ಸಂಖ್ಯೆ","ஆதார் எண்","ఆధార్ నంబర్","ആധാർ നമ്പർ"],
+    dateOfBirth:["date of birth","dob","birth date","जन्म तिथि","ಜನ್ಮ ದಿನಾಂಕ","பிறந்த தேதி","పుట్టిన తేదీ","ജനനത്തീയതി"],
+    sslcRegistrationNumber:["sslc registration number","sslc reg no","sslc number","10th registration number","ಶಾಲಾ ನೋಂದಣಿ ಸಂಖ್ಯೆ"],
+    casteCertificateRdNumber:["caste certificate rd number","caste rd number","caste certificate number","ಜಾತಿ ಪ್ರಮಾಣಪತ್ರ ಆರ್ ಡಿ ಸಂಖ್ಯೆ"],
+    incomeCertificateRdNumber:["income certificate rd number","income rd number","income certificate number","ಆದಾಯ ಪ್ರಮಾಣಪತ್ರ ಆರ್ ಡಿ ಸಂಖ್ಯೆ"],
+    universityRegistrationNumber:["university registration number","university reg no","college registration number","university seat number","ಅಂಕಪಟ್ಟಿ ನೋಂದಣಿ ಸಂಖ್ಯೆ"],
+    taluk:["taluk","taluka","ತಾಲ್ಲೂಕು","ತಾಲೂಕು"],
+    assemblyConstituency:["assembly constituency","constituency","ವಿಧಾನಸಭಾ ಕ್ಷೇತ್ರ"],
+    fullName:["name","full name","name as in aadhaar","name as per aadhaar","name on aadhaar","applicant name","applicant full name","name of applicant","beneficiary name","beneficiary full name","name of beneficiary","पूरा नाम","ಹೆಸರು","பெயர்","పేరు","പേര്"],
     mobileNumber:["mobile number","mobile no","phone number","contact number","registered mobile","मोबाइल नंबर","ಮೊಬೈಲ್ ಸಂಖ್ಯೆ","கைபேசி எண்","మొబైల్ నంబర్","മൊബൈൽ നമ്പർ"],
     emailAddress:["email address","email id","e mail","ईमेल पता","ಇಮೇಲ್ ವಿಳಾಸ","மின்னஞ்சல் முகவரி","ఇమెయిల్ చిరునామా","ഇമെയിൽ വിലാസം"],
     age:["age","उम्र","ವಯಸ್ಸು","வயது","వయస్సు","പ്രായം"],
@@ -50,14 +62,16 @@ function fillProfileInPage(profile,approvedFields){
   };
   const isSensitive=(parts)=>{
     const normalizedParts=(Array.isArray(parts)?parts:[parts]).map(norm);
-    const protectedTerm=/(?:^| )(?:aadhaar|aadhar|uidai|pan|bank|account|ifsc|otp|captcha|password|passcode|identity|document|upload|file|security pin|securitypin|mpin|atm pin|atm_pin|transaction pin|transaction_pin|debit pin|credit pin|login pin)(?: |$)/;
+    const protectedTerm=/(?:^| )(?:pan|bank|account|ifsc|otp|captcha|password|passcode|identity|document|upload|file|security pin|securitypin|mpin|atm pin|atm_pin|transaction pin|transaction_pin|debit pin|credit pin|login pin)(?: |$)/;
     if(normalizedParts.some(part=>protectedTerm.test(part)))return true;
     const postalTerm=/(?:postal pin|pin code|pincode|postal code|zip code)/;
     const ambiguousPin=/(?:^| )pin(?: |$)/;
     return normalizedParts.some(part=>ambiguousPin.test(part)&&!postalTerm.test(part));
   };
+  const isAadhaarSensitive=(parts)=>parts.some(part=>/(?:^| )(?:aadhaar|aadhar|uidai)(?: |$)/.test(norm(part)));
   const profileValue=(key)=>{
-    let value=profile[key];
+    let value=key==="aadhaarNumber"?sessionValues.aadhaarNumber:profile[key];
+    if(key==="aadhaarNumber"&&!/^[0-9]{12}$/.test(String(value??"")))return "";
     if(key==="gender")value=profile.gender==="woman"?"Female":profile.gender==="man"?"Male":profile.gender==="other"?"Other":"";
     if(key==="annualIncome"&&value!==""&&value!=null)value=String(value);
     if(["hasCultivableLand","ownsPuccaHouse","householdHasLpg","poorHouseholdDeclaration","isStudent","top20Percentile","regularUndergraduate","otherScholarship","diplomaOrDistance"].includes(key))value=value===null?"":value?"Yes":"No";
@@ -83,7 +97,7 @@ function fillProfileInPage(profile,approvedFields){
     if(element.getAttribute("pattern"))return {valid:false,reason:"The portal has a custom format rule that needs manual validation."};
     return {valid:true,reason:""};
   };
-  const controls=[...document.querySelectorAll('input:not([type]),input[type="text"],input[type="number"],input[type="radio"],select,textarea')].filter(visible);
+  const controls=[...document.querySelectorAll('input:not([type]),input[type="text"],input[type="number"],input[type="tel"],input[type="email"],input[type="date"],input[type="search"],input[type="radio"],select,textarea')].filter(visible);
   const candidates=[];const handledRadio=new Set();
   for(const element of controls){
     const radio=element.type==="radio";
@@ -108,7 +122,9 @@ function fillProfileInPage(profile,approvedFields){
     }
     if(element.type==="checkbox"||element.type==="file"||element.type==="password")continue;
     const parts=fieldParts(element);
-    if(isSensitive(parts))continue;
+    const aadhaarField=aliases.aadhaarNumber.some(alias=>matchesAlias(parts,alias));
+    const aadhaarNameField=["name as in aadhaar","name as per aadhaar","name on aadhaar"].some(alias=>matchesAlias(parts,alias));
+    if(isSensitive(parts)||(isAadhaarSensitive(parts)&&!(aadhaarField&&profileValue("aadhaarNumber"))&&!aadhaarNameField))continue;
     const key=Object.keys(aliases).find(name=>aliases[name].some(alias=>matchesAlias(parts,alias)));
     if(!key)continue;
     const duplicates=controls.filter(candidate=>{
@@ -125,13 +141,20 @@ function fillProfileInPage(profile,approvedFields){
       const options=[...element.options].filter(option=>!option.disabled&&(norm(option.text)===norm(value)||norm(option.value)===norm(value)));
       if(options.length!==1)continue;
     }else if(String(element.value||"").trim()!=="")continue;
-    const label=element.labels?[...element.labels].map(item=>item.innerText).join(" "):element.getAttribute("aria-label")||element.name||element.id||key;
+    const label=element.labels?[...element.labels].map(item=>item.innerText).join(" "):element.closest(".form-group,.form-row,fieldset")?.innerText||element.getAttribute("aria-label")||element.name||element.id||key;
     const fingerprint=JSON.stringify({kind:element.tagName.toLowerCase(),type:element.type||"",name:element.name||"",id:element.id||"",label:norm(label),placeholder:norm(element.getAttribute("placeholder"))});
     const validation=element.tagName==="SELECT"?{valid:true,reason:""}:validateControl(element,value);
     candidates.push({index:candidates.length,key,label,value,fingerprint,kind:element.tagName==="SELECT"?"select":"text",element,valid:validation.valid,reason:validation.reason});
   }
+  const manualSteps=[];
+  const allControls=[...document.querySelectorAll("input,button,a,select,textarea")];
+  const labels=allControls.map(element=>[element.getAttribute("aria-label")||"",element.name||"",element.id||"",element.value||"",element.innerText||"",element.closest("tr")?.innerText||""].join(" "));
+  if(labels.some(value=>/(?:otp|one time password|verification code)/i.test(value)))manualSteps.push("Request and enter the OTP yourself in the portal.");
+  if(labels.some(value=>/(?:captcha|security code|verification image)/i.test(value)))manualSteps.push("Read and enter the CAPTCHA yourself in the portal.");
+  if(allControls.some(element=>element.tagName==="INPUT"&&element.type==="checkbox"&&/(?:consent|declaration|agree|authorize)/i.test([element.name,element.id,element.closest("tr")?.innerText||""].join(" "))))manualSteps.push("Review and tick any Aadhaar consent or declaration checkbox yourself.");
+  if(allControls.some(element=>element.tagName==="INPUT"&&element.type==="submit"||element.tagName==="BUTTON"&&/(?:submit|apply|proceed|verify|continue|get otp)/i.test(element.innerText||element.value||"")))manualSteps.push("Review the page and click portal buttons yourself. JanaSetu will not click Proceed, Verify, Apply or Submit.");
   if(!Array.isArray(approvedFields)){
-    return {preview:candidates.map(({index,key,label,value,fingerprint,valid,reason})=>({index,key,label,value,fingerprint,valid,reason}))};
+    return {preview:candidates.map(({index,key,label,value,fingerprint,valid,reason})=>({index,key,label,value,fingerprint,valid,reason})),manualSteps};
   }
   const approved=new Map(approvedFields.filter(item=>item&&Number.isInteger(item.index)&&typeof item.fingerprint==="string").map(item=>[item.index,item.fingerprint]));
   let filled=0,stale=0;
@@ -162,5 +185,5 @@ function fillProfileInPage(profile,approvedFields){
     element.dispatchEvent(new Event("change",{bubbles:true}));
     filled++;
   }
-  return {filled,stale};
+  return {filled,stale,manualSteps};
 }

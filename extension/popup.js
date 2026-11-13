@@ -92,7 +92,7 @@ const MAX_BACKUP_BYTES = 5 * 1024 * 1024;
 const STATES_AND_UTS = ["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal","Andaman and Nicobar Islands","Chandigarh","Dadra and Nagar Haveli and Daman and Diu","Delhi","Jammu and Kashmir","Ladakh","Lakshadweep","Puducherry"];
 function isValidProfile(profile) {
   if (!profile || typeof profile !== "object" || Array.isArray(profile)) return false;
-  const allowed = ["fullName","age","gender","state","district","residenceType","annualIncome","occupation","hasCultivableLand","pmKisanExcluded","ownsPuccaHouse","previousHousingBenefit","householdHasLpg","poorHouseholdDeclaration","isStudent","top20Percentile","regularUndergraduate","otherScholarship","diplomaOrDistance","mobileNumber","emailAddress","addressLine1","addressLine2","villageOrTown","pincode","fatherOrGuardianName","motherName","socialCategory","landholdingAcres","institutionName","courseName","courseYear","rationCardCategory"];
+  const allowed = ["fullName","age","gender","state","district","residenceType","annualIncome","occupation","hasCultivableLand","pmKisanExcluded","ownsPuccaHouse","previousHousingBenefit","householdHasLpg","poorHouseholdDeclaration","isStudent","top20Percentile","regularUndergraduate","otherScholarship","diplomaOrDistance","dateOfBirth","sslcRegistrationNumber","casteCertificateRdNumber","incomeCertificateRdNumber","universityRegistrationNumber","taluk","assemblyConstituency","mobileNumber","emailAddress","addressLine1","addressLine2","villageOrTown","pincode","fatherOrGuardianName","motherName","socialCategory","landholdingAcres","institutionName","courseName","courseYear","rationCardCategory"];
   if (Object.keys(profile).some((key) => !allowed.includes(key))) return false;
   if (typeof profile.fullName !== "string" || profile.fullName.length > 100) return false;
   if (!(profile.age === "" || (Number.isInteger(profile.age) && profile.age >= 0 && profile.age <= 120))) return false;
@@ -104,7 +104,7 @@ function isValidProfile(profile) {
   if (normalizeOccupation(profile.occupation) === null) return false;
   for (const key of ["hasCultivableLand","ownsPuccaHouse","householdHasLpg","poorHouseholdDeclaration","top20Percentile","regularUndergraduate","otherScholarship","diplomaOrDistance"]) if (profile[key] !== null && typeof profile[key] !== "boolean") return false;
   if (!["yes","no","unknown"].includes(profile.pmKisanExcluded) || !["yes","no","unknown"].includes(profile.previousHousingBenefit)) return false;
-  const textFields = ["mobileNumber","emailAddress","addressLine1","addressLine2","villageOrTown","pincode","fatherOrGuardianName","motherName","institutionName","courseName","courseYear"];
+  const textFields = ["dateOfBirth","sslcRegistrationNumber","casteCertificateRdNumber","incomeCertificateRdNumber","universityRegistrationNumber","taluk","assemblyConstituency","mobileNumber","emailAddress","addressLine1","addressLine2","villageOrTown","pincode","fatherOrGuardianName","motherName","institutionName","courseName","courseYear"];
   for (const key of textFields) if (profile[key] !== undefined && (typeof profile[key] !== "string" || profile[key].length > 160)) return false;
   if (profile.mobileNumber && !/^\+?[0-9]{10,13}$/.test(profile.mobileNumber.replace(/[\s-]/g,""))) return false;
   if (profile.emailAddress && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.emailAddress)) return false;
@@ -159,13 +159,24 @@ let pendingPreview=[];
 let pendingTabId=null;
 let pendingUrl="";
 let pendingProfile=null;
+let pendingSessionValues=null;
+const sspAadhaarInput=document.getElementById("ssp-aadhaar");
+const sspAadhaarGroup=document.getElementById("ssp-aadhaar-group");
+sspAadhaarInput.addEventListener("input",()=>{sspAadhaarInput.value=sspAadhaarInput.value.replace(/\D/g,"").slice(0,12);});
 const previewEl=document.getElementById("preview");
 const applyButton=document.getElementById("apply");
 function clearPreview(){
-  pendingPreview=[];pendingTabId=null;pendingUrl="";pendingProfile=null;
+  const manual=document.getElementById("manual-steps");if(manual){manual.hidden=true;manual.textContent="";}
+  pendingPreview=[];pendingTabId=null;pendingUrl="";pendingProfile=null;pendingSessionValues=null;
   previewEl.replaceChildren();applyButton.disabled=true;
 }
-function renderPreview(fields){
+function notifyHumanSteps(steps){
+  if(!chrome.notifications?.create||!steps.length)return;
+  try{chrome.notifications.create("janasetu-human-"+Date.now(),{type:"basic",iconUrl:chrome.runtime.getURL("notification.png"),title:"JanaSetu: action needed in browser",message:steps.join(" ").slice(0,240)},()=>{});}catch{}
+}
+function renderPreview(fields,manualSteps=[]){
+  const manual=document.getElementById("manual-steps");
+  if(manual&&manualSteps.length){manual.hidden=false;manual.textContent="Human steps required: "+manualSteps.join(" ");notifyHumanSteps(manualSteps);}
   previewEl.replaceChildren();applyButton.disabled=true;
   if(!Array.isArray(fields)||fields.length===0){say("noFields");return;}
   pendingPreview=fields;
@@ -202,8 +213,9 @@ async function getCitizenConfirmedPortalTab(){
   const host=portalUrl.hostname.toLowerCase();
   const governmentHost=host==="gov.in"||host.endsWith(".gov.in")||host==="nic.in"||host.endsWith(".nic.in");
   if(portalUrl.protocol!=="https:"||!governmentHost){say("blockedDomain");return null;}
-  if(activeSiteEl.textContent&&activeSiteEl.textContent!==portalUrl.href)verifyPortalCheckbox.checked=false;
+  if(activeSiteEl.textContent&&activeSiteEl.textContent!=="Not checked yet"&&activeSiteEl.textContent!==portalUrl.href){verifyPortalCheckbox.checked=false;sspAadhaarInput.value="";}
   activeSiteEl.textContent=portalUrl.href;
+  sspAadhaarGroup.hidden=host!=="ssp.postmatric.karnataka.gov.in";
   if(!verifyPortalCheckbox.checked){say("blockedDomain");return null;}
   return tab;
 }
@@ -215,12 +227,18 @@ document.getElementById("fill").addEventListener("click",async()=>{
     if(!profile){say("profileFirst");return;}
     if(!isValidProfile(profile)){say("invalidBackup");return;}
     const tab=await getCitizenConfirmedPortalTab();if(!tab)return;
+    const isSspPage=new URL(tab.url).hostname.toLowerCase()==="ssp.postmatric.karnataka.gov.in";
+    const enteredAadhaar=sspAadhaarInput.value.trim();
+    if(enteredAadhaar&&!isSspPage){sspAadhaarInput.value="";statusEl.textContent="This one-time field is only available on the exact Karnataka SSP page.";return;}
+    if(enteredAadhaar&&!/^[0-9]{12}$/.test(enteredAadhaar)){document.getElementById("status").textContent="Enter exactly 12 digits for the SSP-only session field, or leave it blank.";return;}
+    const sessionValues={aadhaarNumber:isSspPage?enteredAadhaar:""};
     const normalizedProfile={...profile,occupation:normalizeOccupation(profile.occupation)};
-    const result=await chrome.scripting.executeScript({target:{tabId:tab.id},func:fillProfileInPage,args:[normalizedProfile]});
+    const result=await chrome.scripting.executeScript({target:{tabId:tab.id},func:fillProfileInPage,args:[normalizedProfile,null,sessionValues]});
     const fields=result?.[0]?.result?.preview||[];
-    if(!fields.length){say("noFields");return;}
-    pendingTabId=tab.id;pendingUrl=tab.url;pendingProfile=normalizedProfile;
-    renderPreview(fields);
+    const manualSteps=result?.[0]?.result?.manualSteps||[];
+    if(!fields.length){if(manualSteps.length)renderPreview([],manualSteps);else say("noFields");return;}
+    pendingTabId=tab.id;pendingUrl=tab.url;pendingProfile=normalizedProfile;pendingSessionValues=sessionValues;
+    renderPreview(fields,manualSteps);
   }catch(error){clearPreview();say("fillFail");}
 });
 applyButton.addEventListener("click",async()=>{
@@ -230,9 +248,12 @@ applyButton.addEventListener("click",async()=>{
     if(!selected.length){say("noSelection");return;}
     const tab=await getCitizenConfirmedPortalTab();if(!tab)return;
     if(tab.id!==pendingTabId||tab.url!==pendingUrl||!verifyPortalCheckbox.checked){clearPreview();say("stalePreview");return;}
-    const result=await chrome.scripting.executeScript({target:{tabId:tab.id},func:fillProfileInPage,args:[pendingProfile,selected]});
+    const result=await chrome.scripting.executeScript({target:{tabId:tab.id},func:fillProfileInPage,args:[pendingProfile,selected,pendingSessionValues||{}]});
     const filled=result?.[0]?.result?.filled??0;
     const stale=result?.[0]?.result?.stale??0;
+    const manualSteps=result?.[0]?.result?.manualSteps||[];
+    if(manualSteps.length)notifyHumanSteps(manualSteps);
+    if(filled)sspAadhaarInput.value="";
     clearPreview();
     if(filled)say("fillOk",{count:filled});else if(stale)say("stalePreview");else say("noFields");
   }catch(error){clearPreview();say("fillFail");}

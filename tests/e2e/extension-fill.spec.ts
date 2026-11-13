@@ -41,6 +41,31 @@ test("select and radio controls only choose exact semantic values", async ({ pag
   await expect(page.locator('[name="gender"][value="Male"]')).not.toBeChecked();
 });
 
+test("Karnataka SSP create-account Aadhaar field is filled only after citizen approval and the proceed button is never clicked", async ({ page }) => {
+  await page.setContent(`
+    <form id="form1">
+      <div class="form-group">
+        <label class="control-label" for="ddlPerDistrict">Enter Student Aadhaar number</label>
+        <input name="ctl00$ContentPlaceHolder1$txtAadhaarNo" type="text" maxlength="12" id="ContentPlaceHolder1_txtAadhaarNo" class="form-control custom-textbox">
+      </div>
+      <input type="submit" name="ctl00$ContentPlaceHolder1$btnAadhaar_authentication" value="Click to proceed" id="ContentPlaceHolder1_btnAadhaar_authentication">
+    </form>
+  `);
+  await page.addScriptTag({ path: path.join(process.cwd(), "extension/fill.js") });
+  await page.evaluate(() => {
+    (window as any).__clicked = false;
+    (window as any).__submitted = false;
+    document.querySelector("#form1")!.addEventListener("submit", event => { event.preventDefault(); (window as any).__submitted = true; });
+    document.querySelector("#ContentPlaceHolder1_btnAadhaar_authentication")!.addEventListener("click", () => { (window as any).__clicked = true; });
+  });
+  const result = await fillWithCitizenApproval(page, profile, { aadhaarNumber: "123456789012" });
+  expect(result.filled).toBe(1);
+  expect(result.manualSteps).toContain("Review the page and click portal buttons yourself. JanaSetu will not click Proceed, Verify, Apply or Submit.");
+  await expect(page.locator("#ContentPlaceHolder1_txtAadhaarNo")).toHaveValue("123456789012");
+  expect(await page.evaluate(() => (window as any).__clicked)).toBe(false);
+  expect(await page.evaluate(() => (window as any).__submitted)).toBe(false);
+});
+
 test("ambiguous duplicate labels are skipped rather than guessed", async ({ page }) => {
   const result = await loadFill(page, `
     <label>Applicant name <input name="primaryName"></label>
