@@ -68,9 +68,9 @@ test("automation centre exports the local citizen profile directly for the brows
   await page.route("**/api/sources/health", (route) => route.fulfill({ json: { sources: [] } }));
   await page.goto("/app/automation");
   await expect(page.getByRole("heading", { name: "Start portal autofill in four steps" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Download extension ZIP" }).first()).toHaveAttribute("href", "/downloads/JanaSetu-Form-Assistant.zip");
+  await expect(page.getByRole("link", { name: "Download extension ZIP" }).first()).toHaveAttribute("href", "https://raw.githubusercontent.com/PSP-YN/JanaSetu-AI/main/public/downloads/JanaSetu-Form-Assistant.zip");
   await expect(page.getByRole("link", { name: "PM-KISAN new farmer registration" })).toHaveAttribute("href", "https://pmkisan.gov.in/RegistrationFormupdated.aspx");
-  const extensionZip = await page.request.get("http://127.0.0.1:3003/downloads/JanaSetu-Form-Assistant.zip");
+  const extensionZip = await page.request.get("https://raw.githubusercontent.com/PSP-YN/JanaSetu-AI/main/public/downloads/JanaSetu-Form-Assistant.zip");
   expect(extensionZip.ok()).toBeTruthy();
   expect(extensionZip.headers()["content-type"]).toContain("application/zip");
   page.once("dialog", (dialog) => dialog.accept());
