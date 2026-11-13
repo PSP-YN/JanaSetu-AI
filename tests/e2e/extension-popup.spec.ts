@@ -27,16 +27,18 @@ async function openPopup(page: import("@playwright/test").Page, initialUrl = "ht
         set: async (data: Record<string, unknown>) => Object.assign(storage, data)
       } },
       tabs: { query: async () => [(window as any).__popupTab] },
+      runtime: { getURL: (path: string) => path },
+      notifications: { create: async (_id: string, options: unknown, callback?: (id: string) => void) => { (window as any).__notification = options; callback?.(_id); } },
       scripting: { executeScript: async (call: unknown) => {
         (window as any).__lastScriptCall = call;
         const scriptCall = call as { args: any[] };
-        if (scriptCall.args.length === 1) {
+        if (!Array.isArray(scriptCall.args[1])) {
           return [{ result: { preview: [
             { index: 0, key: "fullName", label: "Applicant name", value: "Synthetic Citizen", fingerprint: "name-1", valid: true, reason: "" },
             { index: 1, key: "age", label: "Age", value: "30", fingerprint: "age-1", valid: true, reason: "" }
-          ] } }];
+          ], manualSteps: scriptCall.args[2]?.aadhaarNumber ? ["Review and click portal buttons yourself."] : [] } }];
         }
-        return [{ result: { filled: scriptCall.args[1].length, stale: 0 } }];
+        return [{ result: { filled: scriptCall.args[1].length, stale: 0, manualSteps: [] } }];
       } }
     } });
   }, initialUrl);
@@ -68,6 +70,22 @@ test("extension imports the reviewed profile and fills only after address and fi
   expect(call.args[1]).toHaveLength(1);
 });
 
+test("SSP popup value is passed only to the active SSP fill session and is not stored", async ({ page }) => {
+  await openPopup(page, "https://ssp.postmatric.karnataka.gov.in/CA/");
+  await page.evaluate((profile) => Object.assign((window as any).__popupStorage, { profile, language: "en" }), syntheticProfile);
+  await page.locator("#fill").click();
+  await expect(page.locator("#ssp-aadhaar-group")).toBeVisible();
+  await page.locator("#verify-portal").check();
+  await page.locator("#ssp-aadhaar").fill("123456789012");
+  await page.locator("#fill").click();
+  const call = await page.evaluate(() => (window as any).__lastScriptCall);
+  expect(call.args[2].aadhaarNumber).toBe("123456789012");
+  expect(await page.evaluate(() => (window as any).__notification.title)).toBe("JanaSetu: action needed in browser");
+  const stored = await page.evaluate(() => (window as any).__popupStorage);
+  expect(stored.profile.aadhaarNumber).toBeUndefined();
+  expect(stored.aadhaarNumber).toBeUndefined();
+});
+
 test("the observed PM-KISAN registration route can preview only after the citizen verifies its address", async ({ page }) => {
   await openPopup(page, "https://pmkisan.gov.in/RegistrationFormupdated.aspx");
   await page.evaluate((profile) => Object.assign((window as any).__popupStorage, { profile, language: "en" }), syntheticProfile);
@@ -94,7 +112,8 @@ test("changing the active portal URL invalidates the per-session confirmation an
   await page.evaluate(() => { (window as any).__popupTab.url = "https://portal.gov.in/another-step"; });
   await page.locator("#apply").click();
   await expect(page.locator("#verify-portal")).not.toBeChecked();
-  expect(await page.evaluate(() => (window as any).__lastScriptCall.args.length)).toBe(1);
+  expect(await page.evaluate(() => (window as any).__lastScriptCall.args.length)).toBe(3);
+  expect(await page.evaluate(() => (window as any).__lastScriptCall.args[2].aadhaarNumber)).toBe("");
 });
 
 test("extension popup rejects deceptive non-government hostnames", async ({ page }) => {

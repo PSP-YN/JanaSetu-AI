@@ -2,6 +2,7 @@ import type { LanguageCode } from "./catalog";
 
 export const PROFILE_FORM_COPY: Record<LanguageCode, Record<string, string>> = {
   en: {
+    dateOfBirthLabel: "Date of birth", sslcRegistrationNumberLabel: "SSLC registration number", casteCertificateRdNumberLabel: "Caste certificate RD number", incomeCertificateRdNumberLabel: "Income certificate RD number", universityRegistrationNumberLabel: "University / college registration number", talukLabel: "Taluk", assemblyConstituencyLabel: "Assembly constituency",
     contactSectionTitle: "Application contact & address",
     contactSectionText: "Enter reusable contact and postal details. These stay in this browser and are not sent to a government portal automatically.",
     mobileNumberLabel: "Mobile number", mobileNumberPlaceholder: "10-digit mobile number",
@@ -20,6 +21,7 @@ export const PROFILE_FORM_COPY: Record<LanguageCode, Record<string, string>> = {
     formAssistantExportFailed: "Profile export failed."
   },
   hi: {
+    dateOfBirthLabel: "जन्म तिथि", sslcRegistrationNumberLabel: "SSLC पंजीकरण संख्या", casteCertificateRdNumberLabel: "जाति प्रमाणपत्र RD संख्या", incomeCertificateRdNumberLabel: "आय प्रमाणपत्र RD संख्या", universityRegistrationNumberLabel: "विश्वविद्यालय / कॉलेज पंजीकरण संख्या", talukLabel: "तालुक", assemblyConstituencyLabel: "विधानसभा क्षेत्र",
     contactSectionTitle: "आवेदन संपर्क और पता",
     contactSectionText: "दोबारा उपयोग के लिए संपर्क और डाक पता दर्ज करें। ये विवरण इसी ब्राउज़र में रहते हैं और अपने-आप किसी सरकारी पोर्टल पर नहीं भेजे जाते।",
     mobileNumberLabel: "मोबाइल नंबर", mobileNumberPlaceholder: "10 अंकों का मोबाइल नंबर",
@@ -38,6 +40,7 @@ export const PROFILE_FORM_COPY: Record<LanguageCode, Record<string, string>> = {
     formAssistantExportFailed: "प्रोफ़ाइल निर्यात नहीं हो सका।"
   },
   kn: {
+    dateOfBirthLabel: "ಜನ್ಮ ದಿನಾಂಕ", sslcRegistrationNumberLabel: "SSLC ನೋಂದಣಿ ಸಂಖ್ಯೆ", casteCertificateRdNumberLabel: "ಜಾತಿ ಪ್ರಮಾಣಪತ್ರ RD ಸಂಖ್ಯೆ", incomeCertificateRdNumberLabel: "ಆದಾಯ ಪ್ರಮಾಣಪತ್ರ RD ಸಂಖ್ಯೆ", universityRegistrationNumberLabel: "ವಿಶ್ವವಿದ್ಯಾಲಯ / ಕಾಲೇಜು ನೋಂದಣಿ ಸಂಖ್ಯೆ", talukLabel: "ತಾಲೂಕು", assemblyConstituencyLabel: "ವಿಧಾನಸಭಾ ಕ್ಷೇತ್ರ",
     contactSectionTitle: "ಅರ್ಜಿ ಸಂಪರ್ಕ ಮತ್ತು ವಿಳಾಸ",
     contactSectionText: "ಮರುಬಳಕೆಗೆ ಸಂಪರ್ಕ ಮತ್ತು ಅಂಚೆ ವಿಳಾಸದ ವಿವರಗಳನ್ನು ನಮೂದಿಸಿ. ಇವು ಈ ಬ್ರೌಸರ್‌ನಲ್ಲೇ ಉಳಿಯುತ್ತವೆ; ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಸರ್ಕಾರಿ ಪೋರ್ಟಲ್‌ಗೆ ಕಳುಹಿಸಲಾಗುವುದಿಲ್ಲ.",
     mobileNumberLabel: "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ", mobileNumberPlaceholder: "10 ಅಂಕಿಯ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",
@@ -56,6 +59,7 @@ export const PROFILE_FORM_COPY: Record<LanguageCode, Record<string, string>> = {
     formAssistantExportFailed: "ಪ್ರೊಫೈಲ್ ರಫ್ತು ವಿಫಲವಾಗಿದೆ."
   },
   ta: {
+    dateOfBirthLabel: "பிறந்த தேதி", sslcRegistrationNumberLabel: "SSLC பதிவு எண்", casteCertificateRdNumberLabel: "சாதிச் சான்றிதழ் RD எண்", incomeCertificateRdNumberLabel: "வருமானச் சான்றிதழ் RD எண்", universityRegistrationNumberLabel: "பல்கலைக்கழகம் / கல்லூரி பதிவு எண்", talukLabel: "தாலுகா", assemblyConstituencyLabel: "சட்டமன்றத் தொகுதி",
     contactSectionTitle: "விண்ணப்பத் தொடர்பு மற்றும் முகவரி",
     contactSectionText: "மீண்டும் பயன்படுத்த தொடர்பு மற்றும் அஞ்சல் முகவரி விவரங்களை உள்ளிடவும். இவை இந்த உலாவியில் மட்டுமே இருக்கும்; தானாக அரசு இணையதளத்திற்கு அனுப்பப்படாது.",
     mobileNumberLabel: "கைபேசி எண்", mobileNumberPlaceholder: "10 இலக்க கைபேசி எண்",
@@ -74,6 +78,7 @@ export const PROFILE_FORM_COPY: Record<LanguageCode, Record<string, string>> = {
     formAssistantExportFailed: "சுயவிவர ஏற்றுமதி தோல்வியடைந்தது."
   },
   te: {
+    dateOfBirthLabel: "పుట్టిన తేదీ", sslcRegistrationNumberLabel: "SSLC రిజిస్ట్రేషన్ నంబర్", casteCertificateRdNumberLabel: "కుల ధృవీకరణ పత్రం RD నంబర్", incomeCertificateRdNumberLabel: "ఆదాయ ధృవీకరణ పత్రం RD నంబర్", universityRegistrationNumberLabel: "విశ్వవిద్యాలయం / కళాశాల రిజిస్ట్రేషన్ నంబర్", talukLabel: "తాలూకా", assemblyConstituencyLabel: "శాసనసభ నియోజకవర్గం",
     contactSectionTitle: "దరఖాస్తు సంప్రదింపు మరియు చిరునామా",
     contactSectionText: "మళ్లీ ఉపయోగించడానికి సంప్రదింపు, పోస్టల్ చిరునామా వివరాలను నమోదు చేయండి. ఇవి ఈ బ్రౌజర్‌లోనే ఉంటాయి; ప్రభుత్వ పోర్టల్‌కు స్వయంచాలకంగా పంపబడవు.",
     mobileNumberLabel: "మొబైల్ నంబర్", mobileNumberPlaceholder: "10 అంకెల మొబైల్ నంబర్",
@@ -92,6 +97,7 @@ export const PROFILE_FORM_COPY: Record<LanguageCode, Record<string, string>> = {
     formAssistantExportFailed: "ప్రొఫైల్ ఎగుమతి విఫలమైంది."
   },
   ml: {
+    dateOfBirthLabel: "ജനനത്തീയതി", sslcRegistrationNumberLabel: "SSLC രജിസ്ട്രേഷൻ നമ്പർ", casteCertificateRdNumberLabel: "ജാതി സർട്ടിഫിക്കറ്റ് RD നമ്പർ", incomeCertificateRdNumberLabel: "വരുമാന സർട്ടിഫിക്കറ്റ് RD നമ്പർ", universityRegistrationNumberLabel: "യൂണിവേഴ്സിറ്റി / കോളേജ് രജിസ്ട്രേഷൻ നമ്പർ", talukLabel: "താലൂക്ക്", assemblyConstituencyLabel: "നിയമസഭാ മണ്ഡലം",
     contactSectionTitle: "അപേക്ഷാ ബന്ധപ്പെടൽ വിവരങ്ങളും വിലാസവും",
     contactSectionText: "വീണ്ടും ഉപയോഗിക്കാനായി ബന്ധപ്പെടാനുള്ള വിവരങ്ങളും തപാൽ വിലാസവും നൽകുക. ഇവ ഈ ബ്രൗസറിൽ മാത്രം തുടരും; സർക്കാർ പോർട്ടലിലേക്ക് സ്വയം അയയ്ക്കില്ല.",
     mobileNumberLabel: "മൊബൈൽ നമ്പർ", mobileNumberPlaceholder: "10 അക്ക മൊബൈൽ നമ്പർ",

@@ -22,6 +22,13 @@ export interface CitizenProfile {
   regularUndergraduate: boolean | null;
   otherScholarship: boolean | null;
   diplomaOrDistance: boolean | null;
+  dateOfBirth?: string;
+  sslcRegistrationNumber?: string;
+  casteCertificateRdNumber?: string;
+  incomeCertificateRdNumber?: string;
+  universityRegistrationNumber?: string;
+  taluk?: string;
+  assemblyConstituency?: string;
   mobileNumber?: string;
   emailAddress?: string;
   addressLine1?: string;

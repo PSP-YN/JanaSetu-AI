@@ -35,7 +35,7 @@ test("citizen profile rejects malformed contact and postal values", () => {
   assert.equal(parseCitizenProfile({ ...base, socialCategory: "VIP" }), null);
 });
 
-test("backup parser preserves the expanded profile and still rejects Aadhaar and bank identifiers", () => {
+test("backup parser rejects Aadhaar and bank identifiers from the reusable profile", () => {
   const restored = parseBackupProfile({ ...base, mobileNumber: "9876543210", pincode: "570001", institutionName: "Synthetic College" });
   assert.ok(restored);
   assert.equal(restored.institutionName, "Synthetic College");

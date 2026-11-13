@@ -69,7 +69,7 @@ test("automation centre exports the local citizen profile directly for the brows
   await page.goto("/app/automation");
   await expect(page.getByRole("heading", { name: "Start portal autofill in four steps" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Download extension ZIP" }).first()).toHaveAttribute("href", "https://raw.githubusercontent.com/PSP-YN/JanaSetu-AI/main/public/downloads/JanaSetu-Form-Assistant.zip");
-  await expect(page.getByRole("link", { name: "PM-KISAN new farmer registration" })).toHaveAttribute("href", "https://pmkisan.gov.in/RegistrationFormupdated.aspx");
+  await expect(page.getByRole("link", { name: /Open SSP Post-Matric/ })).toHaveAttribute("href", "https://ssp.postmatric.karnataka.gov.in/CA/");
   const extensionZip = await page.request.get("https://raw.githubusercontent.com/PSP-YN/JanaSetu-AI/main/public/downloads/JanaSetu-Form-Assistant.zip");
   expect(extensionZip.ok()).toBeTruthy();
   expect(extensionZip.headers()["content-type"]).toContain("application/zip");

@@ -5,7 +5,7 @@ const keys: (keyof CitizenProfile)[] = [
   "occupation", "hasCultivableLand", "pmKisanExcluded", "ownsPuccaHouse",
   "previousHousingBenefit", "householdHasLpg", "poorHouseholdDeclaration",
   "isStudent", "top20Percentile", "regularUndergraduate", "otherScholarship",
-  "diplomaOrDistance", "mobileNumber", "emailAddress", "addressLine1", "addressLine2",
+  "diplomaOrDistance", "dateOfBirth", "sslcRegistrationNumber", "casteCertificateRdNumber", "incomeCertificateRdNumber", "universityRegistrationNumber", "taluk", "assemblyConstituency", "mobileNumber", "emailAddress", "addressLine1", "addressLine2",
   "villageOrTown", "pincode", "fatherOrGuardianName", "motherName", "socialCategory",
   "landholdingAcres", "institutionName", "courseName", "courseYear", "rationCardCategory"
 ];
@@ -36,6 +36,7 @@ export function parseCitizenProfile(value: unknown, options: { allowIncompleteCo
     ownsPuccaHouse: null, previousHousingBenefit: "unknown", householdHasLpg: null,
     poorHouseholdDeclaration: null, isStudent: false, top20Percentile: null,
     regularUndergraduate: null, otherScholarship: null, diplomaOrDistance: null,
+    dateOfBirth: "", sslcRegistrationNumber: "", casteCertificateRdNumber: "", incomeCertificateRdNumber: "", universityRegistrationNumber: "", taluk: "", assemblyConstituency: "",
     mobileNumber: "", emailAddress: "", addressLine1: "", addressLine2: "", villageOrTown: "",
     pincode: "", fatherOrGuardianName: "", motherName: "", socialCategory: "",
     landholdingAcres: "", institutionName: "", courseName: "", courseYear: "", rationCardCategory: ""
@@ -43,8 +44,9 @@ export function parseCitizenProfile(value: unknown, options: { allowIncompleteCo
   const profile = { ...defaults, ...input } as CitizenProfile;
 
   if (typeof profile.fullName !== "string" || profile.fullName.length > 100) return null;
-  const boundedText: (keyof CitizenProfile)[] = ["mobileNumber","emailAddress","addressLine1","addressLine2","villageOrTown","pincode","fatherOrGuardianName","motherName","institutionName","courseName","courseYear"];
+  const boundedText: (keyof CitizenProfile)[] = ["dateOfBirth","sslcRegistrationNumber","casteCertificateRdNumber","incomeCertificateRdNumber","universityRegistrationNumber","taluk","assemblyConstituency","mobileNumber","emailAddress","addressLine1","addressLine2","villageOrTown","pincode","fatherOrGuardianName","motherName","institutionName","courseName","courseYear"];
   for (const key of boundedText) if (typeof profile[key] !== "string" || String(profile[key]).length > 160) return null;
+  if (profile.dateOfBirth && !/^\d{4}-\d{2}-\d{2}$/.test(profile.dateOfBirth)) return null;
   if (!options.allowIncompleteContact && profile.mobileNumber && !/^\+?[0-9]{10,13}$/.test(profile.mobileNumber.replace(/[\s-]/g,""))) return null;
   if (!options.allowIncompleteContact && profile.emailAddress && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.emailAddress)) return null;
   if (!options.allowIncompleteContact && profile.pincode && !/^[0-9]{6}$/.test(profile.pincode)) return null;

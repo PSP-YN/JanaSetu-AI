@@ -16,9 +16,9 @@ type TestElement={
 type ApprovedField={index:number;fingerprint:string};
 type PreviewField={index:number;key:string;fingerprint:string;value:string;valid:boolean;reason:string};
 type FillResult={preview:PreviewField[];filled:number};
-type FillContext=vm.Context&{fillProfileInPage:(profile:Record<string,unknown>,approved?:ApprovedField[])=>FillResult};
+type FillContext=vm.Context&{fillProfileInPage:(profile:Record<string,unknown>,approved?:ApprovedField[]|null,sessionValues?:Record<string,string>)=>FillResult};
 
-function runFill(fields:TestElement[],profile:Record<string,unknown>,approved?:ApprovedField[]):FillResult{
+function runFill(fields:TestElement[],profile:Record<string,unknown>,approved?:ApprovedField[],sessionValues:Record<string,string>={}):FillResult{
  class FakeEvent{
   type:string;options:EventInit;
   constructor(type:string,options:EventInit={}){this.type=type;this.options=options;}
@@ -30,7 +30,7 @@ function runFill(fields:TestElement[],profile:Record<string,unknown>,approved?:A
   HTMLInputElement:class{},HTMLSelectElement:class{},HTMLTextAreaElement:class{}
  } as unknown as FillContext;
  vm.runInNewContext(source,context);
- return context.fillProfileInPage(profile,approved);
+ return context.fillProfileInPage(profile,approved,sessionValues);
 }
 function input({type="text",name,id,label,value=""}:{type?:string;name:string;id:string;label:string;value?:string}):TestElement{
  return {tagName:"INPUT",type,name,id,value,hidden:false,disabled:false,readOnly:false,checked:false,
@@ -138,4 +138,16 @@ test("OTP and authentication PIN identifiers stay blocked even when another fiel
  assert.equal(deceptiveOtp.value,"");
  assert.equal(compactSecurityPin.value,"");
  assert.equal(mobilePin.value,"");
+});
+
+test("extension previews citizen-approved Aadhaar, DOB, telephone and email fields",()=>{
+ const aadhaar=input({name:"txtAadhaarNo",id:"ContentPlaceHolder1_txtAadhaarNo",label:"Enter Student Aadhaar number"});
+ const dob=input({type:"date",name:"date_of_birth",id:"dob",label:"Date of birth"});
+ const phone=input({type:"tel",name:"mobile_number",id:"mobile",label:"Mobile number"});
+ const email=input({type:"email",name:"email",id:"email",label:"Email address"});
+ const p={...profile,dateOfBirth:"2005-01-15"};
+ const result=runFill([aadhaar,dob,phone,email],p,undefined,{aadhaarNumber:"123456789012"});
+ assert.equal(JSON.stringify(result.preview.map(item=>item.key)),JSON.stringify(["aadhaarNumber","dateOfBirth","mobileNumber","emailAddress"]));
+ assert.equal(JSON.stringify(result.preview.map(item=>item.value)),JSON.stringify(["123456789012","2005-01-15","9876543210","citizen@example.test"]));
+ assert.equal(aadhaar.value,"");
 });

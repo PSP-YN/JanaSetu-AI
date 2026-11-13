@@ -26,4 +26,9 @@ test("form assistant export rejects extra identity and bank identifiers", () => 
     state: "Karnataka",
     aadhaarNumber: "000000000000"
   }, "en"));
+  assert.throws(() => buildFormAssistantBackup({
+    fullName: "Synthetic Citizen",
+    state: "Karnataka",
+    bankAccountNumber: "000000000000"
+  }, "en"));
 });

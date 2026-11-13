@@ -12,6 +12,7 @@
     label{display:block;font-size:12px;font-weight:650;margin:12px 0 6px}
     input,button{font:inherit}
     input[type=file]{width:100%;font-size:12px}
+    input[type=text]{width:100%;box-sizing:border-box;padding:8px;border:1px solid #d9c4b2;border-radius:7px;background:white}
     button{width:100%;padding:10px;border:1px solid #c45a12;border-radius:8px;background:#c45a12;color:white;font-weight:700;margin-top:9px;cursor:pointer}
     button.secondary{background:white;color:#7c2d12}
     #status{font-size:12px;margin-top:10px;min-height:18px}
@@ -27,7 +28,13 @@
   <button id="save" data-i18n="importBtn">Import reviewed profile</button>
   <div class="notice"><strong>Active page URL:</strong> <span id="active-site">Not checked yet</span></div>
   <label class="verify-row"><input id="verify-portal" type="checkbox"> <span data-i18n="verifyPortalLabel">I verified this exact address against the official JanaSetu link.</span></label>
+  <div id="ssp-aadhaar-group" hidden>
+    <label for="ssp-aadhaar">SSP Aadhaar number · one-time only (not saved)</label>
+    <input id="ssp-aadhaar" type="text" inputmode="numeric" autocomplete="off" maxlength="12" placeholder="Enter 12 digits for SSP only">
+    <p>Used only on the Karnataka SSP page for this open popup session. It is not added to your profile export or extension storage.</p>
+  </div>
   <button id="fill" class="secondary" data-i18n="fillBtn">Preview matching fields</button>
+  <div id="manual-steps" class="notice" hidden aria-live="polite"></div>
   <div id="preview" class="preview-list" aria-label="Fields awaiting your approval"></div>
   <button id="apply" disabled data-i18n="applyBtn">Fill selected fields</button>
   <div class="notice" data-i18n="warning">This extension only fills visible matching fields after you approve them. JanaSetu stops after filling and never clicks Next, Apply, Save or Submit or uploads documents. Portal scripts may react to field changes; check the page after filling and review every field before proceeding.</div>
