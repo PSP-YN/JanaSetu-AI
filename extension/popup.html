@@ -23,9 +23,9 @@
 <body>
   <h1 data-i18n="title">JanaSetu Form Assistant</h1>
   <p data-i18n="intro">Import a citizen-reviewed JanaSetu JSON backup, then fill matching fields on the active government portal.</p>
-  <label for="backup">Select JanaSetu backup (.json) — importing starts automatically</label>
+  <label for="backup" data-i18n="backupLabel">Select JanaSetu backup (.json) — importing starts automatically</label>
   <input id="backup" type="file" accept=".json,application/json" aria-describedby="status">
-  <button id="save" class="secondary">Import selected profile again</button>
+  <button id="save" class="secondary" data-i18n="importBtn">Import selected profile again</button>
   <div class="notice"><strong>Active page URL:</strong> <span id="active-site">Not checked yet</span></div>
   <label class="verify-row"><input id="verify-portal" type="checkbox"> <span data-i18n="verifyPortalLabel">I verified this exact address against the official JanaSetu link.</span></label>
   <div id="ssp-aadhaar-group" hidden>

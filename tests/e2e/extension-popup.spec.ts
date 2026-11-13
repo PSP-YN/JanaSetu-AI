@@ -130,7 +130,7 @@ test("extension rejects unsupported occupations during profile import", async ({
     name: "unsupported-occupation.json", mimeType: "application/json",
     buffer: Buffer.from(JSON.stringify({ app: "JanaSetu", schemaVersion: 1, language: "en", profile: { ...syntheticProfile, occupation: "Government Employee" } }))
   });
-  await expect(page.locator("#status")).toContainText("profile is incomplete or contains unsupported fields");
+  await expect(page.locator("#status")).toContainText("Profile incomplete or has unsupported fields");
   expect(await page.evaluate(() => (window as any).__popupStorage.profile)).toBeUndefined();
 });
 
@@ -151,7 +151,7 @@ test("extension rejects malformed profile backups before storing citizen data", 
     name: "tampered-backup.json", mimeType: "application/json",
     buffer: Buffer.from(JSON.stringify({ app: "JanaSetu", schemaVersion: 1, language: "en", profile: { ...syntheticProfile, aadhaar: "123456789012" } }))
   });
-  await expect(page.locator("#status")).toContainText("profile is incomplete or contains unsupported fields");
+  await expect(page.locator("#status")).toContainText("Profile incomplete or has unsupported fields");
   const profile = await page.evaluate(() => (window as any).__popupStorage.profile);
   expect(profile).toBeUndefined();
 });
