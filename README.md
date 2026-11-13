@@ -105,3 +105,8 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md
 ## License
 
 MIT. No government affiliation or endorsement is implied.
+
+
+## Localized landing and voice-input hardening
+
+The regional landing-page header and browser voice-error handling were hardened on 13 November 2026. See [the implementation note](docs/localized-landing-and-voice-fix-2026-11-13.md) for the root cause, verification coverage and the remaining browser speech-service limitation.
