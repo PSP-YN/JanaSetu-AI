@@ -32,10 +32,11 @@ type LocalTask = LocalTaskRecord;
 
 type SpeechResultLike = { 0: { transcript: string }; isFinal: boolean };
 type SpeechEventLike = { results: ArrayLike<SpeechResultLike> };
+type SpeechRecognitionErrorLike = { error?: string; message?: string };
 type SpeechRecognitionLike = {
   lang: string; continuous: boolean; interimResults: boolean;
   onresult: ((event: SpeechEventLike) => void) | null;
-  onerror: (() => void) | null; onend: (() => void) | null;
+  onerror: ((event: SpeechRecognitionErrorLike) => void) | null; onend: (() => void) | null;
   start: () => void; stop: () => void;
 };
 type SpeechRecognitionConstructor = new () => SpeechRecognitionLike;
@@ -863,12 +864,12 @@ export default function Home() {
   useEffect(() => () => { recognitionRef.current?.stop(); }, []);
 
   const voiceCopy = ({
-    en: { speak: "Speak", stop: "Stop listening", unsupported: "Voice input is not supported in this browser. You can still type in your language.", failed: "Voice input failed. Please type your answer instead." },
-    hi: { speak: "बोलकर बताएँ", stop: "सुनना बंद करें", unsupported: "इस ब्राउज़र में आवाज़ से इनपुट उपलब्ध नहीं है। आप अपनी भाषा में लिख सकते हैं।", failed: "आवाज़ इनपुट विफल हुआ। कृपया लिखें।" },
-    kn: { speak: "ಮಾತನಾಡಿ", stop: "ಆಲಿಸುವುದನ್ನು ನಿಲ್ಲಿಸಿ", unsupported: "ಈ ಬ್ರೌಸರ್‌ನಲ್ಲಿ ಧ್ವನಿ ಇನ್‌ಪುಟ್ ಬೆಂಬಲಿತವಿಲ್ಲ. ನಿಮ್ಮ ಭಾಷೆಯಲ್ಲಿ ಟೈಪ್ ಮಾಡಬಹುದು.", failed: "ಧ್ವನಿ ಇನ್‌ಪುಟ್ ವಿಫಲವಾಗಿದೆ. ದಯವಿಟ್ಟು ಟೈಪ್ ಮಾಡಿ." },
-    ta: { speak: "பேசுங்கள்", stop: "கேட்பதை நிறுத்து", unsupported: "இந்த உலாவியில் குரல் உள்ளீடு ஆதரிக்கப்படவில்லை. உங்கள் மொழியில் தட்டச்சு செய்யலாம்.", failed: "குரல் உள்ளீடு தோல்வியடைந்தது. தட்டச்சு செய்யவும்." },
-    te: { speak: "మాట్లాడండి", stop: "వినడం ఆపండి", unsupported: "ఈ బ్రౌజర్‌లో వాయిస్ ఇన్‌పుట్ లేదు. మీ భాషలో టైప్ చేయవచ్చు.", failed: "వాయిస్ ఇన్‌పుట్ విఫలమైంది. దయచేసి టైప్ చేయండి." },
-    ml: { speak: "സംസാരിക്കുക", stop: "കേൾക്കുന്നത് നിർത്തുക", unsupported: "ഈ ബ്രൗസറിൽ ശബ്ദ ഇൻപുട്ട് പിന്തുണയില്ല. നിങ്ങളുടെ ഭാഷയിൽ ടൈപ്പ് ചെയ്യാം.", failed: "ശബ്ദ ഇൻപുട്ട് പരാജയപ്പെട്ടു. ദയവായി ടൈപ്പ് ചെയ്യുക." }
+    en: { speak: "Speak", stop: "Stop listening", unsupported: "Voice input is not supported in this browser. You can still type in your language.", failed: "Voice input failed.", help: "Check microphone permission and your internet connection, then try again." },
+    hi: { speak: "बोलकर बताएँ", stop: "सुनना बंद करें", unsupported: "इस ब्राउज़र में आवाज़ से इनपुट उपलब्ध नहीं है। आप अपनी भाषा में लिख सकते हैं।", failed: "आवाज़ इनपुट विफल हुआ।", help: "माइक्रोफ़ोन की अनुमति और इंटरनेट कनेक्शन जाँचें, फिर दोबारा प्रयास करें।" },
+    kn: { speak: "ಮಾತನಾಡಿ", stop: "ಆಲಿಸುವುದನ್ನು ನಿಲ್ಲಿಸಿ", unsupported: "ಈ ಬ್ರೌಸರ್‌ನಲ್ಲಿ ಧ್ವನಿ ಇನ್‌ಪುಟ್ ಬೆಂಬಲಿತವಿಲ್ಲ. ನಿಮ್ಮ ಭಾಷೆಯಲ್ಲಿ ಟೈಪ್ ಮಾಡಬಹುದು.", failed: "ಧ್ವನಿ ಇನ್‌ಪುಟ್ ವಿಫಲವಾಗಿದೆ.", help: "ಮೈಕ್ರೋಫೋನ್ ಅನುಮತಿ ಮತ್ತು ಇಂಟರ್ನೆಟ್ ಸಂಪರ್ಕವನ್ನು ಪರಿಶೀಲಿಸಿ, ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ." },
+    ta: { speak: "பேசுங்கள்", stop: "கேட்பதை நிறுத்து", unsupported: "இந்த உலாவியில் குரல் உள்ளீடு ஆதரிக்கப்படவில்லை. உங்கள் மொழியில் தட்டச்சு செய்யலாம்.", failed: "குரல் உள்ளீடு தோல்வியடைந்தது.", help: "மைக்ரோஃபோன் அனுமதி மற்றும் இணைய இணைப்பைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்." },
+    te: { speak: "మాట్లాడండి", stop: "వినడం ఆపండి", unsupported: "ఈ బ్రౌజర్‌లో వాయిస్ ఇన్‌పుట్ లేదు. మీ భాషలో టైప్ చేయవచ్చు.", failed: "వాయిస్ ఇన్‌పుట్ విఫలమైంది.", help: "మైక్రోఫోన్ అనుమతి మరియు ఇంటర్నెట్ కనెక్షన్‌ను తనిఖీ చేసి మళ్లీ ప్రయత్నించండి." },
+    ml: { speak: "സംസാരിക്കുക", stop: "കേൾക്കുന്നത് നിർത്തുക", unsupported: "ഈ ബ്രൗസറിൽ ശബ്ദ ഇൻപുട്ട് പിന്തുണയില്ല. നിങ്ങളുടെ ഭാഷയിൽ ടൈപ്പ് ചെയ്യാം.", failed: "ശബ്ദ ഇൻപുട്ട് പരാജയപ്പെട്ടു.", help: "മൈക്രോഫോൺ അനുമതിയും ഇന്റർനെറ്റ് കണക്ഷനും പരിശോധിച്ച് വീണ്ടും ശ്രമിക്കുക." }
   } as const)[language];
 
   const startVoiceInput = () => {
@@ -884,11 +885,16 @@ export default function Home() {
       const transcript = Array.from(event.results).filter((result) => result.isFinal).map((result) => result[0].transcript.trim()).filter(Boolean).join(" ");
       if (transcript) setIntakeText((current) => current ? current.trimEnd() + " " + transcript : transcript);
     };
-    recognition.onerror = () => setNotice(voiceCopy.failed);
+    recognition.onerror = (event) => {
+      const errorCode = event.error || "unknown";
+      if (errorCode === "aborted") return;
+      setVoiceListening(false);
+      setNotice(`${voiceCopy.failed} [${errorCode}]. ${voiceCopy.help}`);
+    };
     recognition.onend = () => setVoiceListening(false);
     recognitionRef.current = recognition;
     setVoiceListening(true);
-    try { recognition.start(); } catch { setVoiceListening(false); setNotice(voiceCopy.failed); }
+    try { recognition.start(); } catch { setVoiceListening(false); setNotice(`${voiceCopy.failed} [start]. ${voiceCopy.help}`); }
   };
 
   const activeResults = useMemo(() => {
