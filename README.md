@@ -110,3 +110,11 @@ MIT. No government affiliation or endorsement is implied.
 ## Localized landing and voice-input hardening
 
 The regional landing-page header and browser voice-error handling were hardened on 13 November 2026. See [the implementation note](docs/localized-landing-and-voice-fix-2026-11-13.md) for the root cause, verification coverage and the remaining browser speech-service limitation.
+
+
+## On-device voice intake and portal autofill
+
+- Voice intake offers both a browser speech-service mode and an optional local multilingual Whisper mode. Local mode records in the browser, transcribes in a dedicated worker using WebGPU when an adapter is available and WebAssembly otherwise, and keeps the recording on-device. The first run downloads and caches the quantized model files; the transcript remains a citizen-reviewed draft.
+- Start browser autofill from Workspace > Applications & automation > Start portal autofill in four steps. Complete the profile, download the profile-only JSON after the plaintext warning, download the extension ZIP from the automation page, extract it, and load the extracted folder as an unpacked extension in Brave/Chrome, open a citizen-verified government portal, import the JSON, preview fields, and approve only the values you want filled.
+- The extension is generic visible-field assistance, not a government integration. It blocks identity/authentication fields and never clicks Next, Apply, Save or Submit or performs OTP, CAPTCHA, Aadhaar/e-KYC, document upload or final submission.
+- See docs/voice-and-autofill-quickstart-2026-11-13.md for setup, privacy and verification details.

@@ -40,6 +40,7 @@ test("voice intake transcribes into the text field using the selected locale", a
     Object.defineProperty(window, "SpeechRecognition", { value: FakeSpeechRecognition, configurable: true });
   });
   await page.goto("/app");
+  await page.getByRole("button", { name: "Use browser speech instead" }).click();
   await page.getByRole("button", { name: "Speak" }).click();
   await expect(page.locator(".intake-text")).toHaveValue("ನಾನು 34 ವರ್ಷದ ಮಹಿಳಾ ರೈತ, ಕರ್ನಾಟಕ");
 });

@@ -13,18 +13,22 @@
     "check": "npm run typecheck && npm run test:unit"
   },
   "dependencies": {
+    "@huggingface/transformers": "3.7.2",
     "lucide-react": "^1.70.0",
     "next": "16.4.5",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "^1.65.0",
     "@types/node": "^22.10.2",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.2",
-    "@axe-core/playwright": "^4.10.2",
-    "@playwright/test": "^1.65.0"
+    "typescript": "^5.7.2"
+  },
+  "overrides": {
+    "sharp": "0.35.5"
   }
 }

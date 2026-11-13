@@ -64,6 +64,7 @@ const EMPTY_PROFILE: CitizenProfile = {
 
 const COPY: Record<LanguageCode, Record<string, string>> = {
   en: {
+    applicationsAutomation: "Applications & automation",
     overview: "Overview", discover: "Find benefits", profile: "My profile", documents: "Documents",
     heroTitle1: "One profile.", heroTitle2: "Clear next steps.",
     heroDescription: "Go beyond finding schemes. See which rules need evidence, what remains uncertain and what to prepare next.",
@@ -184,6 +185,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
 
   },
   hi: {
+    applicationsAutomation: "आवेदन और स्वचालन",
     overview: "अवलोकन", discover: "लाभ खोजें", profile: "मेरी प्रोफ़ाइल", documents: "दस्तावेज़",
     heroTitle1: "एक प्रोफ़ाइल।", heroTitle2: "अगले कदम स्पष्ट।",
     heroDescription: "केवल योजनाएँ न खोजें। समझें कि किन नियमों के लिए प्रमाण चाहिए, क्या अनिश्चित है और आगे क्या तैयार करना है।",
@@ -302,6 +304,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
 
   },
   kn: {
+    applicationsAutomation: "ಅರ್ಜಿಗಳು ಮತ್ತು ಸ್ವಯಂಚಾಲನೆ",
     overview: "ಅವಲೋಕನ", discover: "ಸೌಲಭ್ಯಗಳನ್ನು ಹುಡುಕಿ", profile: "ನನ್ನ ಪ್ರೊಫೈಲ್", documents: "ದಾಖಲೆಗಳು",
     heroTitle1: "ಒಂದು ಪ್ರೊಫೈಲ್.", heroTitle2: "ಮುಂದಿನ ಹಂತಗಳು ಸ್ಪಷ್ಟ.",
     heroDescription: "ಯೋಜನೆಗಳನ್ನು ಹುಡುಕುವುದಷ್ಟೇ ಅಲ್ಲ. ಯಾವ ನಿಯಮಕ್ಕೆ ಯಾವ ದಾಖಲೆ ಬೇಕು, ಯಾವುದು ಇನ್ನೂ ಸ್ಪಷ್ಟವಿಲ್ಲ ಮತ್ತು ಮುಂದೆ ಏನು ಸಿದ್ಧಪಡಿಸಬೇಕು ಎಂಬುದನ್ನು ತಿಳಿಯಿರಿ.",
@@ -420,6 +423,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
 
   },
   ta: {
+    applicationsAutomation: "விண்ணப்பங்கள் மற்றும் தானியக்கம்",
     overview: "கண்ணோட்டம்", discover: "நலத்திட்டங்களைத் தேடு", profile: "எனது சுயவிவரம்", documents: "ஆவணங்கள்",
     heroTitle1: "ஒரு சுயவிவரம்.", heroTitle2: "அடுத்த படிகள் தெளிவாக.",
     heroDescription: "திட்டங்களைக் கண்டுபிடிப்பதைக் கடந்து செல்லுங்கள். எந்த விதிக்கு ஆதாரம் தேவை, எது இன்னும் உறுதியில்லை, அடுத்து என்ன தயார் செய்ய வேண்டும் என்பதை அறியுங்கள்.",
@@ -538,6 +542,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
 
   },
   te: {
+    applicationsAutomation: "దరఖాస్తులు & ఆటోమేషన్",
     overview: "అవలోకనం", discover: "ప్రయోజనాలను కనుగొనండి", profile: "నా ప్రొఫైల్", documents: "పత్రాలు",
     heroTitle1: "ఒక ప్రొఫైల్.", heroTitle2: "తదుపరి దశలు స్పష్టం.",
     heroDescription: "పథకాలను కనుగొనడమే కాకుండా, ఏ నియమానికి ఏ ఆధారం అవసరం, ఏది ఇంకా అనిశ్చితం, తర్వాత ఏమి సిద్ధం చేయాలో తెలుసుకోండి.",
@@ -656,6 +661,7 @@ const COPY: Record<LanguageCode, Record<string, string>> = {
 
   },
   ml: {
+    applicationsAutomation: "അപേക്ഷകളും ഓട്ടോമേഷനും",
     overview: "അവലോകനം", discover: "ആനുകൂല്യങ്ങൾ കണ്ടെത്തുക", profile: "എന്റെ പ്രൊഫൈൽ", documents: "രേഖകൾ",
     heroTitle1: "ഒരു പ്രൊഫൈൽ.", heroTitle2: "അടുത്ത ഘട്ടങ്ങൾ വ്യക്തം.",
     heroDescription: "പദ്ധതികൾ കണ്ടെത്തുന്നതിൽ മാത്രം ഒതുങ്ങരുത്. ഏത് നിയമത്തിന് തെളിവ് വേണം, എന്താണ് അനിശ്ചിതം, ഇനി എന്ത് തയ്യാറാക്കണം എന്നിവ മനസ്സിലാക്കുക.",
@@ -826,7 +832,15 @@ export default function Home() {
   const [intakeBusy, setIntakeBusy] = useState(false);
   const [intakeRecognized, setIntakeRecognized] = useState<string[]>([]);
   const [voiceListening, setVoiceListening] = useState(false);
+  const [voiceProcessing, setVoiceProcessing] = useState(false);
+  const [voiceMode, setVoiceMode] = useState<"on-device" | "browser">("on-device");
+  const [voiceModelProgress, setVoiceModelProgress] = useState("");
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
+  const recorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+  const voiceWorkerRef = useRef<Worker | null>(null);
+  const voiceRequestIdRef = useRef(0);
+  const voiceStopTimerRef = useRef<number | null>(null);
   const [agentOutput, setAgentOutput] = useState<any>(null);
   const [expandedApplication, setExpandedApplication] = useState("");
   const [notice, setNotice] = useState("");
@@ -861,7 +875,12 @@ export default function Home() {
     const locale: Record<LanguageCode, string> = { en: "en-IN", hi: "hi-IN", kn: "kn-IN", ta: "ta-IN", te: "te-IN", ml: "ml-IN" };
     document.documentElement.lang = locale[language] || "en-IN";
   }, [language]);
-  useEffect(() => () => { recognitionRef.current?.stop(); }, []);
+  useEffect(() => () => {
+    recognitionRef.current?.stop();
+    recorderRef.current?.stream.getTracks().forEach((track) => track.stop());
+    if (voiceStopTimerRef.current !== null) window.clearTimeout(voiceStopTimerRef.current);
+    voiceWorkerRef.current?.terminate();
+  }, []);
 
   const voiceCopy = ({
     en: { speak: "Speak", stop: "Stop listening", unsupported: "Voice input is not supported in this browser. You can still type in your language.", failed: "Voice input failed.", help: "Check microphone permission and your internet connection, then try again." },
@@ -872,8 +891,21 @@ export default function Home() {
     ml: { speak: "സംസാരിക്കുക", stop: "കേൾക്കുന്നത് നിർത്തുക", unsupported: "ഈ ബ്രൗസറിൽ ശബ്ദ ഇൻപുട്ട് പിന്തുണയില്ല. നിങ്ങളുടെ ഭാഷയിൽ ടൈപ്പ് ചെയ്യാം.", failed: "ശബ്ദ ഇൻപുട്ട് പരാജയപ്പെട്ടു.", help: "മൈക്രോഫോൺ അനുമതിയും ഇന്റർനെറ്റ് കണക്ഷനും പരിശോധിച്ച് വീണ്ടും ശ്രമിക്കുക." }
   } as const)[language];
 
-  const startVoiceInput = () => {
-    if (voiceListening) { recognitionRef.current?.stop(); return; }
+  const voiceModeCopy = ({
+    en: { record: "Record on device", stop: "Stop & transcribe", useBrowser: "Use browser speech instead", useLocal: "Use on-device speech", recording: "Recording on this device. Speak, then press Stop & transcribe.", processing: "Processing audio locally. Your recording is not uploaded.", localPrivacy: "On-device mode: multilingual Whisper runs in your browser. The first use downloads model files (about 80 MB); they are cached for later offline use. Audio is not uploaded.", browserPrivacy: "Browser mode: transcription depends on the browser speech service and may require internet access. JanaSetu receives the transcript only." },
+    hi: { record: "डिवाइस पर रिकॉर्ड करें", stop: "रोकें और टेक्स्ट बनाएँ", useBrowser: "ब्राउज़र स्पीच इस्तेमाल करें", useLocal: "डिवाइस पर स्पीच इस्तेमाल करें", recording: "इस डिवाइस पर रिकॉर्ड हो रहा है। बोलें, फिर रोकें।", processing: "ऑडियो इसी डिवाइस पर प्रोसेस हो रहा है। रिकॉर्डिंग अपलोड नहीं होती।", localPrivacy: "डिवाइस मोड: बहुभाषी Whisper आपके ब्राउज़र में चलता है। पहली बार मॉडल फ़ाइलें डाउनलोड होंगी और बाद में ऑफ़लाइन उपयोग के लिए कैश होंगी। ऑडियो अपलोड नहीं होता।", browserPrivacy: "ब्राउज़र मोड: स्पीच सेवा को इंटरनेट की आवश्यकता हो सकती है। JanaSetu को केवल ट्रांसक्रिप्ट मिलता है।" },
+    kn: { record: "ಸಾಧನದಲ್ಲಿ ಧ್ವನಿ ದಾಖಲಿಸಿ", stop: "ನಿಲ್ಲಿಸಿ ಮತ್ತು ಪಠ್ಯಗೊಳಿಸಿ", useBrowser: "ಬ್ರೌಸರ್ ಸ್ಪೀಚ್ ಬಳಸಿ", useLocal: "ಸಾಧನದಲ್ಲೇ ಸ್ಪೀಚ್ ಬಳಸಿ", recording: "ಈ ಸಾಧನದಲ್ಲಿ ರೆಕಾರ್ಡ್ ಆಗುತ್ತಿದೆ. ಮಾತನಾಡಿ, ನಂತರ ನಿಲ್ಲಿಸಿ.", processing: "ಆಡಿಯೊವನ್ನು ಈ ಸಾಧನದಲ್ಲೇ ಸಂಸ್ಕರಿಸಲಾಗುತ್ತಿದೆ. ರೆಕಾರ್ಡಿಂಗ್ ಅಪ್‌ಲೋಡ್ ಆಗುವುದಿಲ್ಲ.", localPrivacy: "ಸಾಧನ ಮೋಡ್: ಬಹುಭಾಷಾ Whisper ನಿಮ್ಮ ಬ್ರೌಸರ್‌ನಲ್ಲೇ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ. ಮೊದಲ ಬಾರಿ ಮಾದರಿ ಫೈಲ್‌ಗಳು ಡೌನ್‌ಲೋಡ್ ಆಗುತ್ತವೆ; ನಂತರ ಆಫ್‌ಲೈನ್ ಬಳಕೆಗೆ ಕ್ಯಾಶ್ ಆಗುತ್ತವೆ. ಆಡಿಯೊ ಅಪ್‌ಲೋಡ್ ಆಗುವುದಿಲ್ಲ.", browserPrivacy: "ಬ್ರೌಸರ್ ಮೋಡ್: ಸ್ಪೀಚ್ ಸೇವೆಗೆ ಇಂಟರ್ನೆಟ್ ಬೇಕಾಗಬಹುದು. JanaSetu ಗೆ ಪಠ್ಯ ಮಾತ್ರ ಬರುತ್ತದೆ." },
+    ta: { record: "சாதனத்தில் பதிவு செய்", stop: "நிறுத்தி உரையாக்கு", useBrowser: "உலாவி பேச்சைப் பயன்படுத்து", useLocal: "சாதனப் பேச்சைப் பயன்படுத்து", recording: "இந்தச் சாதனத்தில் பதிவு செய்கிறது. பேசி முடித்ததும் நிறுத்தவும்.", processing: "ஒலி இந்தச் சாதனத்திலேயே செயலாக்கப்படுகிறது. பதிவு பதிவேற்றப்படாது.", localPrivacy: "சாதன முறை: பலமொழி Whisper உங்கள் உலாவியில் இயங்கும். முதல் முறை மாதிரி கோப்புகள் பதிவிறக்கப்படும்; பின்னர் ஆஃப்லைனில் பயன்படுத்த சேமிக்கப்படும். ஒலி பதிவேற்றப்படாது.", browserPrivacy: "உலாவி முறை: பேச்சுச் சேவைக்கு இணையம் தேவைப்படலாம். JanaSetu உரையை மட்டுமே பெறும்." },
+    te: { record: "పరికరంలో రికార్డ్ చేయండి", stop: "ఆపి టెక్స్ట్‌గా మార్చండి", useBrowser: "బ్రౌజర్ స్పీచ్ వాడండి", useLocal: "పరికరంలోని స్పీచ్ వాడండి", recording: "ఈ పరికరంలో రికార్డింగ్ జరుగుతోంది. మాట్లాడి ఆపండి.", processing: "ఆడియో ఈ పరికరంలోనే ప్రాసెస్ అవుతోంది. రికార్డింగ్ అప్‌లోడ్ కాదు.", localPrivacy: "పరికర మోడ్: బహుభాషా Whisper మీ బ్రౌజర్‌లోనే పనిచేస్తుంది. మొదటిసారి మోడల్ ఫైళ్లు డౌన్‌లోడ్ అవుతాయి; తరువాత ఆఫ్‌లైన్ వినియోగానికి క్యాష్ అవుతాయి. ఆడియో అప్‌లోడ్ కాదు.", browserPrivacy: "బ్రౌజర్ మోడ్: స్పీచ్ సేవకు ఇంటర్నెట్ అవసరం కావచ్చు. JanaSetu టెక్స్ట్ మాత్రమే పొందుతుంది." },
+    ml: { record: "ഉപകരണത്തിൽ റെക്കോർഡ് ചെയ്യുക", stop: "നിർത്തി ടെക്സ്റ്റാക്കുക", useBrowser: "ബ്രൗസർ സ്പീച്ച് ഉപയോഗിക്കുക", useLocal: "ഉപകരണത്തിലെ സ്പീച്ച് ഉപയോഗിക്കുക", recording: "ഈ ഉപകരണത്തിൽ റെക്കോർഡ് ചെയ്യുന്നു. സംസാരിച്ച ശേഷം നിർത്തുക.", processing: "ഓഡിയോ ഈ ഉപകരണത്തിൽ തന്നെ പ്രോസസ്സ് ചെയ്യുന്നു. റെക്കോർഡിംഗ് അപ്‌ലോഡ് ചെയ്യില്ല.", localPrivacy: "ഉപകരണ മോഡ്: ബഹുഭാഷാ Whisper നിങ്ങളുടെ ബ്രൗസറിൽ പ്രവർത്തിക്കുന്നു. ആദ്യ ഉപയോഗത്തിൽ മോഡൽ ഫയലുകൾ ഡൗൺലോഡ് ചെയ്യും; പിന്നീട് ഓഫ്‌ലൈനായി ഉപയോഗിക്കാൻ കാഷ് ചെയ്യും. ഓഡിയോ അപ്‌ലോഡ് ചെയ്യില്ല.", browserPrivacy: "ബ്രൗസർ മോഡ്: സ്പീച്ച് സേവനത്തിന് ഇന്റർനെറ്റ് ആവശ്യമായേക്കാം. JanaSetu ട്രാൻസ്ക്രിപ്റ്റ് മാത്രം സ്വീകരിക്കും." }
+  } as const)[language];
+
+  const appendVoiceTranscript = (transcript: string) => {
+    const clean = transcript.trim();
+    if (clean) setIntakeText((current) => current ? current.trimEnd() + " " + clean : clean);
+  };
+
+  const startBrowserVoiceInput = () => {
     const speechWindow = window as Window & { SpeechRecognition?: SpeechRecognitionConstructor; webkitSpeechRecognition?: SpeechRecognitionConstructor };
     const Recognition = speechWindow.SpeechRecognition || speechWindow.webkitSpeechRecognition;
     if (!Recognition) { setNotice(voiceCopy.unsupported); return; }
@@ -883,18 +915,119 @@ export default function Home() {
     recognition.interimResults = false;
     recognition.onresult = (event) => {
       const transcript = Array.from(event.results).filter((result) => result.isFinal).map((result) => result[0].transcript.trim()).filter(Boolean).join(" ");
-      if (transcript) setIntakeText((current) => current ? current.trimEnd() + " " + transcript : transcript);
+      appendVoiceTranscript(transcript);
     };
     recognition.onerror = (event) => {
       const errorCode = event.error || "unknown";
       if (errorCode === "aborted") return;
       setVoiceListening(false);
-      setNotice(`${voiceCopy.failed} [${errorCode}]. ${voiceCopy.help}`);
+      setNotice(voiceCopy.failed + " [" + errorCode + "]. " + voiceCopy.help);
     };
     recognition.onend = () => setVoiceListening(false);
     recognitionRef.current = recognition;
     setVoiceListening(true);
-    try { recognition.start(); } catch { setVoiceListening(false); setNotice(`${voiceCopy.failed} [start]. ${voiceCopy.help}`); }
+    try { recognition.start(); } catch { setVoiceListening(false); setNotice(voiceCopy.failed + " [start]. " + voiceCopy.help); }
+  };
+
+  const transcribeOnDevice = async (recording: Blob, selectedLanguage: LanguageCode) => {
+    const AudioContextConstructor = window.AudioContext;
+    if (!AudioContextConstructor) throw new Error("This browser does not support local audio decoding. Try browser speech or type your answer.");
+    const context = new AudioContextConstructor();
+    try {
+      const decoded = await context.decodeAudioData(await recording.arrayBuffer());
+      const source = decoded.getChannelData(0);
+      const ratio = decoded.sampleRate / 16000;
+      const output = new Float32Array(Math.max(1, Math.floor(source.length / ratio)));
+      for (let i = 0; i < output.length; i++) {
+        const position = i * ratio;
+        const left = Math.floor(position);
+        const right = Math.min(left + 1, source.length - 1);
+        const fraction = position - left;
+        output[i] = source[left] * (1 - fraction) + source[right] * fraction;
+      }
+      const worker = voiceWorkerRef.current || new Worker(new URL("./voice.worker.ts", import.meta.url), { type: "module" });
+      voiceWorkerRef.current = worker;
+      const id = ++voiceRequestIdRef.current;
+      setVoiceModelProgress("Loading the multilingual on-device model. The first download is about 75 MB; later use is cached in this browser.");
+      const languageName = ({ en: "english", hi: "hindi", kn: "kannada", ta: "tamil", te: "telugu", ml: "malayalam" } as const)[selectedLanguage];
+      const transcript = await new Promise<string>((resolve, reject) => {
+        const cleanup = () => { worker.removeEventListener("message", onMessage); worker.removeEventListener("error", onError); };
+        const onMessage = (event: MessageEvent<{ id: number; type: string; transcript?: string; message?: string; progress?: number; backend?: string }>) => {
+          if (event.data.id !== id) return;
+          if (event.data.type === "progress") {
+            setVoiceModelProgress(event.data.progress !== undefined && event.data.progress > 0 ? "Downloading on-device model: " + event.data.progress + "%" : "Preparing on-device model files. The first setup can take a few minutes.");
+          } else if (event.data.type === "result") {
+            cleanup();
+            setVoiceModelProgress("Transcribed on this device (" + (event.data.backend || "local") + ").");
+            resolve(event.data.transcript || "");
+          } else if (event.data.type === "error") {
+            cleanup();
+            reject(new Error(event.data.message || "On-device transcription failed."));
+          }
+        };
+        const onError = () => { cleanup(); reject(new Error("The local speech worker stopped unexpectedly. Reload the page and retry.")); };
+        worker.addEventListener("message", onMessage);
+        worker.addEventListener("error", onError);
+        worker.postMessage({ id, audio: output, language: languageName }, [output.buffer]);
+      });
+      appendVoiceTranscript(transcript);
+    } finally {
+      await context.close().catch(() => undefined);
+    }
+  };
+
+  const startVoiceInput = async () => {
+    if (voiceMode === "browser") {
+      if (voiceListening) { recognitionRef.current?.stop(); return; }
+      startBrowserVoiceInput();
+      return;
+    }
+    if (voiceListening) {
+      recorderRef.current?.stop();
+      return;
+    }
+    try {
+      const selectedLanguage = language;
+      if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === "undefined") {
+        throw new Error("On-device recording is not supported here. Switch to browser speech or type your answer.");
+      }
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true } });
+      const recorder = new MediaRecorder(stream);
+      audioChunksRef.current = [];
+      recorderRef.current = recorder;
+      recorder.ondataavailable = (event) => { if (event.data.size) audioChunksRef.current.push(event.data); };
+      recorder.onstop = async () => {
+        stream.getTracks().forEach((track) => track.stop());
+        if (voiceStopTimerRef.current !== null) window.clearTimeout(voiceStopTimerRef.current);
+        voiceStopTimerRef.current = null;
+        setVoiceListening(false);
+        setVoiceProcessing(true);
+        setVoiceModelProgress(voiceModeCopy.processing);
+        try {
+          const recording = new Blob(audioChunksRef.current, { type: recorder.mimeType || audioChunksRef.current[0]?.type || "application/octet-stream" });
+          await transcribeOnDevice(recording, selectedLanguage);
+          setNotice("On-device transcription complete. Review the text before extracting profile details.");
+        } catch (error) {
+          setNotice(error instanceof Error ? error.message : "On-device transcription failed. Switch to browser speech or type your answer.");
+        } finally {
+          setVoiceProcessing(false);
+          recorderRef.current = null;
+          audioChunksRef.current = [];
+        }
+      };
+      recorder.start();
+      setVoiceListening(true);
+      setVoiceModelProgress(voiceModeCopy.recording);
+      voiceStopTimerRef.current = window.setTimeout(() => {
+        if (recorder.state === "recording") {
+          setNotice("The 30-second voice limit was reached. Transcribing the recording now.");
+          recorder.stop();
+        }
+      }, 30000);
+    } catch (error) {
+      setVoiceListening(false);
+      setNotice(error instanceof Error ? error.message : "Microphone access failed. Check site permission and try again.");
+    }
   };
 
   const activeResults = useMemo(() => {
@@ -941,6 +1074,10 @@ export default function Home() {
     }, query ? 300 : 0);
     return () => { controller.abort(); window.clearTimeout(timer); };
   }, [tab, query, category, openDataOffset, includeExternalDataset]);
+
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("tab") === "profile") setTab("profile");
+  }, []);
 
   useEffect(() => {
     const read = (key: string, fallback: any) => {
@@ -1290,6 +1427,7 @@ export default function Home() {
             </button>;
           })}
         </nav>
+        <a className="nav-item" href="/app/automation"><ClipboardCheck size={18}/><span>{t("applicationsAutomation")}</span><ArrowUpRight size={14}/></a>
         <div className="sidebar-spacer"/>
         <div className="sidebar-assist">
           <div className="assist-icon"><HandHeart size={18}/></div>
@@ -1392,11 +1530,13 @@ export default function Home() {
               <div className="intake-actions">
                 <span><ShieldCheck size={14}/> {t("intakeSafety")}</span>
                 <div>
-                  <button className="button button-secondary" onClick={startVoiceInput} disabled={intakeBusy} aria-pressed={voiceListening}>{voiceListening ? <MicOff size={15}/> : <Mic size={15}/>} {voiceListening ? voiceCopy.stop : voiceCopy.speak}</button>
-                  <button className="button button-primary" onClick={submitIntake} disabled={intakeBusy || voiceListening}>{intakeBusy ? "Reading…" : t("extractFacts")} <ArrowRight size={15}/></button>
+                  <button className="text-button" type="button" onClick={() => { if (!voiceListening && !voiceProcessing) { setVoiceMode((mode) => mode === "on-device" ? "browser" : "on-device"); setVoiceModelProgress(""); } }}>{voiceMode === "on-device" ? voiceModeCopy.useBrowser : voiceModeCopy.useLocal}</button>
+                  <button className="button button-secondary" onClick={() => void startVoiceInput()} disabled={intakeBusy || voiceProcessing} aria-pressed={voiceListening}>{voiceListening ? <MicOff size={15}/> : <Mic size={15}/>} {voiceMode === "on-device" ? (voiceListening ? voiceModeCopy.stop : voiceModeCopy.record) : (voiceListening ? voiceCopy.stop : voiceCopy.speak)}</button>
+                  <button className="button button-primary" onClick={submitIntake} disabled={intakeBusy || voiceListening || voiceProcessing}>{intakeBusy ? "Reading…" : voiceProcessing ? "Transcribing…" : t("extractFacts")} <ArrowRight size={15}/></button>
                 </div>
               </div>
-              <small className="voice-privacy-note">{language === "hi" ? "आवाज़ का टेक्स्ट आपके ब्राउज़र की स्पीच सेवा बनाती है; JanaSetu को केवल ट्रांसक्रिप्ट मिलता है।" : language === "kn" ? "ಧ್ವನಿ ಪಠ್ಯವನ್ನು ನಿಮ್ಮ ಬ್ರೌಸರ್‌ನ ಸ್ಪೀಚ್ ಸೇವೆ ರಚಿಸುತ್ತದೆ; JanaSetu ಗೆ ಪಠ್ಯ ಮಾತ್ರ ಬರುತ್ತದೆ." : language === "ta" ? "உங்கள் உலாவியின் பேச்சுச் சேவை குரலை உரையாக மாற்றும்; JanaSetu உரையை மட்டுமே பெறும்." : language === "te" ? "మీ బ్రౌజర్ స్పీచ్ సేవ వాయిస్‌ను టెక్స్ట్‌గా మారుస్తుంది; JanaSetu టెక్స్ట్ మాత్రమే పొందుతుంది." : language === "ml" ? "നിങ്ങളുടെ ബ്രൗസറിന്റെ സ്പീച്ച് സേവനമാണ് ശബ്ദം ടെക്സ്റ്റാക്കുന്നത്; JanaSetu ടെക്സ്റ്റ് മാത്രമേ സ്വീകരിക്കൂ." : "Voice transcription is provided by your browser's speech service; JanaSetu receives the transcript only."}</small>
+              {voiceModelProgress && <small className="voice-privacy-note" role="status">{voiceModelProgress}</small>}
+              <small className="voice-privacy-note">{voiceMode === "on-device" ? voiceModeCopy.localPrivacy : voiceModeCopy.browserPrivacy}</small>
               {intakeRecognized.length > 0 && <div className="intake-recognized"><CheckCircle2 size={15}/> {t("suggestedFields")}: {intakeRecognized.join(" · ")}. {t("reviewProfile")}</div>}
             </section>
 
