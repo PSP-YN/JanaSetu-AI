@@ -125,7 +125,7 @@ export default function AutomationCenterPage(){
       </ol>
       <div className="automation-plan-controls">
         <button className="button-primary" type="button" onClick={downloadFormAssistantProfile}>Download reviewed profile for autofill</button>
-        <a className="button-primary automation-link" href="/downloads/JanaSetu-Form-Assistant.zip" target="_blank" rel="noreferrer">Download extension ZIP</a>
+        <a className="button-primary automation-link" href="https://raw.githubusercontent.com/PSP-YN/JanaSetu-AI/main/public/downloads/JanaSetu-Form-Assistant.zip" target="_blank" rel="noreferrer">Download extension ZIP</a>
         <Link className="automation-text-link" href="/app?tab=profile">Open My profile →</Link>
       </div>
       {profileExportStatus&&<p role="status" className="automation-requirements-note">{profileExportStatus}</p>}

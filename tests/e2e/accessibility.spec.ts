@@ -357,7 +357,7 @@ test("application workspace explains citizen-directed portal field assistance an
   await expect(assistant).toContainText("approve each safe field");
   await expect(assistant).toContainText("not a government-authorized integration");
   await expect(assistant).toContainText("never uploads documents");
-  await expect(page.locator(".portal-assistant-start").getByRole("link", { name: "Download extension ZIP" })).toHaveAttribute("href", "/downloads/JanaSetu-Form-Assistant.zip");
+  await expect(page.locator(".portal-assistant-start").getByRole("link", { name: "Download extension ZIP" })).toHaveAttribute("href", "https://raw.githubusercontent.com/PSP-YN/JanaSetu-AI/main/public/downloads/JanaSetu-Form-Assistant.zip");
 });
 
 
