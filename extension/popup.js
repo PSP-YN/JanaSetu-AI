@@ -138,22 +138,30 @@ const popupReady = (async () => {
   } catch { setLanguage("en"); }
 })();
 
-document.getElementById("save").addEventListener("click", async () => {
+async function importSelectedBackup() {
   await popupReady;
   const file = document.getElementById("backup").files?.[0];
   if (!file) { say("chooseBackup"); return; }
   try {
-    if (file.size > MAX_BACKUP_BYTES) throw new Error(getCopy("invalidBackup"));
-    const data = JSON.parse(await file.text());
-    if (data?.app !== "JanaSetu" || data?.schemaVersion !== 1 || !isValidProfile(data?.profile)) throw new Error(getCopy("invalidBackup"));
+    if (file.size > MAX_BACKUP_BYTES) throw new Error("The selected file is larger than the 5 MB limit.");
+    let data;
+    try { data = JSON.parse(await file.text()); }
+    catch { throw new Error("The selected file is not valid JSON. Re-export the profile from JanaSetu and try again."); }
+    if (data?.app !== "JanaSetu") throw new Error("This JSON is not a JanaSetu export. Open JanaSetu → My profile → Download reviewed profile for autofill.");
+    if (data?.schemaVersion !== 1) throw new Error("Unsupported JanaSetu backup version. Download a fresh profile JSON from the current JanaSetu website.");
+    if (!isValidProfile(data?.profile)) throw new Error("The profile is incomplete or contains unsupported fields. Re-open My profile, complete the required fields, save, and export again.");
     const language = Object.prototype.hasOwnProperty.call(COPY, data.language) ? data.language : "en";
     const profile = { ...data.profile, occupation: normalizeOccupation(data.profile.occupation) };
     await chrome.storage.local.set({ profile, language, importedAt: new Date().toISOString() });
     clearPreview();
     setLanguage(language);
     say("imported");
-  } catch (error) { say("importFailed"); }
-});
+  } catch (error) {
+    statusEl.textContent = error instanceof Error ? error.message : getCopy("importFailed");
+  }
+}
+document.getElementById("backup").addEventListener("change", importSelectedBackup);
+document.getElementById("save").addEventListener("click", importSelectedBackup);
 
 let pendingPreview=[];
 let pendingTabId=null;
