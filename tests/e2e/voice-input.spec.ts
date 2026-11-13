@@ -17,6 +17,7 @@ test("voice input explains browser speech-service failures instead of showing an
       }
       stop() { this.onend?.(); }
     }
+    Object.defineProperty(window, "SpeechRecognition", { configurable: true, value: MockSpeechRecognition });
     Object.defineProperty(window, "webkitSpeechRecognition", { configurable: true, value: MockSpeechRecognition });
   });
   await page.goto("/app");
@@ -42,6 +43,7 @@ test("voice transcription appends a recognized phrase to the citizen intake fiel
       }
       stop() { this.onend?.(); }
     }
+    Object.defineProperty(window, "SpeechRecognition", { configurable: true, value: MockSpeechRecognition });
     Object.defineProperty(window, "webkitSpeechRecognition", { configurable: true, value: MockSpeechRecognition });
   });
   await page.goto("/app");
