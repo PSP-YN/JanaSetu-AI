@@ -1,0 +1,307 @@
+1
+00:00:00,300 --> 00:00:01,280
+Namaste, judges.
+
+2
+00:00:01,490 --> 00:00:03,900
+India has many public-benefit schemes,
+
+3
+00:00:04,140 --> 00:00:06,340
+scholarships and essential services.
+
+4
+00:00:06,740 --> 00:00:08,810
+But the citizen journey is fragmented.
+
+5
+00:00:09,000 --> 00:00:10,810
+People must discover the right scheme,
+
+6
+00:00:11,000 --> 00:00:13,220
+understand complex rules, identify
+
+7
+00:00:13,390 --> 00:00:14,880
+documents and navigate different
+
+8
+00:00:15,100 --> 00:00:15,720
+portals.
+
+9
+00:00:15,990 --> 00:00:18,210
+Language and form complexity make this
+
+10
+00:00:18,300 --> 00:00:20,300
+difficult, especially for first-time
+
+11
+00:00:20,430 --> 00:00:21,690
+digital-service users.
+
+12
+00:00:22,050 --> 00:00:23,930
+JanaSetu starts by making that journey
+
+13
+00:00:24,060 --> 00:00:25,220
+easier to understand.
+
+14
+00:00:25,680 --> 00:00:27,730
+JanaSetu AI is a citizen-controlled
+
+15
+00:00:27,810 --> 00:00:29,560
+bridge from discovering a public service
+
+16
+00:00:29,730 --> 00:00:31,450
+to being prepared to apply.
+
+17
+00:00:31,670 --> 00:00:33,680
+A citizen opens the workspace and
+
+18
+00:00:33,720 --> 00:00:35,690
+describes their situation in their own
+
+19
+00:00:35,770 --> 00:00:36,390
+words.
+
+20
+00:00:36,750 --> 00:00:39,010
+The system suggests profile facts, and
+
+21
+00:00:39,060 --> 00:00:41,060
+the citizen reviews and corrects every
+
+22
+00:00:41,270 --> 00:00:42,930
+suggestion before continuing.
+
+23
+00:00:43,170 --> 00:00:45,300
+For this demonstration, we use typed
+
+24
+00:00:45,430 --> 00:00:47,010
+intake because browser voice
+
+25
+00:00:47,100 --> 00:00:48,800
+transcription depends on the browser's
+
+26
+00:00:48,840 --> 00:00:50,300
+speech service and network.
+
+27
+00:00:51,100 --> 00:00:53,610
+Next, the citizen completes a profile
+
+28
+00:00:53,740 --> 00:00:55,770
+with relevant details such as age,
+
+29
+00:00:56,000 --> 00:00:59,310
+state, district, occupation and income.
+
+30
+00:00:59,670 --> 00:01:01,640
+These details organise a preliminary
+
+31
+00:01:01,760 --> 00:01:02,590
+scheme review.
+
+32
+00:01:02,900 --> 00:01:04,870
+The profile remains editable, and the
+
+33
+00:01:04,910 --> 00:01:06,700
+citizen decides what to provide.
+
+34
+00:01:07,130 --> 00:01:09,430
+JanaSetu is not a government department
+
+35
+00:01:09,520 --> 00:01:11,480
+and does not make official eligibility
+
+36
+00:01:11,610 --> 00:01:12,120
+decisions.
+
+37
+00:01:12,910 --> 00:01:15,380
+From Find Benefits, citizens search and
+
+38
+00:01:15,430 --> 00:01:17,430
+filter scheme references, then inspect
+
+39
+00:01:17,560 --> 00:01:19,220
+source links and what still needs
+
+40
+00:01:19,350 --> 00:01:20,230
+verification.
+
+41
+00:01:20,670 --> 00:01:22,470
+Transparency matters: the current
+
+42
+00:01:22,640 --> 00:01:24,860
+catalogue contains 46 source-linked
+
+43
+00:01:24,940 --> 00:01:25,650
+references.
+
+44
+00:01:25,940 --> 00:01:27,940
+Four preliminary rule prototypes are
+
+45
+00:01:27,980 --> 00:01:29,460
+awaiting independent review.
+
+46
+00:01:29,820 --> 00:01:32,120
+A possible match is guidance, not an
+
+47
+00:01:32,160 --> 00:01:34,210
+official eligibility decision; the
+
+48
+00:01:34,260 --> 00:01:35,620
+responsible department remains
+
+49
+00:01:35,710 --> 00:01:36,250
+authoritative.
+
+50
+00:01:37,020 --> 00:01:39,570
+Once a scheme looks relevant, JanaSetu
+
+51
+00:01:39,700 --> 00:01:41,790
+helps organise a document checklist and
+
+52
+00:01:41,830 --> 00:01:42,530
+next steps.
+
+53
+00:01:42,770 --> 00:01:44,650
+Citizens can verify the current document
+
+54
+00:01:44,860 --> 00:01:46,870
+list with the linked official source and
+
+55
+00:01:46,950 --> 00:01:48,350
+keep track of what is missing.
+
+56
+00:01:48,680 --> 00:01:50,980
+This turns a confusing process into a
+
+57
+00:01:51,020 --> 00:01:52,900
+practical preparation task without
+
+58
+00:01:53,070 --> 00:01:54,520
+pretending that an application has
+
+59
+00:01:54,610 --> 00:01:55,560
+already been approved.
+
+60
+00:01:56,110 --> 00:01:58,580
+In My Applications, preparation drafts
+
+61
+00:01:58,660 --> 00:02:00,550
+and review status stay visible.
+
+62
+00:02:00,870 --> 00:02:03,020
+Citizens can inspect prepared values,
+
+63
+00:02:03,300 --> 00:02:05,730
+identify missing information, download a
+
+64
+00:02:05,770 --> 00:02:07,390
+checklist and open the official
+
+65
+00:02:07,570 --> 00:02:08,680
+application source.
+
+66
+00:02:09,020 --> 00:02:10,640
+Where a compatible browser helper is
+
+67
+00:02:10,770 --> 00:02:13,160
+available, it can preview safe visible
+
+68
+00:02:13,330 --> 00:02:16,100
+fields and fill only values the citizen
+
+69
+00:02:16,190 --> 00:02:17,530
+individually approves.
+
+70
+00:02:17,810 --> 00:02:21,780
+It never clicks Next, Apply, Save or
+
+71
+00:02:21,820 --> 00:02:22,450
+Submit.
+
+72
+00:02:22,730 --> 00:02:26,270
+OTP, CAPTCHA, Aadhaar and e-KYC checks
+
+73
+00:02:26,400 --> 00:02:27,850
+remain with the citizen.
+
+74
+00:02:28,100 --> 00:02:29,830
+JanaSetu helps people discover,
+
+75
+00:02:30,020 --> 00:02:32,800
+understand, prepare and review while the
+
+76
+00:02:32,840 --> 00:02:34,840
+final official action stays in their
+
+77
+00:02:34,890 --> 00:02:35,470
+hands.
