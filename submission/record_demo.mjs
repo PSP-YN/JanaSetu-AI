@@ -1,17 +1,21 @@
 import { chromium } from "playwright";
 import fs from "node:fs/promises";
-const out="/home/psp/projects/JanaSetu-AI/submission/assets/video-raw-final";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+const scriptDir = path.dirname(fileURLToPath(import.meta.url));
+const out = path.join(scriptDir, "assets", "video-raw-final");
+const baseUrl = (process.env.JANASETU_DEMO_URL || "https://jana-setu-ai.vercel.app").replace(/\/+$/, "");
 await fs.rm(out,{recursive:true,force:true}); await fs.mkdir(out,{recursive:true});
 const browser=await chromium.launch({headless:true});
 const context=await browser.newContext({viewport:{width:1920,height:1080},screen:{width:1920,height:1080},deviceScaleFactor:1,recordVideo:{dir:out,size:{width:1920,height:1080}}});
 const page=await context.newPage(); page.setDefaultTimeout(10000);
 const pause=ms=>page.waitForTimeout(ms);
 try {
-  await page.goto("https://janasetu-qfjrr4m63-pspyn.vercel.app/",{waitUntil:"domcontentloaded"});
+  await page.goto(`${baseUrl}/`,{waitUntil:"domcontentloaded"});
   await pause(6000);
   await page.locator("#how-it-works").scrollIntoViewIfNeeded().catch(()=>{});
   await pause(3500);
-  await page.goto("https://janasetu-qfjrr4m63-pspyn.vercel.app/app",{waitUntil:"domcontentloaded"});
+  await page.goto(`${baseUrl}/app`,{waitUntil:"domcontentloaded"});
   await pause(5000);
   await page.getByRole("button",{name:"My profile"}).click();
   const fields=page.locator(".form-grid").first().locator(".field");
@@ -38,12 +42,12 @@ try {
   await page.getByRole("button",{name:"My applications"}).click();
   await pause(7000);
   const proof=(await page.locator("body").innerText()).slice(-1800);
-  await fs.writeFile("/home/psp/projects/JanaSetu-AI/submission/demo-verification.txt",proof);
-  await page.goto("https://janasetu-qfjrr4m63-pspyn.vercel.app/app/automation",{waitUntil:"domcontentloaded"});
+  await fs.writeFile(path.join(scriptDir, "demo-verification.txt"),proof);
+  await page.goto(`${baseUrl}/app/automation`,{waitUntil:"domcontentloaded"});
   await pause(6500);
-  await page.goto("https://janasetu-qfjrr4m63-pspyn.vercel.app/privacy",{waitUntil:"domcontentloaded"});
+  await page.goto(`${baseUrl}/privacy`,{waitUntil:"domcontentloaded"});
   await pause(5000);
-  await page.goto("https://janasetu-qfjrr4m63-pspyn.vercel.app/pitch-deck.html",{waitUntil:"domcontentloaded"});
+  await page.goto(`${baseUrl}/pitch-deck.html`,{waitUntil:"domcontentloaded"});
   await pause(7000);
 } finally { await context.close(); await browser.close(); }
 console.log("Recorded final video:",await fs.readdir(out));

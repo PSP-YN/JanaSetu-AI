@@ -168,31 +168,53 @@ const popupReady = (async () => {
   } catch { setLanguage("en"); }
 })();
 
+const backupInput = document.getElementById("backup");
 let backupImportSequence = 0;
+let backupImportQueue = Promise.resolve();
 async function importSelectedBackup() {
   const sequence = ++backupImportSequence;
+  const file = backupInput.files?.[0];
+  backupInput.removeAttribute("aria-invalid");
   await popupReady;
-  const file = document.getElementById("backup").files?.[0];
+  if (sequence !== backupImportSequence) return;
   if (!file) { say("chooseBackup"); return; }
+
+  let invalidFile = false;
+  const invalid = (key) => { invalidFile = true; return new Error(getCopy(key)); };
   try {
-    if (file.size > MAX_BACKUP_BYTES) throw new Error(getCopy("fileTooLarge"));
+    if (file.size > MAX_BACKUP_BYTES) throw invalid("fileTooLarge");
     let data;
     try { data = JSON.parse(await file.text()); }
-    catch { throw new Error(getCopy("invalidJson")); }
+    catch { throw invalid("invalidJson"); }
     if (sequence !== backupImportSequence) return;
-    if (data?.app !== "JanaSetu") throw new Error(getCopy("wrongExport"));
-    if (data?.schemaVersion !== 1) throw new Error(getCopy("unsupportedVersion"));
-    if (!isValidProfile(data?.profile)) throw new Error(getCopy("incompleteProfile"));
+    if (data?.app !== "JanaSetu") throw invalid("wrongExport");
+    if (data?.schemaVersion !== 1) throw invalid("unsupportedVersion");
+    if (!isValidProfile(data?.profile)) throw invalid("incompleteProfile");
     if (sequence !== backupImportSequence) return;
+
     const language = Object.prototype.hasOwnProperty.call(COPY, data.language) ? data.language : "en";
     const profile = { ...data.profile, occupation: normalizeOccupation(data.profile.occupation) };
-    await chrome.storage.local.set({ profile, language, importedAt: new Date().toISOString() });
-    if (sequence !== backupImportSequence) return;
+    // Serialize storage writes so a slow earlier import cannot finish after and
+    // overwrite a newer file selection. Superseded queued work is discarded.
+    const write = backupImportQueue.then(async () => {
+      if (sequence !== backupImportSequence) return false;
+      await chrome.storage.local.set({ profile, language, importedAt: new Date().toISOString() });
+      return true;
+    });
+    backupImportQueue = write.then(() => undefined, () => undefined);
+    const saved = await write;
+    if (!saved || sequence !== backupImportSequence) return;
+    backupInput.removeAttribute("aria-invalid");
     clearPreview();
     setLanguage(language);
     say("imported");
   } catch (error) {
-    if (sequence === backupImportSequence) statusEl.textContent = error instanceof Error && Object.values(COPY).some((copy) => Object.values(copy).includes(error.message)) ? error.message : getCopy("importFailed");
+    if (sequence === backupImportSequence) {
+      if (invalidFile) backupInput.setAttribute("aria-invalid", "true");
+      statusEl.textContent = invalidFile && error instanceof Error && Object.values(COPY).some((copy) => Object.values(copy).includes(error.message))
+        ? error.message
+        : getCopy("importFailed");
+    }
   }
 }
 document.getElementById("backup").addEventListener("change", importSelectedBackup);

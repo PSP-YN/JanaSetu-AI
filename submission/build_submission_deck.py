@@ -148,7 +148,7 @@ for i,(title,body) in enumerate(items):
 
 # 7 Validation
 s=base('What has been tested — and what has not')
-metrics=[('131','unit tests'),('49','browser E2E tests'),('6','interface languages'),('14/14','public tables with RLS')]
+metrics=[('178','unit tests · 24 Nov 2026'),('87','browser E2E · 24 Nov 2026'),('6','interface languages'),('14/14','public tables with RLS')]
 for i,(n,label) in enumerate(metrics):
     x=0.68+i*3.12
     rect(s,x,1.72,2.75,1.35,PANEL)

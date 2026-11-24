@@ -53,6 +53,7 @@ test("extension imports the reviewed profile and fills only after address and fi
     buffer: Buffer.from(JSON.stringify({ app: "JanaSetu", schemaVersion: 1, profile: syntheticProfile, language: "kn" }))
   });
   await expect(page.locator("#status")).toContainText("ಪ್ರೊಫೈಲ್");
+  await expect(page.locator("#backup")).not.toHaveAttribute("aria-invalid", "true");
   await expect(page.locator("#fill")).toContainText("ಪೂರ್ವವೀಕ್ಷಿಸಿ");
 
   await page.locator("#fill").click();
@@ -131,6 +132,7 @@ test("extension rejects unsupported occupations during profile import", async ({
     buffer: Buffer.from(JSON.stringify({ app: "JanaSetu", schemaVersion: 1, language: "en", profile: { ...syntheticProfile, occupation: "Government Employee" } }))
   });
   await expect(page.locator("#status")).toContainText("Profile incomplete or has unsupported fields");
+  await expect(page.locator("#backup")).toHaveAttribute("aria-invalid", "true");
   expect(await page.evaluate(() => (window as any).__popupStorage.profile)).toBeUndefined();
 });
 
@@ -152,6 +154,35 @@ test("extension rejects malformed profile backups before storing citizen data", 
     buffer: Buffer.from(JSON.stringify({ app: "JanaSetu", schemaVersion: 1, language: "en", profile: { ...syntheticProfile, aadhaar: "123456789012" } }))
   });
   await expect(page.locator("#status")).toContainText("Profile incomplete or has unsupported fields");
+  await expect(page.locator("#backup")).toHaveAttribute("aria-invalid", "true");
   const profile = await page.evaluate(() => (window as any).__popupStorage.profile);
   expect(profile).toBeUndefined();
+});
+
+
+test("storage failures do not mark a valid backup file as invalid", async ({ page }) => {
+  await openPopup(page);
+  await page.evaluate(() => {
+    (window as any).chrome.storage.local.set = async () => { throw new Error("storage quota exceeded"); };
+  });
+  await page.locator("#backup").setInputFiles({
+    name: "valid-profile.json", mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify({ app: "JanaSetu", schemaVersion: 1, profile: syntheticProfile, language: "en" }))
+  });
+  await expect(page.locator("#status")).toContainText("Import failed");
+  await expect(page.locator("#backup")).not.toHaveAttribute("aria-invalid", "true");
+});
+
+
+test("new backup selection clears the invalid state before importing a valid profile", async ({ page }) => {
+  await openPopup(page);
+  await expect(page.locator("#backup")).toHaveAttribute("aria-describedby", "status");
+  await page.locator("#backup").setInputFiles({ name: "broken.json", mimeType: "application/json", buffer: Buffer.from("{") });
+  await expect(page.locator("#backup")).toHaveAttribute("aria-invalid", "true");
+  await page.locator("#backup").setInputFiles({
+    name: "valid-profile.json", mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify({ app: "JanaSetu", schemaVersion: 1, profile: syntheticProfile, language: "en" }))
+  });
+  await expect(page.locator("#backup")).not.toHaveAttribute("aria-invalid", "true");
+  await expect(page.locator("#status")).toContainText("Profile imported");
 });
