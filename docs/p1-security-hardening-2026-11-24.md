@@ -20,6 +20,15 @@ This change set addresses two release gates: enforceable browser content policy 
 - Playwright: 88 browser tests reported passing; one test remained unresolved when the run was stopped. The focused enforced-CSP response/nonce test passed separately.
 - The hosted Auth audit could not be executed because no Management API token was available on this workstation. No hosted Auth setting or SMTP credential was changed.
 
+## Extension update
+
+- Added an explicit one-click `Autofill safe fields` action to the unpacked Chromium extension. It only fills a hard-coded allowlist of non-sensitive, visible, empty controls on an exact HTTPS host allowlist.
+- Aadhaar, contact details, income/certificate/identity identifiers, declarations, document uploads, CAPTCHA, OTP and all Next/Proceed/Verify/Apply/Save/Submit actions remain citizen-controlled.
+- The separate field-by-field preview flow remains available. Exact page URL confirmation is required for each popup session.
+- Extension browser tests: 14/14 passed, including a real DOM test proving that CAPTCHA, OTP, Aadhaar, contact, consent, file upload and form submission controls are not changed by safe autofill.
+- Full Playwright suite: 93/93 browser tests passed, including accessibility, citizen journey, extension, sync and voice tests.
+- The extension ZIP is rebuilt from the tested source and included in the branch. This is not a live-portal end-to-end acceptance test; only synthetic DOM and popup flows were exercised.
+
 ## Still open
 
 1. Deploy this branch and verify nonce/header matching on production HTML, hydration, fonts, voice worker, model downloads and every interactive route. Recheck CSP console violations and response headers.

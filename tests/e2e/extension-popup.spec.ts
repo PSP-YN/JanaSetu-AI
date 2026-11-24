@@ -10,7 +10,7 @@ const syntheticProfile = {
   otherScholarship: null, diplomaOrDistance: null
 };
 
-async function openPopup(page: import("@playwright/test").Page, initialUrl = "https://portal.gov.in/app") {
+async function openPopup(page: import("@playwright/test").Page, initialUrl = "https://pmkisan.gov.in/RegistrationFormupdated.aspx") {
   const html = readFileSync("extension/popup.html", "utf8").replace(/\s*<script src="[^"]+"><\/script>/g, "");
   await page.setContent(html);
   await page.evaluate((url) => {
@@ -32,6 +32,9 @@ async function openPopup(page: import("@playwright/test").Page, initialUrl = "ht
       scripting: { executeScript: async (call: unknown) => {
         (window as any).__lastScriptCall = call;
         const scriptCall = call as { args: any[] };
+        if (scriptCall.args[1] === "safe") {
+          return [{ result: { filled: 6, stale: 0, mode: "safe", manualSteps: ["Read and enter the CAPTCHA yourself in the portal.", "Request and enter the OTP yourself in the portal."] } }];
+        }
         if (!Array.isArray(scriptCall.args[1])) {
           return [{ result: { preview: [
             { index: 0, key: "fullName", label: "Applicant name", value: "Synthetic Citizen", fingerprint: "name-1", valid: true, reason: "" },
@@ -57,7 +60,7 @@ test("extension imports the reviewed profile and fills only after address and fi
   await expect(page.locator("#fill")).toContainText("ಪೂರ್ವವೀಕ್ಷಿಸಿ");
 
   await page.locator("#fill").click();
-  await expect(page.locator("#active-site")).toContainText("https://portal.gov.in/app");
+  await expect(page.locator("#active-site")).toContainText("https://pmkisan.gov.in/RegistrationFormupdated.aspx");
   expect(await page.evaluate(() => (window as any).__lastScriptCall)).toBeNull();
   await page.locator("#verify-portal").check();
   await page.locator("#fill").click();
@@ -102,14 +105,14 @@ test("the observed PM-KISAN registration route can preview only after the citize
 
 
 test("changing the active portal URL invalidates the per-session confirmation and preview", async ({ page }) => {
-  await openPopup(page, "https://portal.gov.in/app");
+  await openPopup(page, "https://pmkisan.gov.in/RegistrationFormupdated.aspx");
   await page.evaluate((profile) => Object.assign((window as any).__popupStorage, { profile, language: "en" }), syntheticProfile);
   await page.locator("#fill").click();
   await page.locator("#verify-portal").check();
   await page.locator("#fill").click();
   await expect(page.locator("#preview .preview-row")).toHaveCount(2);
   await page.locator("#preview .preview-row input").first().check();
-  await page.evaluate(() => { (window as any).__popupTab.url = "https://portal.gov.in/another-step"; });
+  await page.evaluate(() => { (window as any).__popupTab.url = "https://pmkisan.gov.in/another-step"; });
   await page.locator("#apply").click();
   await expect(page.locator("#verify-portal")).not.toBeChecked();
   expect(await page.evaluate(() => (window as any).__lastScriptCall.args.length)).toBe(3);
@@ -117,7 +120,7 @@ test("changing the active portal URL invalidates the per-session confirmation an
 });
 
 test("extension popup rejects deceptive non-government hostnames", async ({ page }) => {
-  await openPopup(page, "https://portal.gov.in.attacker.example/login");
+  await openPopup(page, "https://pmkisan.gov.in.attacker.example/login");
   await page.evaluate((profile) => Object.assign((window as any).__popupStorage, { profile, language: "en" }), syntheticProfile);
   await page.locator("#fill").click();
   await expect(page.locator("#status")).toContainText("verify its exact URL");
@@ -223,4 +226,64 @@ test("a superseded import clears an already-open preview after its storage write
   await page.evaluate(() => (window as any).__importGates.releaseSecond());
   await expect(page.locator("#status")).toContainText("Profile imported");
   expect(await page.evaluate(() => (window as any).__popupStorage.profile.fullName)).toBe("Second Citizen");
+});
+
+
+test("one-click safe autofill fills mapped non-sensitive fields but leaves CAPTCHA, OTP and protected actions to the citizen", async ({ page }) => {
+  await openPopup(page);
+  await page.locator("#backup").setInputFiles({
+    name: "safe-autofill.json", mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify({ app: "JanaSetu", schemaVersion: 1, profile: syntheticProfile, language: "en" }))
+  });
+  await expect(page.locator("#status")).toContainText("Profile imported");
+  await page.locator("#verify-portal").check();
+  await page.locator("#auto-fill").click();
+  await expect(page.locator("#status")).toContainText("Automatically filled 6 safe field(s)");
+  await expect(page.locator("#manual-steps")).toContainText("CAPTCHA");
+  await expect(page.locator("#manual-steps")).toContainText("OTP");
+  const call = await page.evaluate(() => (window as any).__lastScriptCall);
+  expect(call.args[1]).toBe("safe");
+  expect(call.args[2].aadhaarNumber).toBeUndefined();
+});
+
+test("extension rejects an unlisted government-looking hostname", async ({ page }) => {
+  await openPopup(page, "https://portal.gov.in/app");
+  await page.evaluate((profile) => Object.assign((window as any).__popupStorage, { profile, language: "en" }), syntheticProfile);
+  await page.locator("#verify-portal").check();
+  await page.locator("#auto-fill").click();
+  await expect(page.locator("#status")).toContainText("supported official HTTPS government portal");
+  expect(await page.evaluate(() => (window as any).__lastScriptCall)).toBeNull();
+});
+
+
+test("safe autofill function fills only its allowlist and never changes OTP, CAPTCHA, Aadhaar, consent, file or submit controls", async ({ page }) => {
+  await page.setContent(`
+    <form id="application">
+      <label for="applicant">Applicant name</label><input id="applicant" name="applicant_name">
+      <label for="district">District</label><input id="district" name="district">
+      <label for="mobile">Mobile number</label><input id="mobile" name="mobile">
+      <label for="aadhaar">Aadhaar number</label><input id="aadhaar" name="aadhaar_number">
+      <label for="captcha">CAPTCHA</label><input id="captcha" name="captcha">
+      <label for="otp">OTP</label><input id="otp" name="otp">
+      <label for="consent">I agree to the declaration</label><input id="consent" type="checkbox" name="declaration">
+      <label for="document">Upload certificate</label><input id="document" type="file" name="certificate">
+      <button type="submit">Submit application</button>
+    </form>`);
+  await page.addScriptTag({ path: "extension/fill.js" });
+  const result = await page.evaluate(() => (window as any).fillProfileInPage({
+    fullName: "Synthetic Citizen", district: "Mysuru", mobileNumber: "9876543210"
+  }, "safe", {}));
+  expect(result.filled).toBe(2);
+  expect(await page.locator("#applicant").inputValue()).toBe("Synthetic Citizen");
+  expect(await page.locator("#district").inputValue()).toBe("Mysuru");
+  expect(await page.locator("#mobile").inputValue()).toBe("");
+  expect(await page.locator("#aadhaar").inputValue()).toBe("");
+  expect(await page.locator("#captcha").inputValue()).toBe("");
+  expect(await page.locator("#otp").inputValue()).toBe("");
+  expect(await page.locator("#consent").isChecked()).toBe(false);
+  expect(result.manualSteps.join(" ")).toContain("CAPTCHA");
+  expect(result.manualSteps.join(" ")).toContain("OTP");
+  expect(result.manualSteps.join(" ")).toContain("upload required documents yourself");
+  expect(result.manualSteps.join(" ")).toContain("declaration checkbox yourself");
+  expect(await page.locator("form").evaluate(form => (form as HTMLFormElement).dataset.submitted || "")).toBe("");
 });

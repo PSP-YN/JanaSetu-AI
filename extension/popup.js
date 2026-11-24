@@ -12,7 +12,7 @@ const COPY = {
     unsupportedVersion: "Unsupported backup version. Download a fresh profile JSON.",
     incompleteProfile: "Profile incomplete or has unsupported fields. Complete My profile and export again.",
     imported: "Profile imported into extension storage on this device.", importFailed: "Import failed. Select the JSON again.", profileFirst: "Import a profile first.",
-    openPortal: "Open the official portal from JanaSetu first.", blockedDomain: "Open an HTTPS government portal ending in .gov.in or .nic.in, verify its exact URL against JanaSetu, and check the confirmation box.",
+    openPortal: "Open the official portal from JanaSetu first.", blockedDomain: "Open a supported official HTTPS government portal, verify its exact URL against JanaSetu, and check the confirmation box.",
     verifyPortalLabel: 'I checked this exact website address against the official link in JanaSetu. I understand this is user-directed field assistance, not a government-authorized integration.',
     fillOk: "Filled {count} matching field(s). Review every value. JanaSetu stops here and never clicks Next, Apply, Save or Submit; any further steps are yours.", noFields: "No matching fields found. Portal forms vary; fill them manually.", fillFail: "Could not fill this tab. Check extension permissions and try again."
   },
@@ -28,7 +28,7 @@ const COPY = {
     unsupportedVersion: "बैकअप संस्करण समर्थित नहीं है। नई JSON प्रोफ़ाइल डाउनलोड करें।",
     incompleteProfile: "प्रोफ़ाइल अधूरी है या असमर्थित फ़ील्ड हैं। मेरी प्रोफ़ाइल पूरी करके फिर निर्यात करें।",
     imported: "प्रोफ़ाइल इस डिवाइस के एक्सटेंशन स्टोरेज में आयात की गई।", importFailed: "आयात विफल हुआ। JSON फिर चुनें।", profileFirst: "पहले प्रोफ़ाइल आयात करें।",
-    openPortal: "पहले JanaSetu से आधिकारिक पोर्टल खोलें।", blockedDomain: "HTTPS सरकारी पोर्टल खोलें जिसका पता .gov.in या .nic.in पर समाप्त हो, उसका पूरा URL JanaSetu से मिलाएँ और पुष्टि चेकबॉक्स चुनें।",
+    openPortal: "पहले JanaSetu से आधिकारिक पोर्टल खोलें।", blockedDomain: "समर्थित आधिकारिक HTTPS सरकारी पोर्टल खोलें, पूरा URL JanaSetu से मिलाएँ और पुष्टि चेकबॉक्स चुनें।",
     verifyPortalLabel: 'मैंने इस वेबसाइट पते को JanaSetu के आधिकारिक लिंक से मिलाया है। यह उपयोगकर्ता-निर्देशित फ़ील्ड सहायता है, सरकारी-अधिकृत एकीकरण नहीं।',
     fillOk: "{count} मिलते-जुलते फ़ील्ड भरे गए। हर मान जाँचें। JanaSetu यहीं रुकता है और Next, Apply, Save या Submit नहीं दबाता; आगे के सभी कदम आपके नियंत्रण में हैं।", noFields: "कोई मिलान फ़ील्ड नहीं मिला। पोर्टल फ़ॉर्म अलग होते हैं; जानकारी स्वयं भरें।", fillFail: "इस टैब को भर नहीं सके। एक्सटेंशन अनुमतियाँ जाँचकर पुनः प्रयास करें।"
   },
@@ -44,7 +44,7 @@ const COPY = {
     unsupportedVersion: "ಬ್ಯಾಕಪ್ ಆವೃತ್ತಿ ಬೆಂಬಲಿತವಲ್ಲ. ಹೊಸ JSON ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ.",
     incompleteProfile: "ಪ್ರೊಫೈಲ್ ಅಪೂರ್ಣವಾಗಿದೆ ಅಥವಾ ಬೆಂಬಲಿಸದ ಕ್ಷೇತ್ರಗಳಿವೆ. ನನ್ನ ಪ್ರೊಫೈಲ್ ಪೂರ್ಣಗೊಳಿಸಿ ಮತ್ತೆ ರಫ್ತು ಮಾಡಿ.",
     imported: "ಪ್ರೊಫೈಲ್ ಈ ಸಾಧನದ ವಿಸ್ತರಣೆ ಸಂಗ್ರಹಣೆಗೆ ಆಮದು ಮಾಡಲಾಗಿದೆ.", importFailed: "ಆಮದು ವಿಫಲವಾಗಿದೆ. JSON ಮತ್ತೆ ಆಯ್ಕೆಮಾಡಿ.", profileFirst: "ಮೊದಲು ಪ್ರೊಫೈಲ್ ಆಮದು ಮಾಡಿ.",
-    openPortal: "ಮೊದಲು JanaSetu ನಿಂದ ಅಧಿಕೃತ ಪೋರ್ಟಲ್ ತೆರೆಯಿರಿ.", blockedDomain: ".gov.in ಅಥವಾ .nic.in ನಲ್ಲಿ ಕೊನೆಗೊಳ್ಳುವ HTTPS ಸರ್ಕಾರಿ ಪೋರ್ಟಲ್ ತೆರೆಯಿರಿ, ಸಂಪೂರ್ಣ URL ಅನ್ನು JanaSetu ಅಧಿಕೃತ ಲಿಂಕ್‌ನೊಂದಿಗೆ ಪರಿಶೀಲಿಸಿ ಮತ್ತು ದೃಢೀಕರಣ ಚೆಕ್‌ಬಾಕ್ಸ್ ಆಯ್ಕೆಮಾಡಿ.",
+    openPortal: "ಮೊದಲು JanaSetu ನಿಂದ ಅಧಿಕೃತ ಪೋರ್ಟಲ್ ತೆರೆಯಿರಿ.", blockedDomain: "ಬೆಂಬಲಿತ ಅಧಿಕೃತ HTTPS ಸರ್ಕಾರಿ ಪೋರ್ಟಲ್ ತೆರೆಯಿರಿ, ಸಂಪೂರ್ಣ URL ಅನ್ನು JanaSetu ಅಧಿಕೃತ ಲಿಂಕ್‌ನೊಂದಿಗೆ ಪರಿಶೀಲಿಸಿ ಮತ್ತು ದೃಢೀಕರಣ ಚೆಕ್‌ಬಾಕ್ಸ್ ಆಯ್ಕೆಮಾಡಿ.",
     verifyPortalLabel: 'ಈ ವೆಬ್\u200cಸೈಟ್ ವಿಳಾಸವನ್ನು JanaSetu ಅಧಿಕೃತ ಲಿಂಕ್\u200cನೊಂದಿಗೆ ಪರಿಶೀಲಿಸಿದ್ದೇನೆ. ಇದು ಬಳಕೆದಾರ-ನಿರ್ದೇಶಿತ ಕ್ಷೇತ್ರ ಸಹಾಯ ಮಾತ್ರ, ಸರ್ಕಾರಿ-ಅನುಮೋದಿತ ಏಕೀಕರಣವಲ್ಲ.',
     fillOk: "{count} ಹೊಂದಾಣಿಕೆಯ ಕ್ಷೇತ್ರಗಳನ್ನು ತುಂಬಲಾಗಿದೆ. ಪ್ರತಿಯೊಂದು ಮೌಲ್ಯ ಪರಿಶೀಲಿಸಿ. JanaSetu ಇಲ್ಲಿಯೇ ನಿಲ್ಲುತ್ತದೆ; Next, Apply, Save ಅಥವಾ Submit ಒತ್ತುವುದಿಲ್ಲ. ಮುಂದಿನ ಹಂತಗಳು ನಿಮ್ಮ ನಿಯಂತ್ರಣದಲ್ಲಿರುತ್ತವೆ.", noFields: "ಹೊಂದಾಣಿಕೆಯ ಕ್ಷೇತ್ರಗಳು ಕಂಡುಬಂದಿಲ್ಲ. ಪೋರ್ಟಲ್ ಫಾರ್ಮ್‌ಗಳು ಬದಲಾಗುತ್ತವೆ; ಕೈಯಾರೆ ತುಂಬಿ.", fillFail: "ಈ ಟ್ಯಾಬ್ ತುಂಬಲಾಗಲಿಲ್ಲ. ವಿಸ್ತರಣೆ ಅನುಮತಿಗಳನ್ನು ಪರಿಶೀಲಿಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ."
   },
@@ -76,7 +76,7 @@ const COPY = {
     unsupportedVersion: "బ్యాకప్ వెర్షన్‌కు మద్దతు లేదు. కొత్త JSONను డౌన్‌లోడ్ చేయండి.",
     incompleteProfile: "ప్రొఫైల్ అసంపూర్ణం లేదా మద్దతు లేని ఫీల్డ్‌లు ఉన్నాయి. నా ప్రొఫైల్ పూర్తి చేసి మళ్లీ ఎగుమతి చేయండి.",
     imported: "ప్రొఫైల్ ఈ పరికరంలోని ఎక్స్‌టెన్షన్ నిల్వలో దిగుమతి చేయబడింది.", importFailed: "దిగుమతి విఫలమైంది. JSONను మళ్లీ ఎంచుకోండి.", profileFirst: "ముందుగా ప్రొఫైల్‌ను దిగుమతి చేయండి.",
-    openPortal: "ముందుగా JanaSetu నుంచి అధికారిక పోర్టల్‌ను తెరవండి.", blockedDomain: ".gov.in లేదా .nic.in తో ముగిసే HTTPS ప్రభుత్వ పోర్టల్‌ను తెరిచి, పూర్తి URL ను JanaSetu అధికారిక లింక్‌తో సరిపోల్చి నిర్ధారణ చెక్‌బాక్స్‌ను ఎంచుకోండి.",
+    openPortal: "ముందుగా JanaSetu నుంచి అధికారిక పోర్టల్‌ను తెరవండి.", blockedDomain: "మద్దతు ఉన్న అధికారిక HTTPS ప్రభుత్వ పోర్టల్‌ను తెరిచి, పూర్తి URL ను JanaSetu అధికారిక లింక్‌తో సరిపోల్చి నిర్ధారణ చెక్‌బాక్స్‌ను ఎంచుకోండి.",
     verifyPortalLabel: 'ఈ వెబ్\u200cసైట్ చిరునామాను JanaSetu అధికారిక లింక్\u200cతో తనిఖీ చేశాను. ఇది వినియోగదారు-నిర్దేశిత ఫీల్డ్ సహాయం మాత్రమే, ప్రభుత్వ-అధికారిక సమీకరణ కాదు.',
     fillOk: "{count} సరిపోలే ఫీల్డ్‌లు నింపబడ్డాయి. ప్రతి విలువను తనిఖీ చేయండి. JanaSetu ఇక్కడే ఆగుతుంది; Next, Apply, Save లేదా Submit నొక్కదు. తదుపరి చర్యలు మీ నియంత్రణలో ఉంటాయి.", noFields: "సరిపోలే ఫీల్డ్‌లు కనబడలేదు. పోర్టల్ ఫారమ్‌లు వేరుగా ఉంటాయి; చేతితో నింపండి.", fillFail: "ఈ ట్యాబ్‌ను నింపలేకపోయాం. ఎక్స్‌టెన్షన్ అనుమతులను తనిఖీ చేసి మళ్లీ ప్రయత్నించండి."
   },
@@ -92,7 +92,7 @@ const COPY = {
     unsupportedVersion: "ബാക്കപ്പ് പതിപ്പ് പിന്തുണയ്ക്കുന്നില്ല. പുതിയ JSON ഡൗൺലോഡ് ചെയ്യുക.",
     incompleteProfile: "പ്രൊഫൈൽ അപൂർണ്ണമാണ് അല്ലെങ്കിൽ പിന്തുണയ്ക്കാത്ത ഫീൽഡുകളുണ്ട്. എന്റെ പ്രൊഫൈൽ പൂർത്തിയാക്കി വീണ്ടും എക്സ്പോർട്ട് ചെയ്യുക.",
     imported: "പ്രൊഫൈൽ ഈ ഉപകരണത്തിലെ എക്സ്റ്റൻഷൻ സംഭരണത്തിലേക്ക് ഇറക്കുമതി ചെയ്തു.", importFailed: "ഇറക്കുമതി പരാജയപ്പെട്ടു. JSON വീണ്ടും തിരഞ്ഞെടുക്കുക.", profileFirst: "ആദ്യം പ്രൊഫൈൽ ഇറക്കുമതി ചെയ്യുക.",
-    openPortal: "ആദ്യം JanaSetu-യിൽ നിന്ന് ഔദ്യോഗിക പോർട്ടൽ തുറക്കുക.", blockedDomain: ".gov.in അല്ലെങ്കിൽ .nic.in-ൽ അവസാനിക്കുന്ന HTTPS സർക്കാർ പോർട്ടൽ തുറന്ന്, പൂർണ്ണ URL JanaSetu ഔദ്യോഗിക ലിങ്കുമായി പരിശോധിച്ച് സ്ഥിരീകരണ ചെക്ക്ബോക്സ് തിരഞ്ഞെടുക്കുക.",
+    openPortal: "ആദ്യം JanaSetu-യിൽ നിന്ന് ഔദ്യോഗിക പോർട്ടൽ തുറക്കുക.", blockedDomain: "പിന്തുണയ്ക്കുന്ന ഔദ്യോഗിക HTTPS സർക്കാർ പോർട്ടൽ തുറന്ന്, പൂർണ്ണ URL JanaSetu ഔദ്യോഗിക ലിങ്കുമായി പരിശോധിച്ച് സ്ഥിരീകരണ ചെക്ക്ബോക്സ് തിരഞ്ഞെടുക്കുക.",
     verifyPortalLabel: 'ഈ വെബ്സൈറ്റ് വിലാസം JanaSetu ഔദ്യോഗിക ലിങ്കുമായി പരിശോധിച്ചു. ഇത് ഉപയോക്താവ് നിർദ്ദേശിക്കുന്ന ഫീൽഡ് സഹായം മാത്രമാണ്, സർക്കാർ അംഗീകരിച്ച സംയോജനം അല്ല.',
     fillOk: "{count} പൊരുത്തമുള്ള ഫീൽഡുകൾ പൂരിപ്പിച്ചു. ഓരോ മൂല്യവും പരിശോധിക്കുക. JanaSetu ഇവിടെ നിർത്തും; Next, Apply, Save അല്ലെങ്കിൽ Submit അമർത്തില്ല. തുടർനടപടികൾ നിങ്ങളുടെ നിയന്ത്രണത്തിലായിരിക്കും.", noFields: "പൊരുത്തമുള്ള ഫീൽഡുകളൊന്നും കണ്ടെത്തിയില്ല. പോർട്ടൽ ഫോമുകൾ വ്യത്യസ്തമാണ്; കൈകൊണ്ട് പൂരിപ്പിക്കുക.", fillFail: "ഈ ടാബ് പൂരിപ്പിക്കാൻ കഴിഞ്ഞില്ല. എക്സ്റ്റൻഷൻ അനുമതികൾ പരിശോധിച്ച് വീണ്ടും ശ്രമിക്കുക."
   }
@@ -233,6 +233,7 @@ const sspAadhaarGroup=document.getElementById("ssp-aadhaar-group");
 sspAadhaarInput.addEventListener("input",()=>{sspAadhaarInput.value=sspAadhaarInput.value.replace(/\D/g,"").slice(0,12);});
 const previewEl=document.getElementById("preview");
 const applyButton=document.getElementById("apply");
+const autoFillButton=document.getElementById("auto-fill");
 function clearPreview(){
   const manual=document.getElementById("manual-steps");if(manual){manual.hidden=true;manual.textContent="";}
   pendingPreview=[];pendingTabId=null;pendingUrl="";pendingProfile=null;pendingSessionValues=null;
@@ -279,7 +280,10 @@ async function getCitizenConfirmedPortalTab(){
   let portalUrl;
   try{portalUrl=new URL(tab.url);}catch{say("blockedDomain");return null;}
   const host=portalUrl.hostname.toLowerCase();
-  const governmentHost=host==="gov.in"||host.endsWith(".gov.in")||host==="nic.in"||host.endsWith(".nic.in");
+  const governmentHost=new Set([
+    "ssp.postmatric.karnataka.gov.in","pmkisan.gov.in","pmaymis.gov.in",
+    "pmuy.gov.in","www.pmuy.gov.in","scholarships.gov.in"
+  ]).has(host);
   if(portalUrl.protocol!=="https:"||!governmentHost){say("blockedDomain");return null;}
   if(activeSiteEl.textContent&&activeSiteEl.textContent!=="Not checked yet"&&activeSiteEl.textContent!==portalUrl.href){verifyPortalCheckbox.checked=false;sspAadhaarInput.value="";}
   activeSiteEl.textContent=portalUrl.href;
@@ -309,6 +313,36 @@ document.getElementById("fill").addEventListener("click",async()=>{
     renderPreview(fields,manualSteps);
   }catch(error){clearPreview();say("fillFail");}
 });
+
+autoFillButton.addEventListener("click",async()=>{
+  try{
+    await popupReady;
+    clearPreview();
+    sspAadhaarInput.value="";
+    const {profile,language}=await chrome.storage.local.get(["profile","language"]);
+    setLanguage(language||currentLanguage);
+    if(!profile){say("profileFirst");return;}
+    if(!isValidProfile(profile)){say("invalidBackup");return;}
+    const tab=await getCitizenConfirmedPortalTab();if(!tab)return;
+    const normalizedProfile={...profile,occupation:normalizeOccupation(profile.occupation)};
+    // Auto mode is an explicit, citizen-triggered action. It fills only the
+    // built-in non-sensitive allowlist; Aadhaar, contact/financial/identity
+    // fields, declarations, files, CAPTCHA, OTP and every submit action stay manual.
+    const result=await chrome.scripting.executeScript({
+      target:{tabId:tab.id},func:fillProfileInPage,args:[normalizedProfile,"safe",{}]
+    });
+    const filled=result?.[0]?.result?.filled??0;
+    const stale=result?.[0]?.result?.stale??0;
+    const manualSteps=result?.[0]?.result?.manualSteps||[];
+    if(manualSteps.length)notifyHumanSteps(manualSteps);
+    const manual=document.getElementById("manual-steps");
+    if(manual&&manualSteps.length){manual.hidden=false;manual.textContent="Human steps required: "+manualSteps.join(" ");}
+    if(filled){statusEl.textContent=`Automatically filled ${filled} safe field(s). Review every value. Aadhaar, contact and other sensitive fields, CAPTCHA, OTP, declarations, document uploads and submission remain manual.`;}
+    else if(stale)say("stalePreview");
+    else say("noFields");
+  }catch(error){clearPreview();say("fillFail");}
+});
+
 applyButton.addEventListener("click",async()=>{
   try{
     await popupReady;
