@@ -6,11 +6,21 @@
 
 This is an engineering audit of the repository and connected deployment. It is not an independent penetration test, legal opinion, DPDP compliance certification, government authorization, or a capacity certification.
 
+## Deployment follow-up — 24 November 2026
+
+- Audit hardening merged through PR #49 at `0c2548711f593c4ff792d71d3304870b8ff15c8d`.
+- Extension/import fixes merged through PR #46 at `46185596c6ec72418e9a62722c17373c3042f835`.
+- Vercel production deployment `dpl_7uP2GjfWSUCCyQJX8pG2sVbSSvr8` reached `READY` in `bom1` and serves the canonical `jana-setu-ai.vercel.app` alias.
+- Live `/`, `/app`, `/api/health` and `/api/ready` checks returned HTTP 200. Liveness returned `status: ok`; readiness returned `ready: true` and `databaseReachable: true`.
+- The production extension ZIP at `/downloads/JanaSetu-Form-Assistant.zip` downloaded successfully, passed `unzip -t`, and its `popup.js` SHA-256 matched the local packaged extension (`92a2cfb14b73e52e2115185fb18a0121a93dd4873caf6ac320bbb5700cef6d47`).
+- Vercel reported no runtime errors in the one-hour window after deployment.
+- Readiness still reports **0 published schemes**, `persistedApplicationPreparation: false`, and government portal automation disabled pending authorization. Deployment availability is not production-launch approval.
+
 ## Executive assessment
 
 JanaSetu has useful fail-closed controls: published-scheme review gates, user-scoped database access, private document storage, explicit consent purposes, safe portal-fill boundaries, encrypted backup export, and a separate readiness endpoint. The project is still a controlled beta/prototype. It must not be represented as an official government service or as an automated government-application submission system.
 
-The live Supabase project was found inactive during this audit and was restored. The live readiness endpoint now reports database connectivity. A Vercel firewall rate-limit rule is active. The code fixes in this audit branch are **not yet deployed**; production continues to run the previously deployed revision until the pull request is merged and its deployment is verified.
+The live Supabase project was found inactive during this audit and was restored. The live readiness endpoint now reports database connectivity. A Vercel firewall rate-limit rule is active. The audit hardening and extension fixes have since been merged and deployed; see the deployment follow-up below. The release decision remains controlled beta because the P1 data-protection, scheme-approval, authorization, backup and capacity gates remain open.
 
 ## Changes implemented in the audit branch
 
@@ -88,7 +98,7 @@ The audited source revision is expected to pass the following gates before merge
 
 - `npm run check` — 187 unit tests plus TypeScript checking.
 - `npm run build` — including a build with Supabase configured to an intentionally unreachable local endpoint, proving public scheme rendering no longer requires a live database during build.
-- `npx playwright test --workers=1` — full browser E2E suite, including extension, voice, portal safety and citizen workflows.
+- `npx playwright test --workers=1` — 90 browser E2E tests passed in GitHub Actions, including extension, voice, portal safety and citizen workflows. The focused extension popup suite also passed 11 tests.
 - `python3 -m unittest discover -s tests -p 'test_*.py' -v` — document-scanner unit tests.
 - `python scripts/validate_database_migration.py` and `python scripts/validate_scheme_review_packets.py` — migration/review packet validation.
 - `npm audit --omit=dev --audit-level=high` — dependency audit.
@@ -107,6 +117,7 @@ A passing automated suite does not close the legal, identity, data-protection, l
 - [ ] Deploy and verify scanner worker, malware signatures, quarantine, deletion and incident handling before document uploads.
 - [ ] Run staged load tests at the agreed peak concurrency and validate autoscaling, database pool limits, latency and error budgets.
 - [ ] Complete backup restore, outage, queue-recovery and incident-response exercises.
-- [ ] Merge the audit branch, verify production deployment, then run the live readiness monitor and citizen acceptance tests.
+- [x] Merge and deploy the audit hardening and extension fixes; verify live liveness/readiness endpoints and the production extension ZIP.
+- [ ] Verify the next scheduled production monitor run and alert-delivery path; complete citizen acceptance tests with synthetic data.
 
 **Release decision:** keep JanaSetu in controlled beta. Do not onboard the general public or claim production-scale capacity until every P1 gate is closed and independently verified.

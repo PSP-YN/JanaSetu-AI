@@ -1,4 +1,4 @@
-> **Audit update — 24 November 2026:** JanaSetu remains **not approved for general-public production launch**. Supabase was restored and a production WAF rate-limit rule is active. Reliability and request-boundary fixes are under review in `audit/production-hardening-20261124`; they are not live until merged and deployed. See [the full pre-production audit](production-audit-2026-11-24.md) for evidence, release blockers and the go-live checklist.
+> **Audit update — 24 November 2026:** The production-hardening and extension fixes are merged and deployed. Live liveness/readiness checks return HTTP 200 and the database is reachable. JanaSetu remains **not approved for general-public production launch** until the P1 privacy, identity, approved-scheme, legal authorization, backup and load-test gates in [the full audit](production-audit-2026-11-24.md) are closed.
 
 # JanaSetu AI — production readiness and release gate
 
