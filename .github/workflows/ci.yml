@@ -114,7 +114,13 @@ jobs:
           grep -qi '^referrer-policy: strict-origin-when-cross-origin' /tmp/janasetu-headers.txt
           grep -qi '^permissions-policy: camera=(), geolocation=(), payment=(), usb=(), microphone=(self)' /tmp/janasetu-headers.txt
           grep -qi '^strict-transport-security: max-age=31536000; includeSubDomains' /tmp/janasetu-headers.txt
-          grep -qi '^content-security-policy-report-only:' /tmp/janasetu-headers.txt
+          # The P1 branch enforces a nonce CSP; report-only is no longer expected.
+          grep -qi '^content-security-policy:' /tmp/janasetu-headers.txt
+          grep -Eiq "^content-security-policy:.*script-src[^;]*nonce-[^;]*strict-dynamic" /tmp/janasetu-headers.txt
+          if grep -Eiq "^content-security-policy:.*script-src[^;]*unsafe-(inline|eval)" /tmp/janasetu-headers.txt; then
+            echo 'Enforced script-src must not allow unsafe-inline or unsafe-eval' >&2
+            exit 1
+          fi
 
           curl --fail --silent http://127.0.0.1:3000/janasetu-logo.png > /tmp/janasetu-logo.png
           node -e '
