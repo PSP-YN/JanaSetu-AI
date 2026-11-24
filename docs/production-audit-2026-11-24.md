@@ -16,7 +16,7 @@ The live Supabase project was found inactive during this audit and was restored.
 
 | Finding | Change | Verification |
 |---|---|---|
-| GitHub Actions dependency installation attempted to fetch an unavailable optional CUDA binary on CPU-only runners | CI now skips the optional Node CUDA execution provider while retaining CPU ONNX Runtime | CPU-only install workflow guard test; remote CI run pending |
+| GitHub Actions dependency installation attempted to fetch an unavailable optional CUDA binary on CPU-only runners | CI sets the documented `ONNXRUNTIME_NODE_INSTALL_CUDA=skip` environment variable so the optional Node CUDA execution provider is not downloaded on CPU runners | CPU-only install workflow guard test; remote CI run pending |
 | Public scheme pages could abort a production build when Supabase was unavailable | Public catalogue reads now have a bounded timeout and fail closed to an empty guide list; partial/unverified data is not published | Offline-dependency build and regression test |
 | JSON API handlers read unbounded request streams before checking byte length | Added a shared streaming JSON-object parser and migrated write routes to explicit byte limits, including the 8 MB encrypted-sync endpoint | Chunked oversized-body, malformed JSON, scalar/array and route tests |
 | Liveness endpoint returned `status: prototype` | Liveness now reports `status: ok`, uses the correct service identifier and `Cache-Control: no-store` | Health-route unit test |
