@@ -78,8 +78,13 @@ test("security headers are served by the active Next.js configuration", async ({
 
 test("skip navigation is keyboard reachable and moves to main content", async ({ page }) => {
   await page.goto("/app");
-  await page.keyboard.press("Tab");
+  // Browser chrome can retain initial focus under parallel browser load. Walk
+  // the page's tab order until the skip link receives focus.
   const skip = page.locator("a.skip-link");
+  for (let attempt = 0; attempt < 12; attempt += 1) {
+    await page.keyboard.press("Tab");
+    if (await skip.evaluate((element) => element === document.activeElement)) break;
+  }
   await expect(skip).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/#main-content$/);

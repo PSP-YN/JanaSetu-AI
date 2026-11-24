@@ -12,6 +12,8 @@ const syntheticProfile = {
 
 async function openPopup(page: import("@playwright/test").Page, initialUrl = "https://pmkisan.gov.in/RegistrationFormupdated.aspx") {
   const html = readFileSync("extension/popup.html", "utf8").replace(/\s*<script src="[^"]+"><\/script>/g, "");
+  // Web Crypto is unavailable on opaque about:blank origins. Use loopback, a secure context.
+  await page.goto("http://127.0.0.1:3003");
   await page.setContent(html);
   await page.evaluate((url) => {
     const storage: Record<string, unknown> = {};
@@ -24,7 +26,8 @@ async function openPopup(page: import("@playwright/test").Page, initialUrl = "ht
           const list = Array.isArray(keys) ? keys : [keys];
           return Object.fromEntries(list.map((key) => [key, storage[key]]));
         },
-        set: async (data: Record<string, unknown>) => Object.assign(storage, data)
+        set: async (data: Record<string, unknown>) => Object.assign(storage, data),
+        remove: async (keys: string[]) => { for (const key of keys) delete storage[key]; }
       } },
       tabs: { query: async () => [(window as any).__popupTab] },
       runtime: { getURL: (path: string) => path },
@@ -45,8 +48,19 @@ async function openPopup(page: import("@playwright/test").Page, initialUrl = "ht
       } }
     } });
   }, initialUrl);
+  await page.addScriptTag({ path: "extension/vault.js" });
   await page.addScriptTag({ path: "extension/fill.js" });
   await page.addScriptTag({ path: "extension/popup.js" });
+  await page.locator("#vault-password").fill("synthetic-passphrase-2026");
+}
+
+async function seedEncryptedProfile(page: import("@playwright/test").Page, profile = syntheticProfile) {
+  await page.evaluate(async (value) => {
+    const envelope = await (window as any).JanaSetuVault.encryptProfile(value, "synthetic-passphrase-2026");
+    Object.assign((window as any).__popupStorage, { encryptedProfile: envelope, language: "en" });
+  }, profile);
+  await page.locator("#vault-unlock").click();
+  await expect(page.locator("#vault-status")).toContainText("unlocked for this popup session");
 }
 
 test("popup shows the active supported portal URL before the citizen confirms it", async ({ page }) => {
@@ -65,6 +79,11 @@ test("extension imports the reviewed profile and fills only after address and fi
   await expect(page.locator("#status")).toContainText("ಪ್ರೊಫೈಲ್");
   await expect(page.locator("#backup")).not.toHaveAttribute("aria-invalid", "true");
   await expect(page.locator("#fill")).toContainText("ಪೂರ್ವವೀಕ್ಷಿಸಿ");
+  const stored = await page.evaluate(() => (window as any).__popupStorage);
+  expect(stored.profile).toBeUndefined();
+  expect(stored.encryptedProfile.magic).toBe("JANASETU-EXTENSION-VAULT");
+  expect(JSON.stringify(stored.encryptedProfile)).not.toContain("Synthetic Citizen");
+  expect(JSON.stringify(stored)).not.toContain("synthetic-passphrase-2026");
 
   await page.locator("#fill").click();
   await expect(page.locator("#active-site")).toContainText("https://pmkisan.gov.in/RegistrationFormupdated.aspx");
@@ -82,7 +101,7 @@ test("extension imports the reviewed profile and fills only after address and fi
 
 test("SSP popup value is passed only to the active SSP fill session and is not stored", async ({ page }) => {
   await openPopup(page, "https://ssp.postmatric.karnataka.gov.in/CA/");
-  await page.evaluate((profile) => Object.assign((window as any).__popupStorage, { profile, language: "en" }), syntheticProfile);
+  await seedEncryptedProfile(page);
   await page.locator("#fill").click();
   await expect(page.locator("#ssp-aadhaar-group")).toBeVisible();
   await page.locator("#verify-portal").check();
@@ -92,13 +111,14 @@ test("SSP popup value is passed only to the active SSP fill session and is not s
   expect(call.args[2].aadhaarNumber).toBe("123456789012");
   expect(await page.evaluate(() => (window as any).__notification.title)).toBe("JanaSetu: action needed in browser");
   const stored = await page.evaluate(() => (window as any).__popupStorage);
-  expect(stored.profile.aadhaarNumber).toBeUndefined();
+  expect(stored.profile).toBeUndefined();
   expect(stored.aadhaarNumber).toBeUndefined();
+  expect(JSON.stringify(stored.encryptedProfile)).not.toContain("123456789012");
 });
 
 test("redirected Karnataka SSP host is accepted and keeps the one-session Aadhaar input out of storage", async ({ page }) => {
   await openPopup(page, "https://ssp.karnataka.gov.in/CA/");
-  await page.evaluate((profile) => Object.assign((window as any).__popupStorage, { profile, language: "en" }), syntheticProfile);
+  await seedEncryptedProfile(page);
   await page.locator("#fill").click();
   await expect(page.locator("#active-site")).toContainText("https://ssp.karnataka.gov.in/CA/");
   await expect(page.locator("#ssp-aadhaar-group")).toBeVisible();
@@ -108,13 +128,14 @@ test("redirected Karnataka SSP host is accepted and keeps the one-session Aadhaa
   const call = await page.evaluate(() => (window as any).__lastScriptCall);
   expect(call.args[2].aadhaarNumber).toBe("123456789012");
   const stored = await page.evaluate(() => (window as any).__popupStorage);
-  expect(stored.profile.aadhaarNumber).toBeUndefined();
+  expect(stored.profile).toBeUndefined();
   expect(stored.aadhaarNumber).toBeUndefined();
+  expect(JSON.stringify(stored.encryptedProfile)).not.toContain("123456789012");
 });
 
 test("the observed PM-KISAN registration route can preview only after the citizen verifies its address", async ({ page }) => {
   await openPopup(page, "https://pmkisan.gov.in/RegistrationFormupdated.aspx");
-  await page.evaluate((profile) => Object.assign((window as any).__popupStorage, { profile, language: "en" }), syntheticProfile);
+  await seedEncryptedProfile(page);
   await page.locator("#fill").click();
   await expect(page.locator("#status")).toContainText("verify its exact URL");
   expect(await page.evaluate(() => (window as any).__lastScriptCall)).toBeNull();
@@ -129,7 +150,7 @@ test("the observed PM-KISAN registration route can preview only after the citize
 
 test("changing the active portal URL invalidates the per-session confirmation and preview", async ({ page }) => {
   await openPopup(page, "https://pmkisan.gov.in/RegistrationFormupdated.aspx");
-  await page.evaluate((profile) => Object.assign((window as any).__popupStorage, { profile, language: "en" }), syntheticProfile);
+  await seedEncryptedProfile(page);
   await page.locator("#fill").click();
   await page.locator("#verify-portal").check();
   await page.locator("#fill").click();
@@ -144,7 +165,7 @@ test("changing the active portal URL invalidates the per-session confirmation an
 
 test("extension popup rejects deceptive non-government hostnames", async ({ page }) => {
   await openPopup(page, "https://pmkisan.gov.in.attacker.example/login");
-  await page.evaluate((profile) => Object.assign((window as any).__popupStorage, { profile, language: "en" }), syntheticProfile);
+  await seedEncryptedProfile(page);
   await page.locator("#fill").click();
   await expect(page.locator("#status")).toContainText("verify its exact URL");
   const call = await page.evaluate(() => (window as any).__lastScriptCall);
@@ -170,7 +191,9 @@ test("extension normalizes a localized occupation alias during backup import", a
   });
   await page.locator("#save").click();
   await expect(page.locator("#status")).toContainText("प्रोफ़ाइल");
-  expect(await page.evaluate(() => (window as any).__popupStorage.profile.occupation)).toBe("Farmer");
+  const encrypted = await page.evaluate(() => (window as any).__popupStorage.encryptedProfile);
+  const imported = await page.evaluate(async (value) => await (window as any).JanaSetuVault.decryptProfile(value, "synthetic-passphrase-2026"), encrypted);
+  expect(imported.occupation).toBe("Farmer");
 });
 
 test("extension rejects malformed profile backups before storing citizen data", async ({ page }) => {
@@ -181,10 +204,70 @@ test("extension rejects malformed profile backups before storing citizen data", 
   });
   await expect(page.locator("#status")).toContainText("Profile incomplete or has unsupported fields");
   await expect(page.locator("#backup")).toHaveAttribute("aria-invalid", "true");
-  const profile = await page.evaluate(() => (window as any).__popupStorage.profile);
-  expect(profile).toBeUndefined();
+  const storage = await page.evaluate(() => (window as any).__popupStorage);
+  expect(storage.profile).toBeUndefined();
+  expect(storage.encryptedProfile).toBeUndefined();
 });
 
+
+test("citizen can lock the extension profile before closing the popup", async ({ page }) => {
+  await openPopup(page);
+  await seedEncryptedProfile(page);
+  await page.locator("#vault-lock").click();
+  await expect(page.locator("#vault-status")).toContainText("Profile locked");
+  await page.locator("#verify-portal").check();
+  await page.locator("#fill").click();
+  await expect(page.locator("#vault-status")).toContainText("Unlock the encrypted profile");
+  expect(await page.evaluate(() => (window as any).__lastScriptCall)).toBeNull();
+});
+
+test("legacy plaintext profile migrates only after encrypted read-back verification", async ({ page }) => {
+  await openPopup(page);
+  await page.evaluate((profile) => Object.assign((window as any).__popupStorage, { profile, language: "en" }), syntheticProfile);
+  await page.locator("#vault-unlock").click();
+  await expect(page.locator("#vault-status")).toContainText("Legacy profile encrypted and verified");
+  const stored = await page.evaluate(() => (window as any).__popupStorage);
+  expect(stored.profile).toBeUndefined();
+  expect(stored.encryptedProfile.magic).toBe("JANASETU-EXTENSION-VAULT");
+  expect(JSON.stringify(stored.encryptedProfile)).not.toContain("Synthetic Citizen");
+});
+
+test("a verified encrypted profile safely supersedes a stale legacy plaintext copy", async ({ page }) => {
+  await openPopup(page);
+  await seedEncryptedProfile(page);
+  await page.evaluate((profile) => Object.assign((window as any).__popupStorage, { profile }), { ...syntheticProfile, fullName: "Stale Legacy Citizen" });
+  await page.locator("#vault-password").fill("synthetic-passphrase-2026");
+  await page.locator("#vault-unlock").click();
+  await expect(page.locator("#vault-status")).toContainText("stale plaintext copy removed");
+  const stored = await page.evaluate(() => (window as any).__popupStorage);
+  expect(stored.profile).toBeUndefined();
+  const restored = await page.evaluate(async (envelope) => await (window as any).JanaSetuVault.decryptProfile(envelope, "synthetic-passphrase-2026"), stored.encryptedProfile);
+  expect(restored.fullName).toBe("Synthetic Citizen");
+});
+
+test("failed legacy migration preserves the original plaintext profile", async ({ page }) => {
+  await openPopup(page);
+  await page.evaluate((profile) => {
+    Object.assign((window as any).__popupStorage, { profile, language: "en" });
+    (window as any).chrome.storage.local.set = async () => { throw new Error("simulated storage write failure"); };
+  }, syntheticProfile);
+  await page.locator("#vault-unlock").click();
+  await expect(page.locator("#vault-status")).toContainText("simulated storage write failure");
+  const stored = await page.evaluate(() => (window as any).__popupStorage);
+  expect(stored.profile.fullName).toBe("Synthetic Citizen");
+  expect(stored.encryptedProfile).toBeUndefined();
+});
+
+test("wrong passphrase cannot unlock an existing encrypted profile", async ({ page }) => {
+  await openPopup(page);
+  await seedEncryptedProfile(page);
+  await page.locator("#vault-password").fill("wrong-passphrase-2026");
+  await page.locator("#vault-unlock").click();
+  await expect(page.locator("#vault-status")).toContainText("Incorrect passphrase");
+  await page.locator("#verify-portal").check();
+  await page.locator("#fill").click();
+  await expect(page.locator("#status")).toContainText("Import a profile first");
+});
 
 test("storage failures do not mark a valid backup file as invalid", async ({ page }) => {
   await openPopup(page);
@@ -227,8 +310,9 @@ test("a superseded import clears an already-open preview after its storage write
     const secondStartedPromise = new Promise<void>((resolve) => { secondStarted = resolve; });
     (window as any).__importGates = { firstGate: firstStartedPromise, secondGate: secondStartedPromise, releaseFirst, releaseSecond };
     (window as any).chrome.storage.local.set = async (data: Record<string, any>) => {
-      if (data.profile.fullName === "First Citizen") { firstStarted(); await firstGate; }
-      if (data.profile.fullName === "Second Citizen") { secondStarted(); await secondGate; }
+      const profile = await (window as any).JanaSetuVault.decryptProfile(data.encryptedProfile, "synthetic-passphrase-2026");
+      if (profile.fullName === "First Citizen") { firstStarted(); await firstGate; }
+      if (profile.fullName === "Second Citizen") { secondStarted(); await secondGate; }
       Object.assign((window as any).__popupStorage, data);
     };
   });
@@ -248,7 +332,9 @@ test("a superseded import clears an already-open preview after its storage write
   await expect(page.locator("#status")).not.toContainText("Profile imported");
   await page.evaluate(() => (window as any).__importGates.releaseSecond());
   await expect(page.locator("#status")).toContainText("Profile imported");
-  expect(await page.evaluate(() => (window as any).__popupStorage.profile.fullName)).toBe("Second Citizen");
+  const storedEnvelope = await page.evaluate(() => (window as any).__popupStorage.encryptedProfile);
+  const storedProfile = await page.evaluate(async (value) => await (window as any).JanaSetuVault.decryptProfile(value, "synthetic-passphrase-2026"), storedEnvelope);
+  expect(storedProfile.fullName).toBe("Second Citizen");
 });
 
 
@@ -271,7 +357,7 @@ test("one-click safe autofill fills mapped non-sensitive fields but leaves CAPTC
 
 test("extension rejects an unlisted government-looking hostname", async ({ page }) => {
   await openPopup(page, "https://portal.gov.in/app");
-  await page.evaluate((profile) => Object.assign((window as any).__popupStorage, { profile, language: "en" }), syntheticProfile);
+  await seedEncryptedProfile(page);
   await page.locator("#verify-portal").check();
   await page.locator("#auto-fill").click();
   await expect(page.locator("#status")).toContainText("supported official HTTPS government portal");

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "JanaSetu Form Assistant",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Fill selected public-service form fields from a citizen-reviewed JanaSetu backup. Never submits forms.",
   "permissions": [
     "activeTab",

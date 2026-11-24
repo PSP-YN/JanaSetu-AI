@@ -145,7 +145,69 @@ function isValidProfile(profile) {
   return typeof profile.isStudent === "boolean";
 }
 
+// Encrypted-at-rest profile vault. Only the decrypted profile remains in popup memory.
+let unlockedProfile = null;
 let currentLanguage = "en";
+const vaultPasswordInput = document.getElementById("vault-password");
+const vaultStatus = document.getElementById("vault-status");
+const { encryptProfile: encryptExtensionProfile, decryptProfile: decryptExtensionProfile, version: VAULT_VERSION } = globalThis.JanaSetuVault;
+function clearUnlockedProfile() {
+  unlockedProfile = null;
+}
+function setVaultStatus(message) { if (vaultStatus) vaultStatus.textContent = message; }
+async function unlockOrMigrateVault() {
+  const password = vaultPasswordInput.value;
+  if (password.length < 12) { setVaultStatus("Enter a passphrase of at least 12 characters."); return; }
+  try {
+    const saved = await chrome.storage.local.get(["encryptedProfile", "profile"]);
+    if (saved.encryptedProfile) {
+      const result = await decryptExtensionProfile(saved.encryptedProfile, password);
+      unlockedProfile = result;
+      // A successfully authenticated envelope is authoritative. A leftover
+      // legacy profile can only be an interrupted migration/import artifact.
+      if (saved.profile) {
+        await chrome.storage.local.remove(["profile", "importedAt"]);
+        setVaultStatus("Encrypted profile unlocked; stale plaintext copy removed.");
+      } else {
+        setVaultStatus("Encrypted profile unlocked for this popup session. The passphrase is not stored.");
+      }
+      vaultPasswordInput.value = "";
+      clearPreview();
+      return;
+    }
+    if (saved.profile && isValidProfile(saved.profile)) {
+      // Verify the new ciphertext by decrypting it before removing the legacy plaintext.
+      const envelope = await encryptExtensionProfile(saved.profile, password);
+      const existing = await chrome.storage.local.get(["profile"]);
+      if (!existing.profile || JSON.stringify(existing.profile) !== JSON.stringify(saved.profile)) throw new Error("Legacy profile changed during migration. Retry without closing the popup.");
+      await chrome.storage.local.set({ encryptedProfile: envelope, vaultVersion: VAULT_VERSION, vaultMigratedAt: new Date().toISOString() });
+      const check = await chrome.storage.local.get(["encryptedProfile"]);
+      const verified = await decryptExtensionProfile(check.encryptedProfile, password);
+      if (JSON.stringify(verified) !== JSON.stringify(saved.profile)) throw new Error("Encrypted migration verification failed; the original profile was preserved.");
+      await chrome.storage.local.remove(["profile", "importedAt"]);
+      unlockedProfile = verified;
+      setVaultStatus("Legacy profile encrypted and verified. Plaintext copy removed only after verification.");
+      vaultPasswordInput.value = "";
+      clearPreview();
+      return;
+    }
+    setVaultStatus("No imported profile found. Select a JanaSetu JSON export and encrypt it with this passphrase.");
+  } catch (error) {
+    clearUnlockedProfile();
+    clearPreview();
+    vaultPasswordInput.value = "";
+    setVaultStatus(error instanceof Error ? error.message : "Vault unlock failed.");
+  }
+}
+document.getElementById("vault-unlock").addEventListener("click", unlockOrMigrateVault);
+document.getElementById("vault-lock").addEventListener("click", () => {
+  clearUnlockedProfile();
+  vaultPasswordInput.value = "";
+  clearPreview();
+  sspAadhaarInput.value = "";
+  setVaultStatus("Profile locked. Close the popup to end this session.");
+});
+
 const getCopy = (key) => COPY[currentLanguage]?.[key] || COPY.en[key] || key;
 const say = (key, values = {}) => {
   let message = getCopy(key);
@@ -163,8 +225,10 @@ function setLanguage(language) {
 
 const popupReady = (async () => {
   try {
-    const saved = await chrome.storage.local.get(["language"]);
+    const saved = await chrome.storage.local.get(["language", "encryptedProfile", "profile"]);
     setLanguage(saved.language || "en");
+    if (saved.profile && !saved.encryptedProfile) setVaultStatus("An older plaintext profile is present. Enter a new vault passphrase and choose Unlock / securely migrate profile before using it.");
+    else if (saved.encryptedProfile) setVaultStatus("Encrypted profile found. Enter its passphrase and unlock it for this popup session.");
   } catch { setLanguage("en"); }
 })();
 
@@ -194,11 +258,20 @@ async function importSelectedBackup() {
 
     const language = Object.prototype.hasOwnProperty.call(COPY, data.language) ? data.language : "en";
     const profile = { ...data.profile, occupation: normalizeOccupation(data.profile.occupation) };
-    // Serialize storage writes so a slow earlier import cannot finish after and
-    // overwrite a newer file selection. Superseded queued work is discarded.
+    const password = vaultPasswordInput.value;
+    if (password.length < 12) throw new Error("Enter a vault passphrase of at least 12 characters before importing.");
+    // Encrypt before storage. Never write a plaintext profile to extension storage.
+    const envelope = await encryptExtensionProfile(profile, password);
+    if (sequence !== backupImportSequence) return;
+    // Serialize writes so an older file selection cannot overwrite a newer import.
     const write = backupImportQueue.then(async () => {
       if (sequence !== backupImportSequence) return false;
-      await chrome.storage.local.set({ profile, language, importedAt: new Date().toISOString() });
+      await chrome.storage.local.set({ encryptedProfile: envelope, vaultVersion: VAULT_VERSION, language, importedAt: new Date().toISOString() });
+      const check = await chrome.storage.local.get(["encryptedProfile"]);
+      const verified = await decryptExtensionProfile(check.encryptedProfile, password);
+      if (JSON.stringify(verified) !== JSON.stringify(profile)) throw new Error("Encrypted profile verification failed.");
+      await chrome.storage.local.remove(["profile"]);
+      unlockedProfile = verified;
       return true;
     });
     backupImportQueue = write.then(() => undefined, () => undefined);
@@ -210,6 +283,8 @@ async function importSelectedBackup() {
     if (sequence !== backupImportSequence) return;
     backupInput.removeAttribute("aria-invalid");
     setLanguage(language);
+    vaultPasswordInput.value = "";
+    setVaultStatus("Profile encrypted, verified and unlocked for this popup session. Passphrase not stored.");
     say("imported");
   } catch (error) {
     if (sequence === backupImportSequence) {
@@ -307,9 +382,10 @@ async function getCitizenConfirmedPortalTab(){
 document.getElementById("fill").addEventListener("click",async()=>{
   try{
     await popupReady;clearPreview();
-    const {profile,language}=await chrome.storage.local.get(["profile","language"]);
+    const {language}=await chrome.storage.local.get(["language"]);
     setLanguage(language||currentLanguage);
-    if(!profile){say("profileFirst");return;}
+    const profile=unlockedProfile;
+    if(!profile){say("profileFirst");setVaultStatus("Unlock the encrypted profile before filling. The profile is locked by default each time the popup opens.");return;}
     if(!isValidProfile(profile)){say("invalidBackup");return;}
     const tab=await getCitizenConfirmedPortalTab();if(!tab)return;
     const isSspPage=["ssp.postmatric.karnataka.gov.in","ssp.karnataka.gov.in"].includes(new URL(tab.url).hostname.toLowerCase());
@@ -332,9 +408,10 @@ autoFillButton.addEventListener("click",async()=>{
     await popupReady;
     clearPreview();
     sspAadhaarInput.value="";
-    const {profile,language}=await chrome.storage.local.get(["profile","language"]);
+    const {language}=await chrome.storage.local.get(["language"]);
     setLanguage(language||currentLanguage);
-    if(!profile){say("profileFirst");return;}
+    const profile=unlockedProfile;
+    if(!profile){say("profileFirst");setVaultStatus("Unlock the encrypted profile before filling. The profile is locked by default each time the popup opens.");return;}
     if(!isValidProfile(profile)){say("invalidBackup");return;}
     const tab=await getCitizenConfirmedPortalTab();if(!tab)return;
     const normalizedProfile={...profile,occupation:normalizeOccupation(profile.occupation)};
