@@ -2,7 +2,7 @@ name: JanaSetu CI
 
 on:
   push:
-    branches: [main, feat/cross-device-pmkisan-assistant]
+    branches: [main, feat/cross-device-pmkisan-assistant, security/p1-csp-hardening-20261124]
   pull_request:
     branches: [main]
   workflow_dispatch:
