@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { headers } from "next/headers";
 import "./globals.css";
 const siteUrl = new URL("https://jana-setu-ai.vercel.app");
 export const metadata: Metadata = {
@@ -13,4 +14,9 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title: "JanaSetu AI | Government Schemes in India", description: "Discover public benefits. Understand eligibility. Prepare your next step.", images: ["/opengraph-image"] }
 };
 export const viewport: Viewport = { themeColor: "#a94f1b", width: "device-width", initialScale: 1 };
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) { return <html lang="en-IN"><body>{children}</body></html>; }
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  // Request headers make every nonce-protected HTML response render dynamically.
+  // Next.js reads the forwarded Content-Security-Policy nonce and attaches it to framework scripts.
+  await headers();
+  return <html lang="en-IN"><body>{children}</body></html>;
+}

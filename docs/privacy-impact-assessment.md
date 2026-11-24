@@ -2,7 +2,7 @@
 
 **Status: DRAFT FOR QUALIFIED REVIEW. Not a legal opinion, DPIA approval or compliance certification.**  
 **Scope:** JanaSetu web prototype, browser storage, JSON backup/restore, callable API routes, browser speech recognition, open-data proxy and optional browser extension.  
-**Implementation review date:** 4 November 2026. Re-check against the exact deployed commit before relying on this inventory.
+**Implementation review date:** 24 November 2026. Re-check against the exact deployed commit before relying on this inventory.
 
 ## 1. Product purpose and boundaries
 
@@ -18,10 +18,10 @@ Important distinction: the current main web interface performs benefit screening
 | Free-text intake description | User typed or dictated | Main UI: deterministic `parseCitizenMessage` runs in browser. Separate `/api/intake/parse` route accepts text if called by another client. | Main UI text extraction: no text payload sent to JanaSetu API route. API callers: application host receives submitted text. Browser speech provider may receive audio. | Keep the 4,000-character server-route limit; do not log request bodies; disclose speech-provider processing. |
 | Draft application fields | Profile-derived | Main UI: `createDraftRecord` runs in browser and draft is kept in local state/localStorage. Separate `/api/applications/draft` route accepts a profile if called. | Main UI: no draft/profile request sent to JanaSetu API route. API callers: application host receives submitted profile. | Never submit to government portals automatically; clear drafts on user request. |
 | Document metadata/reference | User-entered filename/type/size/date | Browser localStorage | None intended | Do not upload document bytes; warn against sensitive filenames. |
-| JSON backup | User export/import | User-controlled local file; extension local storage after explicit import | None intended by the export/import flow | Warn that backups are not encrypted by JanaSetu; user controls file storage/deletion. |
+| JSON backup / extension transfer | User export/import | Profile-only JSON transfer remains plaintext in a user-controlled file. On import, extension profile is encrypted at rest using PBKDF2-SHA-256 (600,000 iterations) and AES-256-GCM; passphrase/key are not persisted and the decrypted profile exists only in popup memory. | None intended by the export/import flow | Warn that transfer JSON is plaintext and must be deleted after import; passphrase cannot be recovered. Verify encrypted read-back before deleting any legacy plaintext profile. |
 | Scheme search query | Search input | Browser calls JanaSetu open-data route; server searches the bundled SmartDuke snapshot locally. | JanaSetu host receives the search query; the current search implementation does not forward query text to Hugging Face. The source-health monitor separately checks publisher metadata and endpoint availability. | Limit query to 120 characters; tell users not to enter personal data in search. |
 | Source health metadata | Health-route request | Server-side health route | Hugging Face dataset metadata and datasets-server search/rows health endpoints | Fixed generic health-check query and dataset identifier only; no citizen profile or user search term. |
-| Browser extension profile | User-selected backup | Extension stores imported profile in `chrome.storage.local`; selected values are sent to the active tab after explicit Fill action. | Active website receives selected mapped values and dispatched input/change events; the extension does not intentionally submit forms, but portal scripts may react to field changes. | Restrict supported origins; never fill credentials, identity numbers, OTP/CAPTCHA, bank details or files; review every field. |
+| Browser extension profile | User-selected profile-only JSON transfer | Extension stores only an authenticated AES-256-GCM envelope in `chrome.storage.local`; PBKDF2-SHA-256 (600,000 iterations) derives the key from a citizen passphrase. Passphrase/key are not persisted; plaintext profile exists only in the open popup session. | Active website receives selected mapped values and dispatched input/change events; the extension does not intentionally submit forms, but portal scripts may react to field changes. | Restrict supported origins; preserve explicit per-session unlock and user action; test wrong-password/tamper/migration failure; never fill credentials, identity numbers, OTP/CAPTCHA, bank details or files; review every field. |
 | Website request metadata | Browser page/API requests | Hosting/CDN/network infrastructure | Hosting and infrastructure providers | Actual provider logs, retention, region and access must be reviewed; this repository cannot prove provider-side deletion. |
 
 ## 3. Data minimization and necessity
@@ -37,7 +37,8 @@ Potential harms include exposure on shared devices, browser-profile compromise, 
 
 ## 5. Controls to verify
 
-- Browser storage inventory and clear/export behaviour.
+- Browser storage inventory and clear/export behaviour. The web application's own local profile/drafts remain browser-local and are not covered by the extension's encryption; verify their storage protection separately.
+- Extension vault evidence: AES-GCM integrity, fresh salt/nonce, PBKDF2 work factor, passphrase non-persistence, popup-session lock, legacy migration read-back and rollback behavior. The plaintext JSON transfer file remains a separate exposure until deleted by the citizen.
 - Network capture for every user journey to prove exactly which fields leave the browser; verify the main UI does not send profile/text bodies to screening, intake or draft routes.
 - Test callable API routes separately; confirm request bodies are not logged and provider retention is documented.
 - Hosting, CDN and observability log configuration; ensure request bodies and query strings do not contain citizen data. Verify that user search terms are processed against the bundled snapshot and are not forwarded to Hugging Face; the source-health route sends only its fixed health-check query and dataset identifier.

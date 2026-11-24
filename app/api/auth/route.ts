@@ -70,6 +70,9 @@ export async function POST(request: NextRequest) {
       const verified = await fetch((url.endsWith("/") ? url.slice(0, -1) : url) + "/auth/v1/user", { headers: { apikey: key, Authorization: "Bearer " + access_token }, cache: "no-store" });
       if (!verified.ok) return json({ error: "The email confirmation link is invalid or expired." }, 401);
       const user = await verified.json();
+      if (typeof user.email_confirmed_at !== "string" || !user.email_confirmed_at) {
+        return json({ error: "Confirm your email address before continuing. Request a new confirmation link if needed." }, 403);
+      }
       await setSupabaseSession({ access_token, refresh_token, expires_in: 3600 });
       const response = json({ user: { id: user.id, email: user.email }, authenticated: true });
       clearFlowState(response, request.nextUrl.protocol === "https:");
@@ -99,6 +102,9 @@ export async function POST(request: NextRequest) {
       return json({ error: upstreamMessage }, upstream.status >= 400 && upstream.status < 500 ? upstream.status : 502);
     }
     if (result.access_token && result.refresh_token) {
+      if (typeof result.user?.email_confirmed_at !== "string" || !result.user.email_confirmed_at) {
+        return json({ error: "Confirm your email address before signing in." }, 403);
+      }
       await setSupabaseSession(result);
       return json({ user: { id: result.user?.id, email: result.user?.email }, authenticated: true });
     }

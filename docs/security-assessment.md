@@ -9,14 +9,17 @@
 - Security response headers configured in Next.js: nosniff, frame denial, strict referrer policy, permissions policy, HSTS and COOP.
 - Existing CI runs unit tests, TypeScript, extension syntax/manifest, production dependency audit, build and smoke tests.
 - Scheme screening fails closed until a scheme is explicitly marked approved.
+- The P1 hardening branch adds a per-request nonce CSP through Next.js 16 `proxy.ts` and rejects unconfirmed email sessions; it is not active in production until merged and deployed. See [P1 security hardening](p1-security-hardening-2026-11-24.md).
+- `npm run audit:auth` provides a sanitized hosted Supabase Auth configuration audit; hosted settings remain unverified until run with a scoped Management API token.
 
 ## Remaining engineering verification
 - Verify the deployed response headers and HSTS behaviour over HTTPS.
 - Validate every API route's schema, nested field types, boundary values and malformed JSON.
 - Add abuse/rate controls using a durable shared store; do not rely on process-memory counters in serverless functions. No shared rate limiter is currently configured, so public endpoint abuse resistance remains incomplete.
-- Review CSP report-only violations and then move to an enforced policy with nonce/hash-based scripts; the current report-only policy permits inline/eval for compatibility and is not a security boundary.
+- Deploy and browser-verify the nonce-based enforced CSP from the P1 branch. Current production remains on the report-only policy until that deployment is verified.
+- Verify hosted Auth SMTP, email confirmation, redirect allowlist, password policy and refresh-token settings with `npm run audit:auth`; complete a controlled signup/recovery lifecycle test.
+- Encrypt live profile/workspace records in `localStorage` and document binaries in IndexedDB. The existing encrypted export protects backups only; live browser storage is still plaintext.
 - Review CORS/origin behaviour, CSRF assumptions, caching, logs and error messages.
-- Add CSP in report-only mode, collect violations, then enforce only after Next.js runtime compatibility tests.
 - Inspect npm audit output, lockfile and GitHub Actions pinning; run secret scanning and SAST.
 - Verify no request bodies or personal fields are written to logs/analytics.
 - Test extension against hostile pages, iframes, duplicate labels, dynamic DOM, React/Vue controlled inputs and sensitive fields.

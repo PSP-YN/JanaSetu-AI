@@ -1,6 +1,6 @@
 # Scheme portal adapters and encrypted workspace sync — release status
 
-Updated: 12 November 2026
+Updated: 24 November 2026
 
 ## Scheme automation contract
 
@@ -70,7 +70,7 @@ It is not technically or legally credible to claim automatic application submiss
 1. Independently approve and publish each scheme's eligibility rules and source evidence.
 2. Obtain department authorization for the exact scheme, official domain and allowed actions.
 3. Pass live read-only selector/fingerprint tests and scheme-specific acceptance tests.
-4. Enable only reviewed, non-sensitive form assistance; keep protected verification and declarations citizen-controlled.
+4. Keep the browser extension limited to its exact host allowlist and non-sensitive auto-fill allowlist; validate each live portal route and field mapping with synthetic data before wider use. Keep protected verification and declarations citizen-controlled.
 5. Keep final submission citizen-confirmed unless a lawful delegated API explicitly authorizes the service to submit.
 6. Record and verify a receipt before marking an application submitted.
 7. Complete legal/privacy approval for cloud sync, activate the exact policy version and test authenticated two-device sync, conflict handling, wrong-password rejection, revocation and deletion.

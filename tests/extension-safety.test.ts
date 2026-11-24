@@ -7,8 +7,8 @@ const popupHtml = readFileSync(new URL("../extension/popup.html", import.meta.ur
 
 test("form assistant requires per-session citizen verification of an HTTPS government portal address", () => {
   assert.ok(extension.includes("getCitizenConfirmedPortalTab"));
-  assert.ok(extension.includes('host.endsWith(".gov.in")'));
-  assert.ok(extension.includes('host.endsWith(".nic.in")'));
+  assert.ok(extension.includes('"ssp.postmatric.karnataka.gov.in","ssp.karnataka.gov.in","pmkisan.gov.in","pmaymis.gov.in"'));
+  assert.ok(extension.includes('"pmuy.gov.in","www.pmuy.gov.in","scholarships.gov.in"'));
   assert.ok(extension.includes('portalUrl.protocol!=="https:"'));
   assert.ok(extension.includes("verifyPortalCheckbox.checked"));
   assert.ok(extension.includes("tab.url!==pendingUrl"));
@@ -21,11 +21,14 @@ test("form assistant has no automatic submission or document upload code", () =>
   assert.doesNotMatch(extension, /\.requestSubmit\s*\(|\.submit\s*\(/);
   assert.doesNotMatch(extension, /type=["']file["'].*\.files/);
   assert.doesNotMatch(extension, /fetch\s*\(|XMLHttpRequest/);
+  assert.match(readFileSync(new URL("../extension/fill.js", import.meta.url), "utf8"), /autoFillAllowedKeys/);
+  assert.match(readFileSync(new URL("../extension/fill.js", import.meta.url), "utf8"), /candidate.key!=="aadhaarNumber"/);
 });
 
 test("form assistant requires an explicit user click before filling", () => {
   assert.match(extension, /getElementById\("fill"\)\.addEventListener\("click"/);
   assert.match(popupHtml, /Portal scripts may react to field changes/);
+  assert.match(extension, /autoFillButton\.addEventListener\("click"/);
 });
 
 test("extension popup translations have six-locale key parity and cover every HTML label", () => {
@@ -51,6 +54,7 @@ test("SSP identity input is session-only and excluded from the reusable profile 
   assert.match(extension, /"fatherOrGuardianName","motherName","socialCategory","landholdingAcres","institutionName","courseName","courseYear","rationCardCategory"/);
   assert.match(extension, /profile\.mobileNumber/);
   assert.match(extension, /profile\.pincode/);
+  assert.match(extension, /"ssp.karnataka.gov.in"/);
   assert.match(extension, /sessionValues=\{aadhaarNumber:isSspPage\?/);
   assert.match(extension, /args:\[normalizedProfile,null,sessionValues\]/);
   assert.doesNotMatch(extension, /"aadhaarNumber",/);

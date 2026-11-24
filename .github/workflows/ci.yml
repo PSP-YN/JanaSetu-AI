@@ -2,7 +2,7 @@ name: JanaSetu CI
 
 on:
   push:
-    branches: [main, feat/cross-device-pmkisan-assistant]
+    branches: [main, feat/cross-device-pmkisan-assistant, security/p1-csp-hardening-20261124]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -63,11 +63,11 @@ jobs:
       - name: Type-check
         run: npm run typecheck
 
-      - name: Install Chromium for browser tests
+      - name: Install Google Chrome and Firefox for cross-browser tests
         # GitHub-hosted Ubuntu runners already include the browser system libraries.
         # Avoid apt-based --with-deps here: transient runner DNS/mirror failures
         # otherwise prevent browser tests from running at all.
-        run: npx playwright install chromium
+        run: npx playwright install chrome firefox
 
       - name: Build production app and run browser accessibility tests
         run: npm run test:e2e
@@ -114,7 +114,13 @@ jobs:
           grep -qi '^referrer-policy: strict-origin-when-cross-origin' /tmp/janasetu-headers.txt
           grep -qi '^permissions-policy: camera=(), geolocation=(), payment=(), usb=(), microphone=(self)' /tmp/janasetu-headers.txt
           grep -qi '^strict-transport-security: max-age=31536000; includeSubDomains' /tmp/janasetu-headers.txt
-          grep -qi '^content-security-policy-report-only:' /tmp/janasetu-headers.txt
+          # The P1 branch enforces a nonce CSP; report-only is no longer expected.
+          grep -qi '^content-security-policy:' /tmp/janasetu-headers.txt
+          grep -Eiq "^content-security-policy:.*script-src[^;]*nonce-[^;]*strict-dynamic" /tmp/janasetu-headers.txt
+          if grep -Eiq "^content-security-policy:.*script-src[^;]*unsafe-(inline|eval)" /tmp/janasetu-headers.txt; then
+            echo 'Enforced script-src must not allow unsafe-inline or unsafe-eval' >&2
+            exit 1
+          fi
 
           curl --fail --silent http://127.0.0.1:3000/janasetu-logo.png > /tmp/janasetu-logo.png
           node -e '

@@ -1,4 +1,12 @@
 function fillProfileInPage(profile,approvedFields,sessionValues={}){
+  const autoFillSafe=approvedFields==="safe";
+  const autoFillAllowedKeys=new Set([
+    "fullName","age","gender","state","district","residenceType","occupation",
+    "taluk","assemblyConstituency","addressLine1","addressLine2","villageOrTown","pincode",
+    "institutionName","courseName","courseYear","isStudent","top20Percentile",
+    "regularUndergraduate","otherScholarship","diplomaOrDistance","hasCultivableLand",
+    "pmKisanExcluded","ownsPuccaHouse","previousHousingBenefit","householdHasLpg"
+  ]);
   const norm=(value)=>String(value??"").toLowerCase().replace(/[^a-z0-9\p{L}\p{N}]+/gu," ").trim();
   const hasAlias=(text,alias)=>(" "+norm(text)+" ").includes(" "+norm(alias)+" ");
   const fieldParts=(element)=>[
@@ -148,11 +156,22 @@ function fillProfileInPage(profile,approvedFields,sessionValues={}){
   }
   const manualSteps=[];
   const allControls=[...document.querySelectorAll("input,button,a,select,textarea")];
-  const labels=allControls.map(element=>[element.getAttribute("aria-label")||"",element.name||"",element.id||"",element.value||"",element.innerText||"",element.closest("tr")?.innerText||""].join(" "));
+  const labels=allControls.map(element=>[
+    element.labels?[...element.labels].map(label=>label.innerText).join(" "):"",
+    element.getAttribute("aria-label")||"",element.getAttribute("placeholder")||"",
+    element.name||"",element.id||"",element.value||"",element.innerText||"",
+    element.closest("tr")?.innerText||"",element.closest("fieldset")?.innerText||""
+  ].join(" "));
   if(labels.some(value=>/(?:otp|one time password|verification code)/i.test(value)))manualSteps.push("Request and enter the OTP yourself in the portal.");
   if(labels.some(value=>/(?:captcha|security code|verification image)/i.test(value)))manualSteps.push("Read and enter the CAPTCHA yourself in the portal.");
-  if(allControls.some(element=>element.tagName==="INPUT"&&element.type==="checkbox"&&/(?:consent|declaration|agree|authorize)/i.test([element.name,element.id,element.closest("tr")?.innerText||""].join(" "))))manualSteps.push("Review and tick any Aadhaar consent or declaration checkbox yourself.");
+  if(allControls.some(element=>element.tagName==="INPUT"&&element.type==="file"&&!element.disabled))manualSteps.push("Choose and upload required documents yourself after checking the portal's document rules.");
+  if(allControls.some(element=>element.tagName==="INPUT"&&element.type==="checkbox"&&/(?:consent|declaration|agree|authorize)/i.test([element.labels?[...element.labels].map(label=>label.innerText).join(" "):"",element.name,element.id,element.closest("tr")?.innerText||"",element.closest("fieldset")?.innerText||""].join(" "))))manualSteps.push("Review and tick any Aadhaar consent or declaration checkbox yourself.");
   if(allControls.some(element=>element.tagName==="INPUT"&&element.type==="submit"||element.tagName==="BUTTON"&&/(?:submit|apply|proceed|verify|continue|get otp)/i.test(element.innerText||element.value||"")))manualSteps.push("Review the page and click portal buttons yourself. JanaSetu will not click Proceed, Verify, Apply or Submit.");
+  if(autoFillSafe){
+    approvedFields=candidates
+      .filter(candidate=>candidate.valid&&autoFillAllowedKeys.has(candidate.key)&&candidate.key!=="aadhaarNumber")
+      .map(candidate=>({index:candidate.index,fingerprint:candidate.fingerprint}));
+  }
   if(!Array.isArray(approvedFields)){
     return {preview:candidates.map(({index,key,label,value,fingerprint,valid,reason})=>({index,key,label,value,fingerprint,valid,reason})),manualSteps};
   }
@@ -185,5 +204,5 @@ function fillProfileInPage(profile,approvedFields,sessionValues={}){
     element.dispatchEvent(new Event("change",{bubbles:true}));
     filled++;
   }
-  return {filled,stale,manualSteps};
+  return {filled,stale,manualSteps,mode:autoFillSafe?"safe":"review"};
 }
