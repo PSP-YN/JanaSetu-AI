@@ -101,7 +101,7 @@ The SmartDuke snapshot is stale under the 90-day policy. The latest observed pub
 
 ## Database readiness incident (added 24 November 2026)
 
-`/api/health` is a liveness check only. It must not be used as evidence that Supabase or citizen workflows are available. `/api/ready` checks database reachability and must return `ready: true` with `checks.databaseReachable: true`. The hourly production monitor now checks both endpoints in the audit branch.
+`/api/health` is a liveness check only. It must not be used as evidence that Supabase or citizen workflows are available. `/api/ready` checks database reachability and must return `ready: true` with `checks.databaseReachable: true`. The hourly production monitor now checks both endpoints on the deployed main branch.
 
 If `/api/ready` returns 503:
 
