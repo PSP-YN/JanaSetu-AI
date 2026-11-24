@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getVerifiedSupabaseSession } from "@/lib/supabase/rest";
+import { readJsonObjectBody } from "@/lib/request";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -8,9 +9,9 @@ const json = (body: unknown, status = 200) => NextResponse.json(body, { status, 
 export async function POST(request: NextRequest) {
   try {
     if (request.headers.get("origin") !== request.nextUrl.origin) return json({ error: "Cross-origin request blocked." }, 403);
-    const raw = await request.text();
-    if (new TextEncoder().encode(raw).byteLength > 8192) return json({ error: "Consent request is too large." }, 413);
-    const input = JSON.parse(raw) as Record<string, unknown>;
+    const parsed = await readJsonObjectBody(request, 8192, "Consent request is too large.");
+    if (!parsed.ok) return parsed.response;
+    const input = parsed.value;
     if (Object.keys(input).some(k => !["case_id","purpose","policy_version","granted","scope"].includes(k))) return json({ error: "Unsupported consent field." }, 400);
     const purposes = ["profile_storage","cloud_workspace_sync","document_storage","reminder_notifications","assisted_form_filling","external_portal_navigation","automated_submission"];
     if (typeof input.purpose !== "string" || !purposes.includes(input.purpose) || typeof input.policy_version !== "string" || input.policy_version.length < 1 || input.policy_version.length > 80 || typeof input.granted !== "boolean") return json({ error: "Invalid consent details." }, 400);

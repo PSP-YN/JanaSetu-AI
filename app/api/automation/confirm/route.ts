@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getVerifiedSupabaseSession } from "@/lib/supabase/rest";
+import { readJsonObjectBody } from "@/lib/request";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -8,7 +9,9 @@ const json = (body: unknown, status = 200) => NextResponse.json(body, { status, 
 export async function POST(request: NextRequest) {
   try {
     if (request.headers.get("origin") !== request.nextUrl.origin) return json({ error: "Cross-origin request blocked." }, 403);
-    const input = await request.json() as Record<string, unknown>;
+    const parsed = await readJsonObjectBody(request, 8192, "Automation confirmation is too large.");
+    if (!parsed.ok) return parsed.response;
+    const input = parsed.value;
     if (Object.keys(input).some(k => k !== "run_id") || typeof input.run_id !== "string" || !/^[0-9a-f-]{36}$/i.test(input.run_id)) return json({ error: "Invalid automation reference." }, 400);
     const session = await getVerifiedSupabaseSession();
     if (!session) return json({ error: "Sign in required." }, 401);

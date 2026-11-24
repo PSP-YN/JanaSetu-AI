@@ -2,6 +2,7 @@ import { NextRequest,NextResponse } from "next/server";
 import { getVerifiedSupabaseSession } from "@/lib/supabase/rest";
 import { parseCitizenProfile } from "@/lib/profile-validation";
 import { assessApprovedScheme,prepareApplicationDraft,type ApprovedSchemeVersion } from "@/lib/eligibility-engine";
+import { readJsonObjectBody } from "@/lib/request";
 
 export const runtime="nodejs";
 export const dynamic="force-dynamic";
@@ -54,9 +55,9 @@ export async function GET(request:NextRequest){
 export async function POST(request:NextRequest){
  try{
   if(request.headers.get("origin")!==request.nextUrl.origin)return json({error:"Cross-origin request blocked."},403);
-  const raw=await request.text();
-  if(new TextEncoder().encode(raw).byteLength>48*1024)return json({error:"Preparation request is too large."},413);
-  const input=JSON.parse(raw) as Record<string,unknown>;
+  const parsed=await readJsonObjectBody(request,48*1024,"Preparation request is too large.");
+  if(!parsed.ok)return parsed.response;
+  const input=parsed.value;
   if(Object.keys(input).some(k=>![ "scheme_slug","profile","consent_id","idempotency_key" ].includes(k)))return json({error:"Unsupported preparation field."},400);
   const slug=typeof input.scheme_slug==="string"?input.scheme_slug:"";
   const consentId=typeof input.consent_id==="string"?input.consent_id:"";

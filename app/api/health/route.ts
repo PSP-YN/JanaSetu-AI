@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   return NextResponse.json({
     ok: true,
-    service: "janSetu-web",
-    status: "prototype",
+    service: "janasetu-web",
+    status: "ok",
     timestamp: new Date().toISOString()
-  });
+  }, { headers: { "Cache-Control": "no-store" } });
 }

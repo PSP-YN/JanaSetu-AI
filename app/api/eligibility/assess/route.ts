@@ -2,6 +2,7 @@ import { NextRequest,NextResponse } from "next/server";
 import { getVerifiedSupabaseSession } from "@/lib/supabase/rest";
 import { parseCitizenProfile } from "@/lib/profile-validation";
 import { assessApprovedScheme } from "@/lib/eligibility-engine";
+import { readJsonObjectBody } from "@/lib/request";
 
 export const runtime="nodejs";
 export const dynamic="force-dynamic";
@@ -12,9 +13,9 @@ type VersionRow={id:string;version_number:number;verification_status:string;effe
 export async function POST(request:NextRequest){
  try{
   if(request.headers.get("origin")!==request.nextUrl.origin)return json({error:"Cross-origin request blocked."},403);
-  const raw=await request.text();
-  if(new TextEncoder().encode(raw).byteLength>48*1024)return json({error:"Assessment request is too large."},413);
-  const input=JSON.parse(raw) as Record<string,unknown>;
+  const parsed=await readJsonObjectBody(request,48*1024,"Assessment request is too large.");
+  if(!parsed.ok)return parsed.response;
+  const input=parsed.value;
   if(Object.keys(input).some(k=>![ "scheme_slug","profile" ].includes(k)))return json({error:"Unsupported assessment field."},400);
   const slug=typeof input.scheme_slug==="string"?input.scheme_slug:"";
   const profile=parseCitizenProfile(input.profile);

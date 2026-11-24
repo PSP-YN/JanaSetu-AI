@@ -1,11 +1,14 @@
 import { NextRequest,NextResponse } from "next/server";
 import { getVerifiedSupabaseSession } from "@/lib/supabase/rest";
+import { readJsonObjectBody } from "@/lib/request";
 export const runtime="nodejs";
 const json=(body:unknown,status=200)=>NextResponse.json(body,{status,headers:{"Cache-Control":"no-store"}});
 export async function POST(request:NextRequest){
   try{
     if(request.headers.get("origin")!==request.nextUrl.origin)return json({error:"Cross-origin request blocked."},403);
-    const input=await request.json() as Record<string,unknown>;
+    const parsed=await readJsonObjectBody(request,12*1024,"Review decision is too large.");
+    if(!parsed.ok)return parsed.response;
+    const input=parsed.value;
     if(Object.keys(input).some(k=>!["scheme_version_id","approval_type","decision","notes"].includes(k)))return json({error:"Unsupported review field."},400);
     const version=typeof input.scheme_version_id==="string"?input.scheme_version_id:"";
     const type=typeof input.approval_type==="string"?input.approval_type:"";

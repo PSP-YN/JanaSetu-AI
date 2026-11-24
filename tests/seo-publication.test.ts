@@ -11,7 +11,8 @@ test("public scheme guides expose only published, independently approved version
  assert.match(source,/isApprovedRuleSetForPublication/);
  assert.match(source,/isWithinSchemeEffectivePeriod/);
  assert.match(source,/https:/);
- assert.match(source,/throw error instanceof Error/);
+ assert.match(source,/AbortSignal\.timeout\(3000\)/);
+ assert.match(source,/if\(!response\.ok\)return null/);
  assert.match(source,/sourceCheckedAt:source\?\.last_checked_at\|\|null/);
 });
 
