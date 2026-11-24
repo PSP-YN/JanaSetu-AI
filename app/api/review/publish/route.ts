@@ -1,10 +1,13 @@
 import { NextRequest,NextResponse } from "next/server";
 import { getVerifiedSupabaseSession } from "@/lib/supabase/rest";
+import { readJsonObjectBody } from "@/lib/request";
 export const runtime="nodejs";
 export async function POST(request:NextRequest){
   try{
     if(request.headers.get("origin")!==request.nextUrl.origin)return NextResponse.json({error:"Cross-origin request blocked."},{status:403});
-    const input=await request.json() as Record<string,unknown>;
+    const parsed=await readJsonObjectBody(request,8192,"Publication request is too large.");
+    if(!parsed.ok)return parsed.response;
+    const input=parsed.value;
     if(Object.keys(input).some(k=>k!=="scheme_version_id")||typeof input.scheme_version_id!=="string"||!/^[0-9a-f-]{36}$/i.test(input.scheme_version_id))return NextResponse.json({error:"Invalid scheme version."},{status:400});
     const session=await getVerifiedSupabaseSession();
     if(!session)return NextResponse.json({error:"Sign in required."},{status:401});

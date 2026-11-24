@@ -1,5 +1,6 @@
 /// <reference lib="webworker" />
 import { env, pipeline } from "@huggingface/transformers";
+import { validateVoiceTranscript, type VoiceLanguage } from "@/lib/voice-quality";
 
 type VoiceRequest = { id: number; audio: Float32Array; language: string };
 type VoiceResponse = { id: number; type: "progress" | "result" | "error"; progress?: number; message?: string; transcript?: string; backend?: string };
@@ -50,8 +51,9 @@ scope.onmessage = async (event: MessageEvent<VoiceRequest>) => {
     scope.postMessage({ id, type: "progress", message: "Model ready. Transcribing audio on this device." } satisfies VoiceResponse);
     const result = await transcriber(audio, { language, task: "transcribe", return_timestamps: false });
     const transcript = typeof result === "string" ? result : Array.isArray(result) ? result.map((item: any) => item.text || "").join(" ") : result.text || "";
-    if (!transcript.trim()) throw new Error("No speech was recognised. Try a quieter place and speak clearly.");
-    scope.postMessage({ id, type: "result", transcript: transcript.trim(), backend } satisfies VoiceResponse);
+    const quality = validateVoiceTranscript(transcript, language as VoiceLanguage);
+    if (!quality.ok) throw new Error(quality.reason);
+    scope.postMessage({ id, type: "result", transcript: quality.transcript, backend } satisfies VoiceResponse);
   } catch (error) {
     scope.postMessage({ id, type: "error", message: error instanceof Error ? error.message : "On-device transcription failed." } satisfies VoiceResponse);
   }

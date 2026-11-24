@@ -34,6 +34,10 @@ jobs:
           grep -q 'GOVERNMENT BENEFITS WORKSPACE' "$tmp/app.html"
 
           curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/api/health" -o "$tmp/health.json"
+          # This is a real dependency probe, not just a liveness check. It also
+          # provides regular database activity for the Free project, although
+          # Supabase does not guarantee that scheduled traffic prevents pausing.
+          curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/api/ready" -o "$tmp/ready.json"
           curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/api/schemes" -o "$tmp/schemes.json"
           curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/api/sources/health" -o "$tmp/sources.json"
           curl --fail --show-error --silent --retry 2 --retry-delay 2 --connect-timeout 10 --max-time 30 "$PRODUCTION_URL/api/schemes/open-data?q=farmer&limit=5" -o "$tmp/search.json"
@@ -51,11 +55,13 @@ jobs:
           const dir = process.argv[2];
           const read = (name) => fs.readFileSync(path.join(dir, name), "utf8");
           const health = JSON.parse(read("health.json"));
+          const readiness = JSON.parse(read("ready.json"));
           const schemes = JSON.parse(read("schemes.json"));
           const sources = JSON.parse(read("sources.json"));
           const search = JSON.parse(read("search.json"));
           const source = sources.sources?.find((item) => item.id === "smartduke-scheme-catalogue");
-          if (health.ok !== true) throw new Error("Production health endpoint did not return ok=true");
+          if (health.ok !== true || health.status !== "ok") throw new Error("Production liveness endpoint did not return status=ok");
+          if (readiness.ready !== true || readiness.checks?.databaseReachable !== true) throw new Error("Production dependency readiness failed: " + String(readiness.status || "unknown"));
           if (!Array.isArray(schemes.schemes) || schemes.catalogueTotal !== schemes.schemes.length || schemes.catalogueTotal < 1) throw new Error("Built-in catalogue response is incomplete");
           for (const key of ["budgetLineItemLeadTotal", "officialSourceCatalogueOnlyTotal"]) if (!Number.isInteger(schemes[key]) || schemes[key] < 0 || schemes[key] > schemes.catalogueTotal) throw new Error("Built-in catalogue provenance metadata is invalid: " + key);
           if (!source || source.localIndexAvailability !== "available" || !Number.isInteger(source.indexedRows) || source.indexedRows < 1) throw new Error("Bundled third-party snapshot is unavailable or incomplete");
@@ -74,7 +80,7 @@ jobs:
           if (source.freshness === "stale") console.warn("::warning::The third-party discovery snapshot is stale; eligibility rules remain independent of this catalogue.");
           if (source.searchAvailability === "unavailable") console.warn("::warning::The publisher search endpoint is unavailable; the bundled local index is being used.");
           if (source.updateAvailable) console.warn("::warning::A new upstream dataset revision is available; the daily refresh workflow should prepare a review PR.");
-          console.log("Production smoke checks passed: landing page, citizen workspace, health, catalogue, local search, snapshot integrity, branding, SEO, privacy and terms.");
+          console.log("Production smoke checks passed: landing page, citizen workspace, liveness, database readiness, catalogue, local search, snapshot integrity, branding, SEO, privacy and terms.");
           NODE
 
       - name: Open one tracked incident if production checks fail

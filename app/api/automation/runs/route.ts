@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getVerifiedSupabaseSession } from "@/lib/supabase/rest";
+import { readJsonObjectBody } from "@/lib/request";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -19,9 +20,9 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     if (request.headers.get("origin") !== request.nextUrl.origin) return json({ error: "Cross-origin request blocked." }, 403);
-    const raw = await request.text();
-    if (new TextEncoder().encode(raw).byteLength > 20 * 1024) return json({ error: "Automation request is too large." }, 413);
-    const input = JSON.parse(raw) as Record<string, unknown>;
+    const parsed = await readJsonObjectBody(request, 20 * 1024, "Automation request is too large.");
+    if (!parsed.ok) return parsed.response;
+    const input = parsed.value;
     if (Object.keys(input).some(k => !["case_id","action_type","consent_id","idempotency_key","requested_payload"].includes(k))) return json({ error: "Unsupported automation field." }, 400);
     const caseId = typeof input.case_id === "string" ? input.case_id : "";
     const consentId = typeof input.consent_id === "string" ? input.consent_id : "";

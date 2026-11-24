@@ -1,11 +1,14 @@
 import { NextRequest,NextResponse } from "next/server";
 import { getVerifiedSupabaseSession } from "@/lib/supabase/rest";
+import { readJsonObjectBody } from "@/lib/request";
 export const runtime="nodejs";
 export const dynamic="force-dynamic";
 export async function POST(request:NextRequest){
  try{
   if(request.headers.get("origin")!==request.nextUrl.origin)return NextResponse.json({error:"Cross-origin request blocked."},{status:403});
-  const input=await request.json() as Record<string,unknown>;
+  const parsed=await readJsonObjectBody(request,8192,"Preparation confirmation is too large.");
+  if(!parsed.ok)return parsed.response;
+  const input=parsed.value;
   if(Object.keys(input).some(k=>k!=="case_id")||typeof input.case_id!=="string"||!/^[0-9a-f-]{36}$/i.test(input.case_id))return NextResponse.json({error:"A valid application case is required."},{status:400});
   const session=await getVerifiedSupabaseSession();if(!session)return NextResponse.json({error:"Sign in required."},{status:401});
   const response=await fetch(session.url+"/rest/v1/rpc/confirm_application_preparation",{method:"POST",headers:{apikey:session.key,Authorization:"Bearer "+session.accessToken,"Content-Type":"application/json"},body:JSON.stringify({p_case_id:input.case_id}),cache:"no-store"});

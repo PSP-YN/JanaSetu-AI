@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getVerifiedSupabaseSession } from "@/lib/supabase/rest";
 import { parseBackupProfile } from "@/lib/backup-validation";
+import { readJsonObjectBody } from "@/lib/request";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -20,9 +21,9 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     if (request.headers.get("origin") !== request.nextUrl.origin) return json({ error: "Cross-origin request blocked." }, 403);
-    const raw = await request.text();
-    if (new TextEncoder().encode(raw).byteLength > 48 * 1024) return json({ error: "Application profile is too large." }, 413);
-    const input = JSON.parse(raw) as Record<string, unknown>;
+    const parsed = await readJsonObjectBody(request, 48 * 1024, "Application profile is too large.");
+    if (!parsed.ok) return parsed.response;
+    const input = parsed.value;
     if (Object.keys(input).some(k => !["scheme_slug","profile_snapshot","idempotency_key","consent_id"].includes(k))) return json({ error: "Unsupported application field." }, 400);
     const scheme_slug = typeof input.scheme_slug === "string" ? input.scheme_slug : "";
     const idempotency_key = typeof input.idempotency_key === "string" ? input.idempotency_key : "";

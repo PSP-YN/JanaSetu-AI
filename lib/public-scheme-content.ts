@@ -19,10 +19,19 @@ export function isOfficialSchemeSource(value:unknown):value is string{
 const safeUrl=(value:unknown)=>isOfficialSchemeSource(value)?value:null;
 async function rest<T>(path:string):Promise<T|null>{
  const url=base(),anon=key();if(!url||!anon)return null;
- try{const response=await fetch(url+"/rest/v1/"+path,{headers:{apikey:anon,Accept:"application/json"},next:{revalidate:3600}});
-  if(!response.ok)throw new Error("Public scheme catalogue request failed with status "+response.status);
+ try{
+  const response=await fetch(url+"/rest/v1/"+path,{
+   headers:{apikey:anon,Accept:"application/json"},
+   signal:AbortSignal.timeout(3000),
+   next:{revalidate:3600}
+  });
+  if(!response.ok)return null;
   return await response.json() as T;
- }catch(error){throw error instanceof Error?error:new Error("Public scheme catalogue request failed.");}
+ }catch{
+  // Public scheme guides are a read-only enhancement. A database outage must
+  // never prevent the application from building or serving local discovery.
+  return null;
+ }
 }
 type SchemeRow={id:string;slug:string;name:string;category:string;level:string;state_code:string|null;current_version_id:string|null};
 type VersionRow={id:string;version_number:number;source_id:string|null;source_url:string|null;content:unknown;rule_set:unknown;verification_status:string;effective_from:string|null;effective_to:string|null;reviewed_at:string|null};
@@ -39,7 +48,7 @@ export async function listPublicSchemes():Promise<PublicScheme[]>{
  const versions:VersionRow[]=[];
  for(let offset=0;offset<ids.length;offset+=100){
   const batch=await rest<VersionRow[]>("scheme_versions?select=id,version_number,source_id,source_url,content,rule_set,verification_status,effective_from,effective_to,reviewed_at&id=in.("+ids.slice(offset,offset+100).join(",")+")");
-  if(!batch)throw new Error("Published scheme versions could not be loaded.");
+  if(!batch)return [];
   versions.push(...batch);
  }
  const byVersion=new Map(versions.map(version=>[version.id,version]));
@@ -47,7 +56,7 @@ export async function listPublicSchemes():Promise<PublicScheme[]>{
  const sources:SourceRow[]=[];
  for(let offset=0;offset<sourceIds.length;offset+=100){
   const batch=await rest<SourceRow[]>("scheme_sources?select=id,publisher,source_url,last_checked_at&id=in.("+sourceIds.slice(offset,offset+100).join(",")+")");
-  if(!batch)throw new Error("Published scheme sources could not be loaded.");
+  if(!batch)return [];
   sources.push(...batch);
  }
  const bySource=new Map(sources.map(source=>[source.id,source]));
