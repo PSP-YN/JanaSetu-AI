@@ -7,7 +7,7 @@ const popupHtml = readFileSync(new URL("../extension/popup.html", import.meta.ur
 
 test("form assistant requires per-session citizen verification of an HTTPS government portal address", () => {
   assert.ok(extension.includes("getCitizenConfirmedPortalTab"));
-  assert.ok(extension.includes('"ssp.postmatric.karnataka.gov.in","pmkisan.gov.in","pmaymis.gov.in"'));
+  assert.ok(extension.includes('"ssp.postmatric.karnataka.gov.in","ssp.karnataka.gov.in","pmkisan.gov.in","pmaymis.gov.in"'));
   assert.ok(extension.includes('"pmuy.gov.in","www.pmuy.gov.in","scholarships.gov.in"'));
   assert.ok(extension.includes('portalUrl.protocol!=="https:"'));
   assert.ok(extension.includes("verifyPortalCheckbox.checked"));
@@ -54,6 +54,7 @@ test("SSP identity input is session-only and excluded from the reusable profile 
   assert.match(extension, /"fatherOrGuardianName","motherName","socialCategory","landholdingAcres","institutionName","courseName","courseYear","rationCardCategory"/);
   assert.match(extension, /profile\.mobileNumber/);
   assert.match(extension, /profile\.pincode/);
+  assert.match(extension, /"ssp.karnataka.gov.in"/);
   assert.match(extension, /sessionValues=\{aadhaarNumber:isSspPage\?/);
   assert.match(extension, /args:\[normalizedProfile,null,sessionValues\]/);
   assert.doesNotMatch(extension, /"aadhaarNumber",/);

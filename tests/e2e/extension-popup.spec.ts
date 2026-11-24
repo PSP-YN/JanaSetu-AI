@@ -49,6 +49,13 @@ async function openPopup(page: import("@playwright/test").Page, initialUrl = "ht
   await page.addScriptTag({ path: "extension/popup.js" });
 }
 
+test("popup shows the active supported portal URL before the citizen confirms it", async ({ page }) => {
+  await openPopup(page, "https://ssp.karnataka.gov.in/CA/");
+  await expect(page.locator("#active-site")).toContainText("https://ssp.karnataka.gov.in/CA/");
+  await expect(page.locator("#ssp-aadhaar-group")).toBeVisible();
+  await expect(page.locator("#verify-portal")).not.toBeChecked();
+});
+
 test("extension imports the reviewed profile and fills only after address and field confirmation", async ({ page }) => {
   await openPopup(page);
   await page.locator("#backup").setInputFiles({
@@ -84,6 +91,22 @@ test("SSP popup value is passed only to the active SSP fill session and is not s
   const call = await page.evaluate(() => (window as any).__lastScriptCall);
   expect(call.args[2].aadhaarNumber).toBe("123456789012");
   expect(await page.evaluate(() => (window as any).__notification.title)).toBe("JanaSetu: action needed in browser");
+  const stored = await page.evaluate(() => (window as any).__popupStorage);
+  expect(stored.profile.aadhaarNumber).toBeUndefined();
+  expect(stored.aadhaarNumber).toBeUndefined();
+});
+
+test("redirected Karnataka SSP host is accepted and keeps the one-session Aadhaar input out of storage", async ({ page }) => {
+  await openPopup(page, "https://ssp.karnataka.gov.in/CA/");
+  await page.evaluate((profile) => Object.assign((window as any).__popupStorage, { profile, language: "en" }), syntheticProfile);
+  await page.locator("#fill").click();
+  await expect(page.locator("#active-site")).toContainText("https://ssp.karnataka.gov.in/CA/");
+  await expect(page.locator("#ssp-aadhaar-group")).toBeVisible();
+  await page.locator("#verify-portal").check();
+  await page.locator("#ssp-aadhaar").fill("123456789012");
+  await page.locator("#fill").click();
+  const call = await page.evaluate(() => (window as any).__lastScriptCall);
+  expect(call.args[2].aadhaarNumber).toBe("123456789012");
   const stored = await page.evaluate(() => (window as any).__popupStorage);
   expect(stored.profile.aadhaarNumber).toBeUndefined();
   expect(stored.aadhaarNumber).toBeUndefined();

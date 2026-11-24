@@ -274,20 +274,33 @@ function getApprovedFields(){
 // This is not a department-authorized integration and does not certify the page.
 const verifyPortalCheckbox=document.getElementById("verify-portal");
 const activeSiteEl=document.getElementById("active-site");
+const SUPPORTED_PORTAL_HOSTS=new Set([
+  "ssp.postmatric.karnataka.gov.in","ssp.karnataka.gov.in","pmkisan.gov.in","pmaymis.gov.in",
+  "pmuy.gov.in","www.pmuy.gov.in","scholarships.gov.in"
+]);
+const SSP_PORTAL_HOSTS=new Set(["ssp.postmatric.karnataka.gov.in","ssp.karnataka.gov.in"]);
+async function refreshActivePortalDisplay(){
+  try{
+    const [tab]=await chrome.tabs.query({active:true,currentWindow:true});
+    if(!tab?.url)return;
+    const url=new URL(tab.url);
+    if(url.protocol!=="https:"||!SUPPORTED_PORTAL_HOSTS.has(url.hostname.toLowerCase()))return;
+    activeSiteEl.textContent=url.href;
+    sspAadhaarGroup.hidden=!SSP_PORTAL_HOSTS.has(url.hostname.toLowerCase());
+  }catch{}
+}
+void popupReady.then(refreshActivePortalDisplay);
 async function getCitizenConfirmedPortalTab(){
   const [tab]=await chrome.tabs.query({active:true,currentWindow:true});
   if(!tab?.id||!tab.url){say("openPortal");return null;}
   let portalUrl;
   try{portalUrl=new URL(tab.url);}catch{say("blockedDomain");return null;}
   const host=portalUrl.hostname.toLowerCase();
-  const governmentHost=new Set([
-    "ssp.postmatric.karnataka.gov.in","pmkisan.gov.in","pmaymis.gov.in",
-    "pmuy.gov.in","www.pmuy.gov.in","scholarships.gov.in"
-  ]).has(host);
+  const governmentHost=SUPPORTED_PORTAL_HOSTS.has(host);
   if(portalUrl.protocol!=="https:"||!governmentHost){say("blockedDomain");return null;}
   if(activeSiteEl.textContent&&activeSiteEl.textContent!=="Not checked yet"&&activeSiteEl.textContent!==portalUrl.href){verifyPortalCheckbox.checked=false;sspAadhaarInput.value="";}
   activeSiteEl.textContent=portalUrl.href;
-  sspAadhaarGroup.hidden=host!=="ssp.postmatric.karnataka.gov.in";
+  sspAadhaarGroup.hidden=!SSP_PORTAL_HOSTS.has(host);
   if(!verifyPortalCheckbox.checked){say("blockedDomain");return null;}
   return tab;
 }
@@ -299,7 +312,7 @@ document.getElementById("fill").addEventListener("click",async()=>{
     if(!profile){say("profileFirst");return;}
     if(!isValidProfile(profile)){say("invalidBackup");return;}
     const tab=await getCitizenConfirmedPortalTab();if(!tab)return;
-    const isSspPage=new URL(tab.url).hostname.toLowerCase()==="ssp.postmatric.karnataka.gov.in";
+    const isSspPage=["ssp.postmatric.karnataka.gov.in","ssp.karnataka.gov.in"].includes(new URL(tab.url).hostname.toLowerCase());
     const enteredAadhaar=sspAadhaarInput.value.trim();
     if(enteredAadhaar&&!isSspPage){sspAadhaarInput.value="";statusEl.textContent="This one-time field is only available on the exact Karnataka SSP page.";return;}
     if(enteredAadhaar&&!/^[0-9]{12}$/.test(enteredAadhaar)){document.getElementById("status").textContent="Enter exactly 12 digits for the SSP-only session field, or leave it blank.";return;}

@@ -39,15 +39,15 @@ The entry point is **Workspace → Applications & automation → Start portal au
    - Enable Developer mode.
    - Choose **Load unpacked** and select the repository's extension/ directory.
 4. **Open the Karnataka SSP portal.**
-   - For the demo, open https://ssp.postmatric.karnataka.gov.in/CA/ (SSP Post-Matric · Create Account).
+   - The legacy URL https://ssp.postmatric.karnataka.gov.in/CA/ currently redirects to https://ssp.karnataka.gov.in/. Both exact SSP hosts are supported by the extension.
    - Check the address bar yourself. The extension only operates on supported HTTPS .gov.in and .nic.in hosts.
    - Click the JanaSetu Form Assistant toolbar icon, import the JSON once, verify the exact URL, preview suggested fields, select only values you have checked, and click **Fill selected fields**.
-   - The current SSP first page exposes “Enter Student Aadhaar number” and a “Click to proceed” button. Enter the number in the extension popup’s one-time SSP field, preview it and approve that field. The value is not saved. The citizen clicks “Click to proceed” manually.
+   - The redirect currently lands on the SSP homepage, not the previously observed first-step form. Navigate manually to the current official application form first. If an explicitly labelled Aadhaar field is present, enter the number in the popup’s one-time SSP field, preview it and approve that field. The value is not saved; you click any portal continuation control yourself.
    - Review every populated field on the portal yourself. On later steps, refresh the preview after the portal changes.
 
 ### Safety boundaries
 
-- The helper fills visible fields that match the citizen-reviewed profile. For the Karnataka SSP demo only, the citizen may enter the Aadhaar number directly in the extension popup for the current session and approve that field individually; it is not stored in My profile, the JSON export or extension storage.
+- The helper fills visible fields that match the citizen-reviewed profile. For either supported Karnataka SSP host, the citizen may enter the Aadhaar number directly in the extension popup for the current session and approve that field individually; it is not stored in My profile, the JSON export or extension storage.
 - It does not verify Aadhaar/e-KYC or identity. OTP, CAPTCHA, passwords, bank details, consent/declaration checkboxes and security PINs remain human-only.
 - It does not upload documents or click Proceed, Verify, Next, Apply, Save, Submit, Confirm or other portal buttons.
 - It does not decide eligibility and does not submit an application.
