@@ -44,7 +44,7 @@ The extension is a user-triggered form assistant for Chromium-based browsers and
 
 ## Browser validation
 
-The repository Playwright suite runs against Chromium and Firefox. This validates the web application, field-matching logic and popup workflow under both browser engines; it does not substitute for installing the packaged add-on in a normal Chrome/Firefox profile. Chrome/Brave support the unpacked Manifest V3 package. Firefox temporary installation is described above; permanent distribution still needs Mozilla signing.
+The repository Playwright suite runs against Google Chrome and Firefox. This validates the web application, field-matching logic and popup workflow in the two target browser families; it does not substitute for installing the packaged add-on in a normal Chrome/Firefox profile. Chrome/Brave support the unpacked Manifest V3 package. Firefox temporary installation is described above; permanent distribution still needs Mozilla signing.
 
 ## Permission rationale
 

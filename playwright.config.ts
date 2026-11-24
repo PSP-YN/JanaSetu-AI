@@ -9,7 +9,7 @@ export default defineConfig({
   workers: process.env.CI ? 2 : 4,
   use: { baseURL: "http://127.0.0.1:3003", trace: "retain-on-failure" },
   projects: [
-    { name: "chromium", use: { ...devices["Desktop Chrome"] } },
+    { name: "chrome", use: { ...devices["Desktop Chrome"], channel: "chrome" } },
     { name: "firefox", use: { ...devices["Desktop Firefox"] } }
   ],
   webServer: {
