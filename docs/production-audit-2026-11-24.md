@@ -86,7 +86,7 @@ The live Supabase project was found inactive during this audit and was restored.
 
 The audited source revision is expected to pass the following gates before merge:
 
-- `npm run check` — 186 unit tests plus TypeScript checking.
+- `npm run check` — 187 unit tests plus TypeScript checking.
 - `npm run build` — including a build with Supabase configured to an intentionally unreachable local endpoint, proving public scheme rendering no longer requires a live database during build.
 - `npx playwright test --workers=1` — full browser E2E suite, including extension, voice, portal safety and citizen workflows.
 - `python3 -m unittest discover -s tests -p 'test_*.py' -v` — document-scanner unit tests.
