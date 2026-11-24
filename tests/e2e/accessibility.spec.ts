@@ -59,10 +59,20 @@ test("security headers are served by the active Next.js configuration", async ({
   expect(headers["x-frame-options"]).toBe("DENY");
   expect(headers["x-content-type-options"]).toBe("nosniff");
   expect(headers["referrer-policy"]).toBe("strict-origin-when-cross-origin");
-  expect(headers["content-security-policy-report-only"]).toContain("frame-ancestors 'none'");
-  expect(headers["content-security-policy-report-only"]).toContain("https://datasets-server.huggingface.co");
-  expect(headers["content-security-policy-report-only"]).not.toContain("connect-src 'self' https:;");
-  expect(headers["content-security-policy-report-only"]).not.toMatch(/,\s*default-src/);
+  const csp = headers["content-security-policy"];
+  expect(csp).toContain("frame-ancestors 'none'");
+  expect(csp).toContain("https://datasets-server.huggingface.co");
+  expect(csp).not.toMatch(/script-src[^;]*'unsafe-inline'/);
+  expect(csp).not.toMatch(/script-src[^;]*'unsafe-eval'/);
+  expect(headers["content-security-policy-report-only"]).toBeUndefined();
+  const nonce = csp.match(/'nonce-([^']+)'/)?.[1];
+  expect(nonce).toBeTruthy();
+  const html = await response.text();
+  expect(html).toContain(`nonce="${nonce}"`);
+  const secondResponse = await request.get("/");
+  const secondNonce = secondResponse.headers()["content-security-policy"]?.match(/'nonce-([^']+)'/)?.[1];
+  expect(secondNonce).toBeTruthy();
+  expect(secondNonce).not.toBe(nonce);
   expect(headers["x-powered-by"]).toBeUndefined();
 });
 

@@ -45,6 +45,8 @@ test("browser authentication never receives a service-role credential", () => {
   assert.match(auth, /Cross-origin request blocked/);
   assert.match(auth, /janasetu_auth_state/);
   assert.match(auth, /timingSafeEqual/);
+  assert.match(auth, /user\.email_confirmed_at/);
+  assert.match(auth, /result\.user\?\.email_confirmed_at/);
   assert.match(auth, /finally \{ await clearSupabaseSession\(\); \}/);
   const callback = read("app/auth/callback/page.tsx");
   assert.match(callback, /action:"establish",access_token,refresh_token,state/);
