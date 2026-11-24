@@ -203,9 +203,12 @@ async function importSelectedBackup() {
     });
     backupImportQueue = write.then(() => undefined, () => undefined);
     const saved = await write;
-    if (!saved || sequence !== backupImportSequence) return;
-    backupInput.removeAttribute("aria-invalid");
+    if (!saved) return;
+    // A committed import invalidates any preview built from the previous profile,
+    // even when a newer selection now owns the status and language updates.
     clearPreview();
+    if (sequence !== backupImportSequence) return;
+    backupInput.removeAttribute("aria-invalid");
     setLanguage(language);
     say("imported");
   } catch (error) {

@@ -186,3 +186,41 @@ test("new backup selection clears the invalid state before importing a valid pro
   await expect(page.locator("#backup")).not.toHaveAttribute("aria-invalid", "true");
   await expect(page.locator("#status")).toContainText("Profile imported");
 });
+
+
+test("a superseded import clears an already-open preview after its storage write commits", async ({ page }) => {
+  await openPopup(page);
+  await page.evaluate(() => {
+    let releaseFirst!: () => void;
+    let releaseSecond!: () => void;
+    let firstStarted!: () => void;
+    let secondStarted!: () => void;
+    const firstGate = new Promise<void>((resolve) => { releaseFirst = resolve; });
+    const secondGate = new Promise<void>((resolve) => { releaseSecond = resolve; });
+    const firstStartedPromise = new Promise<void>((resolve) => { firstStarted = resolve; });
+    const secondStartedPromise = new Promise<void>((resolve) => { secondStarted = resolve; });
+    (window as any).__importGates = { firstGate: firstStartedPromise, secondGate: secondStartedPromise, releaseFirst, releaseSecond };
+    (window as any).chrome.storage.local.set = async (data: Record<string, any>) => {
+      if (data.profile.fullName === "First Citizen") { firstStarted(); await firstGate; }
+      if (data.profile.fullName === "Second Citizen") { secondStarted(); await secondGate; }
+      Object.assign((window as any).__popupStorage, data);
+    };
+  });
+
+  const backup = (name: string) => ({
+    name: `${name.toLowerCase().replaceAll(" ", "-")}.json`, mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify({ app: "JanaSetu", schemaVersion: 1, profile: { ...syntheticProfile, fullName: name }, language: "en" }))
+  });
+  await page.locator("#backup").setInputFiles(backup("First Citizen"));
+  await page.evaluate(async () => await (window as any).__importGates.firstGate);
+  await page.locator("#preview").evaluate((element) => { element.innerHTML = '<div class="preview-row">Stale preview</div>'; });
+  await page.locator("#backup").setInputFiles(backup("Second Citizen"));
+  await page.evaluate(() => (window as any).__importGates.releaseFirst());
+  await page.evaluate(async () => await (window as any).__importGates.secondGate);
+  await expect(page.locator("#preview .preview-row")).toHaveCount(0);
+  await expect(page.locator("#apply")).toBeDisabled();
+  await expect(page.locator("#status")).not.toContainText("Profile imported");
+  await page.evaluate(() => (window as any).__importGates.releaseSecond());
+  await expect(page.locator("#status")).toContainText("Profile imported");
+  expect(await page.evaluate(() => (window as any).__popupStorage.profile.fullName)).toBe("Second Citizen");
+});
