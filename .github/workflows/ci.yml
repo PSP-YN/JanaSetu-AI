@@ -63,11 +63,11 @@ jobs:
       - name: Type-check
         run: npm run typecheck
 
-      - name: Install Chromium for browser tests
+      - name: Install Chromium and Firefox for cross-browser tests
         # GitHub-hosted Ubuntu runners already include the browser system libraries.
         # Avoid apt-based --with-deps here: transient runner DNS/mirror failures
         # otherwise prevent browser tests from running at all.
-        run: npx playwright install chromium
+        run: npx playwright install chromium firefox
 
       - name: Build production app and run browser accessibility tests
         run: npm run test:e2e

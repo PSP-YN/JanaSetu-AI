@@ -1,6 +1,6 @@
 # JanaSetu Form Assistant — installation and usage
 
-The extension is a user-triggered form assistant for Chromium-based browsers. It offers one-click autofill for a restricted allowlist of non-sensitive fields, plus a separate field-by-field review mode. It is **not** an official government integration and does not submit applications.
+The extension is a user-triggered form assistant for Chromium-based browsers and Firefox (Manifest V3). It offers one-click autofill for a restricted allowlist of non-sensitive fields, plus a separate field-by-field review mode. The web application and extension UI have automated Chromium and Firefox coverage; the browser add-on itself still requires a real installation/acceptance test in each browser before a public release. It is **not** an official government integration and does not submit applications.
 
 ## Install on Chrome or Brave
 
@@ -10,6 +10,14 @@ The extension is a user-triggered form assistant for Chromium-based browsers. It
 4. Select **Load unpacked**.
 5. Select the extracted `JanaSetu-AI-main/extension` directory.
 6. Pin the JanaSetu Form Assistant extension if desired.
+
+## Install on Firefox (temporary developer installation)
+
+1. Extract the repository ZIP.
+2. Open `about:debugging#/runtime/this-firefox`.
+3. Select **Load Temporary Add-on…**.
+4. Choose `JanaSetu-AI-main/extension/manifest.json`.
+5. The temporary add-on remains installed only until Firefox closes. A permanent public Firefox release requires Mozilla Add-ons signing and a reviewed distribution package; do not disable signature enforcement.
 
 ## Use it
 
@@ -29,10 +37,14 @@ The extension is a user-triggered form assistant for Chromium-based browsers. It
 - Preview does not change the page. Fill re-scans the current page and checks the field fingerprint and empty state again to avoid stale previews and overwriting values typed after preview.
 - It validates exact select/radio option matches, text maximum length and numeric minimum/maximum/step. A portal-defined custom `pattern` is not executed as an arbitrary regular expression; the field is disabled for manual entry.
 - It only attempts to fill visible form controls on an explicit allowlist of known government portal hosts (`ssp.postmatric.karnataka.gov.in`, `ssp.karnataka.gov.in`, `pmkisan.gov.in`, `pmaymis.gov.in`, `pmuy.gov.in`, `www.pmuy.gov.in`, `scholarships.gov.in`) over HTTPS, after the citizen verifies the exact page URL against JanaSetu's official source link and confirms it in the extension. A government-domain suffix is not proof that a page is official. It never clicks Proceed, Verify, Next, Apply, Save or Submit, invokes form submission, uploads files, or bypasses OTP, CAPTCHA, consent, payment, identity proofing or other checks.
-- Imported profile data is stored in the extension's local Chrome storage on that browser profile. Remove it by clearing the extension's local data or uninstalling the extension.
+- Imported profile data is currently stored in plaintext in the extension local storage for that browser profile. Do not import real Aadhaar, bank, certificate, OTP, or other highly sensitive data. Use synthetic/redacted data until encrypted extension-vault storage and its migration/recovery tests are implemented. Remove stored data by clearing the extension local data or uninstalling the extension.
 - Label matching remains heuristic. A field may be missed or mapped incorrectly. Treat all filled values as a draft and verify them yourself.
 - Aadhaar is not part of My profile, the reusable JSON export or extension storage. For the Karnataka SSP demo only, the citizen may enter it in the extension popup for the current open-popup session; it is passed to the active SSP tab only for preview/fill and cleared after successful fill or when the tab URL changes. The citizen must approve the Aadhaar field individually. Bank credentials, OTPs, passwords, PINs and sensitive documents remain unsupported.
 - The citizen-directed browser helper is separate from department-authorized API automation. It can fill an allowlist of non-sensitive fields with one explicit user action, or preview and fill individually selected fields; it never clicks Next, Apply, Save or Submit. It does not claim a scheme-specific adapter or official department authorization. The four server-side integration records remain `not_requested` until department authorization is recorded.
+
+## Browser validation
+
+The repository Playwright suite runs against Chromium and Firefox. This validates the web application, field-matching logic and popup workflow under both browser engines; it does not substitute for installing the packaged add-on in a normal Chrome/Firefox profile. Chrome/Brave support the unpacked Manifest V3 package. Firefox temporary installation is described above; permanent distribution still needs Mozilla signing.
 
 ## Permission rationale
 
