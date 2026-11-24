@@ -97,3 +97,22 @@ The form assistant is intentionally fail-closed. A matching `.gov.in`/`.nic.in` 
 These checks establish code/build/test correctness for the exercised paths. They do not replace department authorization, legal review, two-device testing, independent penetration testing, or live government-portal acceptance testing.
 
 The SmartDuke snapshot is stale under the 90-day policy. The latest observed publisher revision is the same as the bundled revision; the publisher's metadata and rows endpoints are available while its search endpoint is unavailable. The local snapshot remains available for discovery and is checked against a SHA-256 manifest before use.
+
+
+## Database readiness incident (added 24 November 2026)
+
+`/api/health` is a liveness check only. It must not be used as evidence that Supabase or citizen workflows are available. `/api/ready` checks database reachability and must return `ready: true` with `checks.databaseReachable: true`. The hourly production monitor now checks both endpoints in the audit branch.
+
+If `/api/ready` returns 503:
+
+1. Check the Supabase project status and region in the Supabase dashboard.
+2. If the Free project is paused, restore it and wait for `ACTIVE_HEALTHY`; do not repeatedly redeploy the web application to fix a paused database.
+3. Recheck `/api/ready`, then inspect Vercel runtime errors for the Supabase hostname and connection failures.
+4. Confirm the internal cron worker resumes and its recent jobs succeed.
+5. Record the outage, duration and affected workflows. A successful `/api/health` response does not close this incident.
+
+Supabase Free inactivity pausing is not an acceptable high-availability strategy. Upgrade to an always-on production tier and verify backups/restore before public launch.
+
+## Edge abuse guard
+
+The canonical Vercel production project has a fixed-window WAF rate limit for `POST /api/agent/run`, `POST /api/intake/parse` and `POST /api/applications/draft`: 120 requests per source IP per 60 seconds, deny after the limit. Shared campus/mobile NAT users share this bucket. Review traffic and legitimate-user impact before changing the threshold. This rule is not authorization and does not replace per-user quotas on authenticated APIs.

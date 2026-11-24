@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getVerifiedSupabaseSession } from "@/lib/supabase/rest";
+import { readJsonObjectBody } from "@/lib/request";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -66,14 +67,9 @@ export async function PUT(request: NextRequest) {
       originMatchesRequest = Boolean(parsedOrigin && requestHost && parsedOrigin.host === requestHost && parsedOrigin.protocol === request.nextUrl.protocol);
     } catch { originMatchesRequest = false; }
     if (!originMatchesRequest) return json({ error: "Cross-origin request blocked." }, 403);
-    const declaredLength = Number(request.headers.get("content-length") ?? 0);
-    if (declaredLength > MAX_BYTES) return json({ error: "Encrypted workspace exceeds the 8 MB limit." }, 413);
-    const raw = await request.text();
-    if (new TextEncoder().encode(raw).byteLength > MAX_BYTES) return json({ error: "Encrypted workspace exceeds the 8 MB limit." }, 413);
-    let parsed: unknown;
-    try { parsed = JSON.parse(raw); } catch { return json({ error: "Request body must be valid JSON." }, 400); }
-    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return json({ error: "Request body must be a JSON object." }, 400);
-    const body = parsed as Record<string, unknown>;
+    const parsed = await readJsonObjectBody(request, MAX_BYTES, "Encrypted workspace exceeds the 8 MB limit.");
+    if (!parsed.ok) return parsed.response;
+    const body = parsed.value;
     if (Object.keys(body).sort().join(",") !== "expected_revision,vault" || !validEnvelope(body.vault) || !Number.isSafeInteger(body.expected_revision) || Number(body.expected_revision) < 0) {
       return json({ error: "Provide a valid encrypted vault and the revision last restored by this device." }, 400);
     }

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-export async function readJsonBody(request: Request, maxBytes = 16 * 1024): Promise<
+export async function readJsonBody(request: Request, maxBytes = 16 * 1024, tooLargeMessage = "Request body is too large."): Promise<
   | { ok: true; value: unknown }
   | { ok: false; response: NextResponse }
 > {
@@ -11,7 +11,7 @@ export async function readJsonBody(request: Request, maxBytes = 16 * 1024): Prom
       return { ok: false, response: NextResponse.json({ error: "Invalid Content-Length." }, { status: 400, headers: { "Cache-Control": "no-store" } }) };
     }
     if (length > maxBytes) {
-      return { ok: false, response: NextResponse.json({ error: "Request body is too large." }, { status: 413, headers: { "Cache-Control": "no-store" } }) };
+      return { ok: false, response: NextResponse.json({ error: tooLargeMessage }, { status: 413, headers: { "Cache-Control": "no-store" } }) };
     }
   }
 
@@ -29,7 +29,7 @@ export async function readJsonBody(request: Request, maxBytes = 16 * 1024): Prom
       total += value.byteLength;
       if (total > maxBytes) {
         await reader.cancel("Request body exceeds configured limit");
-        return { ok: false, response: NextResponse.json({ error: "Request body is too large." }, { status: 413, headers: { "Cache-Control": "no-store" } }) };
+        return { ok: false, response: NextResponse.json({ error: tooLargeMessage }, { status: 413, headers: { "Cache-Control": "no-store" } }) };
       }
       chunks.push(value);
     }
@@ -51,4 +51,21 @@ export async function readJsonBody(request: Request, maxBytes = 16 * 1024): Prom
   } catch {
     return { ok: false, response: NextResponse.json({ error: "Request body must be valid UTF-8 JSON." }, { status: 400, headers: { "Cache-Control": "no-store" } }) };
   }
+}
+
+
+export async function readJsonObjectBody(
+  request: Request,
+  maxBytes = 16 * 1024,
+  tooLargeMessage = "Request body is too large."
+): Promise<
+  | { ok: true; value: Record<string, unknown> }
+  | { ok: false; response: NextResponse }
+> {
+  const parsed = await readJsonBody(request, maxBytes, tooLargeMessage);
+  if (!parsed.ok) return parsed;
+  if (!parsed.value || typeof parsed.value !== "object" || Array.isArray(parsed.value)) {
+    return { ok: false, response: NextResponse.json({ error: "Request body must be a JSON object." }, { status: 400, headers: { "Cache-Control": "no-store" } }) };
+  }
+  return { ok: true, value: parsed.value as Record<string, unknown> };
 }

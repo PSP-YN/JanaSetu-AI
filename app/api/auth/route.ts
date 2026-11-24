@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { randomBytes, timingSafeEqual } from "node:crypto";
 import { clearSupabaseSession, setSupabaseSession, getVerifiedSupabaseSession } from "@/lib/supabase/rest";
+import { readJsonObjectBody } from "@/lib/request";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -18,9 +19,9 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     if (request.headers.get("origin") !== request.nextUrl.origin) return json({ error: "Cross-origin request blocked." }, 403);
-    const raw = await request.text();
-    if (new TextEncoder().encode(raw).byteLength > 8192) return json({ error: "Authentication request is too large." }, 413);
-    const body = JSON.parse(raw) as Record<string, unknown>;
+    const parsed = await readJsonObjectBody(request, 8192, "Authentication request is too large.");
+    if (!parsed.ok) return parsed.response;
+    const body = parsed.value;
     const action = body.action;
     if (action === "signout") {
       let upstreamRevoked = true;

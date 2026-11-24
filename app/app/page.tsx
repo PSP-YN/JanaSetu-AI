@@ -949,7 +949,7 @@ export default function Home() {
       const worker = voiceWorkerRef.current || new Worker(new URL("./voice.worker.ts", import.meta.url), { type: "module" });
       voiceWorkerRef.current = worker;
       const id = ++voiceRequestIdRef.current;
-      setVoiceModelProgress("Loading the multilingual on-device model. The first download is about 75 MB; later use is cached in this browser.");
+      setVoiceModelProgress("Loading the multilingual on-device model. The first download is about 80 MB; later use is cached in this browser.");
       const languageName = ({ en: "english", hi: "hindi", kn: "kannada", ta: "tamil", te: "telugu", ml: "malayalam" } as const)[selectedLanguage];
       const transcript = await new Promise<string>((resolve, reject) => {
         const cleanup = () => { worker.removeEventListener("message", onMessage); worker.removeEventListener("error", onError); };

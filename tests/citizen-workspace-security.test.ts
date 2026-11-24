@@ -90,7 +90,12 @@ test("encrypted workspace API rejects plaintext, malformed and oversized payload
   assert.match(route, /MAX_BYTES = 8 \* 1024 \* 1024/);
   assert.match(route, /validEnvelope/);
   assert.match(route, /expected_revision/);
-  assert.match(route, /Request body must be valid JSON/);
+  assert.match(route, /readJsonObjectBody\(request, MAX_BYTES/);
+  assert.match(route, /Encrypted workspace exceeds the 8 MB limit/);
+  assert.doesNotMatch(route, /request\.(?:text|json)\(/);
+  const parser = read("lib/request.ts");
+  assert.match(parser, /Request body must be valid UTF-8 JSON/);
+  assert.match(parser, /reader\.cancel/);
   assert.match(route, /Cross-origin request blocked/);
   assert.match(route, /workspace_revision_conflict/);
 });

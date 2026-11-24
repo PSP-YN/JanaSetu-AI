@@ -5,6 +5,7 @@ import { assessApprovedScheme, getApprovedApplicationRequirements, type Approved
 import { buildApplicationAutomationPlan, type EligibilityGate } from "@/lib/automation-engine";
 import { SCHEMES } from "@/lib/catalog";
 import { getPortalAdapter } from "@/lib/portal-adapters/registry";
+import { readJsonObjectBody } from "@/lib/request";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -48,9 +49,9 @@ async function loadApprovedScheme(session: Session, slug: string) {
 export async function POST(request: NextRequest) {
   try {
     if (request.headers.get("origin") !== request.nextUrl.origin) return json({ error: "Cross-origin request blocked." }, 403);
-    const raw = await request.text();
-    if (new TextEncoder().encode(raw).byteLength > 32 * 1024) return json({ error: "Automation plan request is too large." }, 413);
-    const input = JSON.parse(raw) as Record<string, unknown>;
+    const parsed = await readJsonObjectBody(request, 32 * 1024, "Automation plan request is too large.");
+    if (!parsed.ok) return parsed.response;
+    const input = parsed.value;
     if (Object.keys(input).some((key) => !["scheme_slug", "profile"].includes(key))) return json({ error: "Unsupported planner input." }, 400);
     const slug = typeof input.scheme_slug === "string" ? input.scheme_slug : "";
     if (!Object.hasOwn(requiredFields, slug)) return json({ error: "No supported scheme workflow exists for this scheme." }, 400);
